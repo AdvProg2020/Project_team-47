@@ -8,14 +8,14 @@ import java.util.ArrayList;
 
 public class Off extends Discount {
     private static ArrayList<Off> allOffs;
-    private int offId;
+    private String offId;
     private String offStatus;
     private ArrayList<Product> products;
     private Seller seller;
 
 
     public Off(Date discountStartTime, Date discountFinishTime,
-               int discountPercent, int offId, String offStatus,
+               int discountPercent, String offId, String offStatus,
                ArrayList<Product> products, Seller seller) {
         super(discountStartTime, discountFinishTime, discountPercent);
         this.offId = offId;
@@ -24,32 +24,52 @@ public class Off extends Discount {
         this.seller = seller;
     }
 
-    public static boolean isThereOff(String offId){return true;}
-    public static Off getOffById(String offId){return null;}
+    public static ArrayList<Off> getAllOffs() {
+        return allOffs;
+    }
+
+    public static void setAllOffs(ArrayList<Off> allOffs) {
+        Off.allOffs = allOffs;
+    }
+
+    public void setOffId(String offId) {
+        this.offId = offId;
+    }
+
+    public static boolean isThereOff(String offId){
+        return allOffs.stream().anyMatch(off -> offId.equals(off.offId));
+    }
+    public static Off getOffById(String offId){
+        return allOffs.stream().filter(off -> offId.equals
+                (off.offId)).findAny().orElse(null);
+    }
     @Override
-    public String toString() {return null;}
+    public String toString() {return null;}//
 
 
 
 
 
-    public void addProduct(Product product){}
-    public void removeProduct(Product product){}
+    public void addProduct(Product product){
+        products.add(product);
+    }
+    public void removeProduct(Product product){
+        products.remove(product);
+    }
 
 
-    public boolean isItInOff(Product product){return true;}
+    public boolean isItInOff(Product product){
+        return products.contains(product);
+    }
 
-    public static String getAllProductsInOffsInfo(String order,ArrayList<String> filter){return null;}
+    public static String getAllProductsInOffsInfo(String order,ArrayList<String> filter){return null;}//
 
-    public static boolean isProductInAnyOff(Product product){return true;}
-
-
-
-
+    public static boolean isProductInAnyOff(Product product){
+        return allOffs.stream().anyMatch(off -> off.isItInOff(product));
+    }
 
 
-
-    public int getOffId() {
+    public String getOffId() {
         return offId;
     }
 
@@ -82,5 +102,5 @@ public class Off extends Discount {
     @Override
     public String discountInfoForSending() {
         return null;
-    }
+    }//
 }

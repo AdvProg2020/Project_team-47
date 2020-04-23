@@ -50,12 +50,6 @@ public class DiscountCode extends Discount {
                 .findAny().orElse(null));
     }
 
-
-
-
-
-
-
     public static boolean isThereDiscountWithCode(String code){
         return allDiscountCodes.stream().anyMatch
                 (discount -> code.equals(discount.discountCode));
@@ -63,7 +57,7 @@ public class DiscountCode extends Discount {
 
     public static String getAllDiscountCodeInfo(String field,String direction){
         return null;
-    }
+    }//
 
     public boolean canThisPersonUseCode(User user){
         return usersAbleToUse.stream().anyMatch(user::equals);
@@ -72,7 +66,7 @@ public class DiscountCode extends Discount {
     @Override
     public String toString() {
         return "DiscountCode{}";
-    }
+    }//
 
     public void setDiscountCode(String discountCode) {
         this.discountCode = discountCode;
@@ -88,7 +82,7 @@ public class DiscountCode extends Discount {
 
     public void useDiscountCode(User user){
 
-    }
+    }//
 
 
 
@@ -104,7 +98,7 @@ public class DiscountCode extends Discount {
     @Override
     public String discountInfoForSending() {
         return null;
-    }
+    }//
 
 
     public static ArrayList<DiscountCode> getAllDiscountCodes() {
