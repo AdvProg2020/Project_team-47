@@ -1,5 +1,6 @@
 package model.discount;
 
+import model.others.Date;
 import model.others.Product;
 import model.user.Seller;
 
@@ -13,7 +14,14 @@ public class Off extends Discount {
     private Seller seller;
 
 
-    public Off() {
+    public Off(Date discountStartTime, Date discountFinishTime,
+               int discountPercent, int offId, String offStatus,
+               ArrayList<Product> products, Seller seller) {
+        super(discountStartTime, discountFinishTime, discountPercent);
+        this.offId = offId;
+        this.offStatus = offStatus;
+        this.products = products;
+        this.seller = seller;
     }
 
     public static boolean isThereOff(String offId){return true;}

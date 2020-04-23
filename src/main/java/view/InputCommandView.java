@@ -1,5 +1,4 @@
 package view;
-
 import view.menu.*;
 
 import java.util.HashMap;
@@ -9,9 +8,12 @@ public class InputCommandView extends View {
     private static HashMap<String, Menu> menuHashMap;
     private static Menu currentMenu;
     private static Scanner scanner;
-    public static void run() {}
+    public static void run() {
+        String command = getCommandWithTrim();
+        
+    }
 
-    private String getCommandWithTrim() {
+    private static String getCommandWithTrim() {
         String command = scanner.nextLine();
         return command.trim();
     }
