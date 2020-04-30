@@ -23,10 +23,26 @@ abstract public class Log {
     abstract public String getLogInfoForSending();
 
 
-    public Log() {
+    public Log(double money, String logId, Date logDate,
+               double appliedDiscount, User customer, String address,
+               String postalCode, String phoneNumber, String customerRequests,
+               String purchaseStatus, ArrayList<Product> purchasedWares) {
+        this.money = money;
+        this.logId = logId;
+        this.logDate = logDate;
+        this.appliedDiscount = appliedDiscount;
+        this.customer = customer;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+        this.customerRequests = customerRequests;
+        this.purchaseStatus = purchaseStatus;
+        this.purchasedWares = purchasedWares;
     }
 
-    public boolean isThereProductInLog(Product product){return true;}
+    public boolean isThereProductInLog(Product product){
+        return purchasedWares.contains(product);
+    }
     public User getCustomer() {
         return customer;
     }

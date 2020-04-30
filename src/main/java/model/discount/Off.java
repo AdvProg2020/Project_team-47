@@ -99,6 +99,10 @@ public class Off extends Discount {
         this.seller = seller;
     }
 
+    public void removeProductFromOff(Product product){
+        products.remove(product);
+    }
+
     @Override
     public String discountInfoForSending() {
         return null;
