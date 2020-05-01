@@ -18,10 +18,10 @@ public class BuyLog extends Log {
     @Override
     public String toString() {
         return "BuyLog{}";
-    }
+    }//
 
     @Override
     public String getLogInfoForSending() {
         return null;
-    }
+    }//
 }

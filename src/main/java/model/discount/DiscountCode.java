@@ -1,6 +1,9 @@
 package model.discount;
 
+import com.google.gson.Gson;
+import model.log.BuyLog;
 import model.others.Date;
+import model.others.Sort;
 import model.user.User;
 
 import java.util.ArrayList;
@@ -13,17 +16,19 @@ public class DiscountCode extends Discount {
     private int maxDiscountAmount;
     private HashMap<User,Integer> userUsedTimeHashMap;
     private ArrayList<User> usersAbleToUse;
+    private BuyLog buyLog;
 
 
     public DiscountCode(Date discountStartTime, Date discountFinishTime, int discountPercent,
                         String discountCode, int maxUsableTime, int maxDiscountAmount,
-                        HashMap<User, Integer> userUsedTimeHashMap, ArrayList<User> usersAbleToUse) {
+                        HashMap<User, Integer> userUsedTimeHashMap, ArrayList<User> usersAbleToUse, BuyLog buyLog) {
         super(discountStartTime, discountFinishTime, discountPercent);
         this.discountCode = discountCode;
         this.maxUsableTime = maxUsableTime;
         this.maxDiscountAmount = maxDiscountAmount;
         this.userUsedTimeHashMap = userUsedTimeHashMap;
         this.usersAbleToUse = usersAbleToUse;
+        this.buyLog = buyLog;
     }
 
     public String getDiscountCode() {
@@ -56,8 +61,14 @@ public class DiscountCode extends Discount {
     }
 
     public static String getAllDiscountCodeInfo(String field,String direction){
-        return null;
-    }//
+        ArrayList<DiscountCode> discountCodes = Sort.sortDiscountCode(field, direction, allDiscountCodes);
+        ArrayList<String> discountsInfo = new ArrayList<>();
+        assert discountCodes != null;
+        for (DiscountCode discountCode : discountCodes) {
+            discountsInfo.add(discountCode.discountInfoForSending());
+        }
+        return (new Gson()).toJson(discountsInfo);
+    }
 
     public boolean canThisPersonUseCode(User user){
         return usersAbleToUse.stream().anyMatch(user::equals);
@@ -81,19 +92,8 @@ public class DiscountCode extends Discount {
     }
 
     public void useDiscountCode(User user){
-
-    }//
-
-
-
-
-
-
-
-
-
-
-
+       userUsedTimeHashMap.replace(user, userUsedTimeHashMap.get(user) - 1);
+    }
 
     @Override
     public String discountInfoForSending() {

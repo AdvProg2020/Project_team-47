@@ -17,12 +17,12 @@ public class SellLog extends Log {
     @Override
     public String toString() {
         return "SellLog{}";
-    }
+    }//
 
 
 
     @Override
     public String getLogInfoForSending() {
         return null;
-    }
+    }//
 }
