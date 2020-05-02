@@ -28,4 +28,16 @@ abstract public class Discount {
 
 
     abstract public String discountInfoForSending();
+
+    public void setDiscountStartTime(Date discountStartTime) {
+        this.discountStartTime = discountStartTime;
+    }
+
+    public void setDiscountFinishTime(Date discountFinishTime) {
+        this.discountFinishTime = discountFinishTime;
+    }
+
+    public void setDiscountPercent(int discountPercent) {
+        this.discountPercent = discountPercent;
+    }
 }

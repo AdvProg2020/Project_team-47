@@ -106,5 +106,5 @@ public class Off extends Discount {
     @Override
     public String discountInfoForSending() {
         return null;
-    }//
+    }
 }
