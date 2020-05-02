@@ -2,6 +2,7 @@ package model.log;
 
 import model.others.Date;
 import model.others.Product;
+import model.user.Seller;
 import model.user.User;
 
 import java.util.ArrayList;
@@ -51,6 +52,10 @@ abstract public class Log {
         return purchasedWares;
     }
 
+    public boolean isThereProductInLogWithThisSeller(Product product, Seller seller) {
+        //todo
+        return true;
+    }
 
 
     public void setMoney(double money) {
@@ -67,5 +72,45 @@ abstract public class Log {
 
     public void setPurchaseStatus(String purchaseStatus) {
         this.purchaseStatus = purchaseStatus;
+    }
+
+    public static int getLogIdCounter() {
+        return logIdCounter;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public String getLogId() {
+        return logId;
+    }
+
+    public Date getLogDate() {
+        return logDate;
+    }
+
+    public double getAppliedDiscount() {
+        return appliedDiscount;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getCustomerRequests() {
+        return customerRequests;
+    }
+
+    public String getPurchaseStatus() {
+        return purchaseStatus;
     }
 }
