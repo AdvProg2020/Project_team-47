@@ -11,6 +11,34 @@ public class Date {
     public Date() {
     }
 
+    public static int compare(Date o1, Date o2) {
+        if (o2.year > o1.year) {
+            return -1;
+        } else if (o1.year > o2.year) {
+            return 1;
+        } else if (o2.month > o1.month) {
+            return -1;
+        } else if (o1.month > o2.month) {
+            return 1;
+        } else if (o2.day > o1.day) {
+            return -1;
+        } else if (o1.day > o2.day) {
+            return 1;
+        } else if (o2.hour > o1.hour) {
+            return -1;
+        } else if (o1.hour > o2.hour) {
+            return 1;
+        } else if (o2.minute > o1.minute) {
+            return -1;
+        } else if (o1.minute > o2.minute) {
+            return 1;
+        } else if (o2.second > o1.second) {
+            return -1;
+        } else if (o1.second > o2.second) {
+            return 1;
+        }
+        return 1;
+    }
     public String getDateInfoForSending(){return null;}
 
     public void setYear(int year) {
