@@ -1,73 +1,55 @@
 package model.others;
 
+import java.time.LocalDateTime;
 import model.user.User;
 
-
-
 public class Comment {
+    public static final int WAITING = 0;
+    public static final int CONFIRMED = 1;
+    public static final int DIMISSED = -1;
+    private User commenter;
+    private User seller;
+    private String title;
+    private String explanation;
+    private boolean hasBought;
+    private LocalDateTime date;
+    private int status;
 
-    private User whoComment;
-    private Product productCommentBelongTo;
-    private User sellerCommentBelongTo;
-    private String commentText;
-    private String commentTitle;
-    private boolean doesCustomerBought;
-
-    public Comment() {
+    public Comment(User commenter, User seller, String title, String explanation, boolean hasBought) {
+        this.commenter = commenter;
+        this.seller = seller;
+        this.title = title;
+        this.explanation = explanation;
+        this.hasBought = hasBought;
+        date = LocalDateTime.now();
+        status = Comment.WAITING;
     }
 
-    public User getWhoComment() {
-        return whoComment;
+    public User getCommenter() {
+        return commenter;
     }
 
-    public Product getProductCommentBelongTo() {
-        return productCommentBelongTo;
+    public User getSeller() {
+        return seller;
     }
 
-    public User getSellerCommentBelongTo() {
-        return sellerCommentBelongTo;
+    public String getTitle() {
+        return title;
     }
 
-    public String getCommentText() {
-        return commentText;
+    public String getExplanation() {
+        return explanation;
     }
 
-    public String getCommentTitle() {
-        return commentTitle;
+    public boolean getHasBought() {
+        return hasBought;
     }
 
-    public boolean isDoesCustomerBought() {
-        return doesCustomerBought;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public void setWhoComment(User whoComment) {
-        this.whoComment = whoComment;
-    }
-
-    public void setProductCommentBelongTo(Product productCommentBelongTo) {
-        this.productCommentBelongTo = productCommentBelongTo;
-    }
-
-    public void setSellerCommentBelongTo(User sellerCommentBelongTo) {
-        this.sellerCommentBelongTo = sellerCommentBelongTo;
-    }
-
-    public void setCommentText(String commentText) {
-        this.commentText = commentText;
-    }
-
-    public void setCommentTitle(String commentTitle) {
-        this.commentTitle = commentTitle;
-    }
-
-    public void setDoesCustomerBought(boolean doesCustomerBought) {
-        this.doesCustomerBought = doesCustomerBought;
-    }
-
-    public String getCommentInfoForSending(){return null;}
-
-    @Override
-    public String toString() {
-        return "Comment{}";
+    public int getStatus() {
+        return status;
     }
 }
