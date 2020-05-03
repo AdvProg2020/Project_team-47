@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public abstract class Category {
-    private static ArrayList<SubCategory> subCategories;
+    private static ArrayList<SubCategory> mainCategories;
     private String name;
     private HashMap<String, String> properties;
     private ArrayList<Product> products;
@@ -15,8 +15,8 @@ public abstract class Category {
         this.name = name;
     }
 
-    public static boolean doesSubCategoryExist(String name) {
-        Iterator<SubCategory> iterator = Category.subCategories.iterator();
+    public static boolean doesMainCategoryExist(String name) {
+        Iterator<SubCategory> iterator = Category.mainCategories.iterator();
         while (iterator.hasNext()) {
             if (iterator.next().getName().equalsIgnoreCase(name)) {
                 return true;
@@ -25,12 +25,12 @@ public abstract class Category {
         return false;
     }
 
-    protected static void addSubCategory(SubCategory subCategory) {
-        Category.subCategories.add(subCategory);
+    protected static void addMainCategory(SubCategory mainCategory) {
+        Category.mainCategories.add(mainCategory);
     }
 
-    public static void removeSubCategory(String name) {
-        Iterator<SubCategory> iterator = Category.subCategories.iterator();
+    public static void removeMainCategory(String name) {
+        Iterator<SubCategory> iterator = Category.mainCategories.iterator();
         while (iterator.hasNext()) {
             if (iterator.next().getName().equalsIgnoreCase(name)) {
                 iterator.remove();
@@ -39,12 +39,12 @@ public abstract class Category {
         }
     }
 
-    public static SubCategory getSubCategory(String name) {
-        Iterator<SubCategory> iterator = Category.subCategories.iterator();
+    public static SubCategory getMainCategory(String name) {
+        Iterator<SubCategory> iterator = Category.mainCategories.iterator();
         while (iterator.hasNext()) {
-            SubCategory subCategory = iterator.next();
-            if (subCategory.getName().equalsIgnoreCase(name)) {
-                return SubCategory;
+            SubCategory mainCategory = iterator.next();
+            if (mainCategory.getName().equalsIgnoreCase(name)) {
+                return mainCategory;
             }
         }
     }
