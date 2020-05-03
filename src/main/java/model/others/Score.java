@@ -1,4 +1,4 @@
-package model.other;
+package model.others;
 
 import model.user.User;
 
