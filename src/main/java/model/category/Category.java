@@ -1,108 +1,100 @@
 package model.category;
 
 import model.others.Product;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
-public abstract class Category {
-    private static ArrayList<SubCategory> mainCategories;
-    private String name;
-    private HashMap<String, String> properties;
-    private ArrayList<Product> products;
+abstract public class Category {
+    protected static ArrayList<Category> allMainCategories;
+    protected static ArrayList<Category> allSubCategories;
+    protected String name;
+    protected ArrayList<String> specialProperties;
+    protected ArrayList<Product> allProducts;
 
-    public Category(String name) {
-        this.name = name;
+    static{
+        allMainCategories = new ArrayList<>();
+        allSubCategories=new ArrayList<>();
+    }
+    public Category() {
+        allProducts = new ArrayList<>();
+        specialProperties = new ArrayList<>();
     }
 
-    public static boolean doesMainCategoryExist(String name) {
-        Iterator<SubCategory> iterator = Category.mainCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-        return false;
+    public static String getAllCategoriesInfo() {
+        return null;
     }
 
-    protected static void addMainCategory(SubCategory mainCategory) {
-        Category.mainCategories.add(mainCategory);
+    public static String getAllCategoriesInfo(String sortField, String sortDirection) {
+        return null;
     }
 
-    public static void removeMainCategory(String name) {
-        Iterator<SubCategory> iterator = Category.mainCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equalsIgnoreCase(name)) {
-                iterator.remove();
-                break;
-            }
-        }
+    public static void removeMainCategory(String categoryName) {
     }
 
-    public static SubCategory getMainCategory(String name) {
-        Iterator<SubCategory> iterator = Category.mainCategories.iterator();
-        while (iterator.hasNext()) {
-            SubCategory mainCategory = iterator.next();
-            if (mainCategory.getName().equalsIgnoreCase(name)) {
-                return mainCategory;
-            }
-        }
+    public static void removeSubCategory(String categoryName) {
+    }
+
+    public static SubCategory getSubCategoryByName(String name) {
+        return null;
+    }
+
+    public static MainCategory getMainCategoryByName(String name) {
+        return null;
+    }
+
+    public static boolean isThereMainCategory(String categoryName) {
+        return true;
+    }
+
+    public static boolean isThereMainCategory(MainCategory mainCategory) {
+        return true;
+    }
+
+    public static boolean isThereSubCategory(String categoryName) {
+        return true;
+    }
+
+    public static boolean isThereSubCategory(SubCategory subCategory) {
+        return true;
+    }
+
+    abstract public String categoryInfoForSending();
+
+    public boolean isThereProduct(Product product) {
+        return true;
+    }
+
+    public void addProduct(Product product) {
+    }
+
+    public void addSpecialProperties(String properties) {
+    }
+
+    public void removeSpecialProperties(String properties) {
+    }
+
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
+    public ArrayList<String> getSpecialProperties() {
+        return specialProperties;
     }
 
-    /**
-     * each category holds properties in format of title-info
-     * 
-     * @param title the title of information.
-     * @param info  this String-kind details are just provided for displaying and
-     *              uses of manager.
-     *              Each info is related with only one title.
-     *              i.e: for foods -->
-     *              vegeteble: day order just
-     *              meal: foods with expiry date
-     *              .
-     *              .
-     *              .
-     */
-    public void addProperty(String title, String info) {
-        properties.put(title, info);
+    public void setSpecialProperties(ArrayList<String> specialProperties) {
+        this.specialProperties = specialProperties;
     }
 
-    public void removeProperty(String title) {
-        properties.remove(title);
+    public ArrayList<Product> getAllProducts() {
+        return allProducts;
     }
 
-    public HashMap<String, String> getProperties() {
-        return properties;
-    }
-
-    public boolean doesProductExist(Product product) {
-        return products.contains(product);
-    }
-
-    public void addProduct(Product product) {
-        products.add(product);
-    }
-
-    public void removeProduct(Product product) {
-        products.remove(product);
-    }
-
-    public Product getProduct(String name) {
-        Iterator<Product> iterator = products.iterator();
-        while (iterator.hasNext()) {
-            Product product = iterator.next();
-            if (product.getName().equalsIgnoreCase(name)) {
-                return product;
-            }
-        }
-        return null;
+    public void setAllProducts(ArrayList<Product> allProducts) {
+        this.allProducts = allProducts;
     }
 }
