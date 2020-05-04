@@ -9,6 +9,9 @@ public class CartInfo extends ServerMessage {
     private ArrayList<ProductInCart> products;
     private double price;
 
+    public CartInfo() {
+        products = new ArrayList<>();
+    }
 
     public void addProductInfo(Product product, Seller seller, int numberInCart) {
         ProductInCart productInCart = new ProductInCart();

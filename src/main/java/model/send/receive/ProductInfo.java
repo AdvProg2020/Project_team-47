@@ -8,15 +8,19 @@ public class ProductInfo extends ServerMessage {
     private String id;
     private String name;
     private String status;
-    private HashMap<String, Double> priceForSellers;
-    private HashMap<String, Double> pricesWithOff;
     private ArrayList<String> sellersNames;
-    private HashMap<String, Integer> numberOfProductSellerHas;
-    private String category;
+    private String mainCategory;
     private String subCategory;
     private HashMap<String, String> specialProperties;
     private String description;
     private double scoreAverage;
+    private ArrayList<ProductSeller> productSellers;
+
+    public ProductInfo() {
+        sellersNames=new ArrayList<>();
+        specialProperties = new HashMap<>();
+        productSellers = new ArrayList<>();
+    }
 
     public int getSeenTime() {
         return seenTime;
@@ -50,21 +54,11 @@ public class ProductInfo extends ServerMessage {
         this.status = status;
     }
 
-    public HashMap<String, Double> getPriceForSellers() {
-        return priceForSellers;
+
+    public void addProductSeller(String sellerUsername, double price, double priceWithOff, int numberInStock) {
+        productSellers.add(new ProductSeller(sellerUsername, price, priceWithOff, numberInStock));
     }
 
-    public void setPriceForSellers(HashMap<String, Double> priceForSellers) {
-        this.priceForSellers = priceForSellers;
-    }
-
-    public HashMap<String, Double> getPricesWithOff() {
-        return pricesWithOff;
-    }
-
-    public void setPricesWithOff(HashMap<String, Double> pricesWithOff) {
-        this.pricesWithOff = pricesWithOff;
-    }
 
     public ArrayList<String> getSellersNames() {
         return sellersNames;
@@ -74,20 +68,13 @@ public class ProductInfo extends ServerMessage {
         this.sellersNames = sellersNames;
     }
 
-    public HashMap<String, Integer> getNumberOfProductSellerHas() {
-        return numberOfProductSellerHas;
+
+    public String getMainCategory() {
+        return mainCategory;
     }
 
-    public void setNumberOfProductSellerHas(HashMap<String, Integer> numberOfProductSellerHas) {
-        this.numberOfProductSellerHas = numberOfProductSellerHas;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
+    public void setMainCategory(String mainCategory) {
+        this.mainCategory = mainCategory;
     }
 
     public String getSubCategory() {
@@ -120,5 +107,52 @@ public class ProductInfo extends ServerMessage {
 
     public void setScoreAverage(double scoreAverage) {
         this.scoreAverage = scoreAverage;
+    }
+
+    private static class ProductSeller {
+        private String sellerName;
+        private double price;
+        private double priceWithOff;
+        private int numberInStock;
+
+
+        public ProductSeller(String sellerUsername, double price, double priceWithOff, int numberInStock) {
+            this.sellerName = sellerUsername;
+            this.price = price;
+            this.priceWithOff = priceWithOff;
+            this.numberInStock = numberInStock;
+        }
+
+        public int getNumberInStock() {
+            return numberInStock;
+        }
+
+        public void setNumberInStock(int numberInStock) {
+            this.numberInStock = numberInStock;
+        }
+
+        public String getSellerName() {
+            return sellerName;
+        }
+
+        public void setSellerName(String sellerName) {
+            this.sellerName = sellerName;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        public double getPriceWithOff() {
+            return priceWithOff;
+        }
+
+        public void setPriceWithOff(double priceWithOff) {
+            this.priceWithOff = priceWithOff;
+        }
     }
 }

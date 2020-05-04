@@ -86,9 +86,10 @@ public class Sort {
     private static void sortProductByDate(ArrayList<Product> products, String direction) {
         products.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return Date.compare(o1.getCreatingDate(), o2.getCreatingDate());
+                return o1.getCreatingDate().compareTo(o2.getCreatingDate());
+
             } else if (direction.startsWith("d")) {
-                return Date.compare(o2.getCreatingDate(), o1.getCreatingDate());
+                return o2.getCreatingDate().compareTo(o1.getCreatingDate());
             }
             return 1;
         });
@@ -128,10 +129,9 @@ public class Sort {
     private static void sortDiscountWithStartTime(ArrayList<DiscountCode> discountCodes, String direction) {
         discountCodes.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return Date.compare(o1.getDiscountStartTime(), o2.getDiscountStartTime());
-
+                return o1.getDiscountStartTime().compareTo(o2.getDiscountStartTime());
             } else if (direction.startsWith("d")) {
-                return Date.compare(o2.getDiscountStartTime(), o1.getDiscountStartTime());
+                return o2.getDiscountStartTime().compareTo(o1.getDiscountStartTime());
             }
             return 1;
         });
@@ -140,10 +140,9 @@ public class Sort {
     private static void sortDiscountWithFinishTime(ArrayList<DiscountCode> discountCodes, String direction) {
         discountCodes.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return Date.compare(o1.getDiscountFinishTime(), o2.getDiscountFinishTime());
-
+                return o1.getDiscountFinishTime().compareTo(o2.getDiscountFinishTime());
             } else if (direction.startsWith("d")) {
-                return Date.compare(o2.getDiscountFinishTime(), o1.getDiscountFinishTime());
+                return o2.getDiscountFinishTime().compareTo(o1.getDiscountFinishTime());
             }
             return 1;
         });
@@ -183,10 +182,9 @@ public class Sort {
     private static void sortOffWithStartTime(ArrayList<Off> offs, String direction) {
         offs.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return Date.compare(o1.getDiscountStartTime(), o2.getDiscountStartTime());
-
+                return o1.getDiscountStartTime().compareTo(o2.getDiscountStartTime());
             } else if (direction.startsWith("d")) {
-                return Date.compare(o2.getDiscountStartTime(), o1.getDiscountStartTime());
+                return o2.getDiscountStartTime().compareTo(o1.getDiscountStartTime());
             }
             return 1;
         });
@@ -195,10 +193,9 @@ public class Sort {
     private static void sortOffWithFinishTime(ArrayList<Off> offs, String direction) {
         offs.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return Date.compare(o1.getDiscountFinishTime(), o2.getDiscountFinishTime());
-
+                return o1.getDiscountFinishTime().compareTo(o2.getDiscountFinishTime());
             } else if (direction.startsWith("d")) {
-                return Date.compare(o2.getDiscountFinishTime(), o1.getDiscountFinishTime());
+                return o2.getDiscountFinishTime().compareTo(o1.getDiscountFinishTime());
             }
             return 1;
         });
@@ -277,9 +274,9 @@ public class Sort {
     private static void sortRequestByApplyDate(ArrayList<Request> requests, String direction) {
         requests.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return Date.compare(o1.getApplyDate(), o2.getApplyDate());
+                return o1.getApplyDate().compareTo(o2.getApplyDate());
             } else if (direction.startsWith("d")) {
-                return Date.compare(o2.getApplyDate(), o1.getApplyDate());
+                return o2.getApplyDate().compareTo(o1.getApplyDate());
             }
             return 1;
         });

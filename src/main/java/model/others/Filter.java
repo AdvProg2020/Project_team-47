@@ -7,7 +7,8 @@ public class Filter {
     private int secondInt;
     private double firstDouble;
     private double secondDouble;
-    private String filterValue;
+    private String firstFilterValue;
+    private String secondFilterValue;
 
     public double getSecondDouble() {
         return secondDouble;
@@ -57,11 +58,19 @@ public class Filter {
         this.secondInt = secondInt;
     }
 
-    public String getFilterValue() {
-        return filterValue;
+    public String getFirstFilterValue() {
+        return firstFilterValue;
     }
 
-    public void setFilterValue(String filterValue) {
-        this.filterValue = filterValue;
+    public void setFirstFilterValue(String firstFilterValue) {
+        this.firstFilterValue = firstFilterValue;
+    }
+
+    public String getSecondFilterValue() {
+        return secondFilterValue;
+    }
+
+    public void setSecondFilterValue(String secondFilterValue) {
+        this.secondFilterValue = secondFilterValue;
     }
 }

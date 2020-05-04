@@ -3,38 +3,44 @@ package model.others;
 import model.user.User;
 
 public class Score {
+    private User whoSubmitScore;
     private int score;
-    private User buyer;
     private User seller;
+    private Product product;
 
-    /**
-     * constructor may get only buyer and seller
-     * because it wouldn't happen to change these two
-     * but score maybe changes
-     * 
-     * @param buyer     person who rates
-     * @param seller    one kind of product may has many vendors
-     *                  so we differ sellers from each other.
-     *                  each seller has a unique rating for a product type
-     */
-    public Score(User buyer, User seller) {
-        this.buyer = buyer;
-        this.seller = seller;
+
+    public Score() {
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public User getWhoSubmitScore() {
+        return whoSubmitScore;
+    }
+
+    public void setWhoSubmitScore(User whoSubmitScore) {
+        this.whoSubmitScore = whoSubmitScore;
     }
 
     public int getScore() {
         return score;
     }
 
-    public User getBuyer() {
-        return buyer;
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public User getSeller() {
         return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
     }
 }
