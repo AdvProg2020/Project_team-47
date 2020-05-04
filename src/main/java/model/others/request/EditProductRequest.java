@@ -1,6 +1,8 @@
 package model.others.request;
 
 import model.category.Category;
+import model.category.MainCategory;
+import model.category.SubCategory;
 import model.others.Product;
 import model.send.receive.RequestInfo;
 import model.user.Seller;
@@ -10,7 +12,7 @@ import java.util.Map;
 
 public class EditProductRequest extends MainRequest {
     private String field;
-    private String newValue;
+    private Object newValue;
     private HashMap<String, String> newValueHashMap;
     private Product product;
     private Seller seller;
@@ -18,30 +20,103 @@ public class EditProductRequest extends MainRequest {
 
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
-        requestInfo.setEditInfo(field, newValue, newValueHashMap);
+        if (newValue instanceof String) {
+            requestInfo.setEditInfo(field, (String) newValue, newValueHashMap);
+        } else if (newValue instanceof Category) {
+            requestInfo.setEditInfo(field, ((Category) newValue).getName(), newValueHashMap);
+        }
     }
 
     @Override
     void accept(String type) {
         switch (field) {
             case "name":
-                product.setName(newValue);
+                product.setName((String) newValue);
                 break;
             case "price":
-                product.changePrice(seller, Double.parseDouble(newValue));
+                product.changePrice(seller, Double.parseDouble((String) newValue));
                 break;
             case "number-of-product":
-                product.changeNumberOfProduct(seller, Integer.parseInt(newValue));
+                product.changeNumberOfProduct(seller, Integer.parseInt((String) newValue));
                 break;
             case "category":
-                product.setCategory(Category.getCategoryByName(newValue));
+                product.setMainCategory((MainCategory) newValue);
+                product.setSubCategory(null);
+                break;
+            case "sub-category":
+                SubCategory subCategory = (SubCategory) newValue;
+                product.setSubCategory(subCategory);
+                product.setMainCategory(subCategory.getMainCategory());
+                break;
             case "special-properties":
                 changeSpecialProperties(type);
                 break;
             case "description":
-                product.setDescription(newValue);
+                product.setDescription((String) newValue);
                 break;
         }
+    }
+
+    @Override
+    boolean update(String type) {
+        if (seller.hasProduct(product)) {
+            return false;
+        } else if (!Seller.isThereSeller(seller)) {
+            return false;
+        }
+        switch (field) {
+            case "name":
+            case "price":
+            case "number-of-product":
+            case "description":
+                return true;
+            case "category":
+                return updateForCategory("main-category");
+            case "sub-category":
+                return updateForCategory("sub-category");
+            case "specialProperties":
+                return updateProperties(type);
+        }
+        return false;
+    }
+
+    private boolean updateProperties(String type) {
+        Category category = product.getSubCategory();
+        if (category == null) {
+            category = product.getMainCategory();
+        }
+        switch (type) {
+            case "edit-product append":
+            case "edit-product change":
+                return true;
+            case "edit-product replace":
+                for (String specialProperty : category.getSpecialProperties()) {
+                    if (!newValueHashMap.containsKey(specialProperty)) {
+                        newValueHashMap.put(specialProperty, product.getSpecialProperties().get(specialProperty));
+                    }
+                }
+                return true;
+            case "edit-product remove":
+                for (String specialProperty : category.getSpecialProperties()) {
+                    newValueHashMap.remove(specialProperty);
+                }
+                return true;
+        }
+        return false;
+    }
+
+    private boolean updateForCategory(String categoryType) {
+        if (categoryType.equals("main-category") && !Category.isThereMainCategory((MainCategory) newValue)) {
+            return false;
+        } else if (categoryType.equals("sub-category") && !Category.isThereSubCategory((SubCategory) newValue)) {
+            return false;
+        }
+        for (String specialProperty : ((Category) newValue).getSpecialProperties()) {
+            if (!product.getSpecialProperties().containsKey(specialProperty)) {
+                product.getSpecialProperties().put(specialProperty, "");
+            }
+        }
+        return true;
     }
 
     private void changeSpecialProperties(String type) {
@@ -59,7 +134,6 @@ public class EditProductRequest extends MainRequest {
                 removeSpecialProperties();
                 appendSpecialProperties();
                 break;
-
         }
     }
 
@@ -84,11 +158,11 @@ public class EditProductRequest extends MainRequest {
         this.field = field;
     }
 
-    public String getNewValue() {
+    public Object getNewValue() {
         return newValue;
     }
 
-    public void setNewValue(String newValue) {
+    public void setNewValue(Object newValue) {
         this.newValue = newValue;
     }
 

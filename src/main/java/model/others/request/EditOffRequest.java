@@ -50,22 +50,48 @@ public class EditOffRequest extends MainRequest {
 
     }
 
+    @Override
+    boolean update(String type) {
+        switch (field) {
+            case "start-time":
+            case "finish-time":
+            case "percent":
+            case "products":
+                return true;
+        }
+        return false;
+    }
+
     private void editProducts(String type) {
         ArrayList<Product> products = new ArrayList<>();
-        for (String s : newValueArrayList) {
-            Product product = Product.getProductWithId(s);
+        for (String id : newValueArrayList) {
+            Product product = Product.getProductWithId(id);
             if (product != null) {
                 products.add(product);
             }
         }
         switch (type) {
             case "edit-off append":
-                off.getProducts().addAll(products);
+                for (Product product : products) {
+                    if (!off.getProducts().contains(product)) {
+                        off.getProducts().add(product);
+                        product.addOff(off);
+                    }
+                }
                 break;
             case "edit-off replace":
+                for (Product product : off.getProducts()) {
+                    product.removeOff(off);
+                }
                 off.setProducts(products);
+                for (Product product : products) {
+                    product.addOff(off);
+                }
                 break;
             case "edit-off remove":
+                for (Product product : products) {
+                    product.removeOff(off);
+                }
                 off.getProducts().removeAll(products);
                 break;
         }

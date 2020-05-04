@@ -1,7 +1,9 @@
 package model.others.request;
 
 import com.google.gson.Gson;
+import controller.Controller;
 import model.others.Date;
+import model.others.Sort;
 import model.send.receive.RequestInfo;
 import model.user.User;
 
@@ -18,6 +20,9 @@ public class Request {
     private Date responseDate;
     private String status;
 
+    static {
+        allNewRequests = new ArrayList<>();
+    }
 
     public Request() {
         allNewRequests.add(this);
@@ -25,21 +30,17 @@ public class Request {
     }
 
     private static String requestIdCreator() {
-        StringBuilder id = new StringBuilder();
-        Random randomNumber = new Random();
-        String upperCaseAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        id.append(upperCaseAlphabet.charAt(randomNumber.nextInt(upperCaseAlphabet.length())));
-        id.append(upperCaseAlphabet.charAt(randomNumber.nextInt(upperCaseAlphabet.length())));
-        id.append(randomNumber.nextInt(10000));
-        if (isThereRequestWithId(id.toString())) {
+        String id = Controller.idCreator();
+        if (isThereRequestWithId(id)) {
             return requestIdCreator();
         } else
-            return id.toString();
+            return id;
     }
 
-    public static String allRequestInfo() {
+    public static String allRequestInfo(String sortField, String sortDirection) {
+        ArrayList<Request> newRequests = Sort.sortRequest(sortField, sortDirection, allNewRequests);
         ArrayList<String> allRequest = new ArrayList<>();
-        for (Request newRequest : allNewRequests) {
+        for (Request newRequest : newRequests) {
             allRequest.add(newRequest.getRequestInfo());
         }
         return (new Gson()).toJson(allRequest);
@@ -83,6 +84,11 @@ public class Request {
 
     public static void setAllNewRequests(ArrayList<Request> allNewRequests) {
         Request.allNewRequests = allNewRequests;
+    }
+
+    public static boolean canDoRequest(String id) {
+        Request request = getRequestById(id);
+        return request.mainRequest.update(request.type);
     }
 
     public String getRequestInfo() {
