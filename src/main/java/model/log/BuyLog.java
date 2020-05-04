@@ -1,18 +1,22 @@
 package model.log;
 
 
-import model.others.Date;
 import model.others.Product;
-import model.user.User;
+import model.user.Seller;
 
 import java.util.ArrayList;
 
 public class BuyLog extends Log {
-    public BuyLog(double money, String logId, Date logDate, double appliedDiscount,
-                  User customer, String address, String postalCode, String phoneNumber,
-                  String customerRequests, String purchaseStatus, ArrayList<Product> purchasedWares) {
-        super(money, logId, logDate, appliedDiscount, customer, address, postalCode,
-                phoneNumber, customerRequests, purchaseStatus, purchasedWares);
+    private String address;
+    private String postalCode;
+    private String phoneNumber;
+    private String customerRequests;
+    private ArrayList<ProductsInLog> products;
+
+
+    public BuyLog() {
+        super();
+        products = new ArrayList<>();
     }
 
     @Override
@@ -24,4 +28,55 @@ public class BuyLog extends Log {
     public String getLogInfoForSending() {
         return null;
     }//
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getCustomerRequests() {
+        return customerRequests;
+    }
+
+    public void setCustomerRequests(String customerRequests) {
+        this.customerRequests = customerRequests;
+    }
+
+    public void addProduct(Seller seller, Product product, int number) {
+
+    }
+
+    public void createSellLog() {
+
+    }
+
+    public void increaseSellerMoney() {
+
+    }
+
+
+    private class ProductsInLog {
+        private Product product;
+        private Seller seller;
+        private int number;
+    }
 }

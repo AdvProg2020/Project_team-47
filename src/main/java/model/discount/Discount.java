@@ -13,31 +13,31 @@ abstract public class Discount {
         this.discountPercent = discountPercent;
     }
 
+    public Discount() {}
+
     public Date getDiscountStartTime() {
         return discountStartTime;
+    }
+
+    public void setDiscountStartTime(Date discountStartTime) {
+        this.discountStartTime = discountStartTime;
     }
 
     public Date getDiscountFinishTime() {
         return discountFinishTime;
     }
 
-    public int getDiscountPercent() {
-        return discountPercent;
-    }
-
-
-
-    abstract public String discountInfoForSending();
-
-    public void setDiscountStartTime(Date discountStartTime) {
-        this.discountStartTime = discountStartTime;
-    }
-
     public void setDiscountFinishTime(Date discountFinishTime) {
         this.discountFinishTime = discountFinishTime;
+    }
+
+    public int getDiscountPercent() {
+        return discountPercent;
     }
 
     public void setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
     }
+
+    abstract public String discountInfoForSending();
 }

@@ -2,8 +2,8 @@ package model.discount;
 
 import com.google.gson.Gson;
 import model.log.BuyLog;
-import model.others.Date;
 import model.others.Sort;
+import model.user.Customer;
 import model.user.User;
 
 import java.util.ArrayList;
@@ -14,53 +14,43 @@ public class DiscountCode extends Discount {
     private String discountCode;
     private int maxUsableTime;
     private int maxDiscountAmount;
-    private HashMap<User,Integer> userUsedTimeHashMap;
-    private ArrayList<User> usersAbleToUse;
+    private HashMap<User, Integer> userUsedTimeHashMap;
+    private ArrayList<Customer> usersAbleToUse;
     private BuyLog buyLog;
 
-
-    public DiscountCode(Date discountStartTime, Date discountFinishTime, int discountPercent,
-                        String discountCode, int maxUsableTime, int maxDiscountAmount,
-                        HashMap<User, Integer> userUsedTimeHashMap, ArrayList<User> usersAbleToUse, BuyLog buyLog) {
-        super(discountStartTime, discountFinishTime, discountPercent);
-        this.discountCode = discountCode;
-        this.maxUsableTime = maxUsableTime;
-        this.maxDiscountAmount = maxDiscountAmount;
-        this.userUsedTimeHashMap = userUsedTimeHashMap;
-        this.usersAbleToUse = usersAbleToUse;
-        this.buyLog = buyLog;
+    static{
+        allDiscountCodes = new ArrayList<>();
     }
 
-    public String getDiscountCode() {
-        return discountCode;
+    public DiscountCode() {
+        userUsedTimeHashMap = new HashMap<>();
+        usersAbleToUse = new ArrayList<>();
+        allDiscountCodes.add(this);
+        this.discountCode = codeCreator();
     }
 
-    public int getMaxDiscountAmount() {
-        return maxDiscountAmount;
+    private String codeCreator() {
+        return null;
     }
 
-    public HashMap<User, Integer> getUserUsedTimeHashMap() {
-        return userUsedTimeHashMap;
-    }
-
-    public static Discount getDiscountById(String id){
+    public static Discount getDiscountById(String id) {
         return allDiscountCodes.stream().
                 filter(discount -> id.equals(discount.discountCode))
                 .findAny().orElse(null);
     }
 
-    public static void removeDiscountCode(String code){
+    public static void removeDiscountCode(String code) {
         allDiscountCodes.remove(allDiscountCodes.stream().
                 filter(discount -> code.equals(discount.discountCode))
                 .findAny().orElse(null));
     }
 
-    public static boolean isThereDiscountWithCode(String code){
+    public static boolean isThereDiscountWithCode(String code) {
         return allDiscountCodes.stream().anyMatch
                 (discount -> code.equals(discount.discountCode));
     }
 
-    public static String getAllDiscountCodeInfo(String field,String direction){
+    public static String getAllDiscountCodeInfo(String field, String direction) {
         ArrayList<DiscountCode> discountCodes = Sort.sortDiscountCode(field, direction, allDiscountCodes);
         ArrayList<String> discountsInfo = new ArrayList<>();
         assert discountCodes != null;
@@ -70,7 +60,56 @@ public class DiscountCode extends Discount {
         return (new Gson()).toJson(discountsInfo);
     }
 
-    public boolean canThisPersonUseCode(User user){
+    public static ArrayList<DiscountCode> getAllDiscountCodes() {
+        return allDiscountCodes;
+    }
+
+    public static void setAllDiscountCodes(ArrayList<DiscountCode> allDiscountCodes) {
+        DiscountCode.allDiscountCodes = allDiscountCodes;
+    }
+
+    public String getDiscountCode() {
+        return discountCode;
+    }
+
+    public void setDiscountCode(String discountCode) {
+        this.discountCode = discountCode;
+    }
+
+    public int getMaxDiscountAmount() {
+        return maxDiscountAmount;
+    }
+
+    public void setMaxDiscountAmount(int maxDiscountAmount) {
+        this.maxDiscountAmount = maxDiscountAmount;
+    }
+
+    public HashMap<User, Integer> getUserUsedTimeHashMap() {
+        return userUsedTimeHashMap;
+    }
+
+    public void setUserUsedTimeHashMap(HashMap<User, Integer> userUsedTimeHashMap) {
+        this.userUsedTimeHashMap = userUsedTimeHashMap;
+    }
+
+    public void remove() {
+        allDiscountCodes.remove(this);
+        for (Customer customer : this.usersAbleToUse) {
+            customer.removeDiscountCode(this);
+        }
+    }
+
+    public double getPriceAfterApply(double price) {
+        return 1;
+    }
+
+    public void codeUsed(Customer customer) {
+    }
+    public double appliedDiscount(double price) {
+        return 1;
+    }
+
+    public boolean canThisPersonUseCode(User user) {
         return usersAbleToUse.stream().anyMatch(user::equals);
     }
 
@@ -79,20 +118,8 @@ public class DiscountCode extends Discount {
         return "DiscountCode{}";
     }//
 
-    public void setDiscountCode(String discountCode) {
-        this.discountCode = discountCode;
-    }
-
-    public void setMaxDiscountAmount(int maxDiscountAmount) {
-        this.maxDiscountAmount = maxDiscountAmount;
-    }
-
-    public void setUserUsedTimeHashMap(HashMap<User, Integer> userUsedTimeHashMap) {
-        this.userUsedTimeHashMap = userUsedTimeHashMap;
-    }
-
-    public void useDiscountCode(User user){
-       userUsedTimeHashMap.replace(user, userUsedTimeHashMap.get(user) - 1);
+    public void useDiscountCode(User user) {
+        userUsedTimeHashMap.replace(user, userUsedTimeHashMap.get(user) - 1);
     }
 
     @Override
@@ -100,32 +127,19 @@ public class DiscountCode extends Discount {
         return null;
     }//
 
-
-    public static ArrayList<DiscountCode> getAllDiscountCodes() {
-        return allDiscountCodes;
-    }
-
-
     public int getMaxUsableTime() {
         return maxUsableTime;
     }
-
-
-    public ArrayList<User> getUsersAbleToUse() {
-        return usersAbleToUse;
-    }
-
-    public static void setAllDiscountCodes(ArrayList<DiscountCode> allDiscountCodes) {
-        DiscountCode.allDiscountCodes = allDiscountCodes;
-    }
-
 
     public void setMaxUsableTime(int maxUsableTime) {
         this.maxUsableTime = maxUsableTime;
     }
 
+    public ArrayList<Customer> getUsersAbleToUse() {
+        return usersAbleToUse;
+    }
 
-    public void setUsersAbleToUse(ArrayList<User> usersAbleToUse) {
+    public void setUsersAbleToUse(ArrayList<Customer> usersAbleToUse) {
         this.usersAbleToUse = usersAbleToUse;
     }
 }
