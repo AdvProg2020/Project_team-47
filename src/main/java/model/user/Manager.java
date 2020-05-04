@@ -16,6 +16,12 @@ public class Manager extends User {
     }
 
     @Override
+    public void deleteUser() {
+        allUsers.remove(this);
+        User.managerRemoved();
+    }
+
+    @Override
     public String userInfoForSending() {
         UserInfo user = new UserInfo();
         user.setEmail(this.getEmail());

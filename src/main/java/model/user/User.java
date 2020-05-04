@@ -37,13 +37,22 @@ abstract public class User {
         this.type = userInfo.get("type");
     }
 
-    public static boolean isThereUsersWithUsername(ArrayList<String> userNames) {
+    public static boolean isThereCustomersWithUsername(ArrayList<String> userNames) {
         for (String username : userNames) {
-            if (!isThereUserWithUsername(username)) {
+            User user = getUserByUsername(username);
+            if (!(user instanceof Seller)) {
                 return false;
             }
         }
         return true;
+    }
+
+    public static boolean isThereSeller(Seller seller) {
+        return allUsers.contains(seller);
+    }
+
+    public static boolean isThereSeller(String username) {
+        return getUserByUsername(username) instanceof Seller;
     }
 
     public static boolean isThereUserWithUsername(String username) {
@@ -114,13 +123,8 @@ abstract public class User {
 
     public static void deleteUser(String username) {
         User user = getUserByUsername(username);
-        deleteUser(user);
-    }
-
-    public static void deleteUser(User user) {
-        allUsers.remove(user);
-        if (user instanceof Manager)
-            User.managersNumber--;
+        assert user != null;
+        user.deleteUser();
     }
 
     private static void copyUserInfo(User destinationUser, User sourceUser) {
@@ -145,20 +149,34 @@ abstract public class User {
         managersNumber++;
     }
 
+    public static void managerRemoved() {
+        managersNumber--;
+    }
+
+    public abstract void deleteUser();
+
     abstract public String userInfoForSending();
 
     public void changeRole(String newRole) {
+
         switch (newRole) {
             case "manager":
+                if (this instanceof Manager)
+                    return;
                 this.changeUserToManager();
                 break;
             case "customer":
+                if (this instanceof Customer)
+                    return;
                 this.changeUserToCustomer();
                 break;
             case "seller":
+                if (this instanceof Seller)
+                    return;
                 this.changeUserToSeller();
                 break;
         }
+        this.deleteUser();
     }
 
     void addUser() {
@@ -171,7 +189,6 @@ abstract public class User {
         Manager manager = new Manager();
         copyUserInfo(manager, this);
         manager.setType("manager");
-        deleteUser(this);
         manager.addUser();
     }
 
@@ -179,7 +196,6 @@ abstract public class User {
         Seller seller = new Seller();
         copyUserInfo(seller, this);
         seller.setType("seller");
-        deleteUser(this);
         seller.addUser();
     }
 
@@ -187,7 +203,6 @@ abstract public class User {
         Customer customer = new Customer();
         copyUserInfo(customer, this);
         customer.setType("customer");
-        deleteUser(this);
         customer.addUser();
     }
 

@@ -1,14 +1,13 @@
 package model.user;
 
 import com.google.gson.Gson;
+import model.category.Category;
 import model.discount.Off;
 import model.log.Log;
 import model.others.Date;
 import model.others.Product;
 import model.others.Sort;
-import model.others.request.EditOffRequest;
-import model.others.request.EditProductRequest;
-import model.others.request.Request;
+import model.others.request.*;
 import model.send.receive.UserInfo;
 
 import java.util.ArrayList;
@@ -27,12 +26,26 @@ public class Seller extends User {
 
     public Seller() {
         super();
+        sellLogs = new ArrayList<>();
+        allProducts=new ArrayList<>();
+        allOff=new ArrayList<>();
     }
 
     public Seller(HashMap<String, String> userInfo) {
         super(userInfo);
         this.companyInfo = userInfo.get("company-info");
         this.companyName = userInfo.get("company-name");
+        sellLogs = new ArrayList<>();
+        allProducts=new ArrayList<>();
+        allOff=new ArrayList<>();
+    }
+
+    @Override
+    public void deleteUser() {
+        allUsers.remove(this);
+        for (Product product : this.allProducts) {
+            product.removeSeller(this);
+        }
     }
 
     public String getAllSellLogsInfo(String sortField, String sortDirection) {
@@ -43,6 +56,40 @@ public class Seller extends User {
             sellInfoArrayList.add(log.getLogInfoForSending());
         }
         return (new Gson()).toJson(sellInfoArrayList);
+    }
+
+    public Off getOffById(String id) {
+        for (Off off : allOff) {
+            if (id.equals(off.getOffId()))
+                return off;
+        }
+        return null;
+    }
+
+    public Product getProductById(String id) {
+        for (Product product : this.allProducts) {
+            if (id.equals(product.getId())) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    public void increaseMoney(double money) {
+        this.money += money;
+    }
+
+    public boolean hasProduct(String id) {
+        for (Product product : this.allProducts) {
+            if (id.equals(product.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasProduct(Product product) {
+        return allProducts.contains(product);
     }
 
 
@@ -89,41 +136,67 @@ public class Seller extends User {
         Request request = new Request();
         request.setApplyDate(Date.getCurrentDate());
         request.setRequestSender(this);
-        request.setType(type);
+        request.setType("edit-product " + type);
         EditProductRequest editProductRequest = new EditProductRequest();
         if (newValue instanceof HashMap) {
             HashMap<String, String> specialProperties = (HashMap<String, String>) newValue;
             editProductRequest.setNewValueHashMap(specialProperties);
         } else
-            editProductRequest.setNewValue((String) newValue);
+            editProductRequest.setNewValue(newValue);
         editProductRequest.setField(field);
         editProductRequest.setProduct(product);
         editProductRequest.setSeller(this);
         request.setMainRequest(editProductRequest);
     }
 
-    public void editOff(String offId, String field, Object newValue, String type) {
-        Off off = Off.getOffById(offId);
+    public void addProduct(HashMap<String, String> productInfo, HashMap<String, String> specialProperties) {
         Request request = new Request();
         request.setApplyDate(Date.getCurrentDate());
         request.setRequestSender(this);
-        request.setType(type);
+        request.setType("add-product");
+        AddProductRequest addProductRequest = new AddProductRequest();
+        addProductRequest.setSeller(this);
+        addProductRequest.setCategory(Category.getMainCategoryByName(productInfo.get("category")));
+        addProductRequest.setSubCategory(Category.getSubCategoryByName(productInfo.get("sub-category")));
+        addProductRequest.setCompany(productInfo.get("company"));
+        addProductRequest.setDescription(productInfo.get("description"));
+        addProductRequest.setName(productInfo.get("name"));
+        addProductRequest.setNumberInStock(Integer.parseInt(productInfo.get("number-in-stock")));
+        addProductRequest.setPrice(Double.parseDouble(productInfo.get("price")));
+        addProductRequest.setSpecialProperties(specialProperties);
+        request.setMainRequest(addProductRequest);
+    }
+
+    public void editOff(Off off, String field, Object newValue, String type) {
         EditOffRequest editOffRequest;
         if (newValue instanceof ArrayList) {
-            ArrayList productIdArray = (ArrayList) newValue;
-            ArrayList<String> productsId = new ArrayList<>();
-            for (Object product : productIdArray) {
-                productsId.add((String) product);
-            }
+            ArrayList<String> productsId = (ArrayList<String>) newValue;
             editOffRequest = new EditOffRequest(field, productsId);
         } else if (newValue instanceof String) {
             editOffRequest = new EditOffRequest(field, (String) newValue);
         } else
-            editOffRequest = new EditOffRequest();
+            return;
+        Request request = new Request();
+        request.setApplyDate(Date.getCurrentDate());
+        request.setRequestSender(this);
+        request.setType("edit-product " + type);
         editOffRequest.setOff(off);
         request.setMainRequest(editOffRequest);
     }
 
+    public void addOff(HashMap<String, String> offInfo, ArrayList<String> productsId) {
+        Request request = new Request();
+        AddOffRequest addOffRequest = new AddOffRequest();
+        request.setApplyDate(Date.getCurrentDate());
+        request.setRequestSender(this);
+        request.setType("add-off");
+        request.setMainRequest(addOffRequest);
+        addOffRequest.setFinishTime(Date.getDateWithString(offInfo.get("finish-time")));
+        addOffRequest.setStartTime(Date.getDateWithString(offInfo.get("start-time")));
+        addOffRequest.setPercent(Integer.parseInt(offInfo.get("percent")));
+        addOffRequest.setProductsId(productsId);
+        addOffRequest.setSellerUsername(this.getUsername());
+    }
 
     public String getBuyers(Product product) {
         HashSet<Customer> buyers = new HashSet<>();
@@ -162,8 +235,7 @@ public class Seller extends User {
     public void removeProduct(Product product) {
         this.allProducts.remove(product);
         product.getSellers().remove(this);
-        product.getPrice().remove(this);
-        product.getNumberOfProductSellerHas().remove(this);
+        product.getProductSellers().remove(product.getProductSeller(this));
     }
 
     public void buy(Log sellLog) {

@@ -2,6 +2,7 @@ package model.user;
 
 import com.google.gson.Gson;
 import model.discount.DiscountCode;
+import model.log.BuyLog;
 import model.log.Log;
 import model.others.Product;
 import model.others.Score;
@@ -12,20 +13,56 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Customer extends User {
-    private ArrayList<Log> buyLogs;
+    private ArrayList<BuyLog> buyLogs;
     private ShoppingCart shoppingCart;
     private ArrayList<DiscountCode> discountCodes;
     private double money;
 
     public Customer() {
         super();
+        buyLogs=new ArrayList<>();
+        discountCodes = new ArrayList<>();
     }
 
     public Customer(HashMap<String, String> userInfo) {
         super(userInfo);
     }
 
-    public boolean userHasDiscountCode(String code) {
+    @Override
+    public void deleteUser() {
+        allUsers.remove(this);
+        for (DiscountCode discountCode : this.discountCodes) {
+            discountCode.getUsersAbleToUse().remove(this);
+        }
+    }
+
+    public DiscountCode getDiscountCode(String code) {
+        for (DiscountCode discountCode : discountCodes) {
+            if (discountCode.getDiscountCode().equals(code)) {
+                return discountCode;
+            }
+        }
+        return null;
+    }
+
+    public void decreaseMoney(double money) {
+        this.money -= money;
+    }
+
+    public BuyLog getBuyLog(String id) {
+        for (BuyLog buyLog : buyLogs) {
+            if (buyLog.getLogId().equals(id)) {
+                return buyLog;
+            }
+        }
+        return null;
+    }
+
+    public void removeDiscountCode(DiscountCode discountCode) {
+        this.discountCodes.remove(discountCode);
+    }
+
+    public boolean customerHasDiscountCode(String code) {
         for (DiscountCode discountCode : this.discountCodes) {
             if (code.equals(discountCode.getDiscountCode())) {
                 return true;
@@ -38,11 +75,8 @@ public class Customer extends User {
         return !(this.money < cartPrice);
     }
 
-    private void addBuyLog(Log buyLog) {
+    public void addBuyLog(BuyLog buyLog) {
         buyLogs.add(buyLog);
-    }
-
-    public void buy(Log buyLog) {
     }
 
     public boolean doesUserBoughtProduct(Product product) {
@@ -108,5 +142,17 @@ public class Customer extends User {
         if (!this.discountCodes.contains(discountCode)) {
             this.discountCodes.add(discountCode);
         }
+    }
+
+    public ArrayList<BuyLog> getBuyLogs() {
+        return buyLogs;
+    }
+
+    public ArrayList<DiscountCode> getDiscountCodes() {
+        return discountCodes;
+    }
+
+    public double getMoney() {
+        return money;
     }
 }
