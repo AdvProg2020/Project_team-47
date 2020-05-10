@@ -12,7 +12,7 @@ public class SellLog extends Log {
     @Override
     public String toString() {
         return "SellLog{}";
-    }//
+    }
 
 
 

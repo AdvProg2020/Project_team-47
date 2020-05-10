@@ -1,6 +1,7 @@
 package model.discount;
 
 import com.google.gson.Gson;
+import controller.Controller;
 import model.log.BuyLog;
 import model.others.Sort;
 import model.user.Customer;
@@ -30,7 +31,13 @@ public class DiscountCode extends Discount {
     }
 
     private String codeCreator() {
-        return null;
+        String id = Controller.idCreator();
+        for (DiscountCode discountCode : allDiscountCodes) {
+            if (id.equals(discountCode.getDiscountCode())){
+                codeCreator();
+            }
+        }
+        return id;
     }
 
     public static Discount getDiscountById(String id) {
@@ -100,13 +107,14 @@ public class DiscountCode extends Discount {
     }
 
     public double getPriceAfterApply(double price) {
-        return 1;
+        return (100 - discountPercent) * price / 100;
     }
 
     public void codeUsed(Customer customer) {
+        userUsedTimeHashMap.replace(customer, userUsedTimeHashMap.get(customer) + 1);
     }
     public double appliedDiscount(double price) {
-        return 1;
+        return discountPercent * price / 100;
     }
 
     public boolean canThisPersonUseCode(User user) {
