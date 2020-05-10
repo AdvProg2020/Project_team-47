@@ -1,20 +1,18 @@
 package view.command;
 
-import view.Menu;
+import view.menu.Menu;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 public abstract class Command {
-    private Menu menu;
+    protected Menu menu;
     private String signature;
     private String regex;
 
-    public Command(String signature, Menu menu, String regex) {
+
+    public Command(Menu menu) {
         this.menu = menu;
-        this.signature = signature;
-        this.regex = regex;
     }
 
     public String getSignature() {
