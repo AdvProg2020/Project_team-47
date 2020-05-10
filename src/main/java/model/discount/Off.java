@@ -61,10 +61,12 @@ public class Off extends Discount {
     }
 
     public boolean isOffStarted() {
+        assert Date.getCurrentDate() != null;
         return discountStartTime.compareTo(Date.getCurrentDate()) >= 0;
     }
 
     public boolean isOffFinished() {
+        assert Date.getCurrentDate() != null;
         return discountFinishTime.compareTo(Date.getCurrentDate()) <= 0;
     }
 
