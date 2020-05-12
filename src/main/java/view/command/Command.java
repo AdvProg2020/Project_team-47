@@ -10,7 +10,6 @@ public abstract class Command {
     private String signature;
     private String regex;
 
-
     public Command(Menu menu) {
         this.menu = menu;
     }
@@ -21,6 +20,20 @@ public abstract class Command {
 
     public void setSignature(String signature) {
         this.signature = signature;
+    }
+
+
+
+    public String getRegex() {
+        return regex;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setRegex(String regex) {
+        this.regex = regex;
     }
 
     public static boolean isInputCommandValid(String inputCommand, ArrayList<Command> commands) {
@@ -44,8 +57,12 @@ public abstract class Command {
         }
         return null;
     }
+    public abstract void doCommand(String text);
 
-    public abstract void doCommand();
+    public static Command findCommandWithSignature(String inputCommand, ArrayList<Command> commands){
+        return commands.stream().filter(command -> command.getSignature()
+                .equalsIgnoreCase(inputCommand)).findFirst().orElse(null);
+    }
 
 
 }

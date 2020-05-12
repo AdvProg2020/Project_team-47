@@ -1,9 +1,11 @@
 package view.menu;
 
 import view.command.Command;
+import view.outputMessages.OutputErrors;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public abstract class Menu {
     private static Scanner scanner;
@@ -11,7 +13,7 @@ public abstract class Menu {
     private String name;
     protected ArrayList<Command> menuCommands;
     protected ArrayList<Menu> subMenus;
-    protected boolean isSignedIn;
+
 
     static {
         scanner = new Scanner(System.in);
@@ -22,7 +24,6 @@ public abstract class Menu {
         menuCommands = new ArrayList<>();
         subMenus = new ArrayList<>();
         menuCommands = new ArrayList<>();
-        isSignedIn = false;
         setSubMenus();
         addCommands();
     }
@@ -31,24 +32,55 @@ public abstract class Menu {
         return menuCommands;
     }
 
+    public ArrayList<Menu> getSubMenus() {
+        return subMenus;
+    }
+
+    public Menu getPreviousMenu() {
+        return previousMenu;
+    }
+
     public String getName() {
         return name;
     }
 
-    public static Scanner getScanner() {
-        return scanner;
+    public void autoExecute(){
+        String inputCommand;
+        while (true) {
+            inputCommand = getInputCommand();
+            if (!isInputCommandValid(inputCommand)) {
+                System.out.println("salam");
+                OutputErrors.invalidInputCommand();
+            } else {
+                processInputCommand(inputCommand).doCommand(inputCommand);
+            }
+        }
     }
-
-    public static void setScanner(Scanner scanner) {
-        Menu.scanner = scanner;
+    public Command processInputCommand(String inputCommand){
+        for (Command menuCommand : menuCommands) {
+            if (Pattern.compile(menuCommand.getRegex()).
+                    matcher(inputCommand).find()){
+                return menuCommand;
+            }
+        }
+        return null;
     }
-
-    public abstract void execute();
+    public boolean isInputCommandValid(String inputCommand){
+        for (Command menuCommand : menuCommands) {
+            if (Pattern.compile(menuCommand.getRegex()).
+                    matcher(inputCommand).find()){
+                return true;
+            }
+        }
+        return false;
+    }
     protected abstract void setSubMenus();
     protected abstract void addCommands();
-    protected void printSubMenusWithNumber(){
-        for (int i = 0; i < subMenus.size(); i++) {
-            System.out.println(i+1 + ". " + subMenus.get(i).getName());
-        }
+    public Menu findSubMenuWithName(String name){
+        return subMenus.stream().filter(subMenu -> subMenu.getName()
+                .equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+    public static String getInputCommand(){
+        return scanner.nextLine().trim();
     }
 }

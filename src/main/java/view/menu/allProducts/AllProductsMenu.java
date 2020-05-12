@@ -7,10 +7,10 @@ public class AllProductsMenu extends Menu {
         super(name, previousMenu);
     }
 
-    @Override
+    /*@Override
     public void execute() {
 
-    }
+    }*/
 
     @Override
     protected void setSubMenus() {

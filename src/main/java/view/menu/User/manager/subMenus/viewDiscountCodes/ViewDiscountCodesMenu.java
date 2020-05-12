@@ -1,13 +1,13 @@
-package view.menu.product;
+package view.menu.User.manager.subMenus.viewDiscountCodes;
 
 import view.menu.Menu;
 
-public class ProductMenu extends Menu {
-    public ProductMenu(String name, Menu previousMenu) {
+public class ViewDiscountCodesMenu extends Menu {
+    public ViewDiscountCodesMenu(String name, Menu previousMenu) {
         super(name, previousMenu);
     }
 
-    /*@Override
+   /* @Override
     public void execute() {
 
     }*/

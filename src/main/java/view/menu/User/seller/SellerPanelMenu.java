@@ -1,20 +1,19 @@
 package view.menu.User.seller;
 
-import view.command.InsideCommand.InsideCommand;
+import view.command.BackCommand;
+import view.command.ExitCommand;
+import view.command.HelpCommand;
 import view.menu.Menu;
-import view.menu.User.UserPanelMenu;
-import view.command.*;
-import java.util.ArrayList;
+import view.menu.User.commands.ViewPersonalInfoCommand;
+import view.menu.User.seller.commands.ManageProductsCommandsSeller;
+import view.menu.User.seller.commands.ViewCompanyInformationCommand;
+import view.menu.User.seller.commands.ViewSalesHistoryCommand;
 
-public class SellerPanelMenu extends UserPanelMenu {
+public class SellerPanelMenu extends Menu {
     public SellerPanelMenu(String name, Menu previousMenu) {
         super(name, previousMenu);
     }
 
-    @Override
-    public void execute() {
-
-    }
 
     @Override
     protected void setSubMenus() {
@@ -23,27 +22,11 @@ public class SellerPanelMenu extends UserPanelMenu {
 
     @Override
     protected void addCommands() {
-        /*Command upperCommand;
-        ArrayList<Command> subCommands;
-        menuCommands.add(new InsideCommand("help", this, null));
-
-        upperCommand = new MenuToControllerCommand
-                ("view personal info", this, null);
-        menuCommands.add(upperCommand);
-        subCommands = upperCommand.getSubCommands();
-        subCommands.add(new MenuToControllerCommand("edit [field]", this, upperCommand, "[]"));
-        upperCommand.setSubCommands(subCommands);
-
-        menuCommands.add(new MenuToControllerCommand("view company information", this, null));
-
-        menuCommands.add(new MenuToControllerCommand("view sales history", this, null));
-
-        upperCommand = new MenuToControllerCommand
-                ("view personal info", this, null);
-        menuCommands.add(upperCommand);
-        subCommands = upperCommand.getSubCommands();*/
-
-
-
+        new ViewPersonalInfoCommand(this);
+        new ViewCompanyInformationCommand(this);
+        new ViewSalesHistoryCommand(this);
+        new ManageProductsCommandsSeller(this);
+        new ExitCommand(this);
+        new HelpCommand(this);
     }
 }

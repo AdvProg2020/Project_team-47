@@ -1,40 +1,30 @@
 package view.menu.loginAndRegister;
 
-import view.command.Command;
+import view.UserAttributes;
+import view.command.HelpCommand;
+import view.command.BackCommand;
 import view.menu.Menu;
-import view.outputMessages.OutputErrors;
-import view.outputMessages.OutputMessages;
+import view.menu.loginAndRegister.Commands.LoginCommand;
+import view.menu.loginAndRegister.Commands.LogoutCommand;
+import view.menu.loginAndRegister.Commands.RegisterCommand;
 
 public class LoginAndRegisterMenu extends Menu {
-    private static boolean isManagerRegistered;
 
     public LoginAndRegisterMenu(String name, Menu previousMenu) {
         super(name, previousMenu);
-        isManagerRegistered = false;
     }
 
     @Override
     protected void setSubMenus() {
-
     }
 
     @Override
     protected void addCommands() {
-
+        menuCommands.add(new RegisterCommand(this));
+        menuCommands.add(new LoginCommand(this));
+        menuCommands.add(new LogoutCommand(this));
+        menuCommands.add(new BackCommand(this));
+        menuCommands.add(new HelpCommand(this));
     }
 
-    @Override
-    public void execute() {
-        /*String inputCommand;
-        while (true) {
-            inputCommand = Menu.getScanner().nextLine().trim();
-            if (!Command.isInputCommandValid(inputCommand, menuCommands)) {
-                OutputErrors.invalidInputCommand();
-            } else {
-                Command.findCommand(inputCommand, menuCommands).doCommand();
-            }
-
-
-        }*/
-    }
 }

@@ -1,9 +1,7 @@
-import view.menu.MainMenu;
-import view.menu.allProducts.AllProductsMenu;
+import view.menu.User.customer.CustomerPanelMenu;
 
 public class Main {
     public static void main(String[] args) {
-        new MainMenu("main menu", null).execute();
-
+        new CustomerPanelMenu("customer panel menu", null).autoExecute();
     }
 }

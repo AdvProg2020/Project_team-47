@@ -1,9 +1,9 @@
-package view.menu.product;
+package view.menu.User.manager.subMenus.manageRequestsMenu;
 
 import view.menu.Menu;
 
-public class ProductMenu extends Menu {
-    public ProductMenu(String name, Menu previousMenu) {
+public class ManageRequestsMenu extends Menu {
+    public ManageRequestsMenu(String name, Menu previousMenu, Menu parentMenu) {
         super(name, previousMenu);
     }
 
