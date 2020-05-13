@@ -18,15 +18,14 @@ public class UserPanelController extends Controller {
         switch (field) {
             case "first-name":
                 loggedUser.setFirstName(newValue);
+                actionCompleted();
                 break;
             case "last-name":
                 loggedUser.setLastName(newValue);
+                actionCompleted();
                 break;
             case "phone-number":
                 editPhoneNumber(newValue);
-                break;
-            case "email":
-                editEmail(newValue);
                 break;
             case "password":
                 editPassword(newValue);
@@ -34,11 +33,13 @@ public class UserPanelController extends Controller {
             case "company-name":
                 if (loggedUser instanceof Seller) {
                     ((Seller) loggedUser).setCompanyName(newValue);
+                    actionCompleted();
                     break;
                 }
             case "company-info":
                 if (loggedUser instanceof Seller) {
                     ((Seller) loggedUser).setCompanyInfo(newValue);
+                    actionCompleted();
                     break;
                 }
             default:
@@ -46,19 +47,18 @@ public class UserPanelController extends Controller {
         }
     }
 
-    private static void editEmail(String newEmail) {
-        if (!User.isEmailValid(newEmail)) {
-            sendError("Wrong email!!");
-        } else {
-            loggedUser.setEmail(newEmail);
-        }
-    }
-
     private static void editPhoneNumber(String newPhoneNumber) {
         if (!User.isPhoneValid(newPhoneNumber)) {
             sendError("Wrong phone number!!");
+        }
+        String lastPhoneNumber = loggedUser.getPhoneNumber();
+        loggedUser.setPhoneNumber("");
+        if (User.isThereUserWithPhone(newPhoneNumber)) {
+            loggedUser.setPhoneNumber(lastPhoneNumber);
+            sendError("There is another user with this phone number!!");
         } else {
             loggedUser.setPhoneNumber(newPhoneNumber);
+            actionCompleted();
         }
     }
 
@@ -67,32 +67,36 @@ public class UserPanelController extends Controller {
             sendError("Password is not valid!!");
         } else {
             loggedUser.setPassword(newPassword);
+            actionCompleted();
         }
     }
 
-    static boolean checkSort(String sortFiled, String direction, String itemToSort) {
-        if (sortFiled == null && direction == null) {
+    static boolean checkSort(String sortField, String direction, String itemToSort) {
+        //this function will check that items could sort by the given field and direction
+
+        if (sortField == null && direction == null) {
             return true;
-        } else if (sortFiled == null || direction == null) {
+        } else if (sortField == null || direction == null) {
             return false;
         } else if (!Pattern.matches("(descending|ascending)", direction)) {
             return false;
         }
+
         switch (itemToSort) {
             case "log":
-                return sortFiled.equals("money");
+                return sortField.equals("money");
             case "request":
-                return Pattern.matches("(apply-date|sender-username)", sortFiled);
+                return Pattern.matches("(apply-date|sender-username)", sortField);
             case "user":
-                return Pattern.matches("(first-name|last-name|username)", sortFiled);
+                return Pattern.matches("(first-name|last-name|username)", sortField);
             case "off":
             case "discount-code":
-                return Pattern.matches("(start-time|finish-time|percent)", sortFiled);
+                return Pattern.matches("(start-time|finish-time|percent)", sortField);
             case "product":
-                return Pattern.matches("(name|score|seen-time|date)", sortFiled);
+                return Pattern.matches("(name|score|seen-time|date|price)", sortField);
             case "category":
-                return sortFiled.equals("name");
+                return sortField.equals("name");
         }
         return false;
-    }//done
-}
+    }
+}//end UserPanelController class

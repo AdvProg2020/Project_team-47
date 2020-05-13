@@ -1,8 +1,11 @@
 package controller;
 
+import com.google.gson.Gson;
 import model.others.ShoppingCart;
+import model.send.receive.*;
 import model.user.User;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 abstract public class Controller {
@@ -12,9 +15,6 @@ abstract public class Controller {
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
     }
 
-    public static void loadingDatabase() {
-    }
-
     public static User getLoggedUser() {
         return loggedUser;
     }
@@ -22,16 +22,132 @@ abstract public class Controller {
     static void sendError(String errorMessage) {
     }
 
-    static void sendAnswer(String message) {
+    static void sendAnswer(ArrayList arrayList, String type) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        switch (type) {
+            case "category":
+                serverMessage.setCategoryInfoArrayList(arrayList);
+                break;
+            case "user":
+                serverMessage.setUserInfoArrayList(arrayList);
+                break;
+            case "code":
+                serverMessage.setDiscountCodeInfoArrayList(arrayList);
+                break;
+            case "off":
+                serverMessage.setOffInfoArrayList(arrayList);
+                break;
+            case "request":
+                serverMessage.setRequestArrayList(arrayList);
+                break;
+            case "product":
+                serverMessage.setProductInfoArrayList(arrayList);
+                break;
+            case "log":
+                serverMessage.setLogInfoArrayList(arrayList);
+                break;
+            case "comment":
+                serverMessage.setCommentArrayList(arrayList);
+                break;
+            case "sort":
+            case "filter":
+                serverMessage.setStrings(arrayList);
+                break;
+            default:
+                sendError("Wrong ArrayList type.(Server Error!!)");
+                return;
+        }
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(double number) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setNumber(number);
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(CategoryInfo categoryInfo) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setCategoryInfo(categoryInfo);
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(LogInfo logInfo) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setLogInfo(logInfo);
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(ProductInfo productInfo) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setProductInfo(productInfo);
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(CartInfo cartInfo) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        //serverMessage.setCartInfo(cartInfo);
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(DiscountCodeInfo discountCodeInfo) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setDiscountCodeInfo(discountCodeInfo);
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(OffInfo offInfo) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setOffInfo(offInfo);
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(RequestInfo requestInfo) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setRequestInfo(requestInfo);
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(UserInfo userInfo) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setUserInfo(userInfo);
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(String firstString, String secondString) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setFirstString(firstString);
+        serverMessage.setSecondString(secondString);
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void actionCompleted() {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Action completed.");
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    private static void send(String answer) {
+
     }
 
     public static String idCreator() {
-        StringBuilder id = new StringBuilder();
+        //this function will create a random string such as "AB1234"
         Random randomNumber = new Random();
         String upperCaseAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        id.append(upperCaseAlphabet.charAt(randomNumber.nextInt(upperCaseAlphabet.length())));
-        id.append(upperCaseAlphabet.charAt(randomNumber.nextInt(upperCaseAlphabet.length())));
-        id.append(randomNumber.nextInt(10000));
-        return id.toString();
+        return String.valueOf(upperCaseAlphabet.charAt(randomNumber.nextInt(upperCaseAlphabet.length()))) +
+                upperCaseAlphabet.charAt(randomNumber.nextInt(upperCaseAlphabet.length())) +
+                randomNumber.nextInt(10000);
     }
-}
+}//end Controller Class

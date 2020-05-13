@@ -20,11 +20,11 @@ public class OffController extends Controller {
 
     public static void offs() {
         filters = new ArrayList<>();
-        sendAnswer(Off.getAllOffsInfo());
+        sendAnswer(Off.getAllOffsInfo(), "off");
     }
 
     public static void voidShowOffs() {
-        sendAnswer(Off.getAllProductsInOffsInfo(sortField, sortDirection, filters));
+        sendAnswer(Off.getAllProductsInOffsInfo(sortField, sortDirection, filters), "off");
     }
 
     private static void addFilter(String filterKey, String firstFilterValue, String secondFilterValue) {
@@ -32,6 +32,7 @@ public class OffController extends Controller {
             sendError("You are already using this filter!!");
             return;
         }
+
         switch (filterKey) {
             case "time":
                 if (!Date.isDateFormatValid(firstFilterValue) || !Date.isDateFormatValid(secondFilterValue)) {
@@ -39,6 +40,7 @@ public class OffController extends Controller {
                 } else
                     createFilterForTime(firstFilterValue, secondFilterValue);
                 break;
+
             case "percent":
                 try {
                     int min = Integer.parseInt(firstFilterValue);
@@ -48,9 +50,11 @@ public class OffController extends Controller {
                     sendError("Please enter valid number!!");
                 }
                 break;
+
             case "seller":
                 createFilterForSeller(firstFilterValue);
                 break;
+
             case "off-status":
                 createFilterForOffStatus(firstFilterValue);
                 break;
@@ -64,7 +68,7 @@ public class OffController extends Controller {
             case "in-edit-queue":
             case "started":
             case "finished":
-            case "accept-by-manager":
+            case "accepted-by-manager":
                 break;
             default:
                 sendError("There is no such status!!");
@@ -75,6 +79,7 @@ public class OffController extends Controller {
         filter.setFilterKey("status");
         filter.setFirstFilterValue(status);
         filters.add(filter);
+        actionCompleted();
     }
 
     private static void createFilterForSeller(String sellerUsername) {
@@ -99,20 +104,26 @@ public class OffController extends Controller {
             filter.setFirstInt(min);
             filter.setSecondInt(max);
             filters.add(filter);
+            actionCompleted();
         }
-
     }
 
     private static void createFilterForTime(String startDate, String finishDate) {
+        if (!(Date.isDateFormatValid(startDate) && Date.isDateFormatValid(finishDate))) {
+            sendError("Please enter valid date!!");
+            return;
+        }
         Filter filter = new Filter();
         filter.setType("equation");
         filter.setFilterKey("time");
         filter.setFirstFilterValue(startDate);
         filter.setSecondFilterValue(finishDate);
         filters.add(filter);
+        actionCompleted();
     }
 
     private static boolean isFilterExist(String key) {
+        //check that if there is a filter with given key
         switch (key) {
             case "time":
             case "percent":
@@ -125,7 +136,7 @@ public class OffController extends Controller {
                 }
                 return false;
             default:
-                return false;
+                return true;
         }
     }
 
@@ -133,6 +144,7 @@ public class OffController extends Controller {
         for (Filter filter : filters) {
             if (filter.getFilterKey().equals(filterKey)) {
                 filters.remove(filter);
+                actionCompleted();
                 return;
             }
         }
@@ -144,6 +156,7 @@ public class OffController extends Controller {
                 Pattern.matches("(ascending|descending)", sortDirection)) {
             OffController.sortField = sortField;
             OffController.sortDirection = sortDirection;
+            actionCompleted();
         } else
             sendError("Can't sort with this field and direction!!");
     }
@@ -151,17 +164,40 @@ public class OffController extends Controller {
     public static void disableSort() {
         OffController.sortField = null;
         OffController.sortDirection = null;
+        actionCompleted();
     }
 
     public static void currentSort() {
+        if (sortField == null || sortDirection == null) {
+            sendError("You didn't any field to sort offs!!");
+        } else
+            sendAnswer(sortField, sortDirection);
     }
 
     public static void showAvailableSorts() {
+        ArrayList<String> sorts = new ArrayList<>();
+        sorts.add("Percent");
+        sorts.add("Starting Time");
+        sorts.add("Finish Time");
+
+        sendAnswer(sorts, "sort");
     }
 
     public static void showAvailableFilters() {
+        ArrayList<String> filters = new ArrayList<>();
+        filters.add("Percent");
+        filters.add("Start and Finish Time");
+        filters.add("Seller Username");
+        filters.add("Off status(in edit queue | started | finished | accepted by manager) ");
+
+        sendAnswer(filters, "filter");
     }
 
     public static void currentFilter() {
+        ArrayList<String> currentFilters = new ArrayList<>();
+        for (Filter filter : filters) {
+            currentFilters.add(filter.toString());
+        }
+        sendAnswer(currentFilters, "filter");
     }
-}
+}//end OffController class

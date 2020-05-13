@@ -9,7 +9,7 @@ import model.user.User;
 
 public class CustomerPanelController extends UserPanelController {
     public static void viewBalance() {
-        sendAnswer(Double.toString(((Customer) loggedUser).getMoney()));
+        sendAnswer(((Customer) loggedUser).getMoney());
     }
 
     public static void viewProductsInCart() {
@@ -33,6 +33,7 @@ public class CustomerPanelController extends UserPanelController {
             sendError("There isn't any product with this id and this seller in your shopping cart!!");
             return;
         }
+
         Product product = Product.getProductWithId(productId);
         User seller = User.getUserByUsername(sellerUsername);
         if (!(seller instanceof Seller)) {
@@ -42,6 +43,7 @@ public class CustomerPanelController extends UserPanelController {
             sendError("There isn't any product with this id!!");
             return;
         }
+
         switch (changingType) {
             case "increase":
                 if (!shoppingCart.canIncrease(product, (Seller) seller)) {
@@ -57,11 +59,11 @@ public class CustomerPanelController extends UserPanelController {
 
     public static void cartPrice() {
         ShoppingCart shoppingCart = getShoppingCart();
-        sendAnswer(Double.toString(shoppingCart.getTotalPrice()));
+        sendAnswer(shoppingCart.getTotalPrice());
     }
 
     public static void viewOrders() {
-        sendAnswer(((Customer) loggedUser).getAllOrdersInfo());
+        sendAnswer(((Customer) loggedUser).getAllOrdersInfo(), "log");
     }
 
     public static void viewOrder(String orderId) {
@@ -87,7 +89,7 @@ public class CustomerPanelController extends UserPanelController {
     }
 
     public static void viewUserDiscountCode() {
-        sendAnswer(((Customer) loggedUser).getAllDiscountCodeInfo());
+        sendAnswer(((Customer) loggedUser).getAllDiscountCodeInfo(), "code");
     }
 
     private static ShoppingCart getShoppingCart() {
@@ -98,4 +100,4 @@ public class CustomerPanelController extends UserPanelController {
             shoppingCart = ((Customer) loggedUser).getShoppingCart();
         return shoppingCart;
     }
-}
+}//end CustomerPanelController class

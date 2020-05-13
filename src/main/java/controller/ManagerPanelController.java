@@ -19,7 +19,7 @@ public class ManagerPanelController extends UserPanelController {
             sendError("Can't sort with this field and direction!!");
             return;
         }
-        sendAnswer(User.getAllUsers(null, null));
+        sendAnswer(User.getAllUsers(field, direction), "user");
     }
 
     public static void viewUser(String username) {
@@ -44,7 +44,7 @@ public class ManagerPanelController extends UserPanelController {
             return;
         }
         user.changeRole(role);
-        sendAnswer("Role changed successfully.");
+        actionCompleted();
     }
 
     public static void deleteUser(String username) {
@@ -58,17 +58,12 @@ public class ManagerPanelController extends UserPanelController {
     }
 
     public static void createManager(HashMap<String, String> managerInformationHashMap) {
-        if (!managerInformationHashMap.containsKey("username") ||
-                !managerInformationHashMap.containsKey("password") ||
-                !managerInformationHashMap.containsKey("first-name") ||
-                !managerInformationHashMap.containsKey("last-name") ||
-                !managerInformationHashMap.containsKey("email") ||
-                !managerInformationHashMap.containsKey("phone-number")) {
+        managerInformationHashMap.put("type", "manager");
+        if (!LoginController.checkRegisterInfoKey(managerInformationHashMap)) {
             sendError("Not enough information!!");
         } else {
-            managerInformationHashMap.put("type", "manager");
             LoginController.registerUser(managerInformationHashMap, "manager");
-            sendAnswer("Manager Created successfully.");
+            actionCompleted();
         }
     }
 
@@ -77,7 +72,7 @@ public class ManagerPanelController extends UserPanelController {
             sendError("Can't sort with this field and direction!!");
             return;
         }
-        sendAnswer(Product.getAllProductInfo(sortField, sortDirection));
+        sendAnswer(Product.getAllProductInfo(sortField, sortDirection), "product");
     }
 
     public static void removeProduct(String productId) {
@@ -86,67 +81,113 @@ public class ManagerPanelController extends UserPanelController {
             return;
         }
         Product.removeProduct(productId);
-        sendAnswer("Product removed successfully.");
+        actionCompleted();
     }
 
-    public static void createDiscountCode(HashMap<String, String> discountInfo,
-                                          ArrayList<String> usernames) {
+    public static void createDiscountCode(HashMap<String, String> discountInfo, ArrayList<String> usernames) {
         if (discountCodeInfoHasError(discountInfo, usernames))
             return;
 
-        int maxUsableTime, maxDiscountAmount, percent;
-        try {
-            percent = Integer.parseInt(discountInfo.get("percent"));
-            maxDiscountAmount = Integer.parseInt(discountInfo.get("max-discount-amount"));
-            maxUsableTime = Integer.parseInt(discountInfo.get("max-usable-time"));
-        } catch (NumberFormatException e) {
-            sendError("Please enter a valid number!!");
-            return;
-        }
-
-        DiscountCode discountCode = new DiscountCode();
         ArrayList<Customer> users = new ArrayList<>();
         for (String username : usernames) {
             Customer user = (Customer) User.getUserByUsername(username);
             users.add(user);
-            assert user != null;
-            user.addDiscountCode(discountCode);
         }
+
+        createDiscountCodeAfterChecking(discountInfo, users);
+    }
+
+    private static void createDiscountCodeAfterChecking(HashMap<String, String> discountInfo, ArrayList<Customer> users) {
+        int maxUsableTime, maxDiscountAmount, percent;
+        percent = Integer.parseInt(discountInfo.get("percent"));
+        maxDiscountAmount = Integer.parseInt(discountInfo.get("max-discount-amount"));
+        maxUsableTime = Integer.parseInt(discountInfo.get("max-usable-time"));
+
+        DiscountCode discountCode = new DiscountCode();
         discountCode.setDiscountStartTime(Date.getDateWithString(discountInfo.get("start-time")));
         discountCode.setDiscountFinishTime(Date.getDateWithString(discountInfo.get("finish-time")));
         discountCode.setMaxDiscountAmount(maxDiscountAmount);
         discountCode.setMaxUsableTime(maxUsableTime);
         discountCode.setUsersAbleToUse(users);
         discountCode.setDiscountPercent(percent);
-        sendAnswer("Discount code created successfully.\nDiscount Code: " + discountCode.getDiscountCode());
+        for (Customer user : users) {
+            user.addDiscountCode(discountCode);
+        }
+
+        sendAnswer(discountCode.getDiscountCode(), null);
     }
 
     private static boolean discountCodeInfoHasError(HashMap<String, String> discountInfo, ArrayList<String> usernames) {
-        if (!discountInfo.containsKey("start-time") ||
-                !discountInfo.containsKey("finish-time") ||
-                !discountInfo.containsKey("max-usable-time") ||
-                !discountInfo.containsKey("max-discount-amount") ||
-                !discountInfo.containsKey("percent")) {
-            sendAnswer("Not enough information!!");
-            return true;
-        } else if (User.isThereCustomersWithUsername(usernames)) {
+        //checking that discount info HashMap contains all required key
+        String[] discountKey = {"start-time", "finish-time", "max-usable-time", "max-discount-amount", "percent"};
+        for (String key : discountKey) {
+            if (!discountInfo.containsKey(key)) {
+                sendError("Not enough information!!");
+                return true;
+            }
+        }
+
+        //check that users who could use code exists and check start and finish time
+        if (User.isThereCustomersWithUsername(usernames)) {
             sendError("There isn't any customer for some of username you entered!!");
             return true;
-        } else if (!Date.isDateFormatValid(discountInfo.get("start-time")) ||
-                !Date.isDateFormatValid(discountInfo.get("finish-time")) ||
-                !Date.getDateWithString(discountInfo.get("start-time")).before(Date.getDateWithString("finsih-time"))) {
-
+        } else if (!discountDateIsValid(discountInfo.get("start-time"), discountInfo.get("finish-time"))) {
             sendError("Dates are invalid!!");
             return true;
         }
+
+        //check that integer value entered correctly
+        try {
+            int percent = Integer.parseInt(discountInfo.get("percent"));
+            int maxDiscountAmount = Integer.parseInt(discountInfo.get("max-discount-amount"));
+            int maxUsableTime = Integer.parseInt(discountInfo.get("max-usable-time"));
+            if (percent >= 100 || percent <= 0) {
+                sendError("Percent should be a number between 0 and 100!!");
+                return true;
+            } else if (maxDiscountAmount <= 0) {
+                sendError("Max discount amount should be positive!!");
+                return true;
+            } else if (maxUsableTime <= 0) {
+                sendError("Max usable time should be positive!!");
+                return true;
+            }
+        } catch (NumberFormatException e) {
+            sendError("Please enter a valid number!!");
+            return true;
+        }
+
         return false;
+    }
+
+    private static boolean discountDateIsValid(String start, String finish) {
+        //this function will check that discount starting and finishing time entered correctly
+
+        if (!(Date.isDateFormatValid(start) && Date.isDateFormatValid(finish))) {
+            sendError("Wrong format for date!!");
+            return false;
+        }
+
+        Date startDate = Date.getDateWithString(start);
+        Date finishDate = Date.getDateWithString(finish);
+
+        if (startDate.before(Date.getCurrentDate())) {
+            sendError("Can't set start time to this value!!");
+            return false;
+        } else if (finishDate.before(Date.getCurrentDate())) {
+            sendError("Can't set finish time to this value!!");
+            return false;
+        } else if (!startDate.before(finishDate)) {
+            sendError("Start time should be before finish time!!");
+            return false;
+        }
+        return true;
     }
 
     public static void viewAllDiscountCodes(String field, String direction) {
         if (!checkSort(field, direction, "discount-code")) {
             sendError("Can't sort with this field and direction!!");
         } else
-            sendAnswer(DiscountCode.getAllDiscountCodeInfo(field, direction));
+            sendAnswer(DiscountCode.getAllDiscountCodeInfo(field, direction), "code");
     }
 
     public static void viewDiscountCode(String code) {
@@ -161,50 +202,79 @@ public class ManagerPanelController extends UserPanelController {
             sendError("There isn't discount code with this code!!");
             return;
         }
-        DiscountCode discountCode = (DiscountCode) DiscountCode.getDiscountById(code);
-        int temp;
+
+        DiscountCode discountCode = DiscountCode.getDiscountById(code);
         switch (field) {
             case "start-time":
-                if (!Date.isDateFormatValid(newValue)) {
-                    sendError("Please enter right value!!");
-                    return;
-                }
-                discountCode.setDiscountStartTime(Date.getDateWithString(newValue));
+                editCodeTime(discountCode, newValue, "Starting time");
                 return;
             case "finish-time":
-                if (!Date.isDateFormatValid(newValue)) {
-                    sendError("Please enter right value!!");
-                    return;
-                }
-                discountCode.setDiscountFinishTime(Date.getDateWithString(newValue));
+                editCodeTime(discountCode, newValue, "Finishing time");
                 return;
-            case "max-amount":
-                try {
-                    temp = Integer.parseInt(newValue);
-                    discountCode.setMaxDiscountAmount(temp);
-                } catch (NumberFormatException e) {
-                    sendError("Please enter a valid number!!");
-                    return;
-                }
+            case "max-discount-amount":
+                editCodeIntegerValues(discountCode, "max-discount-amount", newValue);
+                break;
             case "percent":
-                try {
-                    temp = Integer.parseInt(newValue);
-                    discountCode.setDiscountPercent(temp);
-                } catch (NumberFormatException e) {
-                    sendError("Please enter a valid number!!");
-                    return;
-                }
+                editCodeIntegerValues(discountCode, "percent", newValue);
+                break;
             case "max-usable-time":
-                try {
-                    temp = Integer.parseInt(newValue);
-                    discountCode.setMaxUsableTime(temp);
-                } catch (NumberFormatException e) {
-                    sendError("Please enter a valid number!!");
-                    return;
-                }
+                editCodeIntegerValues(discountCode, "max-usable-time", newValue);
+                break;
             default:
                 sendError("You can't change this field!!");
         }
+    }
+
+    private static void editCodeTime(DiscountCode discountCode, String timeString, String type) {
+        if (!Date.isDateFormatValid(timeString)) {
+            sendError("Please enter right value!!");
+            return;
+        }
+        Date time = Date.getDateWithString(timeString);
+        if (time.before(Date.getCurrentDate())) {
+            sendError(type + " can't change to this value!!");
+            return;
+        }
+        switch (type) {
+            case "Starting time":
+                discountCode.setDiscountStartTime(time);
+                break;
+            case "Finishing time":
+                discountCode.setDiscountFinishTime(time);
+                break;
+        }
+        actionCompleted();
+    }
+
+    private static void editCodeIntegerValues(DiscountCode discountCode, String type, String integerString) {
+        int integer;
+        try {
+            integer = Integer.parseInt(integerString);
+        } catch (NumberFormatException e) {
+            sendError("Please enter a valid number!!");
+            return;
+        }
+
+        if (integer <= 0) {
+            sendError("Please enter a positive value!!");
+            return;
+        }
+        switch (type) {
+            case "max-usable-time":
+                discountCode.setMaxUsableTime(integer);
+                break;
+            case "max-discount-amount":
+                discountCode.setMaxDiscountAmount(integer);
+                break;
+            case "percent":
+                if (integer >= 100) {
+                    sendError("Percent should be a number between 0 and 100!!");
+                    return;
+                }
+                discountCode.setDiscountPercent(integer);
+                break;
+        }
+        actionCompleted();
     }
 
     public static void removeDiscountCode(String code) {
@@ -212,7 +282,7 @@ public class ManagerPanelController extends UserPanelController {
             sendError("There isn't discount code with this code!!");
             return;
         }
-        DiscountCode discountCode = (DiscountCode) DiscountCode.getDiscountById(code);
+        DiscountCode discountCode = DiscountCode.getDiscountById(code);
         discountCode.remove();
     }
 
@@ -220,7 +290,7 @@ public class ManagerPanelController extends UserPanelController {
         if (!checkSort(sortField, sortDirection, "request")) {
             sendError("Can't sort with this field and direction!!");
         } else
-            sendAnswer(Request.allRequestInfo(sortField, sortDirection));
+            sendAnswer(Request.allRequestInfo(sortField, sortDirection), "request");
     }
 
     public static void requestDetail(String id) {
@@ -242,7 +312,7 @@ public class ManagerPanelController extends UserPanelController {
             sendError("This request can't be accept now due to some change in data!!");
         }
         Request.acceptNewRequest(id);
-        sendAnswer("Action completed.");
+        actionCompleted();
     }
 
     public static void declineRequest(String id) {
@@ -251,18 +321,18 @@ public class ManagerPanelController extends UserPanelController {
             return;
         }
         Request.declineNewRequest(id);
-        sendAnswer("Action completed.");
+        actionCompleted();
     }
 
     public static void manageCategories(String sortField, String sortDirection) {
         if (!checkSort(sortField, sortDirection, "category")) {
             sendError("Can't sort with this field and direction!!");
         } else
-            sendAnswer(Category.getAllCategoriesInfo(sortField, sortDirection));
+            sendAnswer(Category.getAllCategoriesInfo(sortField, sortDirection), "category");
     }
 
     public static void addCategory(String name, ArrayList<String> specialProperties) {
-        if (Category.isThereMainCategory(name)) {
+        if (Category.isThereCategory(name)) {
             sendError("There is a category with this name!!");
             return;
         }
@@ -272,16 +342,15 @@ public class ManagerPanelController extends UserPanelController {
     }
 
     public static void addSubCategory(String subCategoryName, String mainCategoryName, ArrayList<String> specialProperties) {
-        if (Category.isThereSubCategory(subCategoryName)) {
-            sendError("There is a sub category with this name!!");
+        if (Category.isThereCategory(subCategoryName)) {
+            sendError("There is a category with this name!!");
         } else if (!Category.isThereMainCategory(mainCategoryName)) {
             sendError("There isn't any category with this name!!");
         } else {
             MainCategory mainCategory = Category.getMainCategoryByName(mainCategoryName);
             for (String specialProperty : mainCategory.getSpecialProperties()) {
                 if (!specialProperties.contains(specialProperty)) {
-                    sendError("Subcategory should have it's main category's special properties!!");
-                    return;
+                    specialProperties.add(specialProperty);
                 }
             }
             SubCategory subCategory = new SubCategory();
@@ -313,26 +382,44 @@ public class ManagerPanelController extends UserPanelController {
             sendError("There isn't any category with this name!!");
             return;
         }
+
         MainCategory mainCategory = Category.getMainCategoryByName(categoryName);
+        assert mainCategory != null;
         switch (field) {
             case "name":
                 mainCategory.setName(changeValue);
+                actionCompleted();
                 break;
-            case "add properties":
-                mainCategory.addSpecialProperties(changeValue);
-                for (Category subCategory : mainCategory.getSubCategories()) {
-                    subCategory.addSpecialProperties(changeValue);
-                }
+            case "add property":
+                addPropertyToMainCategory(mainCategory, changeValue);
                 break;
-            case "remove properties":
-                mainCategory.removeSpecialProperties(changeValue);
-                for (Category subCategory : mainCategory.getSubCategories()) {
-                    subCategory.removeSpecialProperties(changeValue);
-                }
+            case "remove property":
+                removePropertyFromMainCategory(mainCategory, changeValue);
                 break;
             default:
                 sendError("You can't change this!!");
         }
+    }
+
+    private static void removePropertyFromMainCategory(MainCategory mainCategory, String specialProperty) {
+        mainCategory.removeSpecialProperties(specialProperty);
+        actionCompleted();
+    }
+
+    private static void addPropertyToMainCategory(MainCategory mainCategory, String specialProperty) {
+        //adding properties to main categories
+        if (!mainCategory.getSpecialProperties().contains(specialProperty)) {
+            mainCategory.addSpecialProperties(specialProperty);
+        }
+
+        //adding properties to sub categories
+        for (Category subCategory : mainCategory.getSubCategories()) {
+            if (!subCategory.getSpecialProperties().contains(specialProperty)) {
+                subCategory.addSpecialProperties(specialProperty);
+            }
+        }
+
+        actionCompleted();
     }
 
     public static void editSubCategory(String categoryName, String field, String changeValue) {
@@ -340,25 +427,40 @@ public class ManagerPanelController extends UserPanelController {
             sendError("There isn't any category with this name!!");
             return;
         }
+
         SubCategory subCategory = Category.getSubCategoryByName(categoryName);
+        assert subCategory != null;
         switch (field) {
             case "name":
                 subCategory.setName(changeValue);
+                actionCompleted();
                 break;
-            case "add properties":
-                subCategory.addSpecialProperties(changeValue);
+            case "add property":
+                addPropertyToSubCategory(subCategory, changeValue);
+                actionCompleted();
                 break;
-            case "remove properties":
-                if (subCategory.getMainCategory().getSpecialProperties().contains(changeValue)) {
-                    subCategory.getMainCategory().getSpecialProperties().remove(changeValue);
-                    for (Category category : subCategory.getMainCategory().getSubCategories()) {
-                        category.removeSpecialProperties(changeValue);
-                    }
-                } else
-                    subCategory.removeSpecialProperties(changeValue);
+            case "remove property":
+                removePropertyFromSubCategory(subCategory, changeValue);
                 break;
             default:
                 sendError("You can't change this!!");
         }
     }
-}
+
+    private static void addPropertyToSubCategory(SubCategory subCategory, String specialProperty) {
+        if (!subCategory.getSpecialProperties().contains(specialProperty)) {
+            subCategory.addSpecialProperties(specialProperty);
+        }
+        actionCompleted();
+    }
+
+    private static void removePropertyFromSubCategory(SubCategory subCategory, String specialProperty) {
+        MainCategory mainCategory = subCategory.getMainCategory();
+        if (mainCategory.getSpecialProperties().contains(specialProperty)) {
+            mainCategory.removeSpecialProperties(specialProperty);
+        } else if (subCategory.getSpecialProperties().contains(specialProperty))
+            subCategory.removeSpecialProperties(specialProperty);
+
+        actionCompleted();
+    }
+}//end ManagerPanelController

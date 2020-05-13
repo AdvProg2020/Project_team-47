@@ -17,6 +17,8 @@ public class PurchaseController extends Controller {
     }
 
     public static void purchase() {
+        //this function will update cart and send cart info
+
         if (loggedUser == null) {
             sendError("You should log in first!!");
             return;
@@ -28,11 +30,9 @@ public class PurchaseController extends Controller {
     }
 
     public static void gettingPurchaseInformation(HashMap<String, String> information) {
-        if (!information.containsKey("address") ||
-                !information.containsKey("postal-code") ||
-                !information.containsKey("phone-number") ||
-                !information.containsKey("other-requests")) {
+        //this function will get purchase information
 
+        if (!checkingPurchaseInfo(information)) {
             sendError("Not enough information!!");
             return;
         }
@@ -40,49 +40,107 @@ public class PurchaseController extends Controller {
         purchaseLog.setPhoneNumber(information.get("phone-number"));
         purchaseLog.setPostalCode(information.get("postal-code"));
         purchaseLog.setCustomerRequests(information.get("other-requests"));
+        actionCompleted();
+    }
+
+    private static boolean checkingPurchaseInfo(HashMap<String, String> information) {
+        //check that purchase information HashMap has all key that should has
+
+        String[] infoKey = {"address", "postal-code", "phone-number", "other-requests"};
+        for (String key : infoKey) {
+            if (!information.containsKey(key)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void applyDiscountCode(String code) {
+        //apply discount to this purchase
+
         Customer customer = (Customer) loggedUser;
         discountCode = customer.getDiscountCode(code);
-        if (discountCode==null) {
+
+        //checking errors that may happen during apply code
+        if (discountCode == null) {
             sendError("You don't have this discount code!!");
             return;
         } else if (!discountCode.canThisPersonUseCode(customer)) {
             sendError("Sorry you can't use this code!!");
+            discountCode = null;
+            return;
         }
-        sendAnswer(Double.toString(discountCode.getPriceAfterApply(getShoppingCart().getTotalPrice())));
+
+        //sending cart price after applying code successfully
+        sendAnswer(discountCode.getPriceAfterApply(getShoppingCart().getTotalPrice()));
     }
 
     public static void pay() {
+        //this function is the last step for buying
+
         Customer customer = (Customer) loggedUser;
         ShoppingCart shoppingCart = getShoppingCart();
         shoppingCart.update();
-        double cartPrice = shoppingCart.getTotalPrice();
-        purchaseLog.setAppliedDiscount(0);
-        if (discountCode != null&&discountCode.canThisPersonUseCode(customer)) {
-            cartPrice = discountCode.appliedDiscount(cartPrice);
-            purchaseLog.setAppliedDiscount(cartPrice);
-            discountCode.codeUsed(customer);
-        }
-        purchaseLog.setLogDate(Date.getCurrentDate());
-        purchaseLog.setMoney(cartPrice);
-        if (!customer.canUserBuy(cartPrice)) {
+
+        double finalPrice = getFinalPrice(shoppingCart.getTotalPrice());
+        //check if customer has enough money
+        if (!customer.canUserBuy(finalPrice)) {
             sendError("You don't have enough money to buy this products!!");
             return;
         }
-        purchaseLog.setCustomer(customer);
-        shoppingCart.addToBuyLog(purchaseLog);
-        purchaseLog.createSellLog();
-        purchaseLog.increaseSellerMoney();
-        customer.addBuyLog(purchaseLog);
-        customer.decreaseMoney(cartPrice);
+
+        useDiscountCode(shoppingCart);
+
         shoppingCart.buy();
+        purchaseLog.setMoney(finalPrice);
+        customer.decreaseMoney(finalPrice);
+        setPurchaseLogInfo(shoppingCart);
+
+        finishingPurchasing();
+        actionCompleted();
+    }
+
+    private static void finishingPurchasing() {
         purchaseLog = new BuyLog();
     }
 
+    private static void setPurchaseLogInfo(ShoppingCart shoppingCart) {
+        //this function will set some information on buying log such as date ...
+        Customer customer = (Customer) loggedUser;
+        purchaseLog.setLogDate(Date.getCurrentDate());
+        purchaseLog.setCustomer(customer.userInfoForSending());
+        shoppingCart.addToBuyLog(purchaseLog);//add shopping cart item to log
+        customer.addBuyLog(purchaseLog);
+        purchaseLog.createSellLog();//should create sell log for sellers
+    }
+
+    private static double getFinalPrice(double cartPrice) {
+        //this function will get cart price and return final value after applying discount(if exist)
+
+        Customer customer = (Customer) loggedUser;
+        if (discountCode != null && discountCode.canThisPersonUseCode(customer)) {
+            cartPrice = discountCode.getPriceAfterApply(cartPrice);
+        }
+        return cartPrice;
+    }
+
+    private static void useDiscountCode(ShoppingCart shoppingCart) {
+        //this function will use discount and if there was no code it will set purchase log info
+
+        Customer customer = (Customer) loggedUser;
+        double cartPrice = shoppingCart.getTotalPrice();
+        purchaseLog.setAppliedDiscount(0);
+
+        if (discountCode != null && discountCode.canThisPersonUseCode(customer)) {
+            purchaseLog.setAppliedDiscount(discountCode.appliedDiscount(cartPrice));
+            discountCode.codeUsed(customer);
+        }
+    }
+
     private static ShoppingCart getShoppingCart() {
+        //this function will return customer shopping cart who logged in
+
         ShoppingCart shoppingCart = ((Customer) loggedUser).getShoppingCart();
         return shoppingCart;
     }
-}
+}//end purchase controller class
