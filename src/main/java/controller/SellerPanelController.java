@@ -25,7 +25,7 @@ public class SellerPanelController extends UserPanelController {
         sendAnswer(((Seller) loggedUser).getAllSellLogsInfo(sortField, direction));
     }
 
-    public static void manageProduct() {
+    public static void manageProducts() {
         sendAnswer(((Seller) loggedUser).getAllProductInfo("seen-time", "ascending"));
     }
 
