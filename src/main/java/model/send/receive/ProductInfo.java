@@ -3,7 +3,7 @@ package model.send.receive;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ProductInfo extends ServerMessage {
+public class ProductInfo {
     private int seenTime;
     private String id;
     private String name;

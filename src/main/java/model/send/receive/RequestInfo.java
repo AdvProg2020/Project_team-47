@@ -5,7 +5,7 @@ import model.others.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RequestInfo extends ServerMessage {
+public class RequestInfo {
     private String id;
     private String requestedSenderUsername;
     private String type;
@@ -13,13 +13,6 @@ public class RequestInfo extends ServerMessage {
     private EditInfo editInfo;
     private AddInfo addInfo;
 
-    public String getRequestedSenderUsername() {
-        return requestedSenderUsername;
-    }
-
-    public void setRequestedSenderUsername(String requestedSenderUsername) {
-        this.requestedSenderUsername = requestedSenderUsername;
-    }
 
     public String getId() {
         return id;
@@ -27,10 +20,6 @@ public class RequestInfo extends ServerMessage {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getRequestedSender() {
-        return requestedSenderUsername;
     }
 
     public void setRequestedSender(String requestedSender) {
@@ -43,10 +32,6 @@ public class RequestInfo extends ServerMessage {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public Date getApplyDate() {
-        return applyDate;
     }
 
     public void setApplyDate(Date applyDate) {
@@ -87,38 +72,6 @@ public class RequestInfo extends ServerMessage {
             this.newValue = newValue;
             this.newValueHashMap = newValueHashMap;
         }
-
-        public HashMap<String, String> getNewValueHashMap() {
-            return newValueHashMap;
-        }
-
-        public void setNewValueHashMap(HashMap<String, String> newValueHashMap) {
-            this.newValueHashMap = newValueHashMap;
-        }
-
-        public String getChangeField() {
-            return changeField;
-        }
-
-        public void setChangeField(String changeField) {
-            this.changeField = changeField;
-        }
-
-        public String getNewValue() {
-            return newValue;
-        }
-
-        public void setNewValue(String newValue) {
-            this.newValue = newValue;
-        }
-
-        public ArrayList<String> getNewValueArrayList() {
-            return newValueArrayList;
-        }
-
-        public void setNewValueArrayList(ArrayList<String> newValueArrayList) {
-            this.newValueArrayList = newValueArrayList;
-        }
     }
 
     private static class AddInfo {
@@ -131,21 +84,6 @@ public class RequestInfo extends ServerMessage {
             this.addingInformation = addingInformation;
         }
 
-        public String getSellerUsername() {
-            return sellerUsername;
-        }
-
-        public void setSellerUsername(String sellerUsername) {
-            this.sellerUsername = sellerUsername;
-        }
-
-        public HashMap<String, String> getAddingInformation() {
-            return addingInformation;
-        }
-
-        public void setAddingInformation(HashMap<String, String> addingInformation) {
-            this.addingInformation = addingInformation;
-        }
     }
 
 }

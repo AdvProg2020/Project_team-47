@@ -1,6 +1,4 @@
 package model.send.receive;
 
-public class Message {
-
-
+public class CategoryInfo {
 }

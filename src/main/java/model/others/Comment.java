@@ -1,14 +1,11 @@
 package model.others;
 
-import model.user.User;
-
-
-
 public class Comment {
 
-    private User whoComment;
-    private Product productCommentBelongTo;
-    private User sellerCommentBelongTo;
+    private String whoComment;
+    private String productId;
+    private String productName;
+    private String sellerCommentBelongTo;
     private String commentText;
     private String commentTitle;
     private boolean doesCustomerBought;
@@ -16,55 +13,61 @@ public class Comment {
     public Comment() {
     }
 
-    public User getWhoComment() {
+    public String getWhoComment() {
         return whoComment;
     }
 
-    public Product getProductCommentBelongTo() {
-        return productCommentBelongTo;
+    public void setWhoComment(String whoComment) {
+        this.whoComment = whoComment;
     }
 
-    public User getSellerCommentBelongTo() {
+    public String getSellerCommentBelongTo() {
         return sellerCommentBelongTo;
+    }
+
+    public void setSellerCommentBelongTo(String sellerCommentBelongTo) {
+        this.sellerCommentBelongTo = sellerCommentBelongTo;
     }
 
     public String getCommentText() {
         return commentText;
     }
 
-    public String getCommentTitle() {
-        return commentTitle;
-    }
-
-    public boolean isDoesCustomerBought() {
-        return doesCustomerBought;
-    }
-
-    public void setWhoComment(User whoComment) {
-        this.whoComment = whoComment;
-    }
-
-    public void setProductCommentBelongTo(Product productCommentBelongTo) {
-        this.productCommentBelongTo = productCommentBelongTo;
-    }
-
-    public void setSellerCommentBelongTo(User sellerCommentBelongTo) {
-        this.sellerCommentBelongTo = sellerCommentBelongTo;
-    }
-
     public void setCommentText(String commentText) {
         this.commentText = commentText;
+    }
+
+    public String getCommentTitle() {
+        return commentTitle;
     }
 
     public void setCommentTitle(String commentTitle) {
         this.commentTitle = commentTitle;
     }
 
+    public boolean doesCustomerBought() {
+        return doesCustomerBought;
+    }
+
     public void setDoesCustomerBought(boolean doesCustomerBought) {
         this.doesCustomerBought = doesCustomerBought;
     }
 
-    public String getCommentInfoForSending(){return null;}
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
 
     @Override
     public String toString() {

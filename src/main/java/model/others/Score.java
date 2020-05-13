@@ -3,20 +3,19 @@ package model.others;
 import model.user.User;
 
 public class Score {
-    private User whoSubmitScore;
+    private String whoSubmitScore;
     private int score;
-    private User seller;
-    private Product product;
+    private String productId;
 
 
     public Score() {
     }
 
-    public User getWhoSubmitScore() {
+    public String getWhoSubmitScore() {
         return whoSubmitScore;
     }
 
-    public void setWhoSubmitScore(User whoSubmitScore) {
+    public void setWhoSubmitScore(String whoSubmitScore) {
         this.whoSubmitScore = whoSubmitScore;
     }
 
@@ -28,19 +27,11 @@ public class Score {
         this.score = score;
     }
 
-    public Product getProduct() {
-        return product;
+    public String getProduct() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public User getSeller() {
-        return seller;
-    }
-
-    public void setSeller(User seller) {
-        this.seller = seller;
+    public void setProduct(String productId) {
+        this.productId = productId;
     }
 }

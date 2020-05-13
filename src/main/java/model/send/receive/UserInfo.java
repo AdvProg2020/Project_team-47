@@ -1,6 +1,6 @@
 package model.send.receive;
 
-public class UserInfo extends ServerMessage {
+public class UserInfo {
     private String username;
     private String firstName;
     private String lastName;

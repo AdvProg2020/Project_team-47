@@ -1,11 +1,12 @@
 package model.send.receive;
 
 import model.others.Product;
+import model.others.ShoppingCart;
 import model.user.Seller;
 
 import java.util.ArrayList;
 
-public class CartInfo extends ServerMessage {
+public class CartInfo {
     private ArrayList<ProductInCart> products;
     private double price;
 
