@@ -119,7 +119,7 @@ public class ControllerAndViewConnector {
                 SellerPanelController.salesHistory(messageInputs.get(0), messageInputs.get(1));
                 break;
             case "manage products" :
-                SellerPanelController.manageProducts();
+                SellerPanelController.manageProduct();
                 break;
             case "view product" :
                 SellerPanelController.viewProduct(messageInputs.get(0));
