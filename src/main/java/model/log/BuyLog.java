@@ -2,6 +2,9 @@ package model.log;
 
 
 import model.others.Product;
+import model.send.receive.LogInfo;
+import model.send.receive.ProductInfo;
+import model.send.receive.UserInfo;
 import model.user.Seller;
 
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ public class BuyLog extends Log {
     }//
 
     @Override
-    public String getLogInfoForSending() {
+    public LogInfo getLogInfoForSending() {
         return null;
     }//
 
@@ -69,14 +72,10 @@ public class BuyLog extends Log {
 
     }
 
-    public void increaseSellerMoney() {
-
-    }
-
 
     private class ProductsInLog {
-        private Product product;
-        private Seller seller;
+        private ProductInfo product;
+        private UserInfo seller;
         private int number;
     }
 }

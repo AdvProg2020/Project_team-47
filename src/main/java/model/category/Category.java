@@ -1,6 +1,7 @@
 package model.category;
 
 import model.others.Product;
+import model.send.receive.CategoryInfo;
 
 import java.util.ArrayList;
 
@@ -20,11 +21,11 @@ abstract public class Category {
         specialProperties = new ArrayList<>();
     }
 
-    public static String getAllCategoriesInfo() {
+    public static ArrayList<CategoryInfo> getAllCategoriesInfo() {
         return null;
     }
 
-    public static String getAllCategoriesInfo(String sortField, String sortDirection) {
+    public static ArrayList<CategoryInfo> getAllCategoriesInfo(String sortField, String sortDirection) {
         return null;
     }
 
@@ -58,7 +59,11 @@ abstract public class Category {
         return true;
     }
 
-    abstract public String categoryInfoForSending();
+    public static boolean isThereCategory(String name) {
+        return false;
+    }
+
+    public abstract CategoryInfo categoryInfoForSending();
 
     public boolean isThereProduct(Product product) {
         return true;

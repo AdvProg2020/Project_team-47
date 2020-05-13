@@ -4,6 +4,7 @@ import model.others.Date;
 import model.others.Filter;
 import model.others.Product;
 import model.others.Sort;
+import model.send.receive.OffInfo;
 import model.user.Seller;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class Off extends Discount {
                 (off.offId)).findAny().orElse(null);
     }
 
-    public static String getAllProductsInOffsInfo(String sortField, String direction, ArrayList<Filter> filter) {
+    public static ArrayList<OffInfo> getAllProductsInOffsInfo(String sortField, String direction, ArrayList<Filter> filter) {
         //ArrayList<Product> products = Sort.sortProduct(sortField, direction, filter)
         return null;
     }//
@@ -61,12 +62,10 @@ public class Off extends Discount {
     }
 
     public boolean isOffStarted() {
-        assert Date.getCurrentDate() != null;
         return discountStartTime.compareTo(Date.getCurrentDate()) >= 0;
     }
 
     public boolean isOffFinished() {
-        assert Date.getCurrentDate() != null;
         return discountFinishTime.compareTo(Date.getCurrentDate()) <= 0;
     }
 
@@ -86,6 +85,8 @@ public class Off extends Discount {
     public boolean isItInOff(Product product) {
         return products.contains(product);
     }
+
+    public void removeOff(){}
 
     public String getOffId() {
         return offId;
@@ -123,8 +124,8 @@ public class Off extends Discount {
         products.remove(product);
     }
 
-    @Override
-    public String discountInfoForSending() {
+
+    public OffInfo discountInfoForSending() {
         return null;
     }//
 }

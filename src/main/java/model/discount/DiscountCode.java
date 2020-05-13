@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import controller.Controller;
 import model.log.BuyLog;
 import model.others.Sort;
+import model.send.receive.DiscountCodeInfo;
 import model.user.Customer;
 import model.user.User;
 
@@ -40,7 +41,11 @@ public class DiscountCode extends Discount {
         return id;
     }
 
-    public static Discount getDiscountById(String id) {
+    public void removeCustomer(Customer customer){
+
+    }
+
+    public static DiscountCode getDiscountById(String id) {
         return allDiscountCodes.stream().
                 filter(discount -> id.equals(discount.discountCode))
                 .findAny().orElse(null);
@@ -57,14 +62,14 @@ public class DiscountCode extends Discount {
                 (discount -> code.equals(discount.discountCode));
     }
 
-    public static String getAllDiscountCodeInfo(String field, String direction) {
+    public static ArrayList<DiscountCodeInfo> getAllDiscountCodeInfo(String field, String direction) {
         ArrayList<DiscountCode> discountCodes = Sort.sortDiscountCode(field, direction, allDiscountCodes);
-        ArrayList<String> discountsInfo = new ArrayList<>();
+        ArrayList<DiscountCodeInfo> discountsInfo = new ArrayList<>();
         assert discountCodes != null;
         for (DiscountCode discountCode : discountCodes) {
             discountsInfo.add(discountCode.discountInfoForSending());
         }
-        return (new Gson()).toJson(discountsInfo);
+        return discountsInfo;
     }
 
     public static ArrayList<DiscountCode> getAllDiscountCodes() {
@@ -130,8 +135,7 @@ public class DiscountCode extends Discount {
         userUsedTimeHashMap.replace(user, userUsedTimeHashMap.get(user) - 1);
     }
 
-    @Override
-    public String discountInfoForSending() {
+    public DiscountCodeInfo discountInfoForSending() {
         return null;
     }//
 

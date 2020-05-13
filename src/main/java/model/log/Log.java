@@ -2,6 +2,8 @@ package model.log;
 
 import model.others.Date;
 import model.others.Product;
+import model.send.receive.LogInfo;
+import model.send.receive.UserInfo;
 import model.user.Seller;
 import model.user.User;
 
@@ -9,7 +11,7 @@ abstract public class Log {
     protected String logId;
     protected Date logDate;
     protected double appliedDiscount;
-    protected User customer;
+    protected UserInfo customer;
     protected String purchaseStatus;
     private double money;
 
@@ -22,18 +24,10 @@ abstract public class Log {
     }
 
 
-    abstract public String getLogInfoForSending();
+    public abstract LogInfo getLogInfoForSending();
 
     public boolean isThereProductInLog(Product product) {
         return true;
-    }
-
-    public User getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(User customer) {
-        this.customer = customer;
     }
 
     public boolean isThereProductInLogWithThisSeller(Product product, Seller seller) {
@@ -80,4 +74,11 @@ abstract public class Log {
         this.purchaseStatus = purchaseStatus;
     }
 
+    public void setCustomer(UserInfo customer) {
+        this.customer = customer;
+    }
+
+    public UserInfo getCustomer() {
+        return customer;
+    }
 }

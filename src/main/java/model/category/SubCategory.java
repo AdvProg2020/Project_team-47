@@ -1,6 +1,8 @@
 package model.category;
 
 
+import model.send.receive.CategoryInfo;
+
 public class SubCategory extends Category {
     private MainCategory mainCategory;
 
@@ -11,7 +13,7 @@ public class SubCategory extends Category {
     }
 
     @Override
-    public String categoryInfoForSending() {
+    public CategoryInfo categoryInfoForSending() {
         return null;
     }
 

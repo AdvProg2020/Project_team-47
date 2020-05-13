@@ -1,6 +1,7 @@
 package model.discount;
 
 import model.others.Date;
+import model.user.Customer;
 
 abstract public class Discount {
     protected Date discountStartTime;
@@ -39,5 +40,5 @@ abstract public class Discount {
         this.discountPercent = discountPercent;
     }
 
-    abstract public String discountInfoForSending();
+
 }

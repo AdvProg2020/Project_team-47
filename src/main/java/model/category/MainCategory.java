@@ -1,5 +1,7 @@
 package model.category;
 
+import model.send.receive.CategoryInfo;
+
 import java.util.ArrayList;
 
 public class MainCategory extends Category {
@@ -17,12 +19,12 @@ public class MainCategory extends Category {
     }
 
     @Override
-    public String categoryInfoForSending() {
+    public CategoryInfo categoryInfoForSending() {
         return null;
     }
 
 
-    public String getSubcategoriesInfo(String sortField, String sortDirection) {
+    public CategoryInfo getSubcategoriesInfo(String sortField, String sortDirection) {
         return null;
     }
 
