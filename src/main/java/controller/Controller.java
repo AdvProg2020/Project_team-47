@@ -92,7 +92,7 @@ abstract public class Controller {
     static void sendAnswer(CartInfo cartInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
-        //serverMessage.setCartInfo(cartInfo);
+        serverMessage.setCartInfo(cartInfo);
         send((new Gson()).toJson(serverMessage));
     }
 
