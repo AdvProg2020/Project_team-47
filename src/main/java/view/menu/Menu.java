@@ -18,9 +18,8 @@ public abstract class Menu {
     static {
         scanner = new Scanner(System.in);
     }
-    public Menu(String name, Menu previousMenu) {
+    public Menu(Menu previousMenu) {
         this.previousMenu = previousMenu;
-        this.name = name;
         menuCommands = new ArrayList<>();
         subMenus = new ArrayList<>();
         menuCommands = new ArrayList<>();
@@ -44,12 +43,15 @@ public abstract class Menu {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void autoExecute(){
         String inputCommand;
         while (true) {
-            inputCommand = getInputCommand();
+            inputCommand = getInputCommandWithTrim();
             if (!isInputCommandValid(inputCommand)) {
-                System.out.println("salam");
                 OutputErrors.invalidInputCommand();
             } else {
                 processInputCommand(inputCommand).doCommand(inputCommand);
@@ -80,7 +82,7 @@ public abstract class Menu {
         return subMenus.stream().filter(subMenu -> subMenu.getName()
                 .equalsIgnoreCase(name)).findFirst().orElse(null);
     }
-    public static String getInputCommand(){
+    public static String getInputCommandWithTrim(){
         return scanner.nextLine().trim();
     }
 }
