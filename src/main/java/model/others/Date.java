@@ -16,10 +16,6 @@ public class Date extends java.util.Date {
         return null;
     }
 
-    public static Date getNextHour() {
-        return null;
-    }
-
     public static void gift() {
     }
 
