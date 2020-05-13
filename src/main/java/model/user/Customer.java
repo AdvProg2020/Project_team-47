@@ -7,6 +7,8 @@ import model.log.Log;
 import model.others.Product;
 import model.others.Score;
 import model.others.ShoppingCart;
+import model.send.receive.DiscountCodeInfo;
+import model.send.receive.LogInfo;
 import model.send.receive.UserInfo;
 
 import java.util.ArrayList;
@@ -18,23 +20,30 @@ public class Customer extends User {
     private ArrayList<DiscountCode> discountCodes;
     private double money;
 
+
     public Customer() {
         super();
         buyLogs=new ArrayList<>();
         discountCodes = new ArrayList<>();
+        shoppingCart = new ShoppingCart();
     }
+
 
     public Customer(HashMap<String, String> userInfo) {
         super(userInfo);
+        shoppingCart = new ShoppingCart();
     }
+
 
     @Override
     public void deleteUser() {
         allUsers.remove(this);
         for (DiscountCode discountCode : this.discountCodes) {
-            discountCode.getUsersAbleToUse().remove(this);
+            discountCode.removeCustomer(this);
         }
+        //changing database
     }
+
 
     public DiscountCode getDiscountCode(String code) {
         for (DiscountCode discountCode : discountCodes) {
@@ -45,9 +54,11 @@ public class Customer extends User {
         return null;
     }
 
+
     public void decreaseMoney(double money) {
         this.money -= money;
     }
+
 
     public BuyLog getBuyLog(String id) {
         for (BuyLog buyLog : buyLogs) {
@@ -58,9 +69,13 @@ public class Customer extends User {
         return null;
     }
 
+
     public void removeDiscountCode(DiscountCode discountCode) {
+        //this function will call when a discount code should remove to delete
+        //intended code from users who has that code
         this.discountCodes.remove(discountCode);
     }
+
 
     public boolean customerHasDiscountCode(String code) {
         for (DiscountCode discountCode : this.discountCodes) {
@@ -71,13 +86,16 @@ public class Customer extends User {
         return false;
     }
 
+
     public boolean canUserBuy(double cartPrice) {
         return !(this.money < cartPrice);
     }
 
+
     public void addBuyLog(BuyLog buyLog) {
         buyLogs.add(buyLog);
     }
+
 
     public boolean doesUserBoughtProduct(Product product) {
         for (Log buyLog : buyLogs) {
@@ -88,23 +106,22 @@ public class Customer extends User {
         return false;
     }
 
-    public String getAllDiscountCodeInfo() {
-        ArrayList<String> discountCodesInfo = new ArrayList<>();
+
+    public ArrayList<DiscountCodeInfo> getAllDiscountCodeInfo() {
+        ArrayList<DiscountCodeInfo> discountCodesInfo = new ArrayList<>();
         for (DiscountCode discountCode : this.discountCodes) {
             discountCodesInfo.add(discountCode.discountInfoForSending());
         }
-        Gson discountCodesGson = new Gson();
-        return discountCodesGson.toJson(discountCodesInfo);
+        return discountCodesInfo;
     }
 
 
-    public String getAllOrdersInfo() {
-        ArrayList<String> ordersInfo = new ArrayList<>();
+    public ArrayList<LogInfo> getAllOrdersInfo() {
+        ArrayList<LogInfo> ordersInfo = new ArrayList<>();
         for (Log buyLog : buyLogs) {
             ordersInfo.add(buyLog.getLogInfoForSending());
         }
-        Gson ordersInfoGson = new Gson();
-        return ordersInfoGson.toJson(ordersInfo);
+        return ordersInfo;
     }
 
 
@@ -116,14 +133,15 @@ public class Customer extends User {
 
     public void rate(int score, Product product) {
         Score newScore = new Score();
-        newScore.setProduct(product);
+        newScore.setProduct(product.getId());
         newScore.setScore(score);
-        newScore.setWhoSubmitScore(this);
+        newScore.setWhoSubmitScore(this.getUsername());
         product.addScore(newScore);
     }
 
+
     @Override
-    public String userInfoForSending() {
+    public UserInfo userInfoForSending() {
         UserInfo user = new UserInfo();
         user.setEmail(this.getEmail());
         user.setFirstName(this.getFirstName());
@@ -131,25 +149,19 @@ public class Customer extends User {
         user.setPhoneNumber(this.getPhoneNumber());
         user.setUsername(this.getUsername());
         user.setMoney(this.money);
-        return (new Gson()).toJson(user);
+        return user;
     }
+
 
     public ShoppingCart getShoppingCart() {
         return shoppingCart;
     }
 
+
     public void addDiscountCode(DiscountCode discountCode) {
         if (!this.discountCodes.contains(discountCode)) {
             this.discountCodes.add(discountCode);
         }
-    }
-
-    public ArrayList<BuyLog> getBuyLogs() {
-        return buyLogs;
-    }
-
-    public ArrayList<DiscountCode> getDiscountCodes() {
-        return discountCodes;
     }
 
     public double getMoney() {
