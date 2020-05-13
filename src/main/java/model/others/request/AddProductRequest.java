@@ -10,78 +10,88 @@ import model.user.Seller;
 import model.user.User;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class AddProductRequest extends MainRequest {
-    private User seller;
+    private String sellerUsername;
     private String name;
     private double price;
     private int numberInStock;
-    private MainCategory category;
-    private SubCategory subCategory;
+    private String categoryName;
+    private String subCategoryName;
     private String description;
     private String company;
     private HashMap<String, String> specialProperties;
 
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
-        String sellerUsername = seller.getUsername();
-        Gson gson = new Gson();
+        String sellerUsername = this.sellerUsername;
         HashMap<String, String> addingInfo = new HashMap<>();
         addingInfo.put("price", Double.toString(price));
         addingInfo.put("name", name);
         addingInfo.put("number-in-stock", Integer.toString(numberInStock));
-        addingInfo.put("main-category", category.getName());
-        if (subCategory != null)
-            addingInfo.put("sub-category", subCategory.getName());
+        addingInfo.put("main-category", categoryName);
+        if (subCategoryName != null)
+            addingInfo.put("sub-category", subCategoryName);
         else
             addingInfo.put("sub-category", "");
         addingInfo.put("description", description);
         addingInfo.put("company", company);
-        addingInfo.put("special-properties", gson.toJson(specialProperties));
+        addingInfo.put("special-properties", (new Gson()).toJson(specialProperties));
         requestInfo.setAddInfo("add-product", sellerUsername, addingInfo);
     }
 
     @Override
     void accept(String type) {
+        Seller seller = (Seller) Seller.getUserByUsername(sellerUsername);
         Product product = new Product();
         product.setSpecialProperties(specialProperties);
         product.setDescription(description);
-        product.addSeller((Seller) seller, numberInStock, price);
-        product.setMainCategory(category);
-        if (subCategory != null)
-            product.setSubCategory(subCategory);
+        product.addSeller(seller, numberInStock, price);
+        product.setMainCategory(Category.getMainCategoryByName(categoryName));
+        if (subCategoryName != null) {
+            product.setSubCategory(Category.getSubCategoryByName(subCategoryName));
+        }
         product.setName(name);
         product.setCompany(company);
-        product.getSellers().add((Seller) seller);
+        product.getSellers().add(seller);
+        seller.addProduct(product);
     }
 
     @Override
     boolean update(String type) {
-        if (!Category.isThereMainCategory(category) && !(
-                subCategory == null || Category.isThereSubCategory(subCategory)
-        )) {
+        User seller = User.getUserByUsername(sellerUsername);
+        if (!(seller instanceof Seller))
             return false;
+
+        Category category = Category.getMainCategoryByName(categoryName);
+        if (category == null)
+            return false;
+
+        if (subCategoryName != null) {
+            category = Category.getSubCategoryByName(subCategoryName);
+            if (category == null)
+                return false;
         }
-        Category tempCategory = subCategory;
-        if (tempCategory == null) tempCategory = category;
-        for (String specialProperty : tempCategory.getSpecialProperties()) {
-            if (!specialProperties.containsKey(specialProperty)) {
+        for (String specialProperty : category.getSpecialProperties()) {
+            if (!isThereProperty(specialProperty)) {
                 specialProperties.put(specialProperty, "");
             }
         }
         return true;
     }
 
-    public User getSeller() {
-        return seller;
+    private boolean isThereProperty(String key) {
+        for (String entry : specialProperties.keySet()) {
+            if (entry.equalsIgnoreCase(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void setSeller(User seller) {
-        this.seller = seller;
-    }
-
-    public String getName() {
-        return name;
+    public void setSellerUsername(String sellerUsername) {
+        this.sellerUsername = sellerUsername;
     }
 
     public void setName(String name) {
@@ -96,51 +106,27 @@ public class AddProductRequest extends MainRequest {
         this.price = price;
     }
 
-    public int getNumberInStock() {
-        return numberInStock;
-    }
-
     public void setNumberInStock(int numberInStock) {
         this.numberInStock = numberInStock;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(MainCategory category) {
-        this.category = category;
-    }
-
-    public String getDescription() {
-        return description;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getCompany() {
-        return company;
-    }
-
     public void setCompany(String company) {
         this.company = company;
-    }
-
-    public HashMap<String, String> getSpecialProperties() {
-        return specialProperties;
     }
 
     public void setSpecialProperties(HashMap<String, String> specialProperties) {
         this.specialProperties = specialProperties;
     }
 
-    public SubCategory getSubCategory() {
-        return subCategory;
-    }
-
-    public void setSubCategory(SubCategory subCategory) {
-        this.subCategory = subCategory;
+    public void setSubCategoryName(String subCategoryName) {
+        this.subCategoryName = subCategoryName;
     }
 }
