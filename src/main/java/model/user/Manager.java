@@ -19,16 +19,17 @@ public class Manager extends User {
     public void deleteUser() {
         allUsers.remove(this);
         User.managerRemoved();
+        //changing database
     }
 
     @Override
-    public String userInfoForSending() {
+    public UserInfo userInfoForSending() {
         UserInfo user = new UserInfo();
         user.setEmail(this.getEmail());
         user.setFirstName(this.getFirstName());
         user.setLastName(this.getLastName());
         user.setPhoneNumber(this.getPhoneNumber());
         user.setUsername(this.getUsername());
-        return (new Gson()).toJson(user);
+        return user;
     }
 }

@@ -1,18 +1,18 @@
 package model.user;
 
-import com.google.gson.Gson;
-import model.category.Category;
 import model.discount.Off;
 import model.log.Log;
 import model.others.Date;
 import model.others.Product;
 import model.others.Sort;
 import model.others.request.*;
+import model.send.receive.LogInfo;
+import model.send.receive.OffInfo;
+import model.send.receive.ProductInfo;
 import model.send.receive.UserInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class Seller extends User {
     private String companyName;
@@ -21,7 +21,6 @@ public class Seller extends User {
     private ArrayList<Product> allProducts;
     private ArrayList<Off> allOff;
     private double money;
-    private String address;
 
 
     public Seller() {
@@ -29,7 +28,9 @@ public class Seller extends User {
         sellLogs = new ArrayList<>();
         allProducts=new ArrayList<>();
         allOff=new ArrayList<>();
+        //changing database
     }
+
 
     public Seller(HashMap<String, String> userInfo) {
         super(userInfo);
@@ -38,25 +39,33 @@ public class Seller extends User {
         sellLogs = new ArrayList<>();
         allProducts=new ArrayList<>();
         allOff=new ArrayList<>();
+        //changing database
     }
+
 
     @Override
     public void deleteUser() {
         allUsers.remove(this);
         for (Product product : this.allProducts) {
-            product.removeSeller(this);
+            product.removeSellerFromProduct(this);
         }
+        for (Off off : allOff) {
+            off.removeOff();
+        }
+        //changing database
     }
 
-    public String getAllSellLogsInfo(String sortField, String sortDirection) {
-        ArrayList<Log> sellInfo = Sort.sortLogs(sortField, sortDirection, this.sellLogs);
-        ArrayList<String> sellInfoArrayList = new ArrayList<>();
-        assert sellInfo != null;
-        for (Log log : sellInfo) {
-            sellInfoArrayList.add(log.getLogInfoForSending());
+
+    public ArrayList<LogInfo> getAllSellLogsInfo(String sortField, String sortDirection) {
+        ArrayList<Log> sellLogs = Sort.sortLogs(sortField, sortDirection, this.sellLogs);
+        ArrayList<LogInfo> sellInfo = new ArrayList<>();
+        assert sellLogs != null;
+        for (Log log : sellLogs) {
+            sellInfo.add(log.getLogInfoForSending());
         }
-        return (new Gson()).toJson(sellInfoArrayList);
+        return sellInfo;
     }
+
 
     public Off getOffById(String id) {
         for (Off off : allOff) {
@@ -65,6 +74,7 @@ public class Seller extends User {
         }
         return null;
     }
+
 
     public Product getProductById(String id) {
         for (Product product : this.allProducts) {
@@ -75,9 +85,11 @@ public class Seller extends User {
         return null;
     }
 
+
     public void increaseMoney(double money) {
         this.money += money;
     }
+
 
     public boolean hasProduct(String id) {
         for (Product product : this.allProducts) {
@@ -88,31 +100,33 @@ public class Seller extends User {
         return false;
     }
 
+
     public boolean hasProduct(Product product) {
         return allProducts.contains(product);
     }
 
 
-    public String getAllProductInfo(String sortField, String sortDirection) {
+    public ArrayList<ProductInfo> getAllProductInfo(String sortField, String sortDirection) {
         ArrayList<Product> products = Sort.sortProduct(sortField, sortDirection, this.allProducts);
-        ArrayList<String> productsInfo = new ArrayList<>();
+        ArrayList<ProductInfo> productsInfo = new ArrayList<>();
         assert products != null;
         for (Product product : products) {
             productsInfo.add(product.getProductInfo());
         }
-        return (new Gson()).toJson(productsInfo);
+        return productsInfo;
     }
 
 
-    public String getAllOffsInfo(String sortField, String sortDirection) {
+    public ArrayList<OffInfo> getAllOffsInfo(String sortField, String sortDirection) {
         ArrayList<Off> offs = Sort.sortOffs(sortField, sortDirection, this.allOff);
-        ArrayList<String> offsInfo = new ArrayList<>();
+        ArrayList<OffInfo> offsInfo = new ArrayList<>();
         assert offs != null;
         for (Off off : offs) {
             offsInfo.add(off.discountInfoForSending());
         }
-        return (new Gson()).toJson(offsInfo);
+        return offsInfo;
     }
+
 
     public boolean sellerHasThisOff(String offId) {
         for (Off off : this.allOff) {
@@ -123,7 +137,8 @@ public class Seller extends User {
         return false;
     }
 
-    public String getOff(String offId) {
+
+    public OffInfo getOffInfo(String offId) {
         for (Off off : this.allOff) {
             if (off.getOffId().equals(offId)) {
                 return off.discountInfoForSending();
@@ -132,42 +147,58 @@ public class Seller extends User {
         return null;
     }
 
+
     public void editProduct(String type, String field, Object newValue, Product product) {
+        //this function will create a new request for this seller to editing product with data given to this function
         Request request = new Request();
         request.setApplyDate(Date.getCurrentDate());
         request.setRequestSender(this);
         request.setType("edit-product " + type);
+        request.setRequestSender(this);
+
+
         EditProductRequest editProductRequest = new EditProductRequest();
         if (newValue instanceof HashMap) {
             HashMap<String, String> specialProperties = (HashMap<String, String>) newValue;
             editProductRequest.setNewValueHashMap(specialProperties);
-        } else
-            editProductRequest.setNewValue(newValue);
+        } else if(newValue instanceof String)
+            editProductRequest.setNewValue((String) newValue);
+
         editProductRequest.setField(field);
-        editProductRequest.setProduct(product);
-        editProductRequest.setSeller(this);
+        editProductRequest.setProductId(product.getId());
+        editProductRequest.setSeller(this.getUsername());
+
         request.setMainRequest(editProductRequest);
     }
 
+    public void addProduct(Product product) {
+        this.allProducts.add(product);
+    }
+
     public void addProduct(HashMap<String, String> productInfo, HashMap<String, String> specialProperties) {
+        //this function will create a request to adding product to intended seller
         Request request = new Request();
         request.setApplyDate(Date.getCurrentDate());
         request.setRequestSender(this);
         request.setType("add-product");
+
         AddProductRequest addProductRequest = new AddProductRequest();
-        addProductRequest.setSeller(this);
-        addProductRequest.setCategory(Category.getMainCategoryByName(productInfo.get("category")));
-        addProductRequest.setSubCategory(Category.getSubCategoryByName(productInfo.get("sub-category")));
+        addProductRequest.setSellerUsername(this.getUsername());
+        addProductRequest.setCategoryName(productInfo.get("category"));
+        addProductRequest.setSubCategoryName(productInfo.get("sub-category"));
         addProductRequest.setCompany(productInfo.get("company"));
         addProductRequest.setDescription(productInfo.get("description"));
         addProductRequest.setName(productInfo.get("name"));
         addProductRequest.setNumberInStock(Integer.parseInt(productInfo.get("number-in-stock")));
         addProductRequest.setPrice(Double.parseDouble(productInfo.get("price")));
         addProductRequest.setSpecialProperties(specialProperties);
+
         request.setMainRequest(addProductRequest);
     }
 
+
     public void editOff(Off off, String field, Object newValue, String type) {
+        //this function will create a request to edit intended off
         EditOffRequest editOffRequest;
         if (newValue instanceof ArrayList) {
             ArrayList<String> productsId = (ArrayList<String>) newValue;
@@ -176,15 +207,22 @@ public class Seller extends User {
             editOffRequest = new EditOffRequest(field, (String) newValue);
         } else
             return;
+
         Request request = new Request();
         request.setApplyDate(Date.getCurrentDate());
         request.setRequestSender(this);
-        request.setType("edit-product " + type);
-        editOffRequest.setOff(off);
+        request.setType("edit-off " + type);
+        editOffRequest.setOffId(off.getOffId());
+
         request.setMainRequest(editOffRequest);
     }
 
+    public void addOff(Off off) {
+        this.allOff.add(off);
+    }
+
     public void addOff(HashMap<String, String> offInfo, ArrayList<String> productsId) {
+        //this function will create a request to adding a new off
         Request request = new Request();
         AddOffRequest addOffRequest = new AddOffRequest();
         request.setApplyDate(Date.getCurrentDate());
@@ -198,18 +236,15 @@ public class Seller extends User {
         addOffRequest.setSellerUsername(this.getUsername());
     }
 
-    public String getBuyers(Product product) {
-        HashSet<Customer> buyers = new HashSet<>();
+
+    public ArrayList<UserInfo> getBuyers(Product product) {
+        ArrayList<UserInfo> buyers = new ArrayList<>();
         for (Log sellLog : this.sellLogs) {
             if (sellLog.isThereProductInLog(product)) {
-                buyers.add((Customer) sellLog.getCustomer());
+                buyers.add(sellLog.getCustomer());
             }
         }
-        ArrayList<String> buyersInfo = new ArrayList<>();
-        for (Customer buyer : buyers) {
-            buyersInfo.add(buyer.userInfoForSending());
-        }
-        return (new Gson()).toJson(buyersInfo);
+        return buyers;
     }
 
 
@@ -219,7 +254,7 @@ public class Seller extends User {
 
 
     @Override
-    public String userInfoForSending() {
+    public UserInfo userInfoForSending() {
         UserInfo user = new UserInfo();
         user.setCompanyInfo(this.companyInfo);
         user.setCompanyName(this.companyName);
@@ -229,16 +264,12 @@ public class Seller extends User {
         user.setMoney(this.money);
         user.setPhoneNumber(this.getPhoneNumber());
         user.setUsername(this.getUsername());
-        return (new Gson()).toJson(user);
+        return user;
     }
+
 
     public void removeProduct(Product product) {
         this.allProducts.remove(product);
-        product.getSellers().remove(this);
-        product.getProductSellers().remove(product.getProductSeller(this));
-    }
-
-    public void buy(Log sellLog) {
     }
 
 
@@ -258,43 +289,11 @@ public class Seller extends User {
         this.companyInfo = companyInfo;
     }
 
-    public ArrayList<Log> getSellLogs() {
-        return sellLogs;
-    }
-
-    public void setSellLogs(ArrayList<Log> sellLogs) {
-        this.sellLogs = sellLogs;
-    }
-
     public ArrayList<Product> getAllProducts() {
         return allProducts;
     }
 
-    public void setAllProducts(ArrayList<Product> allProducts) {
-        this.allProducts = allProducts;
-    }
-
-    public ArrayList<Off> getAllOff() {
-        return allOff;
-    }
-
-    public void setAllOff(ArrayList<Off> allOff) {
-        this.allOff = allOff;
-    }
-
     public double getMoney() {
         return money;
-    }
-
-    public void setMoney(double money) {
-        this.money = money;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 }

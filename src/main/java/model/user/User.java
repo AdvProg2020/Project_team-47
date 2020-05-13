@@ -1,17 +1,22 @@
 package model.user;
 
 import com.google.gson.Gson;
+import model.others.Sort;
+import model.send.receive.UserInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 abstract public class User {
-    protected static ArrayList<User> allUsers;
+    static ArrayList<User> allUsers;
+    private static TreeSet<String> usedUsernames;
     private static int managersNumber;
 
     static {
         allUsers = new ArrayList<>();
+        usedUsernames = new TreeSet<>();
     }
 
     private String username;
@@ -22,9 +27,11 @@ abstract public class User {
     private String phoneNumber;
     private String type;
 
+
     public User() {
         this.addUser();
     }
+
 
     public User(HashMap<String, String> userInfo) {
         this.addUser();
@@ -35,52 +42,64 @@ abstract public class User {
         this.firstName = userInfo.get("first-name");
         this.lastName = userInfo.get("last-name");
         this.type = userInfo.get("type");
+        usedUsernames.add(this.username);
     }
+
 
     public static boolean isThereCustomersWithUsername(ArrayList<String> userNames) {
         for (String username : userNames) {
             User user = getUserByUsername(username);
-            if (!(user instanceof Seller)) {
+            if (!(user instanceof Customer)) {
                 return false;
             }
         }
         return true;
     }
 
+
     public static boolean isThereSeller(Seller seller) {
         return allUsers.contains(seller);
     }
+
 
     public static boolean isThereSeller(String username) {
         return getUserByUsername(username) instanceof Seller;
     }
 
+
+    public static boolean doesUsernameUsed(String username) {
+        return usedUsernames.contains(username);
+    }
+
     public static boolean isThereUserWithUsername(String username) {
         for (User user : allUsers) {
-            if (user.username.equals(username)) {
+            if (user.username.equalsIgnoreCase(username)) {
                 return true;
             }
         }
         return false;
     }
+
 
     public static boolean isThereUserWithEmail(String email) {
         for (User user : allUsers) {
-            if (user.email.equals(email)) {
+            if (user.email.equalsIgnoreCase(email)) {
                 return true;
             }
         }
         return false;
     }
 
+
     public static boolean isThereUserWithPhone(String phoneNumber) {
         for (User user : allUsers) {
-            if (user.phoneNumber.equals(phoneNumber)) {
+            if (user.phoneNumber.equalsIgnoreCase(phoneNumber)) {
                 return true;
             }
         }
         return false;
     }
+
 
     public static boolean isUsernameValid(String username) {
         if (username.length() < 5)
@@ -88,38 +107,46 @@ abstract public class User {
         return Pattern.matches("[a-zA-Z0-9]+", username);
     }
 
+
     public static boolean isPasswordValid(String password) {
         if (password.length() < 8)
             return false;
         return Pattern.matches("[a-zA-Z0-9!@#$%^&*-_=]+", password);
     }
 
+
     public static boolean isPhoneValid(String phoneNumber) {
         return Pattern.matches("09\\d{9}", phoneNumber);
     }
+
 
     public static boolean isEmailValid(String email) {
         return Pattern.matches("[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-zA-Z]+", email);
     }
 
+
     public static boolean checkPasswordIsCorrect(String username, String password) {
         User user = getUserByUsername(username);
-        assert user != null;
+        if (user == null)
+            return false;
         return user.password.equals(password);
     }
+
 
     public static boolean isThereManager() {
         return managersNumber > 0;
     }
 
+
     public static User getUserByUsername(String username) {
         for (User user : allUsers) {
-            if (user.username.equals(username)) {
+            if (user.username.equalsIgnoreCase(username)) {
                 return user;
             }
         }
         return null;
     }
+
 
     public static void deleteUser(String username) {
         User user = getUserByUsername(username);
@@ -127,35 +154,44 @@ abstract public class User {
         user.deleteUser();
     }
 
+
     private static void copyUserInfo(User destinationUser, User sourceUser) {
-        destinationUser.setEmail(sourceUser.getEmail());
-        destinationUser.setFirstName(sourceUser.getFirstName());
-        destinationUser.setLastName(sourceUser.getLastName());
-        destinationUser.setPassword(sourceUser.getPassword());
-        destinationUser.setPhoneNumber(sourceUser.getPhoneNumber());
-        destinationUser.setUsername(sourceUser.getUsername());
+        //this function copy some field from source user to destination user
+        //it uses when we want change role then we can create new user and copy last user info into new user
+        destinationUser.email = sourceUser.email;
+        destinationUser.firstName = sourceUser.firstName;
+        destinationUser.lastName = sourceUser.lastName;
+        destinationUser.password=sourceUser.password;
+        destinationUser.phoneNumber = sourceUser.phoneNumber;
+        destinationUser.username = sourceUser.username;
     }
 
-    public static String getAllUsers(String field, String direction) {
-        ArrayList<String> usersInfo = new ArrayList<>();
-        for (User user : allUsers) {
+
+    public static ArrayList<UserInfo> getAllUsers(String field, String direction) {
+        ArrayList<UserInfo> usersInfo = new ArrayList<>();
+        ArrayList<User> sortedUsers = Sort.sortUsers(field, direction, allUsers);
+        for (User user : sortedUsers) {
             usersInfo.add(user.userInfoForSending());
         }
-        Gson user = new Gson();
-        return user.toJson(usersInfo);
+        return usersInfo;
     }
 
-    public static void managerAdded() {
+
+    static void managerAdded() {
         managersNumber++;
     }
 
-    public static void managerRemoved() {
+
+    static void managerRemoved() {
         managersNumber--;
     }
 
+
     public abstract void deleteUser();
 
-    abstract public String userInfoForSending();
+
+    public abstract UserInfo userInfoForSending();
+
 
     public void changeRole(String newRole) {
 
@@ -177,39 +213,47 @@ abstract public class User {
                 break;
         }
         this.deleteUser();
+        //changing database
     }
+
 
     void addUser() {
         allUsers.add(this);
         if (this instanceof Manager)
             User.managersNumber++;
+        //changing database
     }
+
 
     private void changeUserToManager() {
         Manager manager = new Manager();
         copyUserInfo(manager, this);
         manager.setType("manager");
-        manager.addUser();
+        //changing database
     }
+
 
     private void changeUserToSeller() {
         Seller seller = new Seller();
         copyUserInfo(seller, this);
         seller.setType("seller");
-        seller.addUser();
+        //changing database
     }
+
 
     private void changeUserToCustomer() {
         Customer customer = new Customer();
         copyUserInfo(customer, this);
         customer.setType("customer");
-        customer.addUser();
+        //changing database
     }
+
 
     @Override
     public String toString() {
         return "User{}";
     }
+
 
     public String getUsername() {
         return username;
@@ -217,10 +261,6 @@ abstract public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -243,12 +283,8 @@ abstract public class User {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
+    String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPhoneNumber() {

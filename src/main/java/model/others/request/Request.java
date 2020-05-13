@@ -1,6 +1,5 @@
 package model.others.request;
 
-import com.google.gson.Gson;
 import controller.Controller;
 import model.others.Date;
 import model.others.Sort;
@@ -8,21 +7,21 @@ import model.send.receive.RequestInfo;
 import model.user.User;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Request {
     private static ArrayList<Request> allNewRequests;
+
+    static {
+        allNewRequests = new ArrayList<>();
+    }
+
     private String requestId;
-    private User requestSender;
+    private String requestSenderUserName;
     private String type;
     private MainRequest mainRequest;
     private Date applyDate;
     private Date responseDate;
     private String status;
-
-    static {
-        allNewRequests = new ArrayList<>();
-    }
 
     public Request() {
         allNewRequests.add(this);
@@ -37,13 +36,13 @@ public class Request {
             return id;
     }
 
-    public static String allRequestInfo(String sortField, String sortDirection) {
+    public static ArrayList<RequestInfo> allRequestInfo(String sortField, String sortDirection) {
         ArrayList<Request> newRequests = Sort.sortRequest(sortField, sortDirection, allNewRequests);
-        ArrayList<String> allRequest = new ArrayList<>();
+        ArrayList<RequestInfo> allRequest = new ArrayList<>();
         for (Request newRequest : newRequests) {
             allRequest.add(newRequest.getRequestInfo());
         }
-        return (new Gson()).toJson(allRequest);
+        return allRequest;
     }
 
     public static boolean isThereRequestWithId(String id) {
@@ -75,59 +74,37 @@ public class Request {
         allNewRequests.remove(request);
     }
 
-    public static void acceptAddOff(Request request) {
-    }
-
-    public static ArrayList<Request> getAllNewRequests() {
-        return allNewRequests;
-    }
-
-    public static void setAllNewRequests(ArrayList<Request> allNewRequests) {
-        Request.allNewRequests = allNewRequests;
-    }
 
     public static boolean canDoRequest(String id) {
         Request request = getRequestById(id);
         return request.mainRequest.update(request.type);
     }
 
-    public String getRequestInfo() {
+    public RequestInfo getRequestInfo() {
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setApplyDate(applyDate);
         requestInfo.setType(type);
         requestInfo.setId(requestId);
-        requestInfo.setRequestedSender(requestSender.getUsername());
-        return (new Gson()).toJson(requestInfo);
+        requestInfo.setRequestedSender(requestSenderUserName);
+        return requestInfo;
     }
 
-    public String detail() {
+    public RequestInfo detail() {
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setApplyDate(applyDate);
         requestInfo.setId(requestId);
         requestInfo.setType(type);
-        requestInfo.setRequestedSender(requestSender.getUsername());
+        requestInfo.setRequestedSender(requestSenderUserName);
         this.mainRequest.requestInfoSetter(requestInfo);
-        return (new Gson()).toJson(requestInfo);
+        return requestInfo;
     }
 
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
-
-    public User getRequestSender() {
-        return requestSender;
+    public String getRequestSender() {
+        return requestSenderUserName;
     }
 
     public void setRequestSender(User requestSender) {
-        this.requestSender = requestSender;
-    }
-
-    public String getType() {
-        return type;
+        this.requestSenderUserName = requestSender.getUsername();
     }
 
     public void setType(String type) {
@@ -140,26 +117,6 @@ public class Request {
 
     public void setApplyDate(Date applyDate) {
         this.applyDate = applyDate;
-    }
-
-    public Date getResponseDate() {
-        return responseDate;
-    }
-
-    public void setResponseDate(Date responseDate) {
-        this.responseDate = responseDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public MainRequest getMainRequest() {
-        return mainRequest;
     }
 
     public void setMainRequest(MainRequest mainRequest) {

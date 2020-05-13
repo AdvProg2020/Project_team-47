@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class AllProductController extends Controller {
     private static ArrayList<Filter> filters;
-    private static String sortFiled;
+    private static String sortField;
     private static String sortDirection;
 
     static {
@@ -20,10 +20,10 @@ public class AllProductController extends Controller {
 
     public static void viewCategories(String sortFiled, String sortDirection) {
         filters = new ArrayList<>();
-        sendAnswer(Category.getAllCategoriesInfo(sortFiled, sortDirection));
+        sendAnswer(Category.getAllCategoriesInfo(sortFiled, sortDirection), "category");
     }
 
-    public static void viewSubcategory(String mainCategoryName, String sortFiled,String sortDirection) {
+    public static void viewSubcategory(String mainCategoryName, String sortFiled, String sortDirection) {
         MainCategory mainCategory = MainCategory.getMainCategoryByName(mainCategoryName);
         if (mainCategory == null) {
             sendError("There isn't any main category with this name!!");
@@ -35,7 +35,7 @@ public class AllProductController extends Controller {
     }
 
     public static void filterBy(String filterType, String filterKey, String firstFilterValue, String secondFilterValue) {
-        if (!Pattern.matches("(equality|equation)( special-properties)?", filterType)) {
+        if (!Pattern.matches("(equality|equation)( special-property)?", filterType)) {
             sendError("Wrong filter type!!");
             return;
         }
@@ -43,20 +43,19 @@ public class AllProductController extends Controller {
             sendError("There is already a filter with this key!!");
             return;
         } else if (Pattern.matches("(equality|equation)", filterType)) {
-            addNonPropertiesFilter(filterKey, firstFilterValue, secondFilterValue);
+            addNonPropertyFilter(filterKey, firstFilterValue, secondFilterValue);
             return;
         }
 
         Category category = getCategoryInFilter();
-        if (filterType.equals("equality special-properties")) {
+        if (filterType.equals("equality special-property")) {
             addPropertiesEqualityFilter(filterKey, firstFilterValue, category);
-        } else if (filterType.equals("equation special-properties")) {
+        } else if (filterType.equals("equation special-property")) {
             addPropertiesEquationFilter(filterKey, firstFilterValue, secondFilterValue, category);
         }
-
     }
 
-    private static void addNonPropertiesFilter(String filterKey, String firstFilterValue, String secondFilterValue) {
+    private static void addNonPropertyFilter(String filterKey, String firstFilterValue, String secondFilterValue) {
         switch (filterKey) {
             case "price":
                 addPriceFilter(firstFilterValue, secondFilterValue);
@@ -73,8 +72,9 @@ public class AllProductController extends Controller {
             case "name":
                 addNameFilter(firstFilterValue);
                 break;
+            default:
+                sendError("Wrong key!!");
         }
-
     }
 
     private static void addPropertiesEqualityFilter(String filterKey, String firstValue, Category category) {
@@ -84,22 +84,22 @@ public class AllProductController extends Controller {
             sendError("The category you choose doesn't have this properties!!");
         } else {
             Filter filter = new Filter();
-            filter.setType("equality special-properties");
+            filter.setType("equality special-property");
             filter.setFilterKey(filterKey);
             filter.setFirstFilterValue(firstValue);
             filters.add(filter);
+            actionCompleted();
         }
-
     }
 
     private static void addPropertiesEquationFilter(String filterKey, String firstValue, String secondValue, Category category) {
         if (category == null) {
             sendError("You should filter products by a category or subcategory at the first!!");
         } else if (!category.getSpecialProperties().contains(filterKey)) {
-            sendError("The category you choose doesn't have this properties!!");
+            sendError("The category you choose doesn't have this property!!");
         } else {
             Filter filter = new Filter();
-            filter.setType("equation special-properties");
+            filter.setType("equation special-property");
             filter.setFilterKey(filterKey);
             try {
                 filter.setFirstDouble(Double.parseDouble(firstValue));
@@ -108,13 +108,11 @@ public class AllProductController extends Controller {
                 sendError("Please enter valid number!!");
             }
             filters.add(filter);
+            actionCompleted();
         }
     }
 
     private static Category getCategoryInFilter() {
-        if (!hasCategoryFilter()) {
-            return null;
-        }
         for (Filter filter : filters) {
             if (filter.getFilterKey().equals("category")) {
                 return Category.getMainCategoryByName(filter.getFirstFilterValue());
@@ -142,11 +140,12 @@ public class AllProductController extends Controller {
         filter.setFilterKey("name");
         filter.setFirstFilterValue(productName);
         filters.add(filter);
+        actionCompleted();
     }
 
     private static void addSubCategoryFilter(String subcategoryName) {
-        SubCategory mainCategory = Category.getSubCategoryByName(subcategoryName);
-        if (mainCategory == null) {
+        SubCategory subCategory = Category.getSubCategoryByName(subcategoryName);
+        if (subCategory == null) {
             sendError("There isn't any category with this name!!");
         } else {
             Filter filter = new Filter();
@@ -154,6 +153,7 @@ public class AllProductController extends Controller {
             filter.setFilterKey("sub-category");
             filter.setFirstFilterValue(subcategoryName);
             filters.add(filter);
+            actionCompleted();
         }
     }
 
@@ -167,6 +167,7 @@ public class AllProductController extends Controller {
             filter.setFilterKey("category");
             filter.setFirstFilterValue(categoryName);
             filters.add(filter);
+            actionCompleted();
         }
     }
 
@@ -184,6 +185,7 @@ public class AllProductController extends Controller {
             filter.setFirstDouble(min);
             filter.setSecondDouble(max);
             filters.add(filter);
+            actionCompleted();
         } catch (NumberFormatException e) {
             sendError("Please enter valid value!!");
         }
@@ -193,21 +195,34 @@ public class AllProductController extends Controller {
         try {
             double min = Double.parseDouble(firstValue);
             double max = Double.parseDouble(secondValue);
+            if (min < 0 || min > max) {
+                throw new NumberFormatException();
+            }
             Filter filter = new Filter();
             filter.setType("equation");
             filter.setFilterKey("price");
             filter.setFirstDouble(min);
             filter.setSecondDouble(max);
             filters.add(filter);
+            actionCompleted();
         } catch (NumberFormatException e) {
-            sendError("Please enter valid value!!");
+            sendError("Please enter valid number!!");
         }
     }
 
     private static boolean doesFilterExist(String filterKey) {
+        int flag = 1;
+        if (Pattern.matches("(category|sub-category)", filterKey))
+            flag = 0;
         for (Filter filter : filters) {
-            if (filter.getFilterKey().equals(filterKey)) {
-                return true;
+            if (flag == 0) {
+                if (filter.getFilterKey().contains(filterKey))
+                    return true;
+
+            } else {
+                if (filter.getFilterKey().equals(filterKey))
+                    return true;
+
             }
         }
         return false;
@@ -217,6 +232,7 @@ public class AllProductController extends Controller {
         for (Filter filter : filters) {
             if (filter.getFilterKey().equals(filterKey)) {
                 filters.remove(filter);
+                actionCompleted();
                 return;
             }
         }
@@ -224,34 +240,61 @@ public class AllProductController extends Controller {
     }
 
     public static void showProductsWithFilterAndSort() {
-        sendAnswer(Product.getProductsFiltered(sortFiled, sortDirection, filters));
+        sendAnswer(Product.getProductsFiltered(sortField, sortDirection, filters), "product");
     }
 
-
     public static void sort(String sortField, String sortDirection) {
-        if (Pattern.matches("(name|score|seen-time|date)", sortField) &&
+        if (Pattern.matches("(name|score|seen-time|price)", sortField) &&
                 Pattern.matches("(ascending|descending)", sortDirection)) {
-            AllProductController.sortFiled = sortField;
+            AllProductController.sortField = sortField;
             AllProductController.sortDirection = sortDirection;
+            actionCompleted();
         } else
             sendError("Can't sort with this field and direction!!");
     }
 
     public static void disableSort() {
         sortDirection = null;
-        sortFiled = null;
+        sortField = null;
+        actionCompleted();
     }
 
-
     public static void showAvailableFilter() {
+        ArrayList<String> availableFilters = new ArrayList<>();
+        Category category = getCategoryInFilter();
+        availableFilters.add("Price");
+        availableFilters.add("Score");
+        availableFilters.add("Category");
+        availableFilters.add("Sub Category");
+        availableFilters.add("Name");
+        if (category != null) {
+            availableFilters.addAll(category.getSpecialProperties());
+        }
+        sendAnswer(availableFilters, "filter");
     }
 
     public static void currentFilters() {
+        ArrayList<String> currentFilters = new ArrayList<>();
+        for (Filter filter : filters) {
+            currentFilters.add(filter.toString());
+        }
+        sendAnswer(currentFilters, "filter");
     }
 
     public static void currentSort() {
+        if (sortField == null || sortDirection == null) {
+            sendError("You didn't any field to sort offs!!");
+        } else
+            sendAnswer(sortField, sortDirection);
     }
 
     public static void showAvailableSorts() {
+        ArrayList<String> sorts = new ArrayList<>();
+        sorts.add("Name");
+        sorts.add("Score");
+        sorts.add("Seen Time");
+        sorts.add("Price");
+
+        sendAnswer(sorts, "sort");
     }
-}
+}//end AllProductController class

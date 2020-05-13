@@ -1,7 +1,5 @@
 package model.others;
 
-import com.google.gson.Gson;
-import model.discount.Discount;
 import model.log.BuyLog;
 import model.send.receive.CartInfo;
 import model.user.Seller;
@@ -12,12 +10,10 @@ import java.util.ArrayList;
 public class ShoppingCart {
     private static ShoppingCart localShoppingCart;
 
-    private Discount appliedDiscountCode;
-    private ArrayList<ProductInCart> productsInCart = new ArrayList<>();
-
+    private ArrayList<ProductInCart> productsInCart;
 
     public ShoppingCart() {
-        productsInCart=new ArrayList<>();
+        productsInCart = new ArrayList<>();
     }
 
     public static ShoppingCart getLocalShoppingCart() {
@@ -28,18 +24,27 @@ public class ShoppingCart {
         ShoppingCart.localShoppingCart = localShoppingCart;
     }
 
-    public String cartInfo() {
+    public CartInfo cartInfo() {
         CartInfo cartInfo = new CartInfo();
-        for (ProductInCart product : productsInCart) {
-            cartInfo.addProductInfo(product.getProduct(), product.getSeller(), product.getNumberInCart());
+        for (ProductInCart productInCart : productsInCart) {
+            cartInfo.addProductInfo(productInCart.getProduct(), productInCart.getSeller(), productInCart.getNumberInCart());
         }
-        return (new Gson()).toJson(cartInfo);
+        return cartInfo;
     }
 
     public boolean isProductInCart(String productId, String sellerUsername) {
         for (ProductInCart product : productsInCart) {
-            if (product.getProduct().getId().equals(productId) &&
-                    product.getSeller().getUsername().equals(sellerUsername)) {
+            if (product.getProduct().getId().equalsIgnoreCase(productId) &&
+                    product.getSeller().getUsername().equalsIgnoreCase(sellerUsername)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isProductInCart(Product product, Seller seller) {
+        for (ProductInCart productInCart : productsInCart) {
+            if (productInCart.getProduct() == product && productInCart.getSeller() == seller) {
                 return true;
             }
         }
@@ -77,6 +82,7 @@ public class ShoppingCart {
         productInCart.increase();
     }
 
+
     public boolean canIncrease(Product product, Seller seller) {
         ProductInCart productInCart = this.getProductInCart(product, seller);
         if (productInCart == null) {
@@ -96,13 +102,10 @@ public class ShoppingCart {
 
     public void mergingWithLocalCart(ShoppingCart localShoppingCart) {
         for (ProductInCart productInCart : localShoppingCart.productsInCart) {
-            if (!this.productsInCart.contains(productInCart)) {
+            if (!isProductInCart(productInCart.getProduct(), productInCart.getSeller())) {
                 this.productsInCart.add(productInCart);
             }
         }
-    }
-
-    public void applyDiscountCode(String code) {
     }
 
     public double getTotalPrice() {
@@ -111,18 +114,16 @@ public class ShoppingCart {
             Seller seller = productInCart.getSeller();
             Product product = productInCart.getProduct();
             int productNumber = productInCart.getNumberInCart();
-            totalPrice = product.getFinalPrice(seller) * (double) productNumber;
+            totalPrice += product.getFinalPrice(seller) * (double) productNumber;
         }
         return totalPrice;
     }
 
     public void addToCart(Product product, Seller seller) {
-        ProductInCart productInCart = new ProductInCart(product, seller);
-        for (ProductInCart temp : this.productsInCart) {
-            if (productInCart.equals(temp)) {
-                return;
-            }
+        if (isProductInCart(product, seller)) {
+            return;
         }
+        ProductInCart productInCart = new ProductInCart(product, seller);
         this.productsInCart.add(productInCart);
     }
 
@@ -135,14 +136,6 @@ public class ShoppingCart {
             seller.increaseMoney(price);
             product.decreaseProduct(seller, productNumber);
         }
-    }
-
-    public Discount getAppliedDiscountCode() {
-        return appliedDiscountCode;
-    }
-
-    public void setAppliedDiscountCode(Discount appliedDiscountCode) {
-        this.appliedDiscountCode = appliedDiscountCode;
     }
 
     public void update() {
@@ -168,14 +161,10 @@ public class ShoppingCart {
         }
     }
 
-
-    private static class ProductInCart {
+    public static class ProductInCart {
         private Product product;
         private Seller seller;
         private int numberInCart;
-
-        public ProductInCart() {
-        }
 
         public ProductInCart(Product product, Seller seller) {
             this.product = product;
@@ -221,5 +210,6 @@ public class ShoppingCart {
         public void setNumberInCart(int numberInCart) {
             this.numberInCart = numberInCart;
         }
-    }
-}
+    }//end ProductInCart class
+
+}//end ShoppingCart class

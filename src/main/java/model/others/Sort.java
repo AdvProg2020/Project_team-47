@@ -28,9 +28,11 @@ public class Sort {
         return categoriesClone;
     }
 
+
     public static ArrayList<Product> sortProduct(String field, String direction, ArrayList<Product> products) {
         ArrayList<Product> productsClone = (ArrayList<Product>) products.clone();
         if (field == null || direction == null) {
+            sortProductBySeenTime(productsClone, direction);
             return productsClone;
         }
         switch (field) {
@@ -43,11 +45,22 @@ public class Sort {
             case "seen-time":
                 sortProductBySeenTime(productsClone, direction);
                 break;
-            case "date":
-                sortProductByDate(productsClone, direction);
+            case "price":
+                sortProductPrice(productsClone, direction);
                 break;
         }
         return productsClone;
+    }
+
+    private static void sortProductPrice(ArrayList<Product> products, String direction) {
+        products.sort((o1, o2) -> {
+            if (direction.startsWith("a")) {
+                return Double.compare(o1.getMinimumPrice(), o2.getMinimumPrice());
+            } else if (direction.startsWith("d")) {
+                return Double.compare(o2.getMinimumPrice(), o1.getMinimumPrice());
+            }
+            return 1;
+        });
     }
 
     private static void sortProductByName(ArrayList<Product> products, String direction) {
@@ -83,17 +96,6 @@ public class Sort {
         });
     }
 
-    private static void sortProductByDate(ArrayList<Product> products, String direction) {
-        products.sort((o1, o2) -> {
-            if (direction.startsWith("a")) {
-                return o1.getCreatingDate().compareTo(o2.getCreatingDate());
-
-            } else if (direction.startsWith("d")) {
-                return o2.getCreatingDate().compareTo(o1.getCreatingDate());
-            }
-            return 1;
-        });
-    }
 
     public static ArrayList<DiscountCode> sortDiscountCode(String field, String direction, ArrayList<DiscountCode> discountCodes) {
         ArrayList<DiscountCode> discountCodesClone = (ArrayList<DiscountCode>) discountCodes.clone();
@@ -148,6 +150,7 @@ public class Sort {
         });
     }
 
+
     public static ArrayList<Off> sortOffs(String field, String direction, ArrayList<Off> offs) {
         ArrayList<Off> offsClone = (ArrayList<Off>) offs.clone();
         if (field == null || direction == null) {
@@ -200,6 +203,7 @@ public class Sort {
             return 1;
         });
     }
+
 
     public static ArrayList<User> sortUsers(String field, String direction, ArrayList<User> users) {
         ArrayList<User> usersClone = (ArrayList<User>) users.clone();
@@ -285,13 +289,14 @@ public class Sort {
     private static void sortRequestBySenderUsername(ArrayList<Request> requests, String direction) {
         requests.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return o1.getRequestSender().getUsername().compareTo(o2.getRequestSender().getUsername());
+                return o1.getRequestSender().compareTo(o2.getRequestSender());
             } else if (direction.startsWith("d")) {
-                return o2.getRequestSender().getUsername().compareTo(o1.getRequestSender().getUsername());
+                return o2.getRequestSender().compareTo(o1.getRequestSender());
             }
             return 1;
         });
     }
+
 
     public static ArrayList<Log> sortLogs(String field, String direction, ArrayList<Log> logs) {
         ArrayList<Log> logsClone = (ArrayList<Log>) logs.clone();

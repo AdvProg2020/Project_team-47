@@ -6,7 +6,7 @@ public abstract class MainRequest {
     public MainRequest() {
     }
 
-    abstract public void requestInfoSetter(RequestInfo requestInfo);
+    public abstract void requestInfoSetter(RequestInfo requestInfo);
 
     abstract void accept(String type);
 

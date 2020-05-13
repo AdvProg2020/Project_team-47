@@ -23,35 +23,47 @@ public class LoginController extends Controller {
             if (loggedUser instanceof Customer) {
                 ((Customer) loggedUser).getShoppingCart().mergingWithLocalCart(ShoppingCart.getLocalShoppingCart());
             }
-            sendAnswer("You are logged in successfully.");
+            actionCompleted();
         }
     }
 
     public static void register(HashMap<String, String> registerInformationHashMap) {
-        if (!registerInformationHashMap.containsKey("username") ||
-                !registerInformationHashMap.containsKey("password") ||
-                !registerInformationHashMap.containsKey("first-name") ||
-                !registerInformationHashMap.containsKey("last-name") ||
-                !registerInformationHashMap.containsKey("email") ||
-                !registerInformationHashMap.containsKey("phone-number") ||
-                !registerInformationHashMap.containsKey("type")) {
-            sendError("Not enough information!!");
-        } else if (registerInformationHashMap.get("type").equals("seller") && (
-                !registerInformationHashMap.containsKey("company-name") ||
-                        !registerInformationHashMap.containsKey("company-info"))) {
+        //this function will check some error may occur during register and if
+        //there wasn't any error it will call registerUser function to completing register
+
+        if (checkRegisterInfoKey(registerInformationHashMap)) {
             sendError("Not enough information!!");
         } else if (registerInformationHashMap.get("type").equals("manager") && User.isThereManager()) {
             sendError("There is manager and you can't register as a manager!!");
-        } else {
+        } else if (registerInformationIsValid(registerInformationHashMap)) {
             registerUser(registerInformationHashMap, registerInformationHashMap.get("type"));
         }
+    }
+
+    static boolean checkRegisterInfoKey(HashMap<String, String> registerInfo) {
+        //this function will check that if registerInfo HashMap contains all key that should have or not
+
+        String[] registerKey = {"username", "password", "first-name", "last-name", "email", "phone-number", "type"};
+        for (String key : registerKey) {
+            if (!registerInfo.containsKey(key))
+                return false;
+        }
+
+        String[] sellerKey = {"company-info", "company-name"};
+        if (registerInfo.get("type").equals("seller")) {
+            for (String key : sellerKey) {
+                if (!registerInfo.containsKey(key))
+                    return false;
+            }
+        }
+        return true;
     }
 
     private static boolean registerInformationIsValid(HashMap<String, String> userInfo) {
         if (!User.isUsernameValid(userInfo.get("username"))) {
             sendError("Username isn't valid!!");
-        } else if (User.isThereUserWithUsername(userInfo.get("username"))) {
-            sendError("This username isn't valid.");
+        } else if (User.doesUsernameUsed(userInfo.get("username"))) {
+            sendError("There is user with this username already!!");
         } else if (!User.isEmailValid(userInfo.get("email"))) {
             sendError("Email isn't valid!!");
         } else if (!User.isPhoneValid(userInfo.get("phone-number"))) {
@@ -69,9 +81,6 @@ public class LoginController extends Controller {
     }
 
     static void registerUser(HashMap<String, String> userInformation, String userType) {
-        if (!registerInformationIsValid(userInformation)) {
-            return;
-        }
         User newUser;
         switch (userType) {
             case "customer":
@@ -84,7 +93,7 @@ public class LoginController extends Controller {
                 newUser = new Manager(userInformation);
                 break;
         }
-        sendAnswer("Your registered successfully.");
+        actionCompleted();
     }
 
     public static void logout() {
@@ -93,8 +102,8 @@ public class LoginController extends Controller {
         } else {
             loggedUser = null;
             ShoppingCart.setLocalShoppingCart(new ShoppingCart());
-            sendAnswer("You logout successfully.");
+            actionCompleted();
         }
     }
 
-}
+}//end LoginController class

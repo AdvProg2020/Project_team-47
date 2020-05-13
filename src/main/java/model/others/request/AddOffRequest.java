@@ -18,16 +18,14 @@ public class AddOffRequest extends MainRequest {
     private ArrayList<String> productsId;
     private int percent;
 
-
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
-        Gson gson = new Gson();
         HashMap<String, String> addingInfo = new HashMap<>();
         addingInfo.put("percent", Integer.toString(percent));
         addingInfo.put("start-time", startTime.toString());
         addingInfo.put("finish-time", finishTime.toString());
         addingInfo.put("seller", sellerUsername);
-        addingInfo.put("products-id", gson.toJson(productsId));
+        addingInfo.put("products-id", (new Gson()).toJson(productsId));
         requestInfo.setAddInfo("add-off", sellerUsername, addingInfo);
     }
 
@@ -37,64 +35,47 @@ public class AddOffRequest extends MainRequest {
         Seller seller = (Seller) User.getUserByUsername(sellerUsername);
         off.setSeller(seller);
         if (startTime.before(Date.getCurrentDate())) {
-            off.setDiscountStartTime(Date.getNextHour());
+            off.setDiscountStartTime(Date.getCurrentDate());
         } else {
             off.setDiscountStartTime(startTime);
         }
         off.setDiscountFinishTime(finishTime);
         off.setDiscountPercent(percent);
-        ArrayList<Product> products = new ArrayList<>();
         for (String id : productsId) {
             Product product = seller.getProductById(id);
             if (product != null) {
-                product.addOff(off);
+                product.addOff(off,seller);
                 off.addProduct(product);
+                seller.addOff(off);
             }
         }
     }
 
     @Override
     boolean update(String type) {
-        return User.isThereSeller(sellerUsername);
-    }
-
-    public Date getStartTime() {
-        return startTime;
+        if(finishTime.before(Date.getCurrentDate()))
+            return false;
+        return (User.getUserByUsername(sellerUsername) instanceof Seller);
     }
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public Date getFinishTime() {
-        return finishTime;
-    }
-
     public void setFinishTime(Date finishTime) {
         this.finishTime = finishTime;
-    }
-
-    public String getSellerUsername() {
-        return sellerUsername;
     }
 
     public void setSellerUsername(String sellerUsername) {
         this.sellerUsername = sellerUsername;
     }
 
-    public ArrayList<String> getProductsId() {
-        return productsId;
-    }
-
     public void setProductsId(ArrayList<String> productsId) {
         this.productsId = productsId;
-    }
-
-    public int getPercent() {
-        return percent;
     }
 
     public void setPercent(int percent) {
         this.percent = percent;
     }
+
 }

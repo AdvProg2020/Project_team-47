@@ -8,7 +8,7 @@ import model.send.receive.RequestInfo;
 import java.util.ArrayList;
 
 public class EditOffRequest extends MainRequest {
-    private Off off;
+    private String offId;
     private String field;
     private String newValue;
     private ArrayList<String> newValueArrayList;
@@ -33,18 +33,19 @@ public class EditOffRequest extends MainRequest {
 
     @Override
     void accept(String type) {
+        Off off = Off.getOffById(offId);
         switch (field) {
             case "start-time":
-                editStartTime();
+                editStartTime(off);
                 break;
             case "finish-time":
-                editFinishTime();
+                editFinishTime(off);
                 break;
             case "percent":
-                editPercent();
+                editPercent(off);
                 break;
             case "products":
-                editProducts(type);
+                editProducts(type, off);
                 break;
         }
 
@@ -52,6 +53,8 @@ public class EditOffRequest extends MainRequest {
 
     @Override
     boolean update(String type) {
+        if (!Off.isThereOff(offId))
+            return false;
         switch (field) {
             case "start-time":
             case "finish-time":
@@ -62,7 +65,7 @@ public class EditOffRequest extends MainRequest {
         return false;
     }
 
-    private void editProducts(String type) {
+    private void editProducts(String type, Off off) {
         ArrayList<Product> products = new ArrayList<>();
         for (String id : newValueArrayList) {
             Product product = Product.getProductWithId(id);
@@ -75,7 +78,7 @@ public class EditOffRequest extends MainRequest {
                 for (Product product : products) {
                     if (!off.getProducts().contains(product)) {
                         off.getProducts().add(product);
-                        product.addOff(off);
+                        product.addOff(off,off.getSeller());
                     }
                 }
                 break;
@@ -85,7 +88,7 @@ public class EditOffRequest extends MainRequest {
                 }
                 off.setProducts(products);
                 for (Product product : products) {
-                    product.addOff(off);
+                    product.addOff(off,off.getSeller());
                 }
                 break;
             case "edit-off remove":
@@ -97,43 +100,20 @@ public class EditOffRequest extends MainRequest {
         }
     }
 
-    private void editPercent() {
+    private void editPercent(Off off) {
         off.setDiscountPercent(Integer.parseInt(newValue));
     }
 
-    private void editFinishTime() {
+    private void editFinishTime(Off off) {
         off.setDiscountFinishTime(Date.getDateWithString(newValue));
     }
 
-    private void editStartTime() {
+    private void editStartTime(Off off) {
         off.setDiscountStartTime(Date.getDateWithString(newValue));
     }
 
-    public String getField() {
-        return field;
+    public void setOffId(String offId) {
+        this.offId = offId;
     }
 
-    public void setField(String field) {
-        this.field = field;
-    }
-
-    public String getNewValue() {
-        return newValue;
-    }
-
-    public void setNewValue(String newValue) {
-        this.newValue = newValue;
-    }
-
-    public void setOff(Off off) {
-        this.off = off;
-    }
-
-    public ArrayList<String> getNewValueArrayList() {
-        return newValueArrayList;
-    }
-
-    public void setNewValueArrayList(ArrayList<String> newValueArrayList) {
-        this.newValueArrayList = newValueArrayList;
-    }
 }
