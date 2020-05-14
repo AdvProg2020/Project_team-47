@@ -1,6 +1,8 @@
 package view.menu.UserMenu.commands;
 
+import model.send.receive.ServerMessage;
 import view.ViewAttributes;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.outputMessages.OutputErrors;
@@ -15,12 +17,23 @@ public class ViewPersonalInfoCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        if (!ViewAttributes.isUserSignedIn()){
+        /*if (!ViewAttributes.isUserSignedIn()){
             OutputErrors.notSignedIn();
             checkIfUserWantToSignIn();
         } else {
             menu.findSubMenuWithName("personal info menu").autoExecute();
+        }*/
+        sendMessageToViewToController(text);
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+        if (serverMessage.getType().equals("successful")) {
+            this.getMenu().findSubMenuWithName("product menu").autoExecute();
         }
+
+    }
+
+    private void sendMessageToViewToController(String text) {
+        ViewToController.setViewMessage("view personal info");
+        ViewToController.sendMessageToController();
     }
 
     private void checkIfUserWantToSignIn() {

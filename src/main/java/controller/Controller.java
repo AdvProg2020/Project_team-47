@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import model.others.ShoppingCart;
 import model.send.receive.*;
 import model.user.User;
+import view.ViewToController;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -20,6 +21,10 @@ abstract public class Controller {
     }
 
     static void sendError(String errorMessage) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("error");
+        serverMessage.setFirstString(errorMessage);
+        send((new Gson()).toJson(serverMessage));
     }
 
     static void sendAnswer(ArrayList arrayList, String type) {
@@ -124,6 +129,13 @@ abstract public class Controller {
         send((new Gson()).toJson(serverMessage));
     }
 
+    static void sendAnswer(String firstString) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setFirstString(firstString);
+        send((new Gson()).toJson(serverMessage));
+    }
+
     static void sendAnswer(String firstString, String secondString) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
@@ -134,12 +146,12 @@ abstract public class Controller {
 
     static void actionCompleted() {
         ServerMessage serverMessage = new ServerMessage();
-        serverMessage.setType("Action completed.");
+        serverMessage.setType("successful");
         send((new Gson()).toJson(serverMessage));
     }
 
     private static void send(String answer) {
-
+        ViewToController.setControllerAnswer(answer);
     }
 
     public static String idCreator() {

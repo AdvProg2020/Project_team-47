@@ -23,7 +23,7 @@ public class LoginController extends Controller {
             if (loggedUser instanceof Customer) {
                 ((Customer) loggedUser).getShoppingCart().mergingWithLocalCart(ShoppingCart.getLocalShoppingCart());
             }
-            actionCompleted();
+            sendAnswer(loggedUser.getType());
         }
     }
 
@@ -35,6 +35,8 @@ public class LoginController extends Controller {
             sendError("Not enough information!!");
         } else if (registerInformationHashMap.get("type").equals("manager") && User.isThereManager()) {
             sendError("There is manager and you can't register as a manager!!");
+        } else if (!registerInformationHashMap.get("type").equals("manager") && !User.isThereManager()) {
+            sendError("There isn't a manager and you should register as a manager!!");
         } else if (registerInformationIsValid(registerInformationHashMap)) {
             registerUser(registerInformationHashMap, registerInformationHashMap.get("type"));
         }
@@ -46,6 +48,7 @@ public class LoginController extends Controller {
         String[] registerKey = {"username", "password", "first-name", "last-name", "email", "phone-number", "type"};
         for (String key : registerKey) {
             if (!registerInfo.containsKey(key))
+                System.out.println(key);
                 return false;
         }
 
@@ -61,7 +64,8 @@ public class LoginController extends Controller {
 
     private static boolean registerInformationIsValid(HashMap<String, String> userInfo) {
         if (!User.isUsernameValid(userInfo.get("username"))) {
-            sendError("Username isn't valid!!");
+            sendError("Username isn't valid!!\nit should contains " +
+                    "more than five letters and only letters and numbers");
         } else if (User.doesUsernameUsed(userInfo.get("username"))) {
             sendError("There is user with this username already!!");
         } else if (!User.isEmailValid(userInfo.get("email"))) {

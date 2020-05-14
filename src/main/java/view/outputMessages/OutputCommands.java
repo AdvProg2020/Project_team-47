@@ -28,4 +28,16 @@ public class OutputCommands {
     public static void enterDiscountCode() {
         System.out.println("enter discount code");
     }
+
+    public static void enterFirstName() {
+        System.out.println("enter first Name");
+    }
+
+    public static void enterLastName() {
+        System.out.println("enter last Name");
+    }
+
+    public static void tryAgain() {
+        System.out.println("try again");
+    }
 }

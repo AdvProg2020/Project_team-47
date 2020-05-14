@@ -1,5 +1,6 @@
 package view.menu.UserMenu.commands;
 
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
@@ -14,6 +15,14 @@ public class GoToProductsMenuCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        this.menu.findSubMenuWithName("all products").autoExecute();
+        sendMessageToViewToController();
+        if (ViewToController.getServerMessage().getType().equals("successful")) {
+            this.menu.findSubMenuWithName("all products").autoExecute();
+        }
+    }
+
+    public void sendMessageToViewToController() {
+        ViewToController.setViewMessage("all products");
+        ViewToController.sendMessageToController();
     }
 }

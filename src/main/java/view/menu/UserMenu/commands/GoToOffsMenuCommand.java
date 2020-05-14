@@ -1,7 +1,10 @@
 package view.menu.UserMenu.commands;
 
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
+
+import javax.swing.text.View;
 
 public class GoToOffsMenuCommand extends Command {
     public GoToOffsMenuCommand(Menu menu) {
@@ -12,6 +15,12 @@ public class GoToOffsMenuCommand extends Command {
 
     @Override
     public void doCommand(String text) {
+        sendMessageToViewToController();
+        if (ViewToController.getServerMessage().getType().equals("successful"))
         this.menu.findSubMenuWithName("all offs menu").autoExecute();
+    }
+    public void sendMessageToViewToController() {
+        ViewToController.setViewMessage("offs");
+        ViewToController.sendMessageToController();
     }
 }
