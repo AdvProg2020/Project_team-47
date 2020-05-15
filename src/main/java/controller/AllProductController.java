@@ -5,6 +5,7 @@ import model.category.MainCategory;
 import model.category.SubCategory;
 import model.others.Filter;
 import model.others.Product;
+import model.user.User;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -72,9 +73,51 @@ public class AllProductController extends Controller {
             case "name":
                 addNameFilter(firstFilterValue);
                 break;
+            case "brand":
+                addBrandFilter(firstFilterValue);
+                break;
+            case "availability":
+                addAvailability(firstFilterValue);
+            case "seller":
+                addSellerFilter(firstFilterValue);
             default:
                 sendError("Wrong key!!");
         }
+    }
+
+    private static void addSellerFilter(String sellerUsername) {
+        if (!User.isThereSeller(sellerUsername)) {
+            sendError("There isn't any seller with this username!!");
+            return;
+        }
+        Filter filter = new Filter();
+        filter.setType("equality");
+        filter.setFilterKey("seller");
+        filter.setFirstFilterValue(sellerUsername);
+        filters.add(filter);
+        actionCompleted();
+    }
+
+    private static void addAvailability(String availability) {
+        if (!Pattern.matches("(yes|no)", availability.toLowerCase())) {
+            sendError("Wrong value!!");
+        } else {
+            Filter filter = new Filter();
+            filter.setType("equality");
+            filter.setFilterKey("availability");
+            filter.setFirstFilterValue(availability);
+            filters.add(filter);
+            actionCompleted();
+        }
+    }
+
+    private static void addBrandFilter(String brand) {
+        Filter filter = new Filter();
+        filter.setType("equality");
+        filter.setFilterKey("brand");
+        filter.setFirstFilterValue(brand);
+        filters.add(filter);
+        actionCompleted();
     }
 
     private static void addPropertiesEqualityFilter(String filterKey, String firstValue, Category category) {
@@ -294,6 +337,9 @@ public class AllProductController extends Controller {
         sorts.add("Score");
         sorts.add("Seen Time");
         sorts.add("Price");
+        sorts.add("Seller");
+        sorts.add("Brand");
+        sorts.add("Availability");
 
         sendAnswer(sorts, "sort");
     }

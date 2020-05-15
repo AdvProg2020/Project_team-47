@@ -92,8 +92,55 @@ public class LoginController extends Controller {
             case "manager":
                 newUser = new Manager(userInformation);
                 break;
+            default:
+                sendError("Please enter valid type!!");
+                return;
         }
+        newUser.emailVerification();
         actionCompleted();
+    }
+
+    public static void confirmEmail(String username, String password, String verificationCode) {
+        User user = User.getUserInVerificationList(username);
+        if (user == null) {
+            sendError("There isn't any user with this username in verification list!!");
+        } else if (!user.checkPasswordIsCorrect(password)) {
+            sendError("Password isn't correct!!");
+        } else if (!user.doesCodeSend()) {
+            sendError("We didn't send any code to your email!!");
+        } else if (!user.sendCodeIsCorrect(verificationCode)) {
+            sendError("Incorrect code!!");
+        } else {
+            user.confirmEmail();
+            loggedUser = user;
+            actionCompleted();
+        }
+    }
+
+    public static void forgotPassword(String username, String email) {
+        User user = User.getUserByUsername(username);
+        if (user == null || !user.checkEmail(email)) {
+            sendError("There isn't any user with this username or email!!");
+        } else {
+            user.sendForgotPasswordCode();
+            actionCompleted();
+        }
+    }
+
+    public static void newPassword(String username, String code,String newPassword) {
+        User user = User.getUserByUsername(username);
+        if (user == null) {
+            sendError("There isn't any user with this username!!");
+        } else if (!user.doesCodeSend()) {
+            sendError("Error!!");
+        } else if (!user.sendCodeIsCorrect(code)) {
+            sendError("Incorrect code!!");
+        } else if (!User.isPasswordValid(newPassword)) {
+            sendError("Password isn't valid!!");
+        } else {
+            user.setSendCode("");
+            user.setPassword(newPassword);
+        }
     }
 
     public static void logout() {

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 abstract public class Controller {
+    private static Gson gson = new Gson();
     static User loggedUser;
 
     static {
@@ -58,70 +59,70 @@ abstract public class Controller {
                 sendError("Wrong ArrayList type.(Server Error!!)");
                 return;
         }
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(double number) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setNumber(number);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(CategoryInfo categoryInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setCategoryInfo(categoryInfo);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(LogInfo logInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setLogInfo(logInfo);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(ProductInfo productInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setProductInfo(productInfo);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(CartInfo cartInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setCartInfo(cartInfo);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(DiscountCodeInfo discountCodeInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setDiscountCodeInfo(discountCodeInfo);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(OffInfo offInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setOffInfo(offInfo);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(RequestInfo requestInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setRequestInfo(requestInfo);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(UserInfo userInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setUserInfo(userInfo);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(String firstString, String secondString) {
@@ -129,13 +130,13 @@ abstract public class Controller {
         serverMessage.setType("Successful");
         serverMessage.setFirstString(firstString);
         serverMessage.setSecondString(secondString);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void actionCompleted() {
         ServerMessage serverMessage = new ServerMessage();
-        serverMessage.setType("Action completed.");
-        send((new Gson()).toJson(serverMessage));
+        serverMessage.setType("Successful");
+        send(gson.toJson(serverMessage));
     }
 
     private static void send(String answer) {
@@ -149,5 +150,9 @@ abstract public class Controller {
         return String.valueOf(upperCaseAlphabet.charAt(randomNumber.nextInt(upperCaseAlphabet.length()))) +
                 upperCaseAlphabet.charAt(randomNumber.nextInt(upperCaseAlphabet.length())) +
                 randomNumber.nextInt(10000);
+    }
+
+    public static Gson getGson() {
+        return gson;
     }
 }//end Controller Class
