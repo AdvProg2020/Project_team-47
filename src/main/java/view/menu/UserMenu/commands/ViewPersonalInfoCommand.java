@@ -17,36 +17,32 @@ public class ViewPersonalInfoCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        /*if (!ViewAttributes.isUserSignedIn()){
-            OutputErrors.notSignedIn();
-            checkIfUserWantToSignIn();
-        } else {
-            menu.findSubMenuWithName("personal info menu").autoExecute();
-        }*/
-        sendMessageToViewToController(text);
+        sendMessageToViewToController();
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("successful")) {
             this.getMenu().findSubMenuWithName("product menu").autoExecute();
+        } else {
+            System.out.println(serverMessage.getFirstString());
         }
 
     }
 
-    private void sendMessageToViewToController(String text) {
+    private void sendMessageToViewToController() {
         ViewToController.setViewMessage("view personal info");
         ViewToController.sendMessageToController();
     }
 
-    private void checkIfUserWantToSignIn() {
-        OutputQuestions.goToSignInMenu();
-        String answer = Menu.getInputCommandWithTrim();
-        if (answer.equalsIgnoreCase("no")) {
-
-        } else if (answer.equalsIgnoreCase("yes")) {
-            // todo
-        } else {
-            OutputErrors.invalidInputCommand();
-            checkIfUserWantToSignIn();
-        }
-    }
+//    private void checkIfUserWantToSignIn() {
+//        OutputQuestions.goToSignInMenu();
+//        String answer = Menu.getInputCommandWithTrim();
+//        if (answer.equalsIgnoreCase("no")) {
+//
+//        } else if (answer.equalsIgnoreCase("yes")) {
+//            // todo
+//        } else {
+//            OutputErrors.invalidInputCommand();
+//            checkIfUserWantToSignIn();
+//        }
+//    }
 
 }

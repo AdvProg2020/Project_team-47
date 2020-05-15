@@ -1,5 +1,7 @@
 package view.menu.UserMenu.manager.subMenus.manageUsersMenu;
 
+import view.command.BackCommand;
+import view.command.HelpCommand;
 import view.menu.Menu;
 import view.menu.UserMenu.manager.subMenus.manageUsersMenu.commands.CreateManagerProfileCommand;
 import view.menu.UserMenu.manager.subMenus.manageUsersMenu.commands.DeleteUserCommand;
@@ -18,9 +20,11 @@ public class ManageUsersMenu extends Menu {
 
     @Override
     protected void addCommands() {
-        new ViewUserCommand(this);
-        new DeleteUserCommand(this);
-        new CreateManagerProfileCommand(this);
+        menuCommands.add(new ViewUserCommand(this));
+        menuCommands.add(new DeleteUserCommand(this));
+        menuCommands.add(new CreateManagerProfileCommand(this));
+        menuCommands.add(new HelpCommand(this));
+        menuCommands.add(new BackCommand(this));
 
     }
 }

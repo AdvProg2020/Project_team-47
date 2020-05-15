@@ -77,8 +77,4 @@ public class ViewToController {
         ControllerAndViewConnector.commandProcess();
     }
 
-    public static void editField(String field) {
-        //todo
-    }
-
 }

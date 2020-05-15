@@ -24,7 +24,6 @@ public class LoginCommand extends Command {
         String password = Menu.getInputCommandWithTrim();
         sendMessageToViewToController(text, password);
         if (ViewToController.getServerMessage().getType().equals("successful")) {
-            System.out.println("salam");
             RegisterCommand.goToUserPanelMenu(ViewToController.getServerMessage().getFirstString(), this);
         } else {
             System.out.println(ViewToController.getServerMessage().getFirstString());

@@ -73,14 +73,14 @@ public class ControllerAndViewConnector {
                 ManagerPanelController.
                         viewAllDiscountCodes(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
                 break;
-            case "view discount code" :
+            case "view discount code manager" :
                 ManagerPanelController.viewDiscountCode(messageArrayListInputs.get(0));
                 break;
-            case "edit discount code" :
+            case "edit discount code manager" :
                 ManagerPanelController.editDiscountCode(messageArrayListInputs.get(0),
                         messageArrayListInputs.get(1), messageArrayListInputs.get(2));
                 break;
-            case "remove discount code" :
+            case "remove discount code manager" :
                 ManagerPanelController.removeDiscountCode(messageArrayListInputs.get(0));
                 break;
             case "manage requests" :
