@@ -1,6 +1,7 @@
 package view.menu.loginAndRegisterMenu.Commands;
 
 import view.ViewAttributes;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.menu.UserMenu.customer.CustomerPanelMenu;
@@ -16,19 +17,18 @@ public class LogoutCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        if (!ViewAttributes.isUserSignedIn()) {
-            OutputErrors.notSignedIn();
-        } else {
-            resetUserAttributes();
-            OutputComments.logoutSuccessful();
+        sendMessageToViewToController();
+        if (ViewToController.getServerMessage().getType().equals("successful")) {
             new CustomerPanelMenu(this.menu).autoExecute();
+        } else {
+            System.out.println(ViewToController.getServerMessage().getFirstString());
         }
     }
 
-    private void resetUserAttributes() {
-        ViewAttributes.setUserType("customer");
-        ViewAttributes.setPassword(null);
-        ViewAttributes.setUsername(null);
-        ViewAttributes.setUserSignedIn(false);
+    private void sendMessageToViewToController() {
+        ViewToController.setViewMessage("logout");
+        ViewToController.sendMessageToController();
     }
+
+
 }

@@ -8,4 +8,8 @@ public class OutputQuestions {
     public static void goToSignInMenu() {
         System.out.println("do you want to go to sign in menu? (yes/no)");
     }
+
+    public static void sortList() {
+        System.out.println("do you want to sort the list? (yes/no)");
+    }
 }

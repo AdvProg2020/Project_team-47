@@ -1,6 +1,6 @@
 package view.menu.UserMenu.customer.commands;
 
-import view.ViewAttributes;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
@@ -15,9 +15,15 @@ public class ViewOrdersCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        ArrayList<String> customerOrders = getCustomerOrdersFromController(ViewAttributes.getUsername());
-        showCustomerOrders(customerOrders);
-        menu.findSubMenuWithName("orders menu").autoExecute();
+        sendMessageToViewToController();
+        if (ViewToController.getServerMessage().getType().equals("successful")) {
+            menu.findSubMenuWithName("orders menu").autoExecute();
+        }
+    }
+
+    private void sendMessageToViewToController() {
+        ViewToController.setViewMessage("orders menu");
+        ViewToController.sendMessageToController();
     }
 
     private void showCustomerOrders(ArrayList<String> customerOrders) {

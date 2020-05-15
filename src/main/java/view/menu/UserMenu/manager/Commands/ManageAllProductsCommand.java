@@ -12,6 +12,6 @@ public class ManageAllProductsCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-
+        this.menu.findSubMenuWithName("manage all products menu").autoExecute();
     }
 }

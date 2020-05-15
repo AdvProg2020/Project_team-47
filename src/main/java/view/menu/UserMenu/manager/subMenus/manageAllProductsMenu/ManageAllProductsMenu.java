@@ -1,5 +1,7 @@
 package view.menu.UserMenu.manager.subMenus.manageAllProductsMenu;
 
+import view.command.BackCommand;
+import view.command.HelpCommand;
 import view.menu.Menu;
 
 public class ManageAllProductsMenu extends Menu {
@@ -17,6 +19,8 @@ public class ManageAllProductsMenu extends Menu {
 
     @Override
     protected void addCommands() {
-        new RemoveProductCommand(this);
+        menuCommands.add(new RemoveProductCommand(this));
+        menuCommands.add(new HelpCommand(this));
+        menuCommands.add(new BackCommand(this));
     }
 }

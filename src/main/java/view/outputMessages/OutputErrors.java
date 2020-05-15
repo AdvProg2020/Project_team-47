@@ -55,4 +55,12 @@ public class OutputErrors {
     public static void invalidId() {
         System.out.println("invalid id");
     }
+
+    public static void signInAsManager() {
+        System.out.println("sign in as manager");
+    }
+
+    public static void failedTry() {
+        System.out.println("failed try");
+    }
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import model.others.ShoppingCart;
 import model.send.receive.*;
 import model.user.User;
+import view.ViewToController;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,6 +22,10 @@ abstract public class Controller {
     }
 
     static void sendError(String errorMessage) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("error");
+        serverMessage.setFirstString(errorMessage);
+        send((new Gson()).toJson(serverMessage));
     }
 
     static void sendAnswer(ArrayList arrayList, String type) {
@@ -59,7 +64,7 @@ abstract public class Controller {
                 sendError("Wrong ArrayList type.(Server Error!!)");
                 return;
         }
-        send(gson.toJson(serverMessage));
+        send((new Gson()).toJson(serverMessage));
     }
 
     static void sendAnswer(double number) {
@@ -122,7 +127,14 @@ abstract public class Controller {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setUserInfo(userInfo);
-        send(gson.toJson(serverMessage));
+        send((new Gson()).toJson(serverMessage));
+    }
+
+    static void sendAnswer(String firstString) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setFirstString(firstString);
+        send((new Gson()).toJson(serverMessage));
     }
 
     static void sendAnswer(String firstString, String secondString) {
@@ -135,12 +147,12 @@ abstract public class Controller {
 
     static void actionCompleted() {
         ServerMessage serverMessage = new ServerMessage();
-        serverMessage.setType("Successful");
+        serverMessage.setType("successful");
         send(gson.toJson(serverMessage));
     }
 
     private static void send(String answer) {
-
+        ViewToController.setControllerAnswer(answer);
     }
 
     public static String idCreator() {

@@ -1,6 +1,8 @@
 package view.menu.UserMenu.commands;
 
+import model.send.receive.ServerMessage;
 import view.ViewAttributes;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.outputMessages.OutputErrors;
@@ -15,25 +17,32 @@ public class ViewPersonalInfoCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        if (!ViewAttributes.isUserSignedIn()){
-            OutputErrors.notSignedIn();
-            checkIfUserWantToSignIn();
+        sendMessageToViewToController();
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+        if (serverMessage.getType().equals("successful")) {
+            this.getMenu().findSubMenuWithName("product menu").autoExecute();
         } else {
-            menu.findSubMenuWithName("personal info menu").autoExecute();
+            System.out.println(serverMessage.getFirstString());
         }
+
     }
 
-    private void checkIfUserWantToSignIn() {
-        OutputQuestions.goToSignInMenu();
-        String answer = Menu.getInputCommandWithTrim();
-        if (answer.equalsIgnoreCase("no")) {
-
-        } else if (answer.equalsIgnoreCase("yes")) {
-            // todo
-        } else {
-            OutputErrors.invalidInputCommand();
-            checkIfUserWantToSignIn();
-        }
+    private void sendMessageToViewToController() {
+        ViewToController.setViewMessage("view personal info");
+        ViewToController.sendMessageToController();
     }
+
+//    private void checkIfUserWantToSignIn() {
+//        OutputQuestions.goToSignInMenu();
+//        String answer = Menu.getInputCommandWithTrim();
+//        if (answer.equalsIgnoreCase("no")) {
+//
+//        } else if (answer.equalsIgnoreCase("yes")) {
+//            // todo
+//        } else {
+//            OutputErrors.invalidInputCommand();
+//            checkIfUserWantToSignIn();
+//        }
+//    }
 
 }

@@ -12,6 +12,6 @@ public class ViewDiscountCodesCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-
+        this.getMenu().findSubMenuWithName("view discount codes menu").autoExecute();
     }
 }

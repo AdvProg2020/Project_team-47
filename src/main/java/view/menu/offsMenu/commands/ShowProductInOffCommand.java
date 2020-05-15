@@ -1,9 +1,11 @@
 package view.menu.offsMenu.commands;
 
+import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ShowProductInOffCommand extends Command {
@@ -15,8 +17,19 @@ public class ShowProductInOffCommand extends Command {
 
     @Override
     public void doCommand(String text) {
+        sendMessageToViewToController(text);
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+        if (serverMessage.getType().equals("successful")) {
+            this.getMenu().findSubMenuWithName("product menu").autoExecute();
+        }
+    }
+
+    private void sendMessageToViewToController(String text) {
         String productId = Arrays.asList(text.split("\\s")).get(2);
-        ViewToController.goToProductPage(productId);
-        this.getMenu().findSubMenuWithName("product menu").autoExecute();
+        ArrayList<String> messageInputs = new ArrayList<>();
+        messageInputs.add(productId);
+        ViewToController.setViewMessage("go to product page");
+        ViewToController.setViewMessageArrayListInputs(messageInputs);
+        ViewToController.sendMessageToController();
     }
 }

@@ -12,6 +12,6 @@ public class ManageUsersCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-
+        this.getMenu().findSubMenuWithName("manage users menu").autoExecute();
     }
 }
