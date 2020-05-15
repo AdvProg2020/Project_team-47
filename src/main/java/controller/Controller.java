@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 abstract public class Controller {
-    private static Gson gson = new Gson();
     static User loggedUser;
+    private static Gson gson = new Gson();
 
     static {
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
@@ -127,14 +127,14 @@ abstract public class Controller {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setUserInfo(userInfo);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(String firstString) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setFirstString(firstString);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
     static void sendAnswer(String firstString, String secondString) {
