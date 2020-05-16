@@ -103,7 +103,7 @@ public class ControllerAndViewConnector {
                         messageArrayListInputs.get(1), messageArrayListInputs.get(2));
                 break;
             case "add main category" :
-                ManagerPanelController.addCategory(message.getMainCategoryName(), messageArrayListInputs);
+                ManagerPanelController.addCategory(message.getFirstString(), messageArrayListInputs);
                 break;
             case "remove main category" :
                 ManagerPanelController.removeMainCategory(messageArrayListInputs.get(0));
@@ -113,11 +113,11 @@ public class ControllerAndViewConnector {
                         messageArrayListInputs.get(1), messageArrayListInputs.get(2));
                 break;
             case "add sub category" :
-                ManagerPanelController.addSubCategory(message.getSubCategoryName(),
-                        message.getMainCategoryName(), messageArrayListInputs);
+                ManagerPanelController.addSubCategory(message.getFirstString(),
+                        message.getSecondString(), messageArrayListInputs);
                 break;
             case "remove sub category" :
-                ManagerPanelController.removeSubCategory(message.getSubCategoryName());
+                ManagerPanelController.removeSubCategory(message.getSecondString());
                 break;
             default:
                 sellerCommandProcess(message);

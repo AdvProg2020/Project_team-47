@@ -80,4 +80,12 @@ public class OutputCommands {
     public static void enterSortDirection() {
         System.out.println("enter sort direction");
     }
+
+    public static void enterNewValue() {
+        System.out.println("enter new value");
+    }
+
+    public static void enterMainCategoryName() {
+        System.out.println("enter main category name");
+    }
 }

@@ -14,6 +14,8 @@ public class ViewToController {
     private static String controllerAnswer;
     private static ServerMessage serverMessage;
     private static HashMap<String, String> viewMessageHashMapInputs;
+    private static String firstString;
+    private static String secondString;
 
     static {
         viewMessageArrayListInputs = new ArrayList<>();
@@ -35,6 +37,22 @@ public class ViewToController {
 
     public static HashMap<String, String> getViewMessageHashMapInputs() {
         return viewMessageHashMapInputs;
+    }
+
+    public static String getFirstString() {
+        return firstString;
+    }
+
+    public static String getSecondString() {
+        return secondString;
+    }
+
+    public static void setFirstString(String firstString) {
+        ViewToController.firstString = firstString;
+    }
+
+    public static void setSecondString(String secondString) {
+        ViewToController.secondString = secondString;
     }
 
     public static void setViewMessageHashMapInputs(HashMap<String, String> viewMessageHashMapInputs) {

@@ -9,8 +9,8 @@ public class ClientMessage extends Message {
     private HashMap<String, String> messageHashMapInputs;
     private HashMap<String, String> productInfo;
     private HashMap<String, String> productSpecialProperties;
-    private String mainCategoryName;
-    private String subCategoryName;
+    private String firstString;
+    private String secondString;
 
     public ClientMessage(String messageContext, ArrayList<String> messageArrayListInputs,
                          HashMap<String, String> messageHashMapInputs) {
@@ -19,20 +19,20 @@ public class ClientMessage extends Message {
         this.messageHashMapInputs = new HashMap<>(messageHashMapInputs);
     }
 
-    public String getMainCategoryName() {
-        return mainCategoryName;
+    public String getFirstString() {
+        return firstString;
     }
 
-    public String getSubCategoryName() {
-        return subCategoryName;
+    public String getSecondString() {
+        return secondString;
     }
 
-    public void setSubCategoryName(String subCategoryName) {
-        this.subCategoryName = subCategoryName;
+    public void setSecondString(String secondString) {
+        this.secondString = secondString;
     }
 
-    public void setMainCategoryName(String mainCategoryName) {
-        this.mainCategoryName = mainCategoryName;
+    public void setFirstString(String firstString) {
+        this.firstString = firstString;
     }
 
     public String getMessageContext() {
