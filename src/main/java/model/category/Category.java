@@ -30,52 +30,108 @@ abstract public class Category {
     }
 
     public static void removeMainCategory(String categoryName) {
+        Iterator<MainCategory> iterator = Category.allMainCategories.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getName().equalsIgnoreCase(categoryName)) {
+                iterator.remove();
+                break;
+            }
+        }
     }
 
     public static void removeSubCategory(String categoryName) {
+        Iterator<SubCategory> iterator = Category.allSubCategories.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getName().equalsIgnoreCase(categoryName)) {
+                iterator.remove();
+                break;
+            }
+        }
     }
 
     public static SubCategory getSubCategoryByName(String name) {
+        Iterator<SubCategory> iterator = SubCategory.allSubCategories.iterator();
+        while (iterator.hasNext()) {
+            SubCategory subCategory = iterator.next();
+            if (subCategory.getName().equalsIgnoreCase(name)) {
+                return subCategory;
+            }
+        }
         return null;
     }
 
     public static MainCategory getMainCategoryByName(String name) {
-        return null;
+        Iterator<MainCategory> iterator = Category.allMainCategories.iterator();
+        while (iterator.hasNext()) {
+            SubCategory mainCategory = iterator.next();
+            if (mainCategory.getName().equalsIgnoreCase(name)) {
+                return mainCategory;
+            }
+        }
     }
 
     public static boolean isThereMainCategory(String categoryName) {
-        return true;
+        Iterator<MainCategory> iterator = Category.allMainCategories.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getName().equalsIgnoreCase(categoryName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isThereMainCategory(MainCategory mainCategory) {
-        return true;
+        Iterator<MainCategory> iterator = Category.allMainCategories.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().equals(mainCategory)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isThereSubCategory(String categoryName) {
-        return true;
+        Iterator<SubCategory> iterator = Category.allSubCategories.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getName().equalsIgnoreCase(categoryName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isThereSubCategory(SubCategory subCategory) {
-        return true;
-    }
-
-    public static boolean isThereCategory(String name) {
+        Iterator<SubCategory> iterator = Category.allSubCategories.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().equals(subCategory)) {
+                return true;
+            }
+        }
         return false;
     }
 
     public abstract CategoryInfo categoryInfoForSending();
 
     public boolean isThereProduct(Product product) {
-        return true;
+        return allProducts.contains(product);
     }
 
     public void addProduct(Product product) {
+        allProducts.add(product);
     }
 
     public void addSpecialProperties(String properties) {
+        specialProperties.add(properties);
     }
 
     public void removeSpecialProperties(String properties) {
+        Iterator<String> iterator = specialProperties.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().equalsIgnoreCase(properties)) {
+                iterator.remove();
+                break;
+            }
+        }
     }
 
 
