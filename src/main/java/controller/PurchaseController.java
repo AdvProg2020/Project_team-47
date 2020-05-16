@@ -96,6 +96,8 @@ public class PurchaseController extends Controller {
         customer.decreaseMoney(finalPrice);
         setPurchaseLogInfo(shoppingCart);
 
+        customer.sendBuyingEmail(purchaseLog.getLogId());
+
         finishingPurchasing();
         actionCompleted();
     }

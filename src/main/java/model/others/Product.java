@@ -153,25 +153,76 @@ public class Product {
 
     private static boolean inEqualityFilter(Product product, Filter filter) {
         if (filter.getFilterKey().equalsIgnoreCase("category")) {
-            return product.getMainCategory().getName().equalsIgnoreCase(filter.getFirstFilterValue());
+            return isInCategoryFilter(product, filter);
         } else if (filter.getFilterKey().equalsIgnoreCase("sub-category")) {
-            try {
-                return product.getSubCategory().getName().equalsIgnoreCase(filter.getFirstFilterValue());
-            } catch (NullPointerException e) {
-                return false;
-            }
-        } else if (filter.getFilterKey().contains("name")) {
-            return product.getName().toLowerCase().contains(filter.getFirstFilterValue());
+            return isInSubCategoryFilter(product, filter);
+        } else if (filter.getFilterKey().equalsIgnoreCase("name")) {
+            return isInNameFilter(product, filter);
         } else if (filter.getType().toLowerCase().contains("special-properties")) {
-            try {
-                return product.getPropertyValue(filter.getFilterKey()).contains(filter.getFirstFilterValue());
-            } catch (Exception e) {
-                return false;
-            }
+            return isInEqualityPropertyFilter(product, filter);
+        } else if (filter.getFilterKey().toLowerCase().equalsIgnoreCase("brand")) {
+            return isInBrandFilter(product, filter);
+        } else if (filter.getFilterKey().toLowerCase().equalsIgnoreCase("availability")) {
+            return isInAvailabilityFilter(product, filter);
+        } else if (filter.getFilterKey().toLowerCase().equalsIgnoreCase("seller")) {
+            return isInSellerFilter(product, filter);
         }
         return false;
     }
 
+    private boolean hasSeller(String username) {
+        for (ProductSeller productSeller : this.productSellers) {
+            if(productSeller.getSeller().getUsername().equalsIgnoreCase(username))
+                return true;
+        }
+        return false;
+    }
+    private static boolean isInSellerFilter(Product product, Filter filter) {
+        return product.hasSeller(filter.getFirstFilterValue());
+    }
+
+    private boolean isAvailable() {
+        for (ProductSeller productSeller : this.productSellers) {
+            if(productSeller.getNumberInStock()>0)
+                return true;
+        }
+        return false;
+    }
+    private static boolean isInNameFilter(Product product, Filter filter) {
+        return product.getName().toLowerCase().contains(filter.getFirstFilterValue().toLowerCase());
+    }
+
+    private static boolean isInAvailabilityFilter(Product product, Filter filter) {
+        if (filter.getFirstFilterValue().equalsIgnoreCase("yes")) {
+            return product.isAvailable();
+        } else if (filter.getFirstFilterValue().equalsIgnoreCase("no")) {
+            return !product.isAvailable();
+        }
+        return false;
+    }
+    private static boolean isInBrandFilter(Product product, Filter filter) {
+        return product.company.toLowerCase().contains(filter.getFirstFilterValue().toLowerCase());
+    }
+    private static boolean isInCategoryFilter(Product product, Filter filter) {
+        return product.getMainCategory().getName().equalsIgnoreCase(filter.getFirstFilterValue());
+    }
+
+    private static boolean isInEqualityPropertyFilter(Product product, Filter filter) {
+        try {
+            return product.getPropertyValue(filter.getFilterKey()).toLowerCase()
+                    .contains(filter.getFirstFilterValue().toLowerCase());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private static boolean isInSubCategoryFilter(Product product, Filter filter) {
+        try {
+            return product.getSubCategory().getName().equalsIgnoreCase(filter.getFirstFilterValue());
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
     private String getPropertyValue(String key) throws Exception {
         for (Map.Entry<String, String> entry : this.specialProperties.entrySet()) {
             if (entry.getKey().equalsIgnoreCase(key)) {
@@ -381,9 +432,6 @@ public class Product {
     public void decreaseProduct(Seller seller, int productNumber) {
         ProductSeller productSeller = getProductSeller(seller);
         productSeller.decrease(productNumber);
-        if (productSeller.getNumberInStock() <= 0) {
-            this.removeSellerFromProduct(seller);
-        }
     }
 
     public int getNumberInStock(Seller seller) {

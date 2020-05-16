@@ -374,6 +374,11 @@ public class SellerPanelController extends UserPanelController {
                 products.add(product);
         }
 
+        if (type == null) {
+            sendError("Wrong command!!");
+            return false;
+        }
+
         switch (type) {
             case "append":
                 for (Product product : products) {
