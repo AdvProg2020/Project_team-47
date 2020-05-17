@@ -1,5 +1,8 @@
 package view.menu.UserMenu.customer.subMenus.viewCartMenu.commands;
 
+import model.send.receive.CartInfo;
+import model.send.receive.ServerMessage;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
@@ -14,17 +17,28 @@ public class ShowProductsInCartCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        ArrayList<String> cartProducts = getCartProductsFromController();
-        printAllProducts(cartProducts);
+        sendMessage();
+        getAnswer();
     }
 
-    private void printAllProducts(ArrayList<String> cartProducts) {
-        for (String cartProduct : cartProducts) {
-            System.out.println(cartProduct);
+    private void sendMessage() {
+        ViewToController.setViewMessage("show products in cart");
+        ViewToController.sendMessageToController();
+    }
+
+    private void getAnswer() {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("successful")) {
+            CartInfo cartInfo = serverMessage.getCartInfo();
+            showCartInfo(cartInfo);
+        } else {
+            System.out.println(serverMessage.getFirstString());
         }
     }
 
-    private ArrayList<String> getCartProductsFromController() {
-        return null;
+    private void showCartInfo(CartInfo cartInfo) {
+        //todo
     }
+
 }

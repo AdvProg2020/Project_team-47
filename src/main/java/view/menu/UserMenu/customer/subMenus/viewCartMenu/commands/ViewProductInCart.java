@@ -1,5 +1,7 @@
 package view.menu.UserMenu.customer.subMenus.viewCartMenu.commands;
 
+import model.send.receive.ServerMessage;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.outputMessages.OutputErrors;
@@ -15,14 +17,27 @@ public class ViewProductInCart extends Command {
 
     @Override
     public void doCommand(String text) {
+        sendMessage(text);
+        getAnswer();
+    }
+
+    private void sendMessage(String text) {
         String productId = Arrays.asList(text.split("\\s")).get(1);
-        if (!IncreaseProductInCart.isIdInCart(productId)){
-            OutputErrors.wrongId();
+        ViewToController.setViewMessage("view product in cart");
+        ViewToController.setFirstString(productId);
+
+        ViewToController.sendMessageToController();
+    }
+
+    private void getAnswer() {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("successful")) {
+            //todo
         } else {
-            goToProductMenu(productId);
+            System.out.println(serverMessage.getFirstString());
         }
     }
 
-    private void goToProductMenu(String productId) {
-    }
+
 }

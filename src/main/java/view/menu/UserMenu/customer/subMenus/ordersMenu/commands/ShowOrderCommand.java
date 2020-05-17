@@ -1,5 +1,7 @@
 package view.menu.UserMenu.customer.subMenus.ordersMenu.commands;
 
+import model.send.receive.ServerMessage;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.outputMessages.OutputErrors;
@@ -15,18 +17,31 @@ public class ShowOrderCommand extends Command {
 
     @Override
     public void doCommand(String text) {
+        sendMessage(text);
+        getAnswer();
+    }
+
+    private void sendMessage(String text) {
         String orderId = Arrays.asList(text.split("\\s")).get(2);
-        if (!checkIfOrderIdIsValidWithController(orderId)) {
-            OutputErrors.invalidId();
+
+        ViewToController.setViewMessage("show order");
+        ViewToController.setFirstString(orderId);
+
+        ViewToController.sendMessageToController();
+    }
+
+    private void getAnswer() {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("successful")) {
+            showOrder(serverMessage);
         } else {
-            showOrderDetails(orderId);
+            System.out.println(serverMessage.getFirstString());
         }
     }
 
-    private void showOrderDetails(String orderId) {
+    private void showOrder(ServerMessage serverMessage) {
     }
 
-    static boolean checkIfOrderIdIsValidWithController(String orderId) {
-        return true;
-    }
+
 }

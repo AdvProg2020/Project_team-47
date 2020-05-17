@@ -56,7 +56,7 @@ public class CreateDiscountCodesCommand extends Command {
     private void sendMessageToViewToController(HashMap<String, String> messageHashMapInputs,
                                                ArrayList<String> messageInputUsernames) {
         ViewToController.setViewMessage("create discount code");
-        ViewToController.setViewMessageHashMapInputs(messageHashMapInputs);
+        ViewToController.setViewMessageFirstHashMapInputs(messageHashMapInputs);
         ViewToController.setViewMessageArrayListInputs(messageInputUsernames);
         ViewToController.sendMessageToController();
     }

@@ -8,7 +8,6 @@ import view.menu.UserMenu.commands.*;
 import view.menu.UserMenu.customer.commands.*;
 import view.menu.UserMenu.customer.subMenus.ordersMenu.OrdersMenu;
 import view.menu.UserMenu.customer.subMenus.viewCartMenu.ViewCartMenu;
-import view.menu.UserMenu.seller.subMenus.viewOffsMenu.ViewOffsMenu;
 import view.menu.allProductsMenu.AllProductsMenu;
 import view.menu.loginAndRegisterMenu.LoginAndRegisterMenu;
 import view.menu.offsMenu.AllOffsMenu;
@@ -37,7 +36,7 @@ public class CustomerPanelMenu extends Menu {
         menuCommands.add(new GoToProductsMenuCommand(this));
         menuCommands.add(new ViewCartCommand(this));
         menuCommands.add(new ViewOrdersCommand(this));
-        menuCommands.add(new ViewBalanceCommand(this));
+        menuCommands.add(new ViewBalanceCommandCustomer(this));
         menuCommands.add(new ViewDiscountCodesCommand(this));
         menuCommands.add(new LoginAndRegisterCommandForUser(this));
         menuCommands.add(new HelpCommand(this));

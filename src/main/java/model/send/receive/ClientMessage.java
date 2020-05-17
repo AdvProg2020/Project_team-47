@@ -6,17 +6,21 @@ import java.util.HashMap;
 public class ClientMessage extends Message {
     private String messageContext;
     private ArrayList<String> messageArrayListInputs;
-    private HashMap<String, String> messageHashMapInputs;
-    private HashMap<String, String> productInfo;
-    private HashMap<String, String> productSpecialProperties;
+    private HashMap<String, String> messageFirstHashMapInputs;
+    private HashMap<String, String> messageSecondHashMapInputs;
     private String firstString;
     private String secondString;
 
-    public ClientMessage(String messageContext, ArrayList<String> messageArrayListInputs,
-                         HashMap<String, String> messageHashMapInputs) {
-        this.messageContext = messageContext;
-        this.messageArrayListInputs = new ArrayList<>(messageArrayListInputs);
-        this.messageHashMapInputs = new HashMap<>(messageHashMapInputs);
+    public ClientMessage() {
+
+    }
+
+    public HashMap<String, String> getMessageSecondHashMapInputs() {
+        return messageSecondHashMapInputs;
+    }
+
+    public void setMessageSecondHashMapInputs(HashMap<String, String> messageSecondHashMapInputs) {
+        this.messageSecondHashMapInputs = messageSecondHashMapInputs;
     }
 
     public String getFirstString() {
@@ -51,27 +55,11 @@ public class ClientMessage extends Message {
         this.messageArrayListInputs = messageArrayListInputs;
     }
 
-    public HashMap<String, String> getProductInfo() {
-        return productInfo;
+    public HashMap<String, String> getMessageFirstHashMapInputs() {
+        return messageFirstHashMapInputs;
     }
 
-    public HashMap<String, String> getProductSpecialProperties() {
-        return productSpecialProperties;
-    }
-
-    public void setProductInfo(HashMap<String, String> productInfo) {
-        this.productInfo = productInfo;
-    }
-
-    public void setProductSpecialProperties(HashMap<String, String> productSpecialProperties) {
-        this.productSpecialProperties = productSpecialProperties;
-    }
-
-    public HashMap<String, String> getMessageHashMapInputs() {
-        return messageHashMapInputs;
-    }
-
-    public void setMessageHashMapInputs(HashMap<String, String> messageHashMapInputs) {
-        this.messageHashMapInputs = messageHashMapInputs;
+    public void setMessageFirstHashMapInputs(HashMap<String, String> messageFirstHashMapInputs) {
+        this.messageFirstHashMapInputs = messageFirstHashMapInputs;
     }
 }

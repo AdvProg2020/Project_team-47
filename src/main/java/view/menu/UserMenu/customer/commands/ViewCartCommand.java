@@ -12,10 +12,6 @@ public class ViewCartCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        for (Menu subMenu : this.menu.getSubMenus()) {
-            if (subMenu.getName().equalsIgnoreCase("view cart menu")){
-                subMenu.autoExecute();
-            }
-        }
+        this.getMenu().findSubMenuWithName("view cart menu").autoExecute();
     }
 }

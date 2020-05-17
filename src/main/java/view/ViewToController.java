@@ -13,14 +13,16 @@ public class ViewToController {
     private static ArrayList<String> viewMessageArrayListInputs;
     private static String controllerAnswer;
     private static ServerMessage serverMessage;
-    private static HashMap<String, String> viewMessageHashMapInputs;
+    private static HashMap<String, String> viewMessageFirstHashMapInputs;
+    private static HashMap<String, String> viewMessageSecondHashMapInputs;
     private static String firstString;
     private static String secondString;
 
     static {
         viewMessageArrayListInputs = new ArrayList<>();
         serverMessage = new ServerMessage();
-        viewMessageHashMapInputs = new HashMap<>();
+        viewMessageFirstHashMapInputs = new HashMap<>();
+        viewMessageSecondHashMapInputs = new HashMap<>();
     }
 
     public static ArrayList<String> getViewMessageArrayListInputs() {
@@ -35,8 +37,8 @@ public class ViewToController {
         return serverMessage;
     }
 
-    public static HashMap<String, String> getViewMessageHashMapInputs() {
-        return viewMessageHashMapInputs;
+    public static HashMap<String, String> getViewMessageFirstHashMapInputs() {
+        return viewMessageFirstHashMapInputs;
     }
 
     public static String getFirstString() {
@@ -55,8 +57,8 @@ public class ViewToController {
         ViewToController.secondString = secondString;
     }
 
-    public static void setViewMessageHashMapInputs(HashMap<String, String> viewMessageHashMapInputs) {
-        ViewToController.viewMessageHashMapInputs = viewMessageHashMapInputs;
+    public static void setViewMessageFirstHashMapInputs(HashMap<String, String> viewMessageFirstHashMapInputs) {
+        ViewToController.viewMessageFirstHashMapInputs = viewMessageFirstHashMapInputs;
     }
 
     public static void setServerMessage(ServerMessage serverMessage) {
@@ -89,8 +91,23 @@ public class ViewToController {
 
     }
 
+    public static HashMap<String, String> getViewMessageSecondHashMapInputs() {
+        return viewMessageSecondHashMapInputs;
+    }
+
+    public static void setViewMessageSecondHashMapInputs(HashMap<String, String> viewMessageSecondHashMapInputs) {
+        ViewToController.viewMessageSecondHashMapInputs = viewMessageSecondHashMapInputs;
+    }
+
     public static void sendMessageToController() {
-        ClientMessage clientMessage = new ClientMessage(viewMessage, viewMessageArrayListInputs, viewMessageHashMapInputs);
+        ClientMessage clientMessage = new ClientMessage();
+
+        clientMessage.setMessageContext(viewMessage);
+        clientMessage.setMessageArrayListInputs(viewMessageArrayListInputs);
+        clientMessage.setMessageFirstHashMapInputs(viewMessageFirstHashMapInputs);
+
+        clientMessage.setMessageSecondHashMapInputs(viewMessageSecondHashMapInputs);
+
         ControllerAndViewConnector.setClientMessage((new Gson()).toJson(clientMessage));
         ControllerAndViewConnector.commandProcess();
     }

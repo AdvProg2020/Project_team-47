@@ -12,5 +12,14 @@ public class ShowCategoriesCommand extends Command {
 
     @Override
     public void doCommand(String text) {
+        sendMessage();
+        getAnswer();
+    }
+
+    private void sendMessage() {
+
+    }
+
+    private void getAnswer() {
     }
 }

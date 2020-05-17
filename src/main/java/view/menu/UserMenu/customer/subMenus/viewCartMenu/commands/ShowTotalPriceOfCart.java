@@ -1,7 +1,10 @@
 package view.menu.UserMenu.customer.subMenus.viewCartMenu.commands;
 
+import model.send.receive.ServerMessage;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
+import view.outputMessages.OutputComments;
 
 public class ShowTotalPriceOfCart extends Command {
     public ShowTotalPriceOfCart(Menu menu) {
@@ -12,15 +15,25 @@ public class ShowTotalPriceOfCart extends Command {
 
     @Override
     public void doCommand(String text) {
-        double cartPrice = getTotalPriceOFCartFromController();
-        printCartPrice(cartPrice);
+        sendMessage();
+        getAnswer();
     }
 
-    private void printCartPrice(double cartPrice) {
-        System.out.println(cartPrice);
+    private void sendMessage() {
+        ViewToController.setViewMessage("show total price of cart");
+        ViewToController.sendMessageToController();
     }
 
-    private double getTotalPriceOFCartFromController() {
-        return 0.0;
+    private void getAnswer() {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("successful")) {
+            OutputComments.totalPrice();
+            System.out.println(serverMessage.getNumber());
+        } else {
+            System.out.println(serverMessage.getFirstString());
+        }
+
     }
+
 }

@@ -1,7 +1,5 @@
 package view.menu.loginAndRegisterMenu.Commands;
 
-import model.send.receive.ServerMessage;
-import view.ViewAttributes;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
@@ -9,11 +7,9 @@ import view.menu.UserMenu.customer.CustomerPanelMenu;
 import view.menu.UserMenu.manager.ManagerPanelMenu;
 import view.menu.UserMenu.seller.SellerPanelMenu;
 import view.outputMessages.OutputCommands;
-import view.outputMessages.OutputComments;
 import view.outputMessages.OutputErrors;
 import view.outputMessages.OutputSystemErrors;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -76,7 +72,7 @@ public class RegisterCommand extends Command {
             viewMessageHashMapInputs.put("phone-number", phoneNumber);
             viewMessageHashMapInputs.put("type", type);
 //            viewMessageArrayListInput.add(type);
-            ViewToController.setViewMessageHashMapInputs(viewMessageHashMapInputs);
+            ViewToController.setViewMessageFirstHashMapInputs(viewMessageHashMapInputs);
 //            ViewToController.setViewMessageArrayListInputs(viewMessageArrayListInput);
             ViewToController.sendMessageToController();
         }

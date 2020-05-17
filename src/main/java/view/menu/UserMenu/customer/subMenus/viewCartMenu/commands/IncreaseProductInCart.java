@@ -1,7 +1,10 @@
 package view.menu.UserMenu.customer.subMenus.viewCartMenu.commands;
 
+import model.send.receive.ServerMessage;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
+import view.outputMessages.OutputCommands;
 import view.outputMessages.OutputErrors;
 
 import java.util.Arrays;
@@ -15,19 +18,32 @@ public class IncreaseProductInCart extends Command {
 
     @Override
     public void doCommand(String text) {
-        String id = Arrays.asList(text.split("\\s")).get(1);
-        if (!isIdInCart(id)) {
-            OutputErrors.wrongId();
+        sendMessage(text);
+        getAnswer();
+    }
+
+    private void sendMessage(String text) {
+        String productId = Arrays.asList(text.split("\\s")).get(1);
+        ViewToController.setViewMessage("increase product in cart");
+
+        ViewToController.setFirstString(productId);
+        getProductSeller();
+    }
+
+    private void getProductSeller() {
+        OutputCommands.enterSellerUsername();
+        ViewToController.setSecondString(Menu.getInputCommandWithTrim());
+    }
+
+
+    private void getAnswer() {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("successful")) {
+            //todo
         } else {
-            addProductToCartInController(id);
+            System.out.println(serverMessage.getSecondString());
         }
     }
 
-    static boolean isIdInCart(String id) {
-        return true;
-    }
-
-
-    private void addProductToCartInController(String productId) {
-    }
 }

@@ -4,6 +4,7 @@ import view.command.BackCommand;
 import view.command.HelpCommand;
 import view.menu.Menu;
 import view.menu.UserMenu.customer.subMenus.viewCartMenu.commands.*;
+import view.menu.loginAndRegisterMenu.LoginAndRegisterMenu;
 
 public class ViewCartMenu extends Menu {
     public ViewCartMenu(Menu previousMenu) {
@@ -14,7 +15,7 @@ public class ViewCartMenu extends Menu {
 
     @Override
     protected void setSubMenus() {
-
+        subMenus.add(new LoginAndRegisterMenu(this));
     }
 
     @Override
@@ -25,7 +26,7 @@ public class ViewCartMenu extends Menu {
         menuCommands.add(new DecreaseProductInCart(this));
         menuCommands.add(new ShowTotalPriceOfCart(this));
         menuCommands.add(new PurchaseCart(this));
-        menuCommands.add(new BackCommand(this));
         menuCommands.add(new HelpCommand(this));
+        menuCommands.add(new BackCommand(this));
     }
 }

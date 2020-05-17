@@ -1,5 +1,6 @@
-package view.menu.UserMenu.seller.commands;
+package view.menu.UserMenu.seller.subMenus.viewOffsMenu.commands;
 
+import model.send.receive.OffInfo;
 import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
@@ -7,11 +8,11 @@ import view.menu.Menu;
 
 import java.util.Arrays;
 
-public class RemoveProductCommand extends Command {
-    public RemoveProductCommand(Menu menu) {
+public class ViewOffCommandSeller extends Command {
+    public ViewOffCommandSeller(Menu menu) {
         super(menu);
-        setSignature("remove product [productId]");
-        setRegex("^remove product [^\\s]+$");
+        setSignature("view [offId]");
+        setRegex("^view [^\\s]+$");
     }
 
     @Override
@@ -21,9 +22,11 @@ public class RemoveProductCommand extends Command {
     }
 
     private void sendMessage(String text) {
-        String productId = Arrays.asList(text.split("\\s")).get(2);
-        ViewToController.setViewMessage("remove product seller");
-        ViewToController.setFirstString(productId);
+        String offId = Arrays.asList(text.split("\\s")).get(1);
+
+        ViewToController.setViewMessage("view off");
+        ViewToController.setFirstString(offId);
+
         ViewToController.sendMessageToController();
     }
 
@@ -31,9 +34,13 @@ public class RemoveProductCommand extends Command {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
         if (serverMessage.getType().equals("successful")) {
-            //todo
+            showOffInfo(serverMessage.getOffInfo());
         } else {
             System.out.println(serverMessage.getFirstString());
         }
+    }
+
+    private void showOffInfo(OffInfo offInfo) {
+        //todo
     }
 }

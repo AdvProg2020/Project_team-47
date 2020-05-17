@@ -1,29 +1,26 @@
-package view.menu.UserMenu.seller.commands;
+package view.menu.UserMenu.customer.commands;
 
 import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
+import view.outputMessages.OutputComments;
 
-import java.util.Arrays;
-
-public class RemoveProductCommand extends Command {
-    public RemoveProductCommand(Menu menu) {
+public class ViewBalanceCommandCustomer extends Command {
+    public ViewBalanceCommandCustomer(Menu menu) {
         super(menu);
-        setSignature("remove product [productId]");
-        setRegex("^remove product [^\\s]+$");
+        setSignature("view balance");
+        setRegex("^view balance$");
     }
 
     @Override
     public void doCommand(String text) {
-        sendMessage(text);
+        sendMessage();
         getAnswer();
     }
 
-    private void sendMessage(String text) {
-        String productId = Arrays.asList(text.split("\\s")).get(2);
-        ViewToController.setViewMessage("remove product seller");
-        ViewToController.setFirstString(productId);
+    private void sendMessage() {
+        ViewToController.setViewMessage("view balance seller");
         ViewToController.sendMessageToController();
     }
 
@@ -31,7 +28,8 @@ public class RemoveProductCommand extends Command {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
         if (serverMessage.getType().equals("successful")) {
-            //todo
+            OutputComments.yourBalance();
+            System.out.println(serverMessage.getNumber());
         } else {
             System.out.println(serverMessage.getFirstString());
         }

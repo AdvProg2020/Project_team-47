@@ -88,4 +88,56 @@ public class OutputCommands {
     public static void enterMainCategoryName() {
         System.out.println("enter main category name");
     }
+
+    public static void enterProductInfo() {
+        System.out.println("enter product info");
+    }
+
+    public static void enterName() {
+        System.out.println("enter name");
+    }
+
+    public static void enterPrice() {
+        System.out.println("enter price");
+    }
+
+    public static void enterNumberInStock() {
+        System.out.println("enter number in stock");
+    }
+
+    public static void enterCategory() {
+        System.out.println("enter category");
+    }
+
+    public static void enterDescription() {
+        System.out.println("enter description");
+    }
+
+    public static void enterSubCategory() {
+        System.out.println("enter sub category");
+    }
+
+    public static void enterCompany() {
+        System.out.println("enter company");
+    }
+
+    public static void enterSpecialPropertyAndEnterKeyForFinish() {
+        System.out.println("enter special property and enter key for finish");
+    }
+
+    public static void enterSpecialPropertyValue() {
+        System.out.println("enter special property value");
+    }
+
+    public static void enterOffInformationAndEnterKeyForFinish() {
+        System.out.println("enter off information and enter key for finish");
+    }
+
+    public static void enterProductsIdAndEnterKeyToFinish() {
+        System.out.println("enter products id and enter key for finish");
+    }
+
+    public static void enterSellerUsername() {
+        System.out.println("enter seller username");
+    }
 }

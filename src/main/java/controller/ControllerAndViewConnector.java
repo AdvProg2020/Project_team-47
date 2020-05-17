@@ -45,7 +45,7 @@ public class ControllerAndViewConnector {
     public static void managerCommandProcess(ClientMessage message) {
         String messageContext = message.getMessageContext();
         ArrayList<String> messageArrayListInputs = message.getMessageArrayListInputs();
-        HashMap<String, String> messageHashMapInputs = message.getMessageHashMapInputs();
+        HashMap<String, String> messageHashMapInputs = message.getMessageFirstHashMapInputs();
         switch(messageContext) {
             case "manage users" :
                 ManagerPanelController.manageUsers(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
@@ -126,7 +126,7 @@ public class ControllerAndViewConnector {
     public static void sellerCommandProcess(ClientMessage message) {
         String messageContext = message.getMessageContext();
         ArrayList<String> messageArrayListInputs = message.getMessageArrayListInputs();
-        HashMap<String, String> messageHashMapInputs = message.getMessageHashMapInputs();
+        HashMap<String, String> messageHashMapInputs = message.getMessageFirstHashMapInputs();
         switch(messageContext) {
             case "view company information" :
                 SellerPanelController.companyInfo();
@@ -148,16 +148,17 @@ public class ControllerAndViewConnector {
                 //SellerPanelController.editProduct();
                 break;
             case "add product" :
-                SellerPanelController.addProduct(message.getProductInfo(), message.getProductSpecialProperties());
+                SellerPanelController.addProduct(message.getMessageFirstHashMapInputs(),
+                        message.getMessageSecondHashMapInputs());
                 break;
             case "remove product seller" :
-                SellerPanelController.removeProduct(messageArrayListInputs.get(0));
+                SellerPanelController.removeProduct(message.getFirstString());
                 break;
             case "view offs" :
                 SellerPanelController.showSellerOffs(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
                 break;
             case "view off" :
-                SellerPanelController.showOff(messageArrayListInputs.get(0));
+                SellerPanelController.showOff(message.getFirstString());
                 break;
             case "edit off" :
                 //todo
@@ -177,21 +178,19 @@ public class ControllerAndViewConnector {
     public static void customerCommandProcess(ClientMessage message) {
         String messageContext = message.getMessageContext();
         ArrayList<String> messageArrayListInputs = message.getMessageArrayListInputs();
-        HashMap<String, String> messageHashMapInputs = message.getMessageHashMapInputs();
+        HashMap<String, String> messageHashMapInputs = message.getMessageFirstHashMapInputs();
         switch(messageContext) {
             case "show products in cart" :
                 CustomerPanelController.viewProductsInCart();
                 break;
             case "view product in cart" :
-                ProductController.showProduct(messageArrayListInputs.get(0));
+                ProductController.showProduct(message.getFirstString());
                 break;
             case "increase product in cart" :
-                CustomerPanelController.increaseProductInCart(messageArrayListInputs.get(0),
-                        messageArrayListInputs.get(1));
+                CustomerPanelController.increaseProductInCart(message.getFirstString(), message.getSecondString());
                 break;
             case "decrease product in cart" :
-                CustomerPanelController.decreaseProductInCart(messageArrayListInputs.get(0),
-                        messageArrayListInputs.get(1));
+                CustomerPanelController.decreaseProductInCart(message.getFirstString(), message.getSecondString());
                 break;
             case "show total price of cart" :
                 CustomerPanelController.cartPrice();
@@ -203,7 +202,7 @@ public class ControllerAndViewConnector {
                 CustomerPanelController.viewOrders();
                 break;
             case "show order" :
-                CustomerPanelController.viewOrder(messageArrayListInputs.get(0));
+                CustomerPanelController.viewOrder(message.getFirstString());
                 break;
             case "rate product" :
                 CustomerPanelController.rate(messageArrayListInputs.get(0),
@@ -222,7 +221,7 @@ public class ControllerAndViewConnector {
     public static void generalCommandProcess(ClientMessage message) {
         String messageContext = message.getMessageContext();
         ArrayList<String> messageArrayListInputs = message.getMessageArrayListInputs();
-        HashMap<String, String> messageHashMapInputs = message.getMessageHashMapInputs();
+        HashMap<String, String> messageHashMapInputs = message.getMessageFirstHashMapInputs();
         switch(messageContext) {
             case "register" :
                 LoginController.register(messageHashMapInputs);
@@ -321,21 +320,10 @@ public class ControllerAndViewConnector {
                 OffController.disableSort();
                 break;
             default:
-                systemCommandProcessor(message);
+                //todo
         }
     }
 
-    private static void systemCommandProcessor(ClientMessage message) {
-        String messageContext = message.getMessageContext();
-        ArrayList<String> messageArrayListInputs = message.getMessageArrayListInputs();
-        switch(messageContext) {
-            case "is manager signed in" :
 
-                break;
-            case "is username taken" :
-
-                break;
-        }
-    }
 
 }
