@@ -245,6 +245,7 @@ public class Seller extends User {
     public UserInfo userInfoForSending() {
         UserInfo user = new UserInfo();
         userInfoSetter(user);
+        user.setType("seller");
         user.setCompanyInfo(this.companyInfo);
         user.setCompanyName(this.companyName);
         user.setMoney(this.money);

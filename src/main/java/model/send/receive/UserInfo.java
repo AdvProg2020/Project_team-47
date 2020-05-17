@@ -1,6 +1,7 @@
 package model.send.receive;
 
 public class UserInfo {
+    private String type;
     private String username;
     private String firstName;
     private String lastName;
@@ -75,5 +76,9 @@ public class UserInfo {
 
     public void setCompanyInfo(String companyInfo) {
         this.companyInfo = companyInfo;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
