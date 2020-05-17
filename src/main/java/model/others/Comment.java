@@ -9,8 +9,14 @@ public class Comment {
     private String commentText;
     private String commentTitle;
     private boolean doesCustomerBought;
+    private String status;
 
     public Comment() {
+        this.status = "IN_CONFIRM_QUEUE";
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getWhoComment() {

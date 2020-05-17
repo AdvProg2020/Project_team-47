@@ -135,6 +135,8 @@ public class ShoppingCart {
             double price = product.getFinalPrice(seller) * (double) productNumber;
             seller.increaseMoney(price);
             product.decreaseProduct(seller, productNumber);
+            product.updateDatabase();
+            seller.updateDatabase().update();
         }
     }
 
@@ -159,6 +161,7 @@ public class ShoppingCart {
         for (ProductInCart productInCart : productsInCart) {
             purchaseLog.addProduct(productInCart.getSeller(), productInCart.getProduct(), productInCart.getNumberInCart());
         }
+        purchaseLog.updateDatabase();
     }
 
     public static class ProductInCart {
@@ -176,7 +179,6 @@ public class ShoppingCart {
         }
 
         public void increase() {
-
             numberInCart++;
         }
 

@@ -1,7 +1,5 @@
 package model.others;
 
-import model.user.User;
-
 public class Score {
     private String whoSubmitScore;
     private int score;
