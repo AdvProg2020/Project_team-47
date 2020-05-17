@@ -1,14 +1,15 @@
 package model.others.request;
 
 import com.google.gson.Gson;
+import controller.Controller;
 import model.discount.Off;
-import model.others.Date;
 import model.others.Product;
 import model.send.receive.RequestInfo;
 import model.user.Seller;
 import model.user.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class AddOffRequest extends MainRequest {
@@ -33,29 +34,39 @@ public class AddOffRequest extends MainRequest {
     void accept(String type) {
         Off off = new Off();
         Seller seller = (Seller) User.getUserByUsername(sellerUsername);
+        if (seller == null)
+            return;
         off.setSeller(seller);
-        if (startTime.before(Date.getCurrentDate())) {
-            off.setDiscountStartTime(Date.getCurrentDate());
+        if (startTime.before(Controller.getCurrentTime())) {
+            off.setStartTime(Controller.getCurrentTime());
         } else {
-            off.setDiscountStartTime(startTime);
+            off.setStartTime(startTime);
         }
-        off.setDiscountFinishTime(finishTime);
-        off.setDiscountPercent(percent);
+        off.setFinishTime(finishTime);
+        off.setPercent(percent);
+        seller.addOff(off);
         for (String id : productsId) {
             Product product = seller.getProductById(id);
             if (product != null) {
-                product.addOff(off,seller);
+                product.addOff(off, seller);
                 off.addProduct(product);
-                seller.addOff(off);
+                product.updateDatabase();
             }
         }
+        seller.updateDatabase().update();
+        off.updateDatabase();
     }
 
     @Override
     boolean update(String type) {
-        if(finishTime.before(Date.getCurrentDate()))
+        if (finishTime.before(Controller.getCurrentTime()))
             return false;
         return (User.getUserByUsername(sellerUsername) instanceof Seller);
+    }
+
+    @Override
+    public void decline() {
+
     }
 
     public void setStartTime(Date startTime) {

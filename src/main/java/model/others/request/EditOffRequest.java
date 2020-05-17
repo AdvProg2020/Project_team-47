@@ -1,7 +1,7 @@
 package model.others.request;
 
+import controller.Controller;
 import model.discount.Off;
-import model.others.Date;
 import model.others.Product;
 import model.send.receive.RequestInfo;
 
@@ -48,7 +48,8 @@ public class EditOffRequest extends MainRequest {
                 editProducts(type, off);
                 break;
         }
-
+        off.setOffStatus("EDIT_ACCEPTED");
+        off.updateDatabase();
     }
 
     @Override
@@ -65,6 +66,13 @@ public class EditOffRequest extends MainRequest {
         return false;
     }
 
+    @Override
+    public void decline() {
+        Off off = Off.getOffById(offId);
+        off.setOffStatus("EDIT_DECLINED");
+        off.updateDatabase();
+    }
+
     private void editProducts(String type, Off off) {
         ArrayList<Product> products = new ArrayList<>();
         for (String id : newValueArrayList) {
@@ -75,41 +83,63 @@ public class EditOffRequest extends MainRequest {
         }
         switch (type) {
             case "edit-off append":
-                for (Product product : products) {
-                    if (!off.getProducts().contains(product)) {
-                        off.getProducts().add(product);
-                        product.addOff(off,off.getSeller());
-                    }
-                }
+                appendProduct(off, products);
                 break;
             case "edit-off replace":
-                for (Product product : off.getProducts()) {
-                    product.removeOff(off);
-                }
-                off.setProducts(products);
-                for (Product product : products) {
-                    product.addOff(off,off.getSeller());
-                }
+                replaceProduct(off, products);
                 break;
             case "edit-off remove":
-                for (Product product : products) {
-                    product.removeOff(off);
-                }
-                off.getProducts().removeAll(products);
+                removeProduct(off, products);
                 break;
+        }
+        updateOffDatabase(off, products);
+    }
+
+    private void updateOffDatabase(Off off, ArrayList<Product> products) {
+        for (Product product : off.getProducts()) {
+            product.updateDatabase();
+        }
+        for (Product product : products) {
+            product.updateDatabase();
+        }
+    }
+
+    private void removeProduct(Off off, ArrayList<Product> products) {
+        for (Product product : products) {
+            product.removeOff(off);
+        }
+        off.getProducts().removeAll(products);
+    }
+
+    private void replaceProduct(Off off, ArrayList<Product> products) {
+        for (Product product : off.getProducts()) {
+            product.removeOff(off);
+        }
+        off.setProducts(products);
+        for (Product product : products) {
+            product.addOff(off, off.getSeller());
+        }
+    }
+
+    private void appendProduct(Off off, ArrayList<Product> products) {
+        for (Product product : products) {
+            if (!off.getProducts().contains(product)) {
+                off.getProducts().add(product);
+                product.addOff(off, off.getSeller());
+            }
         }
     }
 
     private void editPercent(Off off) {
-        off.setDiscountPercent(Integer.parseInt(newValue));
+        off.setPercent(Integer.parseInt(newValue));
     }
 
     private void editFinishTime(Off off) {
-        off.setDiscountFinishTime(Date.getDateWithString(newValue));
+        off.setFinishTime(Controller.getDateWithString(newValue));
     }
 
     private void editStartTime(Off off) {
-        off.setDiscountStartTime(Date.getDateWithString(newValue));
+        off.setStartTime(Controller.getDateWithString(newValue));
     }
 
     public void setOffId(String offId) {

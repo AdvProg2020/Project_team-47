@@ -1,8 +1,10 @@
 package model.user;
 
-import com.google.gson.Gson;
+import database.UserData;
 import model.send.receive.UserInfo;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Manager extends User {
@@ -12,24 +14,41 @@ public class Manager extends User {
 
     public Manager(HashMap<String, String> userInfo) {
         super(userInfo);
-        User.managerAdded();
+    }
+
+    public static ArrayList<Customer> getCustomersForGift(int numberOfUser) {
+        ArrayList<Customer> randomCustomers = new ArrayList<>();
+        ArrayList<User> allUsersClone = (ArrayList<User>) allUsers.clone();
+        Collections.shuffle(allUsersClone);
+        for (User user : allUsers) {
+            if (numberOfUser == 0)
+                break;
+            else if (user instanceof Customer) {
+                randomCustomers.add((Customer) user);
+                numberOfUser--;
+            }
+        }
+        return randomCustomers;
     }
 
     @Override
     public void deleteUser() {
         allUsers.remove(this);
         User.managerRemoved();
-        //changing database
+        this.removeFromDatabase();
     }
 
     @Override
     public UserInfo userInfoForSending() {
         UserInfo user = new UserInfo();
-        user.setEmail(this.getEmail());
-        user.setFirstName(this.getFirstName());
-        user.setLastName(this.getLastName());
-        user.setPhoneNumber(this.getPhoneNumber());
-        user.setUsername(this.getUsername());
+        userInfoSetter(user);
+        return user;
+    }
+
+    @Override
+    public UserData updateDatabase() {
+        UserData user = new UserData("manager");
+        super.updateDatabase(user);
         return user;
     }
 }

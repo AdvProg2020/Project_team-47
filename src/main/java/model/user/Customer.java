@@ -1,6 +1,6 @@
 package model.user;
 
-import com.google.gson.Gson;
+import database.UserData;
 import model.discount.DiscountCode;
 import model.log.BuyLog;
 import model.log.Log;
@@ -23,17 +23,17 @@ public class Customer extends User {
 
     public Customer() {
         super();
-        buyLogs=new ArrayList<>();
+        buyLogs = new ArrayList<>();
         discountCodes = new ArrayList<>();
         shoppingCart = new ShoppingCart();
+        this.money = 10000000;
     }
-
 
     public Customer(HashMap<String, String> userInfo) {
         super(userInfo);
         shoppingCart = new ShoppingCart();
+        this.money = 10000000;
     }
-
 
     @Override
     public void deleteUser() {
@@ -41,9 +41,8 @@ public class Customer extends User {
         for (DiscountCode discountCode : this.discountCodes) {
             discountCode.removeCustomer(this);
         }
-        //changing database
+        this.removeFromDatabase();
     }
-
 
     public DiscountCode getDiscountCode(String code) {
         for (DiscountCode discountCode : discountCodes) {
@@ -54,11 +53,10 @@ public class Customer extends User {
         return null;
     }
 
-
     public void decreaseMoney(double money) {
         this.money -= money;
+        this.updateDatabase().update();
     }
-
 
     public BuyLog getBuyLog(String id) {
         for (BuyLog buyLog : buyLogs) {
@@ -69,21 +67,11 @@ public class Customer extends User {
         return null;
     }
 
-
     public void removeDiscountCode(DiscountCode discountCode) {
         //this function will call when a discount code should remove to delete
         //intended code from users who has that code
         this.discountCodes.remove(discountCode);
-    }
-
-
-    public boolean customerHasDiscountCode(String code) {
-        for (DiscountCode discountCode : this.discountCodes) {
-            if (code.equals(discountCode.getDiscountCode())) {
-                return true;
-            }
-        }
-        return false;
+        this.updateDatabase().update();
     }
 
 
@@ -91,30 +79,26 @@ public class Customer extends User {
         return !(this.money < cartPrice);
     }
 
-
     public void addBuyLog(BuyLog buyLog) {
         buyLogs.add(buyLog);
     }
 
-
     public boolean doesUserBoughtProduct(Product product) {
         for (Log buyLog : buyLogs) {
-            if (buyLog.isThereProductInLog(product)) {
+            if (buyLog.isThereProductInLog(product.getId())) {
                 return true;
             }
         }
         return false;
     }
 
-
     public ArrayList<DiscountCodeInfo> getAllDiscountCodeInfo() {
         ArrayList<DiscountCodeInfo> discountCodesInfo = new ArrayList<>();
         for (DiscountCode discountCode : this.discountCodes) {
-            discountCodesInfo.add(discountCode.discountInfoForSending());
+            discountCodesInfo.add(discountCode.discountCodeInfo());
         }
         return discountCodesInfo;
     }
-
 
     public ArrayList<LogInfo> getAllOrdersInfo() {
         ArrayList<LogInfo> ordersInfo = new ArrayList<>();
@@ -124,39 +108,48 @@ public class Customer extends User {
         return ordersInfo;
     }
 
-
-    public boolean doesCustomerOrdered(String productId) {
-        Product product = Product.getProductWithId(productId);
-        return doesUserBoughtProduct(product);
-    }
-
-
     public void rate(int score, Product product) {
         Score newScore = new Score();
         newScore.setProduct(product.getId());
         newScore.setScore(score);
         newScore.setWhoSubmitScore(this.getUsername());
         product.addScore(newScore);
+        product.updateDatabase();
     }
-
 
     @Override
     public UserInfo userInfoForSending() {
         UserInfo user = new UserInfo();
-        user.setEmail(this.getEmail());
-        user.setFirstName(this.getFirstName());
-        user.setLastName(this.getLastName());
-        user.setPhoneNumber(this.getPhoneNumber());
-        user.setUsername(this.getUsername());
+        userInfoSetter(user);
         user.setMoney(this.money);
         return user;
     }
 
+    @Override
+    public UserData updateDatabase() {
+        UserData user = new UserData("customer");
+        super.updateDatabase(user);
+        user.setMoney(this.money);
+        addLogToDatabase(user);
+        addDiscountCodeToDatabase(user);
+        return user;
+    }
+
+    private void addLogToDatabase(UserData user) {
+        for (BuyLog buyLog : buyLogs) {
+            user.addLog(buyLog.getLogId());
+        }
+    }
+
+    private void addDiscountCodeToDatabase(UserData user) {
+        for (DiscountCode discountCode : discountCodes) {
+            user.addDiscountCode(discountCode.getDiscountCode());
+        }
+    }
 
     public ShoppingCart getShoppingCart() {
         return shoppingCart;
     }
-
 
     public void addDiscountCode(DiscountCode discountCode) {
         if (!this.discountCodes.contains(discountCode)) {
@@ -166,5 +159,9 @@ public class Customer extends User {
 
     public double getMoney() {
         return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
     }
 }
