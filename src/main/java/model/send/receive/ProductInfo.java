@@ -17,7 +17,7 @@ public class ProductInfo {
     private ArrayList<ProductSeller> productSellers;
 
     public ProductInfo() {
-        sellersNames=new ArrayList<>();
+        sellersNames = new ArrayList<>();
         specialProperties = new HashMap<>();
         productSellers = new ArrayList<>();
     }
@@ -54,6 +54,23 @@ public class ProductInfo {
         this.status = status;
     }
 
+    public double getPrice(String sellerUsername) {
+        for (ProductSeller productSeller : productSellers) {
+            if (productSeller.sellerName.equals(sellerUsername)) {
+                return productSeller.price;
+            }
+        }
+        return -1;
+    }
+
+    public double getFinalPrice(String sellerUsername) {
+        for (ProductSeller productSeller : productSellers) {
+            if (productSeller.sellerName.equals(sellerUsername)) {
+                return productSeller.priceWithOff;
+            }
+        }
+        return -1;
+    }
 
     public void addProductSeller(String sellerUsername, double price, double priceWithOff, int numberInStock) {
         productSellers.add(new ProductSeller(sellerUsername, price, priceWithOff, numberInStock));

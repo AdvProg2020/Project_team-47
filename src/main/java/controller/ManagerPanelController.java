@@ -4,13 +4,14 @@ import model.category.Category;
 import model.category.MainCategory;
 import model.category.SubCategory;
 import model.discount.DiscountCode;
-import model.others.Date;
 import model.others.Product;
 import model.others.request.Request;
 import model.user.Customer;
+import model.user.Manager;
 import model.user.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class ManagerPanelController extends UserPanelController {
@@ -53,6 +54,10 @@ public class ManagerPanelController extends UserPanelController {
             return;
         }
         User user = User.getUserByUsername(username);
+        if (user == loggedUser) {
+            sendError("You can't remove yourself!!");
+            return;
+        }
         assert user != null;
         user.deleteUser();
     }
@@ -103,39 +108,32 @@ public class ManagerPanelController extends UserPanelController {
         maxDiscountAmount = Integer.parseInt(discountInfo.get("max-discount-amount"));
         maxUsableTime = Integer.parseInt(discountInfo.get("max-usable-time"));
 
-        DiscountCode discountCode = new DiscountCode();
-        discountCode.setDiscountStartTime(Date.getDateWithString(discountInfo.get("start-time")));
-        discountCode.setDiscountFinishTime(Date.getDateWithString(discountInfo.get("finish-time")));
-        discountCode.setMaxDiscountAmount(maxDiscountAmount);
-        discountCode.setMaxUsableTime(maxUsableTime);
+        DiscountCode discountCode = new DiscountCode(maxDiscountAmount, maxUsableTime);
+        discountCode.setStartTime(Controller.getDateWithString(discountInfo.get("start-time")));
+        discountCode.setFinishTime(Controller.getDateWithString(discountInfo.get("finish-time")));
         discountCode.setUsersAbleToUse(users);
-        discountCode.setDiscountPercent(percent);
+        discountCode.setPercent(percent);
+        discountCode.updateDatabase();
         for (Customer user : users) {
             user.addDiscountCode(discountCode);
+            user.updateDatabase().update();
         }
 
-        sendAnswer(discountCode.getDiscountCode(), null);
+        sendAnswer(discountCode.getDiscountCode());
     }
 
     private static boolean discountCodeInfoHasError(HashMap<String, String> discountInfo, ArrayList<String> usernames) {
-        //checking that discount info HashMap contains all required key
-        String[] discountKey = {"start-time", "finish-time", "max-usable-time", "max-discount-amount", "percent"};
-        for (String key : discountKey) {
-            if (!discountInfo.containsKey(key)) {
-                sendError("Not enough information!!");
-                return true;
-            }
-        }
-
-        //check that users who could use code exists and check start and finish time
-        if (User.isThereCustomersWithUsername(usernames)) {
-            sendError("There isn't any customer for some of username you entered!!");
+        if (discountInfoHasError(discountInfo))
             return true;
-        } else if (!discountDateIsValid(discountInfo.get("start-time"), discountInfo.get("finish-time"))) {
-            sendError("Dates are invalid!!");
+        else if (discountUsersHasError(usernames))
             return true;
-        }
+        else if (discountDateHasError(discountInfo.get("start-time"), discountInfo.get("finish-time")))
+            return true;
+        else
+            return discountInfoHasWrongIntegers(discountInfo);
+    }
 
+    private static boolean discountInfoHasWrongIntegers(HashMap<String, String> discountInfo) {
         //check that integer value entered correctly
         try {
             int percent = Integer.parseInt(discountInfo.get("percent"));
@@ -159,21 +157,42 @@ public class ManagerPanelController extends UserPanelController {
         return false;
     }
 
-    private static boolean discountDateIsValid(String start, String finish) {
+    private static boolean discountUsersHasError(ArrayList<String> usernames) {
+        //check that users who could use code exists and check start and finish time
+        if (User.isThereCustomersWithUsername(usernames)) {
+            sendError("There isn't customer for some of username you entered!!");
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean discountInfoHasError(HashMap<String, String> discountInfo) {
+        //checking that discount info HashMap contains all required key
+        String[] discountKey = {"start-time", "finish-time", "max-usable-time", "max-discount-amount", "percent"};
+        for (String key : discountKey) {
+            if (!discountInfo.containsKey(key)) {
+                sendError("Not enough information!!");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean discountDateHasError(String start, String finish) {
         //this function will check that discount starting and finishing time entered correctly
 
-        if (!(Date.isDateFormatValid(start) && Date.isDateFormatValid(finish))) {
+        if (!(Controller.isDateFormatValid(start) && Controller.isDateFormatValid(finish))) {
             sendError("Wrong format for date!!");
             return false;
         }
 
-        Date startDate = Date.getDateWithString(start);
-        Date finishDate = Date.getDateWithString(finish);
+        Date startDate = Controller.getDateWithString(start);
+        Date finishDate = Controller.getDateWithString(finish);
 
-        if (startDate.before(Date.getCurrentDate())) {
+        if (startDate.before(Controller.getCurrentTime())) {
             sendError("Can't set start time to this value!!");
             return false;
-        } else if (finishDate.before(Date.getCurrentDate())) {
+        } else if (finishDate.before(Controller.getCurrentTime())) {
             sendError("Can't set finish time to this value!!");
             return false;
         } else if (!startDate.before(finishDate)) {
@@ -194,7 +213,7 @@ public class ManagerPanelController extends UserPanelController {
         if (!DiscountCode.isThereDiscountWithCode(code)) {
             sendError("There isn't discount code with this code!!");
         } else
-            sendAnswer(DiscountCode.getDiscountById(code).discountInfoForSending());
+            sendAnswer(DiscountCode.getDiscountById(code).discountCodeInfo());
     }
 
     public static void editDiscountCode(String code, String field, String newValue) {
@@ -212,41 +231,42 @@ public class ManagerPanelController extends UserPanelController {
                 editCodeTime(discountCode, newValue, "Finishing time");
                 return;
             case "max-discount-amount":
-                editCodeIntegerValues(discountCode, "max-discount-amount", newValue);
+                editCodeIntegersValues(discountCode, "max-discount-amount", newValue);
                 break;
             case "percent":
-                editCodeIntegerValues(discountCode, "percent", newValue);
+                editCodeIntegersValues(discountCode, "percent", newValue);
                 break;
             case "max-usable-time":
-                editCodeIntegerValues(discountCode, "max-usable-time", newValue);
+                editCodeIntegersValues(discountCode, "max-usable-time", newValue);
                 break;
             default:
                 sendError("You can't change this field!!");
         }
+        discountCode.updateDatabase();
     }
 
     private static void editCodeTime(DiscountCode discountCode, String timeString, String type) {
-        if (!Date.isDateFormatValid(timeString)) {
+        if (!Controller.isDateFormatValid(timeString)) {
             sendError("Please enter right value!!");
             return;
         }
-        Date time = Date.getDateWithString(timeString);
-        if (time.before(Date.getCurrentDate())) {
+        Date time = Controller.getDateWithString(timeString);
+        if (time.before(Controller.getCurrentTime())) {
             sendError(type + " can't change to this value!!");
             return;
         }
         switch (type) {
             case "Starting time":
-                discountCode.setDiscountStartTime(time);
+                discountCode.setStartTime(time);
                 break;
             case "Finishing time":
-                discountCode.setDiscountFinishTime(time);
+                discountCode.setFinishTime(time);
                 break;
         }
         actionCompleted();
     }
 
-    private static void editCodeIntegerValues(DiscountCode discountCode, String type, String integerString) {
+    private static void editCodeIntegersValues(DiscountCode discountCode, String type, String integerString) {
         int integer;
         try {
             integer = Integer.parseInt(integerString);
@@ -271,7 +291,7 @@ public class ManagerPanelController extends UserPanelController {
                     sendError("Percent should be a number between 0 and 100!!");
                     return;
                 }
-                discountCode.setDiscountPercent(integer);
+                discountCode.setPercent(integer);
                 break;
         }
         actionCompleted();
@@ -339,6 +359,7 @@ public class ManagerPanelController extends UserPanelController {
         Category category = new MainCategory();
         category.setName(name);
         category.setSpecialProperties(specialProperties);
+        category.updateDatabase();
     }
 
     public static void addSubCategory(String subCategoryName, String mainCategoryName, ArrayList<String> specialProperties) {
@@ -358,6 +379,8 @@ public class ManagerPanelController extends UserPanelController {
             subCategory.setMainCategory(mainCategory);
             subCategory.setSpecialProperties(specialProperties);
             mainCategory.addSubCategory(subCategory);
+            mainCategory.updateDatabase();
+            subCategory.updateDatabase();
         }
     }
 
@@ -399,6 +422,7 @@ public class ManagerPanelController extends UserPanelController {
             default:
                 sendError("You can't change this!!");
         }
+        mainCategory.updateDatabase();
     }
 
     private static void removePropertyFromMainCategory(MainCategory mainCategory, String specialProperty) {
@@ -408,18 +432,27 @@ public class ManagerPanelController extends UserPanelController {
 
     private static void addPropertyToMainCategory(MainCategory mainCategory, String specialProperty) {
         //adding properties to main categories
-        if (!mainCategory.getSpecialProperties().contains(specialProperty)) {
+        if (!isThereProperty(mainCategory, specialProperty)) {
             mainCategory.addSpecialProperties(specialProperty);
         }
 
         //adding properties to sub categories
         for (Category subCategory : mainCategory.getSubCategories()) {
-            if (!subCategory.getSpecialProperties().contains(specialProperty)) {
+            if (!isThereProperty(mainCategory, specialProperty)) {
                 subCategory.addSpecialProperties(specialProperty);
+                subCategory.updateDatabase();
             }
         }
 
         actionCompleted();
+    }
+
+    private static boolean isThereProperty(Category category, String property) {
+        for (String specialProperty : category.getSpecialProperties()) {
+            if (specialProperty.equalsIgnoreCase(property))
+                return true;
+        }
+        return false;
     }
 
     public static void editSubCategory(String categoryName, String field, String changeValue) {
@@ -445,22 +478,34 @@ public class ManagerPanelController extends UserPanelController {
             default:
                 sendError("You can't change this!!");
         }
+        subCategory.updateDatabase();
     }
 
     private static void addPropertyToSubCategory(SubCategory subCategory, String specialProperty) {
-        if (!subCategory.getSpecialProperties().contains(specialProperty)) {
+        if (!isThereProperty(subCategory, specialProperty)) {
             subCategory.addSpecialProperties(specialProperty);
         }
         actionCompleted();
     }
 
     private static void removePropertyFromSubCategory(SubCategory subCategory, String specialProperty) {
-        MainCategory mainCategory = subCategory.getMainCategory();
-        if (mainCategory.getSpecialProperties().contains(specialProperty)) {
-            mainCategory.removeSpecialProperties(specialProperty);
-        } else if (subCategory.getSpecialProperties().contains(specialProperty))
+        if (isThereProperty(subCategory, specialProperty))
             subCategory.removeSpecialProperties(specialProperty);
 
         actionCompleted();
+    }
+
+    public static void giveGift(int numberOfUser, HashMap<String, String> giftInfo) {
+        if (discountInfoHasError(giftInfo)) {
+            return;
+        } else if (discountDateHasError(giftInfo.get("start-time"), giftInfo.get("finish-time"))) {
+            return;
+        } else if (discountInfoHasWrongIntegers(giftInfo)) {
+            return;
+        } else if (numberOfUser < 1) {
+            sendError("You should at least add this code to 1 customer!!");
+            return;
+        }
+        createDiscountCodeAfterChecking(giftInfo, Manager.getCustomersForGift(numberOfUser));
     }
 }//end ManagerPanelController

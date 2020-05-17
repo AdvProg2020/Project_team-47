@@ -2,7 +2,6 @@ package controller;
 
 import model.discount.DiscountCode;
 import model.log.BuyLog;
-import model.others.Date;
 import model.others.ShoppingCart;
 import model.user.Customer;
 
@@ -92,7 +91,7 @@ public class PurchaseController extends Controller {
         useDiscountCode(shoppingCart);
 
         shoppingCart.buy();
-        purchaseLog.setMoney(finalPrice);
+        purchaseLog.setPrice(finalPrice);
         customer.decreaseMoney(finalPrice);
         setPurchaseLogInfo(shoppingCart);
 
@@ -109,10 +108,11 @@ public class PurchaseController extends Controller {
     private static void setPurchaseLogInfo(ShoppingCart shoppingCart) {
         //this function will set some information on buying log such as date ...
         Customer customer = (Customer) loggedUser;
-        purchaseLog.setLogDate(Date.getCurrentDate());
+        purchaseLog.setLogDate(Controller.getCurrentTime());
         purchaseLog.setCustomer(customer.userInfoForSending());
         shoppingCart.addToBuyLog(purchaseLog);//add shopping cart item to log
         customer.addBuyLog(purchaseLog);
+        customer.updateDatabase().update();
         purchaseLog.createSellLog();//should create sell log for sellers
     }
 

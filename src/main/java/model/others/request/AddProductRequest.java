@@ -2,15 +2,12 @@ package model.others.request;
 
 import com.google.gson.Gson;
 import model.category.Category;
-import model.category.MainCategory;
-import model.category.SubCategory;
 import model.others.Product;
 import model.send.receive.RequestInfo;
 import model.user.Seller;
 import model.user.User;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class AddProductRequest extends MainRequest {
     private String sellerUsername;
@@ -55,7 +52,10 @@ public class AddProductRequest extends MainRequest {
         product.setName(name);
         product.setCompany(company);
         product.getSellers().add(seller);
+        product.setStatus("CONFIRMED");
         seller.addProduct(product);
+        seller.updateDatabase().update();
+        product.updateDatabase();
     }
 
     @Override
@@ -79,6 +79,11 @@ public class AddProductRequest extends MainRequest {
             }
         }
         return true;
+    }
+
+    @Override
+    public void decline() {
+
     }
 
     private boolean isThereProperty(String key) {

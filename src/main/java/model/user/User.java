@@ -1,6 +1,8 @@
 package model.user;
 
 import controller.Controller;
+import database.Database;
+import database.UserData;
 import model.others.Email;
 import model.others.Sort;
 import model.send.receive.UserInfo;
@@ -20,6 +22,7 @@ abstract public class User {
     static {
         allUsers = new ArrayList<>();
         usedUsernames = new TreeSet<>();
+        verificationList = new HashSet<>();
     }
 
     private String sendCode;
@@ -46,6 +49,7 @@ abstract public class User {
         this.lastName = userInfo.get("last-name");
         this.type = userInfo.get("type");
         usedUsernames.add(this.username);
+        Database.updateUsedUsernames(usedUsernames);
     }
 
     public static User getUserInVerificationList(String username) {
@@ -119,7 +123,7 @@ abstract public class User {
     }
 
     public static boolean isPhoneValid(String phoneNumber) {
-        return Pattern.matches("09\\d{9}", phoneNumber);
+        return Pattern.matches("0?9\\d{9}", phoneNumber);
     }
 
     public static boolean isEmailValid(String email) {
@@ -144,12 +148,6 @@ abstract public class User {
             }
         }
         return null;
-    }
-
-    public static void deleteUser(String username) {
-        User user = getUserByUsername(username);
-        assert user != null;
-        user.deleteUser();
     }
 
     private static void copyUserInfo(User destinationUser, User sourceUser) {
@@ -180,8 +178,13 @@ abstract public class User {
         managersNumber--;
     }
 
+    public static void setUsedUsernames(TreeSet<String> usedUsernames) {
+        User.usedUsernames = usedUsernames;
+    }
+
     public void confirmEmail() {
         verificationList.remove(this);
+        this.removeNotVerifiedFromDatabase();
         this.sendCode = "";
         this.addUser();
     }
@@ -193,19 +196,24 @@ abstract public class User {
     public void emailVerification() {
         this.sendCode = Controller.idCreator();
         Email newEmail = new Email(this.email);
-        (new EmailThread(newEmail, this.sendCode, "verification-code")).start();
+        newEmail.setMessage(this.sendCode);
+        newEmail.sendVerificationEmail();
         verificationList.add(this);
+        this.updateDatabase().addNorVerifiedUser();
     }
 
     public void sendForgotPasswordCode() {
         this.sendCode = Controller.idCreator();
         Email newEmail = new Email(this.email);
-        (new EmailThread(newEmail, this.sendCode, "forgot-password-code")).start();
+        newEmail.setMessage(this.sendCode);
+        newEmail.sendForgotPasswordEmail();
+        this.updateDatabase().update();
     }
 
     public void sendBuyingEmail(String logId) {
         Email newEmail = new Email(this.email);
-        (new EmailThread(newEmail, logId, "buying")).start();
+        newEmail.setMessage(logId);
+        newEmail.sendBuyingEmail();
     }
 
     public boolean sendCodeIsCorrect(String code) {
@@ -223,9 +231,15 @@ abstract public class User {
 
     public abstract void deleteUser();
 
-
     public abstract UserInfo userInfoForSending();
 
+    public void userInfoSetter(UserInfo userInfo) {
+        userInfo.setEmail(this.getEmail());
+        userInfo.setFirstName(this.getFirstName());
+        userInfo.setLastName(this.getLastName());
+        userInfo.setPhoneNumber(this.getPhoneNumber());
+        userInfo.setUsername(this.getUsername());
+    }
 
     public void changeRole(String newRole) {
 
@@ -247,50 +261,35 @@ abstract public class User {
                 break;
         }
         this.deleteUser();
-        //changing database
     }
-
 
     void addUser() {
         allUsers.add(this);
         if (this instanceof Manager)
-            User.managersNumber++;
-        //changing database
+            User.managerAdded();
+        this.updateDatabase().update();
     }
-
 
     private void changeUserToManager() {
         Manager manager = new Manager();
         copyUserInfo(manager, this);
         manager.setType("manager");
         manager.addUser();
-        //changing database
     }
-
 
     private void changeUserToSeller() {
         Seller seller = new Seller();
         copyUserInfo(seller, this);
         seller.setType("seller");
         seller.addUser();
-        //changing database
     }
-
 
     private void changeUserToCustomer() {
         Customer customer = new Customer();
         copyUserInfo(customer, this);
         customer.setType("customer");
         customer.addUser();
-        //changing database
     }
-
-
-    @Override
-    public String toString() {
-        return "User{}";
-    }
-
 
     public String getUsername() {
         return username;
@@ -324,6 +323,10 @@ abstract public class User {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -344,29 +347,33 @@ abstract public class User {
         this.sendCode = sendCode;
     }
 
-    private static class EmailThread extends Thread {
-        private Email email;
-        private String type;
-        private String contentString;
+    public abstract UserData updateDatabase();
 
-        EmailThread(Email email, String contentString, String type) {
-            this.email = email;
-            this.type = type;
-            this.email.setContentString(contentString);
-        }
+    public void updateDatabase(UserData userData) {
+        userData.setUsername(this.username);
+        userData.setPassword(this.password);
+        userData.setFirstName(this.firstName);
+        userData.setLastName(this.lastName);
+        userData.setEmail(this.email);
+        userData.setPhoneNumber(this.phoneNumber);
+        userData.setSendCode(this.sendCode);
+    }
 
-        public void run() {
-            switch (type) {
-                case "verification-code":
-                    email.sendVerificationEmail();
-                    break;
-                case "forgot-password-code":
-                    email.sendForgotPasswordEmail();
-                    break;
-                case "buying":
-                    email.sendBuyingEmail();
-                    break;
-            }
-        }
+    public void addToVerificationListFromDatabase() {
+        verificationList.add(this);
+    }
+
+    public void addToUsersFromDatabase() {
+        User.allUsers.add(this);
+        if (this instanceof Manager)
+            User.managerAdded();
+    }
+
+    public void removeFromDatabase() {
+        Database.removeUser(this.username);
+    }
+
+    public void removeNotVerifiedFromDatabase() {
+        Database.removeNotVerifiedUser(this.username);
     }
 }

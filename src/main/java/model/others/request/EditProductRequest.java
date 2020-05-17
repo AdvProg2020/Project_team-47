@@ -18,6 +18,14 @@ public class EditProductRequest extends MainRequest {
     private String productId;
     private String sellerUsername;
 
+    private static boolean productHasProperty(Product product, String property) {
+        for (Map.Entry<String, String> entry : product.getSpecialProperties().entrySet()) {
+            if (entry.getKey().equalsIgnoreCase(property))
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
         if (newValue != null) {
@@ -49,12 +57,14 @@ public class EditProductRequest extends MainRequest {
                 product.setMainCategory(subCategory.getMainCategory());
                 break;
             case "special-properties":
-                changeSpecialProperties(type,product);
+                changeSpecialProperties(type, product);
                 break;
             case "description":
                 product.setDescription(newValue);
                 break;
         }
+        product.setStatus("EDIT_ACCEPTED");
+        product.updateDatabase();
     }
 
     @Override
@@ -63,13 +73,13 @@ public class EditProductRequest extends MainRequest {
         User user = Seller.getUserByUsername(sellerUsername);
         if (!(user instanceof Seller)) {
             return false;
-        }else
+        } else
             seller = (Seller) user;
         Product product = Product.getProductWithId(productId);
-        if(product==null)
+        if (product == null)
             return false;
 
-        if (!seller.hasProduct(product)||!Seller.isThereSeller(seller)) {
+        if (!seller.hasProduct(product) || !Seller.isThereSeller(seller)) {
             return false;
         }
 
@@ -80,18 +90,27 @@ public class EditProductRequest extends MainRequest {
             case "description":
                 return true;
             case "category":
-                return updateForCategory("main-category",product);
+                return updateForCategory("main-category", product);
             case "sub-category":
-                return updateForCategory("sub-category",product);
+                return updateForCategory("sub-category", product);
             case "specialProperties":
                 return updateProperties(type);
         }
         return false;
     }
 
+    @Override
+    public void decline() {
+        Product product = Product.getProductWithId(this.productId);
+        if (product != null) {
+            product.setStatus("EDIT_DECLINED");
+            product.updateDatabase();
+        }
+    }
+
     private boolean updateProperties(String type) {
         Product product = Product.getProductWithId(productId);
-        if(product == null)
+        if (product == null)
             return false;
         Category category = product.getSubCategory();
         if (category == null) {
@@ -103,7 +122,7 @@ public class EditProductRequest extends MainRequest {
             case "edit-product change":
                 return true;
             case "edit-product replace":
-                updatePropertiesReplace(category,product);
+                updatePropertiesReplace(category, product);
                 return true;
             case "edit-product remove":
                 updatePropertiesRemove(category);
@@ -112,7 +131,7 @@ public class EditProductRequest extends MainRequest {
         return false;
     }
 
-    private void updatePropertiesReplace(Category category,Product product) {
+    private void updatePropertiesReplace(Category category, Product product) {
         for (String specialProperty : category.getSpecialProperties()) {
             if (!isThereProperty(specialProperty)) {
                 newValueHashMap.put(specialProperty, getProductProperty(product, specialProperty));
@@ -131,30 +150,30 @@ public class EditProductRequest extends MainRequest {
         }
     }
 
-    private String getProductProperty(Product product,String key) {
+    private String getProductProperty(Product product, String key) {
         for (Map.Entry<String, String> entry : product.getSpecialProperties().entrySet()) {
-            if(entry.getKey().equalsIgnoreCase(key))
+            if (entry.getKey().equalsIgnoreCase(key))
                 return entry.getValue();
         }
         return "";
     }
 
-    private boolean updateForCategory(String categoryType,Product product) {
+    private boolean updateForCategory(String categoryType, Product product) {
         if (categoryType.equals("main-category")) {
-            Category category=Category.getMainCategoryByName(newValue);
-            if(category==null)
+            Category category = Category.getMainCategoryByName(newValue);
+            if (category == null)
                 return false;
             for (String specialProperty : category.getSpecialProperties()) {
-                if (!productHasProperty(product,specialProperty)) {
+                if (!productHasProperty(product, specialProperty)) {
                     product.getSpecialProperties().put(specialProperty, "");
                 }
             }
         } else if (categoryType.equals("sub-category") && !Category.isThereSubCategory(newValue)) {
-            Category category=Category.getSubCategoryByName(newValue);
-            if(category==null)
+            Category category = Category.getSubCategoryByName(newValue);
+            if (category == null)
                 return false;
             for (String specialProperty : category.getSpecialProperties()) {
-                if (!productHasProperty(product,specialProperty)) {
+                if (!productHasProperty(product, specialProperty)) {
                     product.getSpecialProperties().put(specialProperty, "");
                 }
             }
@@ -165,21 +184,13 @@ public class EditProductRequest extends MainRequest {
 
     private boolean isThereProperty(String property) {
         for (Map.Entry<String, String> entry : newValueHashMap.entrySet()) {
-            if(entry.getKey().equalsIgnoreCase(property))
+            if (entry.getKey().equalsIgnoreCase(property))
                 return true;
         }
         return false;
     }
 
-    private static boolean productHasProperty(Product product, String property) {
-        for (Map.Entry<String, String> entry : product.getSpecialProperties().entrySet()) {
-            if(entry.getKey().equalsIgnoreCase(property))
-                return true;
-        }
-        return false;
-    }
-
-    private void changeSpecialProperties(String type,Product product) {
+    private void changeSpecialProperties(String type, Product product) {
         switch (type) {
             case "edit-product append":
                 appendSpecialProperties(product);

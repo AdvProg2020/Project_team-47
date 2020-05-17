@@ -1,6 +1,8 @@
 package model.others;
 
 import model.category.Category;
+import model.category.MainCategory;
+import model.category.SubCategory;
 import model.discount.DiscountCode;
 import model.discount.Off;
 import model.log.Log;
@@ -10,13 +12,23 @@ import model.user.User;
 import java.util.ArrayList;
 
 public class Sort {
-    public static ArrayList<Category> sortCategory(String field, String direction, ArrayList<Category> categories) {
-        ArrayList<Category> categoriesClone = (ArrayList<Category>) categories.clone();
+    public static ArrayList<MainCategory> sortMainCategories(String field, String direction, ArrayList<MainCategory> categories) {
+        ArrayList<MainCategory> categoriesClone = (ArrayList<MainCategory>) categories.clone();
+        return Sort.sortCategory(field, direction, categoriesClone);
+    }
+
+    public static ArrayList<SubCategory> sortSubCategories(String field, String direction, ArrayList<SubCategory> categories) {
+        ArrayList<SubCategory> categoriesClone = (ArrayList<SubCategory>) categories.clone();
+        return Sort.sortCategory(field, direction, categoriesClone);
+    }
+
+    private static <E> ArrayList<E> sortCategory(String field, String direction, ArrayList<E> categoriesClone) {
+        ArrayList<Category> categories = (ArrayList<Category>) categoriesClone;
         if (field == null || direction == null) {
-            return categoriesClone;
+            return (ArrayList<E>) categories;
         }
         if (field.equals("name")) {
-            categoriesClone.sort((o1, o2) -> {
+            categories.sort((o1, o2) -> {
                 if (direction.startsWith("a")) {
                     return o1.getName().compareTo(o2.getName());
                 } else if (direction.startsWith("d")) {
@@ -25,7 +37,7 @@ public class Sort {
                 return 1;
             });
         }
-        return categoriesClone;
+        return (ArrayList<E>) categories;
     }
 
 
@@ -119,10 +131,10 @@ public class Sort {
     private static void sortDiscountCodeByPercent(ArrayList<DiscountCode> discountCodes, String direction) {
         discountCodes.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return Integer.compare(o1.getDiscountPercent(), o2.getDiscountPercent());
+                return Integer.compare(o1.getPercent(), o2.getPercent());
 
             } else if (direction.startsWith("d")) {
-                return Integer.compare(o2.getDiscountPercent(), o1.getDiscountPercent());
+                return Integer.compare(o2.getPercent(), o1.getPercent());
             }
             return 1;
         });
@@ -131,9 +143,9 @@ public class Sort {
     private static void sortDiscountWithStartTime(ArrayList<DiscountCode> discountCodes, String direction) {
         discountCodes.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return o1.getDiscountStartTime().compareTo(o2.getDiscountStartTime());
+                return o1.getStartTime().compareTo(o2.getStartTime());
             } else if (direction.startsWith("d")) {
-                return o2.getDiscountStartTime().compareTo(o1.getDiscountStartTime());
+                return o2.getStartTime().compareTo(o1.getStartTime());
             }
             return 1;
         });
@@ -142,9 +154,9 @@ public class Sort {
     private static void sortDiscountWithFinishTime(ArrayList<DiscountCode> discountCodes, String direction) {
         discountCodes.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return o1.getDiscountFinishTime().compareTo(o2.getDiscountFinishTime());
+                return o1.getFinishTime().compareTo(o2.getFinishTime());
             } else if (direction.startsWith("d")) {
-                return o2.getDiscountFinishTime().compareTo(o1.getDiscountFinishTime());
+                return o2.getFinishTime().compareTo(o1.getFinishTime());
             }
             return 1;
         });
@@ -173,10 +185,10 @@ public class Sort {
     private static void sortOffByPercent(ArrayList<Off> offs, String direction) {
         offs.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return Integer.compare(o1.getDiscountPercent(), o2.getDiscountPercent());
+                return Integer.compare(o1.getPercent(), o2.getPercent());
 
             } else if (direction.startsWith("d")) {
-                return Integer.compare(o2.getDiscountPercent(), o1.getDiscountPercent());
+                return Integer.compare(o2.getPercent(), o1.getPercent());
             }
             return 1;
         });
@@ -185,9 +197,9 @@ public class Sort {
     private static void sortOffWithStartTime(ArrayList<Off> offs, String direction) {
         offs.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return o1.getDiscountStartTime().compareTo(o2.getDiscountStartTime());
+                return o1.getStartTime().compareTo(o2.getStartTime());
             } else if (direction.startsWith("d")) {
-                return o2.getDiscountStartTime().compareTo(o1.getDiscountStartTime());
+                return o2.getStartTime().compareTo(o1.getStartTime());
             }
             return 1;
         });
@@ -196,9 +208,9 @@ public class Sort {
     private static void sortOffWithFinishTime(ArrayList<Off> offs, String direction) {
         offs.sort((o1, o2) -> {
             if (direction.startsWith("a")) {
-                return o1.getDiscountFinishTime().compareTo(o2.getDiscountFinishTime());
+                return o1.getFinishTime().compareTo(o2.getFinishTime());
             } else if (direction.startsWith("d")) {
-                return o2.getDiscountFinishTime().compareTo(o1.getDiscountFinishTime());
+                return o2.getFinishTime().compareTo(o1.getFinishTime());
             }
             return 1;
         });
@@ -307,9 +319,9 @@ public class Sort {
             case "money":
                 logsClone.sort((o1, o2) -> {
                     if (direction.startsWith("a")) {
-                        return Double.compare(o1.getMoney(), o2.getMoney());
+                        return Double.compare(o1.getPrice(), o2.getPrice());
                     } else if (direction.startsWith("d")) {
-                        return Double.compare(o1.getMoney(), o2.getMoney());
+                        return Double.compare(o1.getPrice(), o2.getPrice());
                     }
                     return 1;
                 });

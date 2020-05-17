@@ -1,84 +1,66 @@
 package model.log;
 
-import model.others.Date;
-import model.others.Product;
+import controller.Controller;
+import database.Database;
 import model.send.receive.LogInfo;
 import model.send.receive.UserInfo;
-import model.user.Seller;
-import model.user.User;
+
+import java.util.Date;
+import java.util.TreeSet;
 
 abstract public class Log {
+    private static TreeSet<String> usedId;
     protected String logId;
     protected Date logDate;
-    protected double appliedDiscount;
     protected UserInfo customer;
     protected String purchaseStatus;
-    private double money;
+    protected double price;
 
     public Log() {
         this.logId = logIdCreator();
+        usedId.add(this.logId);
+        Database.updateUsedId(usedId);
+    }
+
+    public static void setUsedId(TreeSet<String> usedId) {
+        Log.usedId = usedId;
     }
 
     private String logIdCreator() {
-        return null;
+        String id = Controller.idCreator();
+        if (usedId.contains(id))
+            return logIdCreator();
+        return id;
     }
 
+    public abstract void updateDatabase();
 
     public abstract LogInfo getLogInfoForSending();
 
-    public boolean isThereProductInLog(Product product) {
-        return true;
+    public abstract boolean isThereProductInLog(String productId);
+
+    public double getPrice() {
+        return price;
     }
 
-    public boolean isThereProductInLogWithThisSeller(Product product, Seller seller) {
-        return true;
-    }
-
-    public double getMoney() {
-        return money;
-    }
-
-    public void setMoney(double money) {
-        this.money = money;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getLogId() {
         return logId;
     }
 
-    public void setLogId(String logId) {
-        this.logId = logId;
-    }
-
-    public Date getLogDate() {
-        return logDate;
-    }
-
     public void setLogDate(Date logDate) {
         this.logDate = logDate;
     }
 
-    public double getAppliedDiscount() {
-        return appliedDiscount;
-    }
-
-    public void setAppliedDiscount(double appliedDiscount) {
-        this.appliedDiscount = appliedDiscount;
-    }
-
-    public String getPurchaseStatus() {
-        return purchaseStatus;
-    }
-
-    public void setPurchaseStatus(String purchaseStatus) {
-        this.purchaseStatus = purchaseStatus;
+    public UserInfo getCustomer() {
+        return customer;
     }
 
     public void setCustomer(UserInfo customer) {
         this.customer = customer;
     }
 
-    public UserInfo getCustomer() {
-        return customer;
-    }
 }

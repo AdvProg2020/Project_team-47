@@ -1,11 +1,11 @@
 package controller;
 
 import model.discount.Off;
-import model.others.Date;
 import model.others.Filter;
 import model.user.Seller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 public class OffController extends Controller {
@@ -35,7 +35,7 @@ public class OffController extends Controller {
 
         switch (filterKey) {
             case "time":
-                if (!Date.isDateFormatValid(firstFilterValue) || !Date.isDateFormatValid(secondFilterValue)) {
+                if (!Controller.isDateFormatValid(firstFilterValue) || !Controller.isDateFormatValid(secondFilterValue)) {
                     sendError("Please enter valid date!!");
                 } else
                     createFilterForTime(firstFilterValue, secondFilterValue);
@@ -109,7 +109,9 @@ public class OffController extends Controller {
     }
 
     private static void createFilterForTime(String startDate, String finishDate) {
-        if (!(Date.isDateFormatValid(startDate) && Date.isDateFormatValid(finishDate))) {
+        Date start = Controller.getDateWithString(startDate);
+        Date finish = Controller.getDateWithString(finishDate);
+        if (start.after(finish)) {
             sendError("Please enter valid date!!");
             return;
         }
@@ -188,7 +190,7 @@ public class OffController extends Controller {
         filters.add("Percent");
         filters.add("Start and Finish Time");
         filters.add("Seller Username");
-        filters.add("Off status(in edit queue | started | finished | accepted by manager) ");
+        filters.add("Off status(IN_EDIT_QUEUE | EDIT_ACCEPTED | EDIT_DECLINED | CONFIRMED) ");
 
         sendAnswer(filters, "filter");
     }

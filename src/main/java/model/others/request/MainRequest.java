@@ -11,4 +11,6 @@ public abstract class MainRequest {
     abstract void accept(String type);
 
     abstract boolean update(String type);
+
+    public abstract void decline();
 }

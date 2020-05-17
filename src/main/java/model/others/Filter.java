@@ -16,20 +16,20 @@ public class Filter {
         if (type != null)
             stringBuilder.append("Type: ").append(type).append("\n");
 
-        if(filterKey!=null)
+        if (filterKey != null)
             stringBuilder.append("Key: ").append(filterKey).append("\n");
 
         if (firstFilterValue != null) {
             stringBuilder.append("First filter value : ").append(firstFilterValue).append("\n");
-            if(secondFilterValue!=null)
+            if (secondFilterValue != null)
                 stringBuilder.append("Second filter value: ").append(secondFilterValue).append("\n");
         } else if (firstInt != 0) {
             stringBuilder.append("First filter value : ").append(firstInt).append("\n");
-            if(secondInt!=0)
+            if (secondInt != 0)
                 stringBuilder.append("Second filter value: ").append(secondInt).append("\n");
-        }else if (firstDouble != 0) {
+        } else if (firstDouble != 0) {
             stringBuilder.append("First filter value : ").append(firstDouble).append("\n");
-            if(secondDouble!=0)
+            if (secondDouble != 0)
                 stringBuilder.append("Second filter value: ").append(secondDouble).append("\n");
         }
 

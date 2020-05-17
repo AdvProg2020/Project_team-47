@@ -1,9 +1,13 @@
 package model.others;
 
 import controller.Controller;
+import database.Database;
+import database.ProductData;
 import model.category.MainCategory;
 import model.category.SubCategory;
 import model.discount.Off;
+import model.others.request.AddCommentRequest;
+import model.others.request.Request;
 import model.send.receive.ProductInfo;
 import model.user.Customer;
 import model.user.Seller;
@@ -19,7 +23,7 @@ public class Product {
 
     static {
         allProducts = new ArrayList<>();
-        usedId=new TreeSet<>();
+        usedId = new TreeSet<>();
     }
 
     private int seenTime;
@@ -35,7 +39,6 @@ public class Product {
     private String description;
     private ArrayList<Score> scores;
     private double scoreAverage;
-    private Date creatingDate;
     private ArrayList<ProductSeller> productSellers;
 
     public Product() {
@@ -43,9 +46,9 @@ public class Product {
         this.productSellers = new ArrayList<>();
         this.comments = new ArrayList<>();
         this.scores = new ArrayList<>();
-        this.creatingDate = Date.getCurrentDate();
         this.id = productIdCreator();
         usedId.add(this.id);
+        Database.updateUsedProductId(usedId);
         allProducts.add(this);
     }
 
@@ -54,7 +57,7 @@ public class Product {
         removeProduct(product);
     }
 
-    private static void removeProduct(Product product) {
+    public static void removeProduct(Product product) {
         allProducts.remove(product);
         for (Seller seller : product.sellers) {
             seller.removeProduct(product);
@@ -64,7 +67,7 @@ public class Product {
                 productSeller.off.removeProduct(product);
             }
         }
-        //changing database
+        product.removeFromDatabase();
     }
 
     private static String productIdCreator() {
@@ -170,24 +173,10 @@ public class Product {
         return false;
     }
 
-    private boolean hasSeller(String username) {
-        for (ProductSeller productSeller : this.productSellers) {
-            if(productSeller.getSeller().getUsername().equalsIgnoreCase(username))
-                return true;
-        }
-        return false;
-    }
     private static boolean isInSellerFilter(Product product, Filter filter) {
         return product.hasSeller(filter.getFirstFilterValue());
     }
 
-    private boolean isAvailable() {
-        for (ProductSeller productSeller : this.productSellers) {
-            if(productSeller.getNumberInStock()>0)
-                return true;
-        }
-        return false;
-    }
     private static boolean isInNameFilter(Product product, Filter filter) {
         return product.getName().toLowerCase().contains(filter.getFirstFilterValue().toLowerCase());
     }
@@ -200,9 +189,11 @@ public class Product {
         }
         return false;
     }
+
     private static boolean isInBrandFilter(Product product, Filter filter) {
         return product.company.toLowerCase().contains(filter.getFirstFilterValue().toLowerCase());
     }
+
     private static boolean isInCategoryFilter(Product product, Filter filter) {
         return product.getMainCategory().getName().equalsIgnoreCase(filter.getFirstFilterValue());
     }
@@ -223,6 +214,65 @@ public class Product {
             return false;
         }
     }
+
+    public static void setUsedId(TreeSet<String> usedId) {
+        Product.usedId = usedId;
+    }
+
+    public void updateDatabase() {
+        ProductData productData = new ProductData();
+        this.dataObjectSetter(productData);
+        this.addSellerToData(productData);
+        this.addSellersInfoToData(productData);
+        productData.addToDatabase();
+    }
+
+    private void addSellersInfoToData(ProductData productData) {
+        for (ProductSeller sellerInfo : this.productSellers) {
+            productData.addSeller(sellerInfo.seller.getUsername(),
+                    sellerInfo.off.getOffId(),
+                    sellerInfo.price, sellerInfo.numberInStock);
+        }
+    }
+
+    private void addSellerToData(ProductData productData) {
+        for (Seller seller : this.sellers) {
+            productData.addSeller(seller.getUsername());
+        }
+    }
+
+    private void dataObjectSetter(ProductData productData) {
+        productData.setSeenTime(this.seenTime);
+        productData.setComments(this.comments);
+        productData.setCompany(this.company);
+        productData.setDescription(this.description);
+        productData.setMainCategory(mainCategory.getName());
+        if (subCategory != null)
+            productData.setSubCategory(subCategory.getName());
+        productData.setId(this.id);
+        productData.setScoreAverage(this.scoreAverage);
+        productData.setScores(this.scores);
+        productData.setSpecialProperties(this.specialProperties);
+        productData.setStatus(this.status);
+        productData.setName(this.name);
+    }
+
+    private boolean hasSeller(String username) {
+        for (ProductSeller productSeller : this.productSellers) {
+            if (productSeller.getSeller().getUsername().equalsIgnoreCase(username))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isAvailable() {
+        for (ProductSeller productSeller : this.productSellers) {
+            if (productSeller.getNumberInStock() > 0)
+                return true;
+        }
+        return false;
+    }
+
     private String getPropertyValue(String key) throws Exception {
         for (Map.Entry<String, String> entry : this.specialProperties.entrySet()) {
             if (entry.getKey().equalsIgnoreCase(key)) {
@@ -235,6 +285,7 @@ public class Product {
     public void removeSellerFromProduct(Seller seller) {
         if (productSellers.size() == 1) {
             removeProduct(this);
+            return;
         }
         this.sellers.remove(seller);
         for (ProductSeller productSeller : this.productSellers) {
@@ -249,6 +300,7 @@ public class Product {
                 productSeller.getOff().removeProduct(this);
             }
         }
+        this.updateDatabase();
     }
 
     public ProductInfo digest() {
@@ -328,7 +380,15 @@ public class Product {
         comment.setProductId(this.id);
         comment.setProductName(this.name);
         comment.setWhoComment(customer.getUsername());
-        this.comments.add(comment);
+        addCommentRequest(comment);
+    }
+
+    private void addCommentRequest(Comment comment) {
+        Request request = new Request();
+        request.setRequestSender(comment.getWhoComment());
+        request.setType("add-comment");
+        request.setMainRequest(new AddCommentRequest(comment));
+        request.addToDatabase();
     }
 
     public void changePrice(Seller seller, double price) {
@@ -361,6 +421,7 @@ public class Product {
 
     public void addSeenTime() {
         this.seenTime++;
+        this.updateDatabase();
     }
 
     public String getName() {
@@ -395,12 +456,24 @@ public class Product {
         return scoreAverage;
     }
 
+    public void setScoreAverage(double scoreAverage) {
+        this.scoreAverage = scoreAverage;
+    }
+
     public String getId() {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public int getSeenTime() {
         return seenTime;
+    }
+
+    public void setSeenTime(int seenTime) {
+        this.seenTime = seenTime;
     }
 
     public MainCategory getMainCategory() {
@@ -418,7 +491,6 @@ public class Product {
     public void setSubCategory(SubCategory subCategory) {
         this.subCategory = subCategory;
     }
-
 
     public ProductSeller getProductSeller(Seller seller) {
         for (ProductSeller productSeller : this.productSellers) {
@@ -464,10 +536,39 @@ public class Product {
             return -1;
     }
 
+    public void addSellerFromDatabase(Seller seller, Off off, double price, int numberInStock) {
+        this.sellers.add(seller);
+        ProductSeller productSeller = new ProductSeller();
+        productSeller.setPrice(price);
+        productSeller.setSeller(seller);
+        productSeller.setNumberInStock(numberInStock);
+        productSeller.setOff(off);
+        this.productSellers.add(productSeller);
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void setScores(ArrayList<Score> scores) {
+        this.scores = scores;
+    }
+
     public ProductInfo attributes() {
         return this.getProductInfo();
     }
 
+    public void removeFromDatabase() {
+        Database.removeProduct(this.id);
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
 
     static class ProductSeller {
         private Off off;
@@ -482,7 +583,7 @@ public class Product {
             else if (off.isOffFinished() || !off.isOffStarted())
                 return price;
 
-            int offPercent = off.getDiscountPercent();
+            int offPercent = off.getPercent();
             if (offPercent < 1) {
                 offPercent *= 100;
             }

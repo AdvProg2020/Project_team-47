@@ -1,6 +1,8 @@
 package model.category;
 
 
+import database.CategoryData;
+import model.others.Product;
 import model.send.receive.CategoryInfo;
 
 public class SubCategory extends Category {
@@ -13,13 +15,29 @@ public class SubCategory extends Category {
     }
 
     @Override
-    public CategoryInfo categoryInfoForSending() {
-        return null;
+    public void updateDatabase() {
+        CategoryData categoryData = new CategoryData("sub-category");
+        super.updateDatabase(categoryData);
+        categoryData.setMainCategoryName(this.mainCategory.getName());
+        categoryData.addToDatabase();
     }
 
     @Override
-    public String toString() {
-        return "SubCategory{}";
+    public void remove() {
+        for (Product product : this.allProducts) {
+            Product.removeProduct(product);
+        }
+        this.removeFromDatabase();
+    }
+
+    @Override
+    public CategoryInfo categoryInfoForSending() {
+        CategoryInfo categoryInfo = new CategoryInfo(this.name, this.specialProperties);
+        categoryInfo.setMainCategory(this.mainCategory.name);
+        for (Product product : allProducts) {
+            categoryInfo.addProduct(product);
+        }
+        return categoryInfo;
     }
 
     public MainCategory getMainCategory() {

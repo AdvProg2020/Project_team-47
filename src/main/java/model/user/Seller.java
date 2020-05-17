@@ -1,8 +1,9 @@
 package model.user;
 
+import controller.Controller;
+import database.UserData;
 import model.discount.Off;
 import model.log.Log;
-import model.others.Date;
 import model.others.Product;
 import model.others.Sort;
 import model.others.request.*;
@@ -26,9 +27,8 @@ public class Seller extends User {
     public Seller() {
         super();
         sellLogs = new ArrayList<>();
-        allProducts=new ArrayList<>();
-        allOff=new ArrayList<>();
-        //changing database
+        allProducts = new ArrayList<>();
+        allOff = new ArrayList<>();
     }
 
 
@@ -37,11 +37,9 @@ public class Seller extends User {
         this.companyInfo = userInfo.get("company-info");
         this.companyName = userInfo.get("company-name");
         sellLogs = new ArrayList<>();
-        allProducts=new ArrayList<>();
-        allOff=new ArrayList<>();
-        //changing database
+        allProducts = new ArrayList<>();
+        allOff = new ArrayList<>();
     }
-
 
     @Override
     public void deleteUser() {
@@ -52,9 +50,8 @@ public class Seller extends User {
         for (Off off : allOff) {
             off.removeOff();
         }
-        //changing database
+        this.removeFromDatabase();
     }
-
 
     public ArrayList<LogInfo> getAllSellLogsInfo(String sortField, String sortDirection) {
         ArrayList<Log> sellLogs = Sort.sortLogs(sortField, sortDirection, this.sellLogs);
@@ -66,7 +63,6 @@ public class Seller extends User {
         return sellInfo;
     }
 
-
     public Off getOffById(String id) {
         for (Off off : allOff) {
             if (id.equals(off.getOffId()))
@@ -74,7 +70,6 @@ public class Seller extends User {
         }
         return null;
     }
-
 
     public Product getProductById(String id) {
         for (Product product : this.allProducts) {
@@ -85,11 +80,9 @@ public class Seller extends User {
         return null;
     }
 
-
     public void increaseMoney(double money) {
         this.money += money;
     }
-
 
     public boolean hasProduct(String id) {
         for (Product product : this.allProducts) {
@@ -100,11 +93,9 @@ public class Seller extends User {
         return false;
     }
 
-
     public boolean hasProduct(Product product) {
         return allProducts.contains(product);
     }
-
 
     public ArrayList<ProductInfo> getAllProductInfo(String sortField, String sortDirection) {
         ArrayList<Product> products = Sort.sortProduct(sortField, sortDirection, this.allProducts);
@@ -116,17 +107,15 @@ public class Seller extends User {
         return productsInfo;
     }
 
-
     public ArrayList<OffInfo> getAllOffsInfo(String sortField, String sortDirection) {
         ArrayList<Off> offs = Sort.sortOffs(sortField, sortDirection, this.allOff);
         ArrayList<OffInfo> offsInfo = new ArrayList<>();
         assert offs != null;
         for (Off off : offs) {
-            offsInfo.add(off.discountInfoForSending());
+            offsInfo.add(off.offInfo());
         }
         return offsInfo;
     }
-
 
     public boolean sellerHasThisOff(String offId) {
         for (Off off : this.allOff) {
@@ -137,21 +126,18 @@ public class Seller extends User {
         return false;
     }
 
-
     public OffInfo getOffInfo(String offId) {
         for (Off off : this.allOff) {
             if (off.getOffId().equals(offId)) {
-                return off.discountInfoForSending();
+                return off.offInfo();
             }
         }
         return null;
     }
 
-
     public void editProduct(String type, String field, Object newValue, Product product) {
         //this function will create a new request for this seller to editing product with data given to this function
         Request request = new Request();
-        request.setApplyDate(Date.getCurrentDate());
         request.setRequestSender(this);
         request.setType("edit-product " + type);
         request.setRequestSender(this);
@@ -161,7 +147,7 @@ public class Seller extends User {
         if (newValue instanceof HashMap) {
             HashMap<String, String> specialProperties = (HashMap<String, String>) newValue;
             editProductRequest.setNewValueHashMap(specialProperties);
-        } else if(newValue instanceof String)
+        } else if (newValue instanceof String)
             editProductRequest.setNewValue((String) newValue);
 
         editProductRequest.setField(field);
@@ -169,6 +155,9 @@ public class Seller extends User {
         editProductRequest.setSeller(this.getUsername());
 
         request.setMainRequest(editProductRequest);
+        request.addToDatabase();
+
+        product.setStatus("IN_EDITING_QUEUE");
     }
 
     public void addProduct(Product product) {
@@ -178,7 +167,6 @@ public class Seller extends User {
     public void addProduct(HashMap<String, String> productInfo, HashMap<String, String> specialProperties) {
         //this function will create a request to adding product to intended seller
         Request request = new Request();
-        request.setApplyDate(Date.getCurrentDate());
         request.setRequestSender(this);
         request.setType("add-product");
 
@@ -194,8 +182,8 @@ public class Seller extends User {
         addProductRequest.setSpecialProperties(specialProperties);
 
         request.setMainRequest(addProductRequest);
+        request.addToDatabase();
     }
-
 
     public void editOff(Off off, String field, Object newValue, String type) {
         //this function will create a request to edit intended off
@@ -209,12 +197,14 @@ public class Seller extends User {
             return;
 
         Request request = new Request();
-        request.setApplyDate(Date.getCurrentDate());
         request.setRequestSender(this);
         request.setType("edit-off " + type);
         editOffRequest.setOffId(off.getOffId());
 
         request.setMainRequest(editOffRequest);
+        request.addToDatabase();
+
+        off.setOffStatus("IN_EDITING_QUEUE");
     }
 
     public void addOff(Off off) {
@@ -225,53 +215,77 @@ public class Seller extends User {
         //this function will create a request to adding a new off
         Request request = new Request();
         AddOffRequest addOffRequest = new AddOffRequest();
-        request.setApplyDate(Date.getCurrentDate());
         request.setRequestSender(this);
         request.setType("add-off");
         request.setMainRequest(addOffRequest);
-        addOffRequest.setFinishTime(Date.getDateWithString(offInfo.get("finish-time")));
-        addOffRequest.setStartTime(Date.getDateWithString(offInfo.get("start-time")));
+        addOffRequest.setFinishTime(Controller.getDateWithString(offInfo.get("finish-time")));
+        addOffRequest.setStartTime(Controller.getDateWithString(offInfo.get("start-time")));
         addOffRequest.setPercent(Integer.parseInt(offInfo.get("percent")));
         addOffRequest.setProductsId(productsId);
         addOffRequest.setSellerUsername(this.getUsername());
-    }
 
+        request.addToDatabase();
+    }
 
     public ArrayList<UserInfo> getBuyers(Product product) {
         ArrayList<UserInfo> buyers = new ArrayList<>();
         for (Log sellLog : this.sellLogs) {
-            if (sellLog.isThereProductInLog(product)) {
+            if (sellLog.isThereProductInLog(product.getId())) {
                 buyers.add(sellLog.getCustomer());
             }
         }
         return buyers;
     }
 
-
-    private void addSellLog(Log sellLog) {
+    public void addSellLog(Log sellLog) {
         this.sellLogs.add(sellLog);
     }
-
 
     @Override
     public UserInfo userInfoForSending() {
         UserInfo user = new UserInfo();
+        userInfoSetter(user);
         user.setCompanyInfo(this.companyInfo);
         user.setCompanyName(this.companyName);
-        user.setEmail(this.getEmail());
-        user.setFirstName(this.getFirstName());
-        user.setLastName(this.getLastName());
         user.setMoney(this.money);
-        user.setPhoneNumber(this.getPhoneNumber());
-        user.setUsername(this.getUsername());
         return user;
     }
 
+    @Override
+    public UserData updateDatabase() {
+        UserData user = new UserData("seller");
+        super.updateDatabase(user);
+        user.setCompanyName(this.companyName);
+        user.setCompanyInfo(this.companyInfo);
+        user.setMoney(this.money);
+        addOffsToDatabase(user);
+        addLogToDatabase(user);
+        addProductsToDatabase(user);
+        return user;
+    }
+
+    private void addProductsToDatabase(UserData user) {
+        for (Product product : allProducts) {
+            user.addProduct(product.getId());
+        }
+    }
+
+    private void addLogToDatabase(UserData user) {
+        for (Log sellLog : sellLogs) {
+            user.addLog(sellLog.getLogId());
+        }
+    }
+
+    private void addOffsToDatabase(UserData user) {
+        for (Off off : allOff) {
+            user.addOff(off.getOffId());
+        }
+    }
 
     public void removeProduct(Product product) {
         this.allProducts.remove(product);
+        this.updateDatabase().update();
     }
-
 
     public String getCompanyName() {
         return companyName;
@@ -295,5 +309,9 @@ public class Seller extends User {
 
     public double getMoney() {
         return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
     }
 }

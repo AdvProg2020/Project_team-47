@@ -1,12 +1,13 @@
 package model.others.request;
 
 import controller.Controller;
-import model.others.Date;
+import database.Database;
 import model.others.Sort;
 import model.send.receive.RequestInfo;
 import model.user.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Request {
     private static ArrayList<Request> allNewRequests;
@@ -24,6 +25,7 @@ public class Request {
     private String status;
 
     public Request() {
+        applyDate = Controller.getCurrentTime();
         allNewRequests.add(this);
         this.requestId = requestIdCreator();
     }
@@ -67,17 +69,28 @@ public class Request {
         Request request = getRequestById(id);
         assert request != null;
         request.mainRequest.accept(request.type);
+        allNewRequests.remove(request);
+        request.removeFromDatabase();
     }
 
     public static void declineNewRequest(String id) {
         Request request = getRequestById(id);
+        request.mainRequest.decline();
         allNewRequests.remove(request);
+        request.removeFromDatabase();
     }
-
 
     public static boolean canDoRequest(String id) {
         Request request = getRequestById(id);
         return request.mainRequest.update(request.type);
+    }
+
+    public static void setAllNewRequests(ArrayList<Request> allNewRequests) {
+        Request.allNewRequests = allNewRequests;
+    }
+
+    public void addToDatabase() {
+        Database.addRequestToDatabase(this, requestId);
     }
 
     public RequestInfo getRequestInfo() {
@@ -107,6 +120,10 @@ public class Request {
         this.requestSenderUserName = requestSender.getUsername();
     }
 
+    public void setRequestSender(String requestSenderUserName) {
+        this.requestSenderUserName = requestSenderUserName;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
@@ -115,11 +132,11 @@ public class Request {
         return applyDate;
     }
 
-    public void setApplyDate(Date applyDate) {
-        this.applyDate = applyDate;
-    }
-
     public void setMainRequest(MainRequest mainRequest) {
         this.mainRequest = mainRequest;
+    }
+
+    public void removeFromDatabase() {
+        Database.removeRequest(this.requestId);
     }
 }
