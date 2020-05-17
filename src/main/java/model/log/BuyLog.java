@@ -1,81 +1,129 @@
 package model.log;
 
 
+import database.Database;
 import model.others.Product;
 import model.send.receive.LogInfo;
 import model.send.receive.ProductInfo;
 import model.send.receive.UserInfo;
 import model.user.Seller;
+import model.user.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BuyLog extends Log {
     private String address;
     private String postalCode;
     private String phoneNumber;
     private String customerRequests;
-    private ArrayList<ProductsInLog> products;
+    private ArrayList<ProductInLog> products;
+    private double appliedDiscount;
 
 
     public BuyLog() {
         super();
         products = new ArrayList<>();
+        this.purchaseStatus = "IN_SENDING_QUEUE";
     }
 
     @Override
-    public String toString() {
-        return "BuyLog{}";
-    }//
+    public void updateDatabase() {
+        Database.addBuyLog(this, this.logId);
+    }
 
     @Override
     public LogInfo getLogInfoForSending() {
-        return null;
-    }//
+        LogInfo logInfo = new LogInfo(logId, logDate, "buy log");
+        logInfo.setAddress(address);
+        logInfo.setAppliedDiscount(appliedDiscount);
+        logInfo.setCustomerRequest(customerRequests);
+        logInfo.setPhoneNumber(phoneNumber);
+        logInfo.setPostalCode(postalCode);
+        logInfo.setPrice(price);
+        logInfo.setCustomer(customer.getUsername());
+        logInfo.setStatus(purchaseStatus);
+        for (ProductInLog productInLog : this.products) {
+            logInfo.addProduct(productInLog.seller, productInLog.product, productInLog.number);
+        }
+        return logInfo;
+    }
 
-    public String getAddress() {
-        return address;
+    @Override
+    public boolean isThereProductInLog(String productId) {
+        for (ProductInLog productInLog : this.products) {
+            if (productInLog.product.getId().equalsIgnoreCase(productId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public String getPostalCode() {
-        return postalCode;
-    }
-
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getCustomerRequests() {
-        return customerRequests;
-    }
-
     public void setCustomerRequests(String customerRequests) {
         this.customerRequests = customerRequests;
     }
 
-    public void addProduct(Seller seller, Product product, int number) {
+    public void setAppliedDiscount(double appliedDiscount) {
+        this.appliedDiscount = appliedDiscount;
+    }
 
+    public void addProduct(Seller seller, Product product, int number) {
+        ProductInLog productInLog = new ProductInLog();
+        productInLog.product = product.getProductInfo();
+        productInLog.seller = seller.userInfoForSending();
+        productInLog.number = number;
+        this.products.add(productInLog);
     }
 
     public void createSellLog() {
+        HashMap<String, SellLog> sellerBuyLogHashMap = new HashMap<>();
+        for (ProductInLog productInLog : this.products) {
+            String username = productInLog.seller.getUsername();
+            SellLog sellLog;
+            if (sellerBuyLogHashMap.containsKey(username)) {
+                sellLog = sellerBuyLogHashMap.get(username);
+                sellLog.addProduct(productInLog.product);
+            } else {
+                sellLog = new SellLog(productInLog.seller);
+                sellLog.customer = this.customer;
+                sellLog.addProduct(productInLog.product);
+                sellLog.purchaseStatus = this.purchaseStatus;
+                sellerBuyLogHashMap.put(username, sellLog);
+            }
+        }
 
+        updateSellersLog(sellerBuyLogHashMap);
+    }
+
+    private void updateSellersLog(HashMap<String, SellLog> sellerBuyLogHashMap) {
+        for (Map.Entry<String, SellLog> entry : sellerBuyLogHashMap.entrySet()) {
+            User seller = User.getUserByUsername(entry.getKey());
+            if (seller instanceof Seller) {
+                ((Seller) seller).addSellLog(entry.getValue());
+                seller.updateDatabase().update();
+                entry.getValue().updateDatabase();
+            }
+        }
     }
 
 
-    private class ProductsInLog {
+    private static class ProductInLog {
         private ProductInfo product;
         private UserInfo seller;
         private int number;
     }
+
 }

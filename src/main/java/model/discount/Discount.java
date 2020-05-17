@@ -1,44 +1,44 @@
 package model.discount;
 
-import model.others.Date;
-import model.user.Customer;
+import java.util.Date;
 
 abstract public class Discount {
-    protected Date discountStartTime;
-    protected Date discountFinishTime;
-    protected int discountPercent;
+    protected Date startTime;
+    protected Date finishTime;
+    protected int percent;
 
-    public Discount(Date discountStartTime, Date discountFinishTime, int discountPercent) {
-        this.discountStartTime = discountStartTime;
-        this.discountFinishTime = discountFinishTime;
-        this.discountPercent = discountPercent;
+    public Discount(Date startTime, Date finishTime, int percent) {
+        this.startTime = startTime;
+        this.finishTime = finishTime;
+        this.percent = percent;
     }
 
-    public Discount() {}
-
-    public Date getDiscountStartTime() {
-        return discountStartTime;
+    public Discount() {
     }
 
-    public void setDiscountStartTime(Date discountStartTime) {
-        this.discountStartTime = discountStartTime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public Date getDiscountFinishTime() {
-        return discountFinishTime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public void setDiscountFinishTime(Date discountFinishTime) {
-        this.discountFinishTime = discountFinishTime;
+    public Date getFinishTime() {
+        return finishTime;
     }
 
-    public int getDiscountPercent() {
-        return discountPercent;
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
     }
 
-    public void setDiscountPercent(int discountPercent) {
-        this.discountPercent = discountPercent;
+    public int getPercent() {
+        return percent;
     }
 
+    public void setPercent(int percent) {
+        this.percent = percent;
+    }
 
+    public abstract void removeFromDatabase();
 }

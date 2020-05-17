@@ -1,8 +1,8 @@
 package model.discount;
 
-import com.google.gson.Gson;
 import controller.Controller;
-import model.log.BuyLog;
+import database.Database;
+import database.DiscountCodeData;
 import model.others.Sort;
 import model.send.receive.DiscountCodeInfo;
 import model.user.Customer;
@@ -10,56 +10,47 @@ import model.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class DiscountCode extends Discount {
     private static ArrayList<DiscountCode> allDiscountCodes;
+
+    static {
+        allDiscountCodes = new ArrayList<>();
+    }
+
     private String discountCode;
     private int maxUsableTime;
     private int maxDiscountAmount;
     private HashMap<User, Integer> userUsedTimeHashMap;
     private ArrayList<Customer> usersAbleToUse;
-    private BuyLog buyLog;
 
-    static{
-        allDiscountCodes = new ArrayList<>();
-    }
-
-    public DiscountCode() {
+    public DiscountCode(String code, int percent) {
         userUsedTimeHashMap = new HashMap<>();
         usersAbleToUse = new ArrayList<>();
         allDiscountCodes.add(this);
+        this.discountCode = code;
+        this.percent = percent;
+    }
+
+    public DiscountCode(int maxDiscountAmount, int maxUsableTime) {
+        userUsedTimeHashMap = new HashMap<>();
+        usersAbleToUse = new ArrayList<>();
+        allDiscountCodes.add(this);
+        this.maxDiscountAmount = maxDiscountAmount;
+        this.maxUsableTime = maxUsableTime;
         this.discountCode = codeCreator();
-    }
-
-    private String codeCreator() {
-        String id = Controller.idCreator();
-        for (DiscountCode discountCode : allDiscountCodes) {
-            if (id.equals(discountCode.getDiscountCode())){
-                codeCreator();
-            }
-        }
-        return id;
-    }
-
-    public void removeCustomer(Customer customer){
-
     }
 
     public static DiscountCode getDiscountById(String id) {
         return allDiscountCodes.stream().
-                filter(discount -> id.equals(discount.discountCode))
+                filter(discount -> id.equalsIgnoreCase(discount.discountCode))
                 .findAny().orElse(null);
-    }
-
-    public static void removeDiscountCode(String code) {
-        allDiscountCodes.remove(allDiscountCodes.stream().
-                filter(discount -> code.equals(discount.discountCode))
-                .findAny().orElse(null));
     }
 
     public static boolean isThereDiscountWithCode(String code) {
         return allDiscountCodes.stream().anyMatch
-                (discount -> code.equals(discount.discountCode));
+                (discount -> code.equalsIgnoreCase(discount.discountCode));
     }
 
     public static ArrayList<DiscountCodeInfo> getAllDiscountCodeInfo(String field, String direction) {
@@ -67,41 +58,53 @@ public class DiscountCode extends Discount {
         ArrayList<DiscountCodeInfo> discountsInfo = new ArrayList<>();
         assert discountCodes != null;
         for (DiscountCode discountCode : discountCodes) {
-            discountsInfo.add(discountCode.discountInfoForSending());
+            discountsInfo.add(discountCode.discountCodeInfo());
         }
         return discountsInfo;
     }
 
-    public static ArrayList<DiscountCode> getAllDiscountCodes() {
-        return allDiscountCodes;
+
+    public void updateDatabase() {
+        DiscountCodeData codeData = new DiscountCodeData();
+        codeData.setCode(this.discountCode);
+        codeData.setStartTime(this.startTime);
+        codeData.setFinishTime(this.finishTime);
+        codeData.setMaxDiscountAmount(this.maxDiscountAmount);
+        codeData.setMaxUsableTime(this.maxUsableTime);
+        codeData.setPercent(this.percent);
+        this.addUsersToData(codeData);
+        codeData.addToDatabase();
     }
 
-    public static void setAllDiscountCodes(ArrayList<DiscountCode> allDiscountCodes) {
-        DiscountCode.allDiscountCodes = allDiscountCodes;
+    private void addUsersToData(DiscountCodeData codeData) {
+        for (Customer customer : this.usersAbleToUse) {
+            codeData.addUserAbleToUse(customer.getUsername());
+        }
+        for (Map.Entry<User, Integer> entry : userUsedTimeHashMap.entrySet()) {
+            codeData.addUserToHashMap(entry.getKey().getUsername(), entry.getValue());
+        }
+    }
+
+    private String codeCreator() {
+        String code = Controller.idCreator();
+        if (isThereDiscountWithCode(code))
+            return codeCreator();
+        else
+            return code;
+    }
+
+    public void removeCustomer(Customer customer) {
+        usersAbleToUse.remove(customer);
+        userUsedTimeHashMap.remove(customer);
+        this.updateDatabase();
     }
 
     public String getDiscountCode() {
         return discountCode;
     }
 
-    public void setDiscountCode(String discountCode) {
-        this.discountCode = discountCode;
-    }
-
-    public int getMaxDiscountAmount() {
-        return maxDiscountAmount;
-    }
-
     public void setMaxDiscountAmount(int maxDiscountAmount) {
         this.maxDiscountAmount = maxDiscountAmount;
-    }
-
-    public HashMap<User, Integer> getUserUsedTimeHashMap() {
-        return userUsedTimeHashMap;
-    }
-
-    public void setUserUsedTimeHashMap(HashMap<User, Integer> userUsedTimeHashMap) {
-        this.userUsedTimeHashMap = userUsedTimeHashMap;
     }
 
     public void remove() {
@@ -109,49 +112,61 @@ public class DiscountCode extends Discount {
         for (Customer customer : this.usersAbleToUse) {
             customer.removeDiscountCode(this);
         }
+        this.removeFromDatabase();
     }
 
     public double getPriceAfterApply(double price) {
-        return (100 - discountPercent) * price / 100;
+        return (price - appliedDiscount(price));
     }
 
     public void codeUsed(Customer customer) {
-        userUsedTimeHashMap.replace(customer, userUsedTimeHashMap.get(customer) + 1);
+        int usedTime = userUsedTimeHashMap.get(customer);
+        userUsedTimeHashMap.replace(customer, usedTime + 1);
+        this.updateDatabase();
     }
+
     public double appliedDiscount(double price) {
-        return discountPercent * price / 100;
+        double applyWithoutMaxAmount = price * percent / 100;
+        if (applyWithoutMaxAmount > maxDiscountAmount)
+            return maxDiscountAmount;
+        else
+            return applyWithoutMaxAmount;
     }
 
     public boolean canThisPersonUseCode(User user) {
-        return usersAbleToUse.stream().anyMatch(user::equals);
+        int usedTime = userUsedTimeHashMap.get(user);
+        return usedTime < maxUsableTime;
     }
 
-    @Override
-    public String toString() {
-        return "DiscountCode{}";
-    }//
-
-    public void useDiscountCode(User user) {
-        userUsedTimeHashMap.replace(user, userUsedTimeHashMap.get(user) - 1);
-    }
-
-    public DiscountCodeInfo discountInfoForSending() {
-        return null;
-    }//
-
-    public int getMaxUsableTime() {
-        return maxUsableTime;
+    public DiscountCodeInfo discountCodeInfo() {
+        DiscountCodeInfo codeInfo = new DiscountCodeInfo(startTime, finishTime, percent);
+        codeInfo.setCode(this.discountCode);
+        codeInfo.setMaxDiscountAmount(maxDiscountAmount);
+        codeInfo.setMaxUsableTime(maxUsableTime);
+        for (Customer customer : usersAbleToUse) {
+            codeInfo.addUser(customer);
+        }
+        return codeInfo;
     }
 
     public void setMaxUsableTime(int maxUsableTime) {
         this.maxUsableTime = maxUsableTime;
     }
 
-    public ArrayList<Customer> getUsersAbleToUse() {
-        return usersAbleToUse;
-    }
-
     public void setUsersAbleToUse(ArrayList<Customer> usersAbleToUse) {
         this.usersAbleToUse = usersAbleToUse;
+        for (Customer customer : usersAbleToUse) {
+            this.userUsedTimeHashMap.put(customer, 0);
+        }
+    }
+
+    public void addUsers(Customer customer, int usedTime) {
+        this.usersAbleToUse.add(customer);
+        this.userUsedTimeHashMap.put(customer, usedTime);
+    }
+
+    @Override
+    public void removeFromDatabase() {
+        Database.removeCode(this.discountCode);
     }
 }
