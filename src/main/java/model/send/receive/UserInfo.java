@@ -26,6 +26,10 @@ public class UserInfo {
         return firstName;
     }
 
+    public String getType() {
+        return type;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }

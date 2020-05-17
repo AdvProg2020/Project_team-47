@@ -37,12 +37,15 @@ public class ViewPersonalInfoCommand extends Command {
         System.out.println("last name : " + userInfo.getLastName());
         System.out.println("email : " + userInfo.getEmail());
         System.out.println("phone number : " + userInfo.getPhoneNumber());
-        /*if (!userInfo.getType().equals("manager")) {
-            System.out.println(": " + userInfo.getMoney());
-        }*/
-        /*System.out.println(" : " + userInfo.);
-        System.out.println(" : " + userInfo.);
-        System.out.println(" : " + userInfo.);*/
+        if (!userInfo.getType().equals("manager")) {
+            System.out.println("money : " + userInfo.getMoney());
+
+            if (userInfo.getType().equals("seller")) {
+                System.out.println("company name : " + userInfo.getCompanyName());
+                System.out.println("company information : " + userInfo.getCompanyInfo());
+            }
+        }
+
     }
 
     private void sendMessageToViewToController() {
@@ -51,12 +54,3 @@ public class ViewPersonalInfoCommand extends Command {
     }
 
 }
-
-/*username;
-private String firstName;
-private String lastName;
-private String email;
-private String phoneNumber;
-private double money;
-private String companyName;
-private String companyInfo;*/
