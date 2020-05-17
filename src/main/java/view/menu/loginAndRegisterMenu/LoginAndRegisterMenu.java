@@ -23,8 +23,8 @@ public class LoginAndRegisterMenu extends Menu {
         menuCommands.add(new RegisterCommand(this));
         menuCommands.add(new LoginCommand(this));
         menuCommands.add(new LogoutCommand(this));
-        menuCommands.add(new BackCommand(this));
         menuCommands.add(new HelpCommand(this));
+        menuCommands.add(new BackCommand(this));
     }
 
 }

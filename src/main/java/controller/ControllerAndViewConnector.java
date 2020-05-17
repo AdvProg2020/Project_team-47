@@ -6,6 +6,8 @@ import model.send.receive.ClientMessage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static controller.Controller.sendError;
+
 public class ControllerAndViewConnector {
     private static String clientMessage;
     private static String serverAnswer;
@@ -196,10 +198,18 @@ public class ControllerAndViewConnector {
                 CustomerPanelController.cartPrice();
                 break;
             case "purchase cart" :
-                PurchaseController.purchase();
+                if (Controller.getLoggedUser() == null) {
+                    sendErrorIfNotLogin();
+                } else {
+                    PurchaseController.purchase();
+                }
                 break;
             case "view orders" :
-                CustomerPanelController.viewOrders();
+                if (Controller.getLoggedUser() == null) {
+                    sendErrorIfNotLogin();
+                } else {
+                    CustomerPanelController.viewOrders();
+                }
                 break;
             case "show order" :
                 CustomerPanelController.viewOrder(message.getFirstString());
@@ -208,16 +218,25 @@ public class ControllerAndViewConnector {
                 CustomerPanelController.rate(message.getFirstString(), Integer.parseInt(message.getSecondString()));
                 break;
             case "view balance customer" :
-                CustomerPanelController.viewBalance();
+                if (Controller.getLoggedUser() == null) {
+                    sendErrorIfNotLogin();
+                } else {
+                    CustomerPanelController.viewBalance();
+                }
                 break;
             case "view discount codes customer" :
-                CustomerPanelController.viewUserDiscountCode();
+                if (Controller.getLoggedUser() == null) {
+                    sendErrorIfNotLogin();
+                } else {
+                    CustomerPanelController.viewUserDiscountCode();
+                }
                 break;
 
             default:
                 generalCommandProcess(message);
         }
     }
+
     public static void generalCommandProcess(ClientMessage message) {
         String messageContext = message.getMessageContext();
         ArrayList<String> messageArrayListInputs = message.getMessageArrayListInputs();
@@ -233,7 +252,11 @@ public class ControllerAndViewConnector {
                 LoginController.logout();
                 break;
             case "view personal info" :
-                UserPanelController.personalInfo();
+                if (Controller.getLoggedUser() == null) {
+                    sendErrorIfNotLogin();
+                } else {
+                    UserPanelController.personalInfo();
+                }
                 break;
             case "edit personal info" :
                 UserPanelController.edit(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
@@ -290,7 +313,12 @@ public class ControllerAndViewConnector {
                 ProductController.comment();
                 break;
             case "add comment" :
-                ProductController.addComment(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
+                if (Controller.getLoggedUser() == null) {
+                    sendErrorIfNotLogin();
+                } else {
+                    ProductController.addComment(messageArrayListInputs.get(0)
+                            , messageArrayListInputs.get(1));
+                }
                 break;
             case "offs" :
                 OffController.offs();
@@ -324,6 +352,9 @@ public class ControllerAndViewConnector {
         }
     }
 
+    public static void sendErrorIfNotLogin() {
+        sendError("you should be logged in first");
+    }
 
 
 }

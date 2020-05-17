@@ -49,6 +49,7 @@ public abstract class Menu {
 
     public void autoExecute(){
         String inputCommand;
+
         while (true) {
             inputCommand = getInputCommandWithTrim();
             if (!isInputCommandValid(inputCommand)) {
