@@ -24,15 +24,31 @@ public class AllProductController extends Controller {
         sendAnswer(Category.getAllCategoriesInfo(sortFiled, sortDirection), "category");
     }
 
-    public static void viewSubcategory(String mainCategoryName, String sortFiled, String sortDirection) {
+    public static void viewSubcategories(String mainCategoryName, String sortFiled, String sortDirection) {
         MainCategory mainCategory = MainCategory.getMainCategoryByName(mainCategoryName);
         if (mainCategory == null) {
             sendError("There isn't any main category with this name!!");
         } else if (!UserPanelController.checkSort(sortFiled, sortDirection, "category")) {
             sendError("Can't sort with this field and direction!!");
         } else {
-            sendAnswer(mainCategory.getSubcategoriesInfo(sortFiled, sortDirection));
+            sendAnswer(mainCategory.getSubcategoriesInfo(sortFiled, sortDirection), "category");
         }
+    }
+
+    public static void viewCategory(String categoryName) {
+        MainCategory mainCategory = Category.getMainCategoryByName(categoryName);
+        if (mainCategory == null) {
+            sendError("There isn't any main category with this name!!");
+        } else
+            sendAnswer(mainCategory.categoryInfoForSending());
+    }
+
+    public static void viewSubCategory(String subCategoryName) {
+        SubCategory mainCategory = Category.getSubCategoryByName(subCategoryName);
+        if (mainCategory == null) {
+            sendError("There isn't any sub category with this name!!");
+        } else
+            sendAnswer(mainCategory.categoryInfoForSending());
     }
 
     public static void filterBy(String filterType, String filterKey, String firstFilterValue, String secondFilterValue) {

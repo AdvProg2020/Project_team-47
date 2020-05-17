@@ -2,11 +2,11 @@ package controller;
 
 import model.category.Category;
 import model.discount.Off;
-import model.others.Date;
 import model.others.Product;
 import model.user.Seller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -405,23 +405,23 @@ public class SellerPanelController extends UserPanelController {
         int flag = 1;
         if (!(newValue instanceof String)) {
             sendError("Wrong command!!");
-        } else if (!Date.isDateFormatValid((String) newValue)) {
+        } else if (!Controller.isDateFormatValid((String) newValue)) {
             sendError("Wrong format for date!!");
         }
 
-        Date date = Date.getDateWithString((String) newValue);
+        Date date = Controller.getDateWithString((String) newValue);
 
         if (field.equals("start-time") && off.isOffStarted()) {
             sendError("This off started now and you can't change it's starting time!");
-        } else if (field.equals("start-time") && date.before(Date.getCurrentDate())) {
+        } else if (field.equals("start-time") && date.before(Controller.getCurrentTime())) {
             sendError("Can't change start time to this value!!");
         } else if (field.equals("finish-time") && off.isOffFinished()) {
             sendError("This off finished now and you can't change it!!");
-        } else if (field.equals("finish-time") && date.before(Date.getCurrentDate())) {
+        } else if (field.equals("finish-time") && date.before(Controller.getCurrentTime())) {
             sendError("Can't change finish time to this value!!");
-        } else if (field.equals("start-time") && date.after(off.getDiscountFinishTime())) {
+        } else if (field.equals("start-time") && date.after(off.getFinishTime())) {
             sendError("Can't change start time to this value!!");
-        } else if (field.equals("finish-time") && date.before(off.getDiscountStartTime())) {
+        } else if (field.equals("finish-time") && date.before(off.getStartTime())) {
             sendError("Can't change finish time to this value!!");
         } else {
             flag = 0;
@@ -477,17 +477,17 @@ public class SellerPanelController extends UserPanelController {
     private static boolean isOffDatesValid(String start, String finish) {
         //check that if starting and finishing date is valid
 
-        if (!Date.isDateFormatValid(start) ||
-                !Date.isDateFormatValid(finish)) {
+        if (!Controller.isDateFormatValid(start) ||
+                !Controller.isDateFormatValid(finish)) {
 
             sendError("Wrong date format!!");
             return false;
         }
 
 
-        Date startingDate = Date.getDateWithString(start);
-        Date finishingDate = Date.getDateWithString(finish);
-        Date currentDate = Date.getCurrentDate();
+        Date startingDate = Controller.getDateWithString(start);
+        Date finishingDate = Controller.getDateWithString(finish);
+        Date currentDate = Controller.getCurrentTime();
         if (startingDate.before(currentDate) ||
                 finishingDate.before(currentDate) ||
                 !startingDate.before(finishingDate)) {
@@ -500,6 +500,6 @@ public class SellerPanelController extends UserPanelController {
     }
 
     private static boolean sellerHasProduct(Product product) {
-        return (product != null && ((Seller) loggedUser).getAllProducts().contains(product));
+        return (product != null && ((Seller) loggedUser).hasProduct(product));
     }
 }//end SellerPanelController class

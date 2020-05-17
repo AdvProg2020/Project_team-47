@@ -49,7 +49,7 @@ public class LoginController extends Controller {
         for (String key : registerKey) {
             if (!registerInfo.containsKey(key))
                 System.out.println(key);
-                return false;
+            return false;
         }
 
         String[] sellerKey = {"company-info", "company-name"};
@@ -131,7 +131,7 @@ public class LoginController extends Controller {
         }
     }
 
-    public static void newPassword(String username, String code,String newPassword) {
+    public static void newPassword(String username, String code, String newPassword) {
         User user = User.getUserByUsername(username);
         if (user == null) {
             sendError("There isn't any user with this username!!");
@@ -144,6 +144,7 @@ public class LoginController extends Controller {
         } else {
             user.setSendCode("");
             user.setPassword(newPassword);
+            user.updateDatabase().update();
         }
     }
 

@@ -45,6 +45,7 @@ public class UserPanelController extends Controller {
             default:
                 sendError("Your entered wrong filed to edit!!");
         }
+        loggedUser.updateDatabase();
     }
 
     private static void editPhoneNumber(String newPhoneNumber) {
@@ -93,7 +94,7 @@ public class UserPanelController extends Controller {
             case "discount-code":
                 return Pattern.matches("(start-time|finish-time|percent)", sortField);
             case "product":
-                return Pattern.matches("(name|score|seen-time|date|price)", sortField);
+                return Pattern.matches("(name|score|seen-time|price)", sortField);
             case "category":
                 return sortField.equals("name");
         }

@@ -96,6 +96,7 @@ public class ProductController extends Controller {
             sendError("You should be on a product page!!");
         } else {
             product.addComment(title, content, ((Customer) loggedUser));
+            actionCompleted();
         }
     }
 }//end ProductController class

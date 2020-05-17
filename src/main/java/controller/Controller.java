@@ -6,8 +6,13 @@ import model.send.receive.*;
 import model.user.User;
 import view.ViewToController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 abstract public class Controller {
     static User loggedUser;
@@ -162,6 +167,44 @@ abstract public class Controller {
         return String.valueOf(upperCaseAlphabet.charAt(randomNumber.nextInt(upperCaseAlphabet.length()))) +
                 upperCaseAlphabet.charAt(randomNumber.nextInt(upperCaseAlphabet.length())) +
                 randomNumber.nextInt(10000);
+    }
+
+    public static Date getCurrentTime() {
+        return new Date();
+    }
+
+    public static boolean isDateFormatValid(String date) {
+        String regex = "(\\d{1,2})-(\\d{1,2})-(\\d{4}) (\\d{1,2}):(\\d{1,2})";
+        Pattern datePattern = Pattern.compile(regex);
+        Matcher dateMatcher = datePattern.matcher(date);
+        if (!dateMatcher.find())
+            return false;
+        int day = Integer.parseInt(dateMatcher.group(1));
+        int month = Integer.parseInt(dateMatcher.group(2));
+        int year = Integer.parseInt(dateMatcher.group(3));
+        int hour = Integer.parseInt(dateMatcher.group(4));
+        int minute = Integer.parseInt(dateMatcher.group(5));
+        if (day < 1 || day > 31)
+            return false;
+        else if (month < 1 || month > 12)
+            return false;
+        else if (year < 1970 || year > 2500)
+            return false;
+        else if (hour < 0 || hour > 24)
+            return false;
+        else return minute >= 0 && minute <= 60;
+    }
+
+    public static Date getDateWithString(String dateString) {
+        if (!isDateFormatValid(dateString))
+            return null;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        try {
+            Date date = formatter.parse(dateString);
+            return date;
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
     public static Gson getGson() {
