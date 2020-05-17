@@ -261,7 +261,11 @@ public class ControllerAndViewConnector {
                 }
                 break;
             case "forgot password" :
-                LoginController.forgotPassword(message.getFirstString(), message.getSecondString());
+                if (Controller.getLoggedUser() != null) {
+                    sendErrorIfAlreadyLoggedIn();
+                } else {
+                    LoginController.forgotPassword(message.getFirstString(), message.getSecondString());
+                }
                 break;
             case "new password" :
                 LoginController.newPassword(messageArrayListInputs.get(0),
