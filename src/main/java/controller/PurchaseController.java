@@ -2,9 +2,12 @@ package controller;
 
 import model.discount.DiscountCode;
 import model.log.BuyLog;
+import model.others.Email;
 import model.others.ShoppingCart;
 import model.user.Customer;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class PurchaseController extends Controller {
@@ -86,6 +89,8 @@ public class PurchaseController extends Controller {
         if (!customer.canUserBuy(finalPrice)) {
             sendError("You don't have enough money to buy this products!!");
             return;
+        } else if (finalPrice > 1000000) {
+            giveGift(customer,finalPrice);
         }
 
         useDiscountCode(shoppingCart);
@@ -99,6 +104,23 @@ public class PurchaseController extends Controller {
 
         finishingPurchasing();
         actionCompleted();
+    }
+
+    private static void giveGift(Customer customer, double shoppingPrice) {
+        DiscountCode discountCode = new DiscountCode((int) (shoppingPrice / 50), 1);
+        ArrayList<Customer> customerArrayList = new ArrayList<>();
+        customerArrayList.add(customer);
+        discountCode.setUsersAbleToUse(customerArrayList);
+        discountCode.setStartTime(getCurrentTime());
+        discountCode.setFinishTime(new Date(getCurrentTime().getTime()+604800000));
+        discountCode.setPercent(20);
+        customer.addDiscountCode(discountCode);
+        discountCode.updateDatabase();
+        customer.updateDatabase().update();
+
+        Email newEmail = new Email(customer.getEmail());
+        newEmail.setMessage(discountCode.getDiscountCode());
+        newEmail.sendDiscountEmail(20);
     }
 
     private static void finishingPurchasing() {
