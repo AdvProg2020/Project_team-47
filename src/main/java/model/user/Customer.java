@@ -122,6 +122,7 @@ public class Customer extends User {
         UserInfo user = new UserInfo();
         userInfoSetter(user);
         user.setMoney(this.money);
+        user.setType("customer");
         return user;
     }
 

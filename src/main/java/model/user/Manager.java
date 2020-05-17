@@ -42,6 +42,7 @@ public class Manager extends User {
     public UserInfo userInfoForSending() {
         UserInfo user = new UserInfo();
         userInfoSetter(user);
+        user.setType("manager");
         return user;
     }
 
