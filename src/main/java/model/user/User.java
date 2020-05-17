@@ -319,7 +319,7 @@ abstract public class User {
         this.lastName = lastName;
     }
 
-    String getEmail() {
+    public String getEmail() {
         return email;
     }
 
