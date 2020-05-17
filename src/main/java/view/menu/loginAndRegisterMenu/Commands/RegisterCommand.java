@@ -1,5 +1,6 @@
 package view.menu.loginAndRegisterMenu.Commands;
 
+import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
@@ -10,6 +11,7 @@ import view.outputMessages.OutputCommands;
 import view.outputMessages.OutputErrors;
 import view.outputMessages.OutputSystemErrors;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -24,18 +26,16 @@ public class RegisterCommand extends Command {
     @Override
     public void doCommand(String text) {
         String type = Arrays.asList(text.split("\\s")).get(2);
+
         sendMessageToViewToController(text);
-        if (ViewToController.getServerMessage().getType().equals("successful")) {
-            goToUserPanelMenu(type, this);
-        } else {
-            System.out.println(ViewToController.getServerMessage().getFirstString());
-        }
     }
 
     private void sendMessageToViewToController(String text) {
         ViewToController.setViewMessage("register");
+
         String type = Arrays.asList(text.split("\\s")).get(2);
         String username = Arrays.asList(text.split("\\s")).get(3);
+
         register(type, username);
     }
 
@@ -44,6 +44,7 @@ public class RegisterCommand extends Command {
     private void register(String type, String username) {
         OutputCommands.enterPassword();
         String password = Menu.getInputCommandWithTrim();
+
         if (!isPasswordValid(password)) {
             OutputErrors.invalidPassword();
             register(type, username);
@@ -55,15 +56,19 @@ public class RegisterCommand extends Command {
     private void getPersonalInformation(String username, String type, String password) {
         OutputCommands.enterFirstName();
         String firstName = Menu.getInputCommandWithTrim();
+
         OutputCommands.enterLastName();
         String lastName = Menu.getInputCommandWithTrim();
+
         OutputCommands.enterEmail();
         String email = Menu.getInputCommandWithTrim();
+
         OutputCommands.enterPhoneNumber();
         String phoneNumber = Menu.getInputCommandWithTrim();
-        if (isEmailValid()) {
+
+
             HashMap<String, String> viewMessageHashMapInputs = new HashMap<>();
-//            ArrayList<String> viewMessageArrayListInput = new ArrayList<>();
+
             viewMessageHashMapInputs.put("username", username);
             viewMessageHashMapInputs.put("password", password);
             viewMessageHashMapInputs.put("first-name", firstName);
@@ -71,20 +76,54 @@ public class RegisterCommand extends Command {
             viewMessageHashMapInputs.put("email", email);
             viewMessageHashMapInputs.put("phone-number", phoneNumber);
             viewMessageHashMapInputs.put("type", type);
-//            viewMessageArrayListInput.add(type);
+
             ViewToController.setViewMessageFirstHashMapInputs(viewMessageHashMapInputs);
-//            ViewToController.setViewMessageArrayListInputs(viewMessageArrayListInput);
+
             ViewToController.sendMessageToController();
-        }
-        else {
-            OutputErrors.invalidEmail();
-            getPersonalInformation(username, type, password);
+
+            getPersonalInformationAnswer(username, password, type);
+
+    }
+
+    private void getPersonalInformationAnswer(String username, String password, String type) {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("successful")) {
+            emailVerification(username, password, type);
+        } else {
+            System.out.println(serverMessage.getFirstString());
         }
     }
 
-    private boolean isEmailValid() {
-        return true;
+    private void emailVerification(String username, String password, String type) {
+        OutputCommands.enterEmailVerificationCode();
+        String verificationCode = Menu.getInputCommandWithTrim();
+
+        ViewToController.setViewMessage("confirm email");
+
+        ArrayList<String> messageInputs = new ArrayList<>();
+
+        messageInputs.add(username);
+        messageInputs.add(password);
+        messageInputs.add(verificationCode);
+
+        ViewToController.setViewMessageArrayListInputs(messageInputs);
+        ViewToController.sendMessageToController();
+
+        getVerificationAnswer(type);
     }
+
+    private void getVerificationAnswer(String type) {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("successful")) {
+            goToUserPanelMenu(type, this);
+        } else {
+            System.out.println(serverMessage.getFirstString());
+        }
+
+    }
+
 
     private boolean isPasswordValid(String password) {
         return Pattern.compile("^[^\\s]+$").matcher(password).find();

@@ -140,4 +140,12 @@ public class OutputCommands {
     public static void enterSellerUsername() {
         System.out.println("enter seller username");
     }
+
+    public static void enterPasswordOrForgot() {
+        System.out.println("enter password or type \"forgot\" if you forgot your password");
+    }
+
+    public static void enterEmailVerificationCode() {
+        System.out.println("enter email verification code");
+    }
 }

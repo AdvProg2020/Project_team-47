@@ -245,6 +245,10 @@ public class ControllerAndViewConnector {
             case "register" :
                 LoginController.register(messageHashMapInputs);
                 break;
+            case "confirm email" :
+                LoginController.confirmEmail(messageArrayListInputs.get(0),
+                        messageArrayListInputs.get(1), messageArrayListInputs.get(2));
+                break;
             case "login" :
                 LoginController.login(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
                 break;

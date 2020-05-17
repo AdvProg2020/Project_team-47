@@ -20,22 +20,36 @@ public class LoginCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        OutputCommands.enterPassword();
+        OutputCommands.enterPasswordOrForgot();
         String password = Menu.getInputCommandWithTrim();
-        sendMessageToViewToController(text, password);
-        if (ViewToController.getServerMessage().getType().equals("successful")) {
-            RegisterCommand.goToUserPanelMenu(ViewToController.getServerMessage().getFirstString(), this);
-        } else {
-            System.out.println(ViewToController.getServerMessage().getFirstString());
+        if (password.equals("forgot")) {
+            forgotPassword();
         }
+        else {
+            sendMessageToViewToController(text, password);
+
+            if (ViewToController.getServerMessage().getType().equals("successful")) {
+                RegisterCommand.goToUserPanelMenu(ViewToController.getServerMessage().getFirstString(), this);
+            } else {
+                System.out.println(ViewToController.getServerMessage().getFirstString());
+            }
+        }
+
+    }
+
+    private void forgotPassword() {
+        //todo
     }
 
 
     private void sendMessageToViewToController(String text, String password) {
         ViewToController.setViewMessage("login");
+
         ArrayList<String> messageInputs = new ArrayList<>();
+
         messageInputs.add(Arrays.asList(text.split("\\s")).get(1));
         messageInputs.add(password);
+
         ViewToController.setViewMessageArrayListInputs(messageInputs);
         ViewToController.sendMessageToController();
     }
