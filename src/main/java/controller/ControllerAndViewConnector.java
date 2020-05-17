@@ -357,7 +357,7 @@ public class ControllerAndViewConnector {
     }
 
     public static void sendErrorIfNotLogin() {
-        sendError("you should be logged in first");
+        sendError("you should log in first");
     }
 
 
