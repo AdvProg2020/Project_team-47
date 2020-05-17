@@ -32,11 +32,15 @@ public class PurchaseCart extends Command {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
         if (serverMessage.getType().equals("Successful")) {
-            //unsure
+            ((ReceiverInformationMenu) (this.menu.findSubMenuWithName("receiver information menu"))).manualExecute();
         } else {
             System.out.println(serverMessage.getFirstString());
-            OutputComments.goingToLoginMenu();
-            this.getMenu().findSubMenuWithName("login/register menu").autoExecute();
+            if (serverMessage.getFirstString().equals("you should log in first")) {
+                OutputComments.goingToLoginMenu();
+                this.getMenu().findSubMenuWithName("login/register menu").autoExecute();
+            } else {
+                //unsure
+            }
         }
     }
 }

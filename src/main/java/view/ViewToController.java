@@ -17,12 +17,22 @@ public class ViewToController {
     private static HashMap<String, String> viewMessageSecondHashMapInputs;
     private static String firstString;
     private static String secondString;
+    private static Object viewMessageObject;
 
     static {
         viewMessageArrayListInputs = new ArrayList<>();
         serverMessage = new ServerMessage();
         viewMessageFirstHashMapInputs = new HashMap<>();
         viewMessageSecondHashMapInputs = new HashMap<>();
+        viewMessageObject = new Object();
+    }
+
+    public static Object getViewMessageObject() {
+        return viewMessageObject;
+    }
+
+    public static void setViewMessageObject(Object viewMessageObject) {
+        ViewToController.viewMessageObject = viewMessageObject;
     }
 
     public static ArrayList<String> getViewMessageArrayListInputs() {
@@ -107,6 +117,7 @@ public class ViewToController {
         clientMessage.setMessageFirstHashMapInputs(viewMessageFirstHashMapInputs);
 
         clientMessage.setMessageSecondHashMapInputs(viewMessageSecondHashMapInputs);
+        clientMessage.setObject(viewMessageObject);
 
         ControllerAndViewConnector.setClientMessage((new Gson()).toJson(clientMessage));
         ControllerAndViewConnector.commandProcess();

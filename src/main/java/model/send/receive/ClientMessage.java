@@ -10,9 +10,18 @@ public class ClientMessage extends Message {
     private HashMap<String, String> messageSecondHashMapInputs;
     private String firstString;
     private String secondString;
+    private Object object;
 
     public ClientMessage() {
 
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
     }
 
     public HashMap<String, String> getMessageSecondHashMapInputs() {

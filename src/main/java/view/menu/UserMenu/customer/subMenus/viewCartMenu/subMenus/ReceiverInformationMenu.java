@@ -7,7 +7,7 @@ import view.outputMessages.OutputErrors;
 import java.util.regex.Pattern;
 
 public class ReceiverInformationMenu extends Menu {
-    public ReceiverInformationMenu(String name, Menu previousMenu) {
+    public ReceiverInformationMenu(Menu previousMenu) {
         super(previousMenu);
         setName("receiver information menu");
     }
@@ -25,23 +25,9 @@ public class ReceiverInformationMenu extends Menu {
     public void manualExecute(){
         getReceiverAddress();
         getReceiverPhoneNumber();
-        getReceiverEmail();
         new DiscountCodeInPurchasingCartMenu("discount code", this).manualExecute();
     }
 
-    private void getReceiverEmail() {
-        OutputCommands.enterEmail();
-        String email = Menu.getInputCommandWithTrim();
-        if (!isEmailValid(email)){
-            OutputErrors.invalidEmail();
-            getReceiverEmail();
-        } else {
-            sendEmailToController(email);
-        }
-    }
-
-    private void sendEmailToController(String email) {
-    }
 
     private boolean isEmailValid(String email) {
         return Pattern.compile("^[^\\s]+@[^\\s]+\\.[^\\s]+$").matcher(email).find();

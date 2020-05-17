@@ -146,8 +146,8 @@ public class ControllerAndViewConnector {
                 SellerPanelController.viewBuyers(messageArrayListInputs.get(0));
                 break;
             case "edit product" :
-                //todo
-                //SellerPanelController.editProduct();
+                SellerPanelController.editProduct(messageArrayListInputs.get(0),
+                        messageArrayListInputs.get(1), message.getObject(), messageArrayListInputs.get(2));
                 break;
             case "add product" :
                 SellerPanelController.addProduct(message.getMessageFirstHashMapInputs(),
@@ -163,8 +163,8 @@ public class ControllerAndViewConnector {
                 SellerPanelController.showOff(message.getFirstString());
                 break;
             case "edit off" :
-                //todo
-                //SellerPanelController.editOff();
+                SellerPanelController.editOff(messageArrayListInputs.get(0),
+                        messageArrayListInputs.get(1), message.getObject(), messageArrayListInputs.get(2));
                 break;
             case "add off" :
                 SellerPanelController.addOff(messageHashMapInputs, messageArrayListInputs);
