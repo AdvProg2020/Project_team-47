@@ -42,7 +42,7 @@ public class ViewOffsCommand extends Command {
 
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             showOffsInfo(serverMessage.getOffInfoArrayList());
             this.getMenu().findSubMenuWithName("view offs menu");
         } else {

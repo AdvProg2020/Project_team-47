@@ -20,7 +20,7 @@ public class DeleteUserCommand extends Command {
         ArrayList<String> messageInputs = new ArrayList<>();
         messageInputs.add(Arrays.asList(text.split("\\s")).get(2));
         ViewToController.sendMessageToController();
-        if (ViewToController.getServerMessage().getType().equals("successful")) {
+        if (ViewToController.getServerMessage().getType().equals("Successful")) {
 
         } else {
 

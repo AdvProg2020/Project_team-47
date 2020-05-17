@@ -28,7 +28,7 @@ public class ViewOrdersCommand extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             showOrders(serverMessage);
             this.getMenu().findSubMenuWithName("orders menu").autoExecute();
         } else {

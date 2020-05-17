@@ -25,7 +25,7 @@ public class ManageProductsCommandsSeller extends Command {
 
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             showSellerProducts();
             this.getMenu().findSubMenuWithName("seller products menu").autoExecute();
         } else{

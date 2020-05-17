@@ -33,7 +33,7 @@ public class ShowOrderCommand extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             showOrder(serverMessage);
         } else {
             System.out.println(serverMessage.getFirstString());

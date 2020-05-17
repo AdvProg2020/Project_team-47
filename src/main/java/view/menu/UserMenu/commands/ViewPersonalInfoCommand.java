@@ -19,7 +19,7 @@ public class ViewPersonalInfoCommand extends Command {
     public void doCommand(String text) {
         sendMessageToViewToController();
         ServerMessage serverMessage = ViewToController.getServerMessage();
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             this.getMenu().findSubMenuWithName("product menu").autoExecute();
         } else {
             System.out.println(serverMessage.getFirstString());

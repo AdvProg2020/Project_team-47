@@ -88,7 +88,7 @@ public class RegisterCommand extends Command {
     private void getPersonalInformationAnswer(String username, String password, String type) {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             emailVerification(username, password, type);
         } else {
             System.out.println(serverMessage.getFirstString());
@@ -116,7 +116,7 @@ public class RegisterCommand extends Command {
     private void getVerificationAnswer(String type) {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             goToUserPanelMenu(type, this);
         } else {
             System.out.println(serverMessage.getFirstString());

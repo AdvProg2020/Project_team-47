@@ -19,7 +19,7 @@ public class ShowProductInOffCommand extends Command {
     public void doCommand(String text) {
         sendMessageToViewToController(text);
         ServerMessage serverMessage = ViewToController.getServerMessage();
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             this.getMenu().findSubMenuWithName("product menu").autoExecute();
         }
     }

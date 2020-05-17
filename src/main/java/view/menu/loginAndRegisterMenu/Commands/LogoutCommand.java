@@ -18,7 +18,7 @@ public class LogoutCommand extends Command {
     @Override
     public void doCommand(String text) {
         sendMessageToViewToController();
-        if (ViewToController.getServerMessage().getType().equals("successful")) {
+        if (ViewToController.getServerMessage().getType().equals("Successful")) {
             new CustomerPanelMenu(this.menu).autoExecute();
         } else {
             System.out.println(ViewToController.getServerMessage().getFirstString());

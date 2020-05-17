@@ -27,7 +27,7 @@ public class ShowTotalPriceOfCart extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             OutputComments.totalPrice();
             System.out.println(serverMessage.getNumber());
         } else {

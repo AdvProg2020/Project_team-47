@@ -16,7 +16,7 @@ public class GoToOffsMenuCommand extends Command {
     @Override
     public void doCommand(String text) {
         sendMessageToViewToController();
-        if (ViewToController.getServerMessage().getType().equals("successful")) {
+        if (ViewToController.getServerMessage().getType().equals("Successful")) {
             this.menu.findSubMenuWithName("all offs menu").autoExecute();
         } else {
             System.out.println(ViewToController.getServerMessage().getFirstString());

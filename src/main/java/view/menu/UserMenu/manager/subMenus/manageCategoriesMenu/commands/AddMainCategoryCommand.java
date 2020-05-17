@@ -41,7 +41,7 @@ public class AddMainCategoryCommand extends Command {
 
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
 
         } else {
             System.out.println(serverMessage.getFirstString());

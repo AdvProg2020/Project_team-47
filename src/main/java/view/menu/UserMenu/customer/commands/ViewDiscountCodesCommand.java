@@ -29,7 +29,7 @@ public class ViewDiscountCodesCommand extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             showDiscountCodes(serverMessage);
         } else {
             System.out.println(serverMessage.getFirstString());

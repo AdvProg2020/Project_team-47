@@ -32,7 +32,7 @@ public class RequestDetailsCommand extends Command {
 
     private void getAnswerFromController() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             printRequestInfo();
         } else {
             System.out.println(serverMessage.getFirstString());

@@ -22,7 +22,7 @@ public class CreateManagerProfileCommand extends Command {
         getInformation();
 
         ViewToController.sendMessageToController();
-        if (ViewToController.getServerMessage().getType().equals("successful")) {
+        if (ViewToController.getServerMessage().getType().equals("Successful")) {
 
         } else {
 

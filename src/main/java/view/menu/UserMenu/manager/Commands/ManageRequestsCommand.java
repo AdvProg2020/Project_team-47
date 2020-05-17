@@ -52,7 +52,7 @@ public class ManageRequestsCommand extends Command {
     private void getControllerAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             goToRequestsMenu();
         } else {
             System.out.println(serverMessage.getFirstString());

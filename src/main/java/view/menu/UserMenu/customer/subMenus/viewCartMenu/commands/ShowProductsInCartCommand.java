@@ -29,7 +29,7 @@ public class ShowProductsInCartCommand extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             CartInfo cartInfo = serverMessage.getCartInfo();
             showCartInfo(cartInfo);
         } else {

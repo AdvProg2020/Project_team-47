@@ -33,7 +33,7 @@ public class ViewOffCommandSeller extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             showOffInfo(serverMessage.getOffInfo());
         } else {
             System.out.println(serverMessage.getFirstString());

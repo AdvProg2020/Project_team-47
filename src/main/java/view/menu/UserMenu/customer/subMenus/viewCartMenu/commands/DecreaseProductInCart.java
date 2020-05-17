@@ -39,7 +39,7 @@ public class DecreaseProductInCart extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             //todo
         } else {
             System.out.println(serverMessage.getSecondString());

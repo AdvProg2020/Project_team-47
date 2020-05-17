@@ -31,7 +31,7 @@ public class LoginCommand extends Command {
         else {
             sendMessageToViewToController(text, password);
 
-            if (ViewToController.getServerMessage().getType().equals("successful")) {
+            if (ViewToController.getServerMessage().getType().equals("Successful")) {
                 RegisterCommand.goToUserPanelMenu(ViewToController.getServerMessage().getFirstString(), this);
             } else {
                 System.out.println(ViewToController.getServerMessage().getFirstString());
@@ -43,7 +43,7 @@ public class LoginCommand extends Command {
     private void getNewPasswordAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             //todo
         } else {
             System.out.println(serverMessage.getFirstString());

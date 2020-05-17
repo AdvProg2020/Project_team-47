@@ -25,7 +25,7 @@ public class ViewCompanyInformationCommand extends Command {
 
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             showCompanyInformation(serverMessage);
         } else {
             System.out.println(serverMessage.getFirstString());

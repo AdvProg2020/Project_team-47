@@ -16,7 +16,7 @@ public class GoToProductsMenuCommand extends Command {
     @Override
     public void doCommand(String text) {
         sendMessageToViewToController();
-        if (ViewToController.getServerMessage().getType().equals("successful")) {
+        if (ViewToController.getServerMessage().getType().equals("Successful")) {
             this.menu.findSubMenuWithName("all products").autoExecute();
         }
     }

@@ -152,7 +152,7 @@ abstract public class Controller {
 
     static void actionCompleted() {
         ServerMessage serverMessage = new ServerMessage();
-        serverMessage.setType("successful");
+        serverMessage.setType("Successful");
         send(gson.toJson(serverMessage));
     }
 

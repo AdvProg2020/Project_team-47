@@ -24,7 +24,7 @@ public class RemoveProductCommand extends Command {
 
     private void getMessageFromViewToController() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
 
         } else {
 

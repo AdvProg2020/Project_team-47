@@ -28,7 +28,7 @@ public class ViewBalanceCommandSeller extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             OutputComments.yourBalance();
             System.out.println(serverMessage.getNumber());
         } else {

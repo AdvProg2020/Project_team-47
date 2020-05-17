@@ -23,7 +23,7 @@ public class ManageCategoriesCommand extends Command {
 
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
-        if (serverMessage.getType().equals("successful")) {
+        if (serverMessage.getType().equals("Successful")) {
             showCategories();
             this.getMenu().findSubMenuWithName("manage categories menu").autoExecute();
         } else {
