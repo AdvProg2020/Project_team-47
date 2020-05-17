@@ -1,89 +1,112 @@
 package model.category;
 
+import controller.Controller;
+import database.CategoryData;
+import database.Database;
 import model.others.Product;
+import model.others.Sort;
 import model.send.receive.CategoryInfo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 abstract public class Category {
-    protected static ArrayList<Category> allMainCategories;
-    protected static ArrayList<Category> allSubCategories;
+    static ArrayList<MainCategory> allMainCategories;
+    static ArrayList<SubCategory> allSubCategories;
+
+    static {
+        allMainCategories = new ArrayList<>();
+        allSubCategories = new ArrayList<>();
+    }
+
     protected String name;
     protected ArrayList<String> specialProperties;
     protected ArrayList<Product> allProducts;
+    private String id;
 
-    static{
-        allMainCategories = new ArrayList<>();
-        allSubCategories=new ArrayList<>();
-    }
     public Category() {
         allProducts = new ArrayList<>();
         specialProperties = new ArrayList<>();
+        this.id = idCreator();
     }
 
-    public static ArrayList<CategoryInfo> getAllCategoriesInfo() {
-        return null;
+    private static String idCreator() {
+        String id = Controller.idCreator();
+        if (isThereCategoryWithId(id)) {
+            return idCreator();
+        } else
+            return id;
     }
 
-    public static ArrayList<CategoryInfo> getAllCategoriesInfo(String sortField, String sortDirection) {
-        return null;
-    }
-
-    public static void removeMainCategory(String categoryName) {
-        Iterator<MainCategory> iterator = Category.allMainCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equalsIgnoreCase(categoryName)) {
-                iterator.remove();
-                break;
+    private static boolean isThereCategoryWithId(String id) {
+        for (Category mainCategory : allMainCategories) {
+            if (mainCategory.id.equals(id)) {
+                return true;
             }
         }
-    }
-
-    public static void removeSubCategory(String categoryName) {
-        Iterator<SubCategory> iterator = Category.allSubCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equalsIgnoreCase(categoryName)) {
-                iterator.remove();
-                break;
-            }
-        }
-    }
-
-    public static SubCategory getSubCategoryByName(String name) {
-        Iterator<SubCategory> iterator = SubCategory.allSubCategories.iterator();
-        while (iterator.hasNext()) {
-            SubCategory subCategory = iterator.next();
-            if (subCategory.getName().equalsIgnoreCase(name)) {
-                return subCategory;
-            }
-        }
-        return null;
-    }
-
-    public static MainCategory getMainCategoryByName(String name) {
-        Iterator<MainCategory> iterator = Category.allMainCategories.iterator();
-        while (iterator.hasNext()) {
-            SubCategory mainCategory = iterator.next();
-            if (mainCategory.getName().equalsIgnoreCase(name)) {
-                return mainCategory;
-            }
-        }
-    }
-
-    public static boolean isThereMainCategory(String categoryName) {
-        Iterator<MainCategory> iterator = Category.allMainCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equalsIgnoreCase(categoryName)) {
+        for (Category subCategory : allSubCategories) {
+            if (subCategory.id.equals(id)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean isThereMainCategory(MainCategory mainCategory) {
-        Iterator<MainCategory> iterator = Category.allMainCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().equals(mainCategory)) {
+    public static boolean isThereCategory(String name) {
+        return isThereSubCategory(name) || isThereMainCategory(name);
+    }
+
+    public static ArrayList<CategoryInfo> getAllCategoriesInfo() {
+        ArrayList<CategoryInfo> categoriesInfo = new ArrayList<>();
+        for (MainCategory mainCategory : allMainCategories) {
+            categoriesInfo.add(mainCategory.categoryInfoForSending());
+        }
+        return categoriesInfo;
+    }
+
+    public static ArrayList<CategoryInfo> getAllCategoriesInfo(String sortField, String sortDirection) {
+        ArrayList<CategoryInfo> categoriesInfo = new ArrayList<>();
+        ArrayList<MainCategory> sortedCategories = Sort.sortMainCategories(sortField, sortDirection, allMainCategories);
+        for (MainCategory mainCategory : sortedCategories) {
+            categoriesInfo.add(mainCategory.categoryInfoForSending());
+        }
+        return categoriesInfo;
+    }
+
+    public static void removeMainCategory(String categoryName) {
+        MainCategory mainCategory = getMainCategoryByName(categoryName);
+        if (mainCategory == null)
+            return;
+        mainCategory.remove();
+    }
+
+    public static void removeSubCategory(String categoryName) {
+        SubCategory subCategory = getSubCategoryByName(categoryName);
+        if (subCategory == null)
+            return;
+        subCategory.remove();
+    }
+
+    public static SubCategory getSubCategoryByName(String name) {
+        for (SubCategory subCategory : allSubCategories) {
+            if (subCategory.name.equalsIgnoreCase(name))
+                return subCategory;
+        }
+        return null;
+    }
+
+    public static MainCategory getMainCategoryByName(String name) {
+        for (MainCategory mainCategory : Category.allMainCategories) {
+            if (mainCategory.name.equalsIgnoreCase(name)) {
+                return mainCategory;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isThereMainCategory(String categoryName) {
+        for (MainCategory allMainCategory : Category.allMainCategories) {
+            if (allMainCategory.getName().equalsIgnoreCase(categoryName)) {
                 return true;
             }
         }
@@ -91,24 +114,26 @@ abstract public class Category {
     }
 
     public static boolean isThereSubCategory(String categoryName) {
-        Iterator<SubCategory> iterator = Category.allSubCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equalsIgnoreCase(categoryName)) {
+        for (SubCategory allSubCategory : Category.allSubCategories) {
+            if (allSubCategory.getName().equalsIgnoreCase(categoryName)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean isThereSubCategory(SubCategory subCategory) {
-        Iterator<SubCategory> iterator = Category.allSubCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().equals(subCategory)) {
-                return true;
-            }
+    public abstract void updateDatabase();
+
+    void updateDatabase(CategoryData categoryData) {
+        categoryData.setId(this.id);
+        categoryData.setName(this.name);
+        categoryData.setSpecialProperties(this.specialProperties);
+        for (Product product : allProducts) {
+            categoryData.addProduct(product.getId());
         }
-        return false;
     }
+
+    public abstract void remove();
 
     public abstract CategoryInfo categoryInfoForSending();
 
@@ -118,10 +143,12 @@ abstract public class Category {
 
     public void addProduct(Product product) {
         allProducts.add(product);
+        this.updateDatabase();
     }
 
     public void addSpecialProperties(String properties) {
         specialProperties.add(properties);
+        this.updateDatabase();
     }
 
     public void removeSpecialProperties(String properties) {
@@ -132,6 +159,7 @@ abstract public class Category {
                 break;
             }
         }
+        this.updateDatabase();
     }
 
 
@@ -151,11 +179,12 @@ abstract public class Category {
         this.specialProperties = specialProperties;
     }
 
-    public ArrayList<Product> getAllProducts() {
-        return allProducts;
+
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setAllProducts(ArrayList<Product> allProducts) {
-        this.allProducts = allProducts;
+    public void removeFromDatabase() {
+        Database.removeCategory(this.id);
     }
 }

@@ -1,70 +1,74 @@
 package model.category;
 
+import database.CategoryData;
+import model.others.Product;
+import model.others.Sort;
 import model.send.receive.CategoryInfo;
 
 import java.util.ArrayList;
 
 public class MainCategory extends Category {
-    private ArrayList<Category> subCategories;
+    private ArrayList<SubCategory> subCategories;
 
 
     public MainCategory() {
         super();
-        subCategories=new ArrayList<>();
+        subCategories = new ArrayList<>();
         allMainCategories.add(this);
     }
 
-    public void addSubCategory(SubCategory subCategory){
+    @Override
+    public void updateDatabase() {
+        CategoryData categoryData = new CategoryData("main-category");
+        super.updateDatabase(categoryData);
+        for (Category subCategory : this.subCategories) {
+            categoryData.addSubCategory(subCategory.getName());
+        }
+        categoryData.addToDatabase();
+    }
+
+    @Override
+    public void remove() {
+        for (Product product : this.allProducts) {
+            Product.removeProduct(product);
+        }
+        for (SubCategory subCategory : subCategories) {
+            subCategory.removeFromDatabase();
+        }
+        Category.allSubCategories.removeAll(this.subCategories);
+        this.removeFromDatabase();
+    }
+
+    public void addSubCategory(SubCategory subCategory) {
         subCategories.add(subCategory);
+        this.updateDatabase();
     }
 
     @Override
     public CategoryInfo categoryInfoForSending() {
-        return null;
-    }
-
-
-    public CategoryInfo getSubcategoriesInfo(String sortField, String sortDirection) {
-        return null;
-    }
-
-    public boolean isThereSubCategories(String name) {
-        Iterator<SubCategory> iterator = Category.subCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equalsIgnoreCase(name)) {
-                return true;
-            }
+        CategoryInfo categoryInfo = new CategoryInfo(this.name, this.specialProperties);
+        for (Product product : this.allProducts) {
+            categoryInfo.addProduct(product);
         }
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return "MainCategory{}";
-    }
-
-    public SubCategory getSubCategory(String name) {
-        Iterator<SubCategory> iterator = SubCategory.subCategories.iterator();
-        while (iterator.hasNext()) {
-            SubCategory subCategory = iterator.next();
-            if (subCategory.getName().equalsIgnoreCase(name)) {
-                return subCategory;
-            }
+        ArrayList<String> subCategories = new ArrayList<>();
+        for (SubCategory subCategory : this.subCategories) {
+            subCategories.add(subCategory.name);
         }
-        return null;
+        categoryInfo.setSubCategories(subCategories);
+        return categoryInfo;
     }
 
-    public boolean isThereSubCategory(Category subCategory) {
-        Iterator<SubCategory> iterator = SubCategory.subCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equalsIgnoreCase(name)) {
-                return true;
-            }
+
+    public ArrayList<CategoryInfo> getSubcategoriesInfo(String sortField, String sortDirection) {
+        ArrayList<CategoryInfo> subcategoriesInfo = new ArrayList<>();
+        ArrayList<SubCategory> subCategories = Sort.sortSubCategories(sortField, sortDirection, this.subCategories);
+        for (SubCategory subCategory : subCategories) {
+            subcategoriesInfo.add(subCategory.categoryInfoForSending());
         }
-        return false;
+        return subcategoriesInfo;
     }
 
-    public ArrayList<Category> getSubCategories() {
+    public ArrayList<SubCategory> getSubCategories() {
         return subCategories;
     }
 }
