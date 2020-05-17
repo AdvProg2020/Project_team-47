@@ -1,11 +1,10 @@
-package view.menu.productMenu.subMenus;
+package view.menu.allProductsMenu.subMenus.sortingMenu;
 
 import view.menu.Menu;
 
-public class AttributesMenu extends Menu {
-    public AttributesMenu(Menu previousMenu) {
+public class SortingMenu extends Menu {
+    public SortingMenu(Menu previousMenu) {
         super(previousMenu);
-        setName("attributes menu");
     }
 
     @Override
