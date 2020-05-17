@@ -215,6 +215,7 @@ public class Database {
     }
 
     private void loadDatabase() {
+        this.creatingFolders();
         this.loadEmail();
         this.loadUsedUsernames();
         this.loadUsedProductId();
@@ -228,6 +229,12 @@ public class Database {
         this.loadUsers();
         this.loadNotVerifiedUsers();
         this.loadRequests();
+    }
+
+    private void creatingFolders() {
+        for (Path pa : Path.values()) {
+            createFolder(pa.getPath());
+        }
     }
 
     private void loadEmail() {
