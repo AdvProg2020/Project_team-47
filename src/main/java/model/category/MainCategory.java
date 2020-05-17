@@ -15,7 +15,7 @@ public class MainCategory extends Category {
     }
 
     public void addSubCategory(SubCategory subCategory){
-        subCategories.add(subCategory);
+
     }
 
     @Override
@@ -29,13 +29,7 @@ public class MainCategory extends Category {
     }
 
     public boolean isThereSubCategories(String name) {
-        Iterator<SubCategory> iterator = Category.subCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 
     @Override
@@ -44,24 +38,11 @@ public class MainCategory extends Category {
     }
 
     public SubCategory getSubCategory(String name) {
-        Iterator<SubCategory> iterator = SubCategory.subCategories.iterator();
-        while (iterator.hasNext()) {
-            SubCategory subCategory = iterator.next();
-            if (subCategory.getName().equalsIgnoreCase(name)) {
-                return subCategory;
-            }
-        }
         return null;
     }
 
     public boolean isThereSubCategory(Category subCategory) {
-        Iterator<SubCategory> iterator = SubCategory.subCategories.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 
     public ArrayList<Category> getSubCategories() {
