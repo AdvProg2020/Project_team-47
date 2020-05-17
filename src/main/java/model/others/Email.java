@@ -6,13 +6,10 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class Email {
-    private static String email;
-    private static String password;
     private static final Properties mailProperties;
-    private static final String firstPartOfVerificationHtml;
-    private static final String secondPartOfVerificationHtml;
-    private static final String firstPartOfForgotPasswordHtml;
-    private static final String secondPartOfForgoPasswordHtml;
+    private static String htmlPage;
+    private static String email = "online.shop4787@gmail.com";
+    private static String password;
 
     static {
         mailProperties = new Properties();
@@ -21,40 +18,57 @@ public class Email {
         mailProperties.put("mail.smtp.auth", "true");
         mailProperties.put("mail.smtp.socketFactory.port", "465");
         mailProperties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-
-        firstPartOfVerificationHtml = "";
-        secondPartOfVerificationHtml = "";
-        firstPartOfForgotPasswordHtml = "";
-        secondPartOfForgoPasswordHtml = "";
     }
 
     private String recipients;
     private String subject;
     private String content;
-    private String contentString;
+    private String message;
 
     public Email(String recipients) {
         this.recipients = recipients;
     }
 
+    public static void setPassword(String password) {
+        Email.password = password;
+    }
+
+    public static void setHtmlPage(String htmlPage) {
+        Email.htmlPage = htmlPage;
+    }
+
     public void sendVerificationEmail() {
         this.subject = "Verification Code";
-        this.content = firstPartOfVerificationHtml + this.contentString + secondPartOfVerificationHtml;
+        String emailHtml = htmlPage.replace("TITLE_PLACE", "Verify your email address");
+        emailHtml = emailHtml.replace("TEXT_PLACE", "Thanks for signing up for our online shop! We're excited to have you as an early\n" +
+                "user.\n" +
+                "<br>\n" +
+                "Please enter below code in shop app!!");
+        emailHtml = emailHtml.replace("CODE_PLACE", this.message);
+        this.content = emailHtml;
         send();
     }
 
-
     public void sendForgotPasswordEmail() {
         this.subject = "Forgot Password";
-        this.content = firstPartOfVerificationHtml + this.contentString + secondPartOfVerificationHtml;
+        String emailHtml = htmlPage.replace("TITLE_PLACE", "Forgot password");
+        emailHtml = emailHtml.replace("TEXT_PLACE", "Please enter below code in shop app to " +
+                "change your account password.");
+        emailHtml = emailHtml.replace("CODE_PLACE", this.message);
+        this.content = emailHtml;
         send();
     }
 
     public void sendBuyingEmail() {
-
+        this.subject = "Buying";
+        String emailHtml = htmlPage.replace("TITLE_PLACE", "Successful buy");
+        emailHtml = emailHtml.replace("TEXT_PLACE", "You purchased successfully and your buying log's id is:");
+        emailHtml = emailHtml.replace("CODE_PLACE", this.message);
+        this.content = emailHtml;
+        send();
     }
 
-    private void send(){
+    private void send() {
         Session session = createSession();
         try {
             Message message = new MimeMessage(session);
@@ -67,7 +81,7 @@ public class Email {
             message.setSubject(this.subject);
             message.setContent(this.content, "text/html");
 
-            Transport.send(message);
+            (new SendingThread(message)).start();
 
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -83,12 +97,25 @@ public class Email {
                 });
     }
 
-    public void setContentString(String string) {
-        this.contentString = string;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public static void setShopEmail(String email, String password) {
-        Email.email = email;
-        Email.password = password;
+    private static class SendingThread extends Thread {
+        private Message message;
+
+        SendingThread(Message message) {
+            this.message = message;
+        }
+
+        public void run() {
+            try {
+                Transport.send(message);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+
 }
