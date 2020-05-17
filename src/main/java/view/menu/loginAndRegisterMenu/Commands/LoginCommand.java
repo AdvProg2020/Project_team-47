@@ -1,5 +1,6 @@
 package view.menu.loginAndRegisterMenu.Commands;
 
+import model.send.receive.ServerMessage;
 import view.ViewAttributes;
 import view.ViewToController;
 import view.command.Command;
@@ -23,7 +24,9 @@ public class LoginCommand extends Command {
         OutputCommands.enterPasswordOrForgot();
         String password = Menu.getInputCommandWithTrim();
         if (password.equals("forgot")) {
-            forgotPassword();
+            forgotPassword(text);
+            setNewPassword(text);
+            getNewPasswordAnswer();
         }
         else {
             sendMessageToViewToController(text, password);
@@ -37,8 +40,44 @@ public class LoginCommand extends Command {
 
     }
 
-    private void forgotPassword() {
-        //todo
+    private void getNewPasswordAnswer() {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("successful")) {
+            //todo
+        } else {
+            System.out.println(serverMessage.getFirstString());
+        }
+    }
+
+    private void setNewPassword(String text) {
+        String username = Arrays.asList(text.split("\\s")).get(1);
+
+        ViewToController.setViewMessage("new password");
+        ArrayList<String> messageInputs = new ArrayList<>();
+
+        messageInputs.add(username);
+
+        OutputCommands.enterEmailVerificationCode();
+        messageInputs.add(Menu.getInputCommandWithTrim());
+
+        OutputCommands.enterNewPassword();
+        messageInputs.add(Menu.getInputCommandWithTrim());
+
+        ViewToController.setViewMessageArrayListInputs(messageInputs);
+        ViewToController.sendMessageToController();
+    }
+
+    private void forgotPassword(String text) {
+        String username = Arrays.asList(text.split("\\s")).get(1);
+
+        OutputCommands.enterEmail();
+        String email = Menu.getInputCommandWithTrim();
+
+        ViewToController.setFirstString(username);
+        ViewToController.setSecondString(email);
+
+        ViewToController.sendMessageToController();
     }
 
 

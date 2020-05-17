@@ -148,4 +148,8 @@ public class OutputCommands {
     public static void enterEmailVerificationCode() {
         System.out.println("enter email verification code");
     }
+
+    public static void enterNewPassword() {
+        System.out.println("enter new password");
+    }
 }

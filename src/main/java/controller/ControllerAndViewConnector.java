@@ -199,14 +199,14 @@ public class ControllerAndViewConnector {
                 break;
             case "purchase cart" :
                 if (Controller.getLoggedUser() == null) {
-                    sendErrorIfNotLogin();
+                    sendErrorIfNotLoggedIn();
                 } else {
                     PurchaseController.purchase();
                 }
                 break;
             case "view orders" :
                 if (Controller.getLoggedUser() == null) {
-                    sendErrorIfNotLogin();
+                    sendErrorIfNotLoggedIn();
                 } else {
                     CustomerPanelController.viewOrders();
                 }
@@ -219,14 +219,14 @@ public class ControllerAndViewConnector {
                 break;
             case "view balance customer" :
                 if (Controller.getLoggedUser() == null) {
-                    sendErrorIfNotLogin();
+                    sendErrorIfNotLoggedIn();
                 } else {
                     CustomerPanelController.viewBalance();
                 }
                 break;
             case "view discount codes customer" :
                 if (Controller.getLoggedUser() == null) {
-                    sendErrorIfNotLogin();
+                    sendErrorIfNotLoggedIn();
                 } else {
                     CustomerPanelController.viewUserDiscountCode();
                 }
@@ -243,21 +243,40 @@ public class ControllerAndViewConnector {
         HashMap<String, String> messageHashMapInputs = message.getMessageFirstHashMapInputs();
         switch(messageContext) {
             case "register" :
-                LoginController.register(messageHashMapInputs);
+                if (Controller.getLoggedUser() != null) {
+                    sendErrorIfAlreadyLoggedIn();
+                } else {
+                    LoginController.register(messageHashMapInputs);
+                }
                 break;
             case "confirm email" :
                 LoginController.confirmEmail(messageArrayListInputs.get(0),
                         messageArrayListInputs.get(1), messageArrayListInputs.get(2));
                 break;
             case "login" :
-                LoginController.login(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
+                if (Controller.getLoggedUser() != null) {
+                    sendErrorIfAlreadyLoggedIn();
+                } else {
+                    LoginController.login(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
+                }
+                break;
+            case "forgot password" :
+                LoginController.forgotPassword(message.getFirstString(), message.getSecondString());
+                break;
+            case "new password" :
+                LoginController.newPassword(messageArrayListInputs.get(0),
+                        messageArrayListInputs.get(1), messageArrayListInputs.get(2));
                 break;
             case "logout" :
-                LoginController.logout();
+                if (Controller.getLoggedUser() == null) {
+                    sendErrorIfNotLoggedIn();
+                } else {
+                    LoginController.logout();
+                }
                 break;
             case "view personal info" :
                 if (Controller.getLoggedUser() == null) {
-                    sendErrorIfNotLogin();
+                    sendErrorIfNotLoggedIn();
                 } else {
                     UserPanelController.personalInfo();
                 }
@@ -318,7 +337,7 @@ public class ControllerAndViewConnector {
                 break;
             case "add comment" :
                 if (Controller.getLoggedUser() == null) {
-                    sendErrorIfNotLogin();
+                    sendErrorIfNotLoggedIn();
                 } else {
                     ProductController.addComment(messageArrayListInputs.get(0)
                             , messageArrayListInputs.get(1));
@@ -356,7 +375,11 @@ public class ControllerAndViewConnector {
         }
     }
 
-    public static void sendErrorIfNotLogin() {
+    private static void sendErrorIfAlreadyLoggedIn() {
+        sendError("you are already logged in");
+    }
+
+    public static void sendErrorIfNotLoggedIn() {
         sendError("you should log in first");
     }
 
