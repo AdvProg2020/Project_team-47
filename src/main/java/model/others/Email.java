@@ -68,6 +68,16 @@ public class Email {
         send();
     }
 
+    public void sendDiscountEmail(int percent) {
+        this.subject = "Discount code";
+        String emailHtml = htmlPage.replace("TITLE_PLACE", "Discount Code");
+        emailHtml = emailHtml.replace("TEXT_PLACE", "You get a discount with " + percent +
+                " percent for buying from our shop.<br> You have 1 week to use this code. Here is the code:");
+        emailHtml = emailHtml.replace("CODE_PLACE", this.message);
+        this.content = emailHtml;
+        send();
+    }
+
     private void send() {
         Session session = createSession();
         try {
