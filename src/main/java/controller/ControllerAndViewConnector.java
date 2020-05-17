@@ -205,15 +205,15 @@ public class ControllerAndViewConnector {
                 CustomerPanelController.viewOrder(message.getFirstString());
                 break;
             case "rate product" :
-                CustomerPanelController.rate(messageArrayListInputs.get(0),
-                        Integer.parseInt(messageArrayListInputs.get(0)));
-                break;
-            case "view discount codes customer" :
-                CustomerPanelController.viewUserDiscountCode();
+                CustomerPanelController.rate(message.getFirstString(), Integer.parseInt(message.getSecondString()));
                 break;
             case "view balance customer" :
                 CustomerPanelController.viewBalance();
                 break;
+            case "view discount codes customer" :
+                CustomerPanelController.viewUserDiscountCode();
+                break;
+
             default:
                 generalCommandProcess(message);
         }

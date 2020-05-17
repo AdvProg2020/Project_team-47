@@ -1,5 +1,7 @@
 package view.menu.UserMenu.customer.commands;
 
+import model.send.receive.ServerMessage;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
@@ -14,18 +16,28 @@ public class ViewDiscountCodesCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        ArrayList<String> discountCodes = new ArrayList<>();
-        discountCodes = getCustomerDiscountCodes();
-        printDiscountCodes(discountCodes);
+        sendMessage();
+        getAnswer();
     }
 
-    private void printDiscountCodes(ArrayList<String> discountCodes) {
-        for (String discountCode : discountCodes) {
-            System.out.println(discountCode);
+    private void sendMessage() {
+        ViewToController.setViewMessage("view discount codes customer");
+
+        ViewToController.sendMessageToController();
+    }
+
+    private void getAnswer() {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("successful")) {
+            showDiscountCodes(serverMessage);
+        } else {
+            System.out.println(serverMessage.getFirstString());
         }
     }
 
-    private ArrayList<String> getCustomerDiscountCodes() {
-        return null;
+    private void showDiscountCodes(ServerMessage serverMessage) {
+        //todo
     }
+
 }

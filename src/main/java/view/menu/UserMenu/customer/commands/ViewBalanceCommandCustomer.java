@@ -20,7 +20,7 @@ public class ViewBalanceCommandCustomer extends Command {
     }
 
     private void sendMessage() {
-        ViewToController.setViewMessage("view balance seller");
+        ViewToController.setViewMessage("view balance customer");
         ViewToController.sendMessageToController();
     }
 

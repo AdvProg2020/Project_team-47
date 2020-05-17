@@ -1,9 +1,12 @@
 package view.menu.UserMenu.customer.subMenus.ordersMenu.commands;
 
+import model.send.receive.ServerMessage;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.outputMessages.OutputErrors;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RateOrderCommand extends Command {
@@ -15,15 +18,29 @@ public class RateOrderCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        String orderId = Arrays.asList(text.split("\\s")).get(2);
-        int rateNumber = Integer.parseInt(Arrays.asList(text.split("\\s")).get(3));
-        if (!ShowOrderCommand.checkIfOrderIdIsValidWithController(orderId)) {
-            OutputErrors.invalidId();
+        sendMessage(text);
+        getAnswer();
+    }
+
+    private void sendMessage(String text) {
+        String orderId = Arrays.asList(text.split("\\s")).get(1);
+        String score = Arrays.asList(text.split("\\s")).get(2);
+
+        ViewToController.setViewMessage("rate product");
+        ViewToController.setFirstString(orderId);
+        ViewToController.setSecondString(score);
+
+        ViewToController.sendMessageToController();
+    }
+
+    private void getAnswer() {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("successful")) {
+            //todo
         } else {
-            rateOrder(orderId, rateNumber);
+            System.out.println(serverMessage.getFirstString());
         }
     }
 
-    private void rateOrder(String orderId, int rateNumber) {
-    }
 }
