@@ -1,7 +1,6 @@
 package model.send.receive;
 
 import model.others.Product;
-import model.others.ShoppingCart;
 import model.user.Seller;
 
 import java.util.ArrayList;

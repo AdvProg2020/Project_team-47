@@ -27,16 +27,16 @@ public class ClientMessage extends Message {
         return firstString;
     }
 
+    public void setFirstString(String firstString) {
+        this.firstString = firstString;
+    }
+
     public String getSecondString() {
         return secondString;
     }
 
     public void setSecondString(String secondString) {
         this.secondString = secondString;
-    }
-
-    public void setFirstString(String firstString) {
-        this.firstString = firstString;
     }
 
     public String getMessageContext() {

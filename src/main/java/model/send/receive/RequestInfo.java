@@ -1,8 +1,9 @@
 package model.send.receive;
 
-import model.others.Date;
+import model.others.Comment;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class RequestInfo {
@@ -51,6 +52,11 @@ public class RequestInfo {
         this.addInfo = new AddInfo(type, username, addingInfo);
     }
 
+    public void setAddComment(Comment comment) {
+        this.addInfo = new AddInfo(comment);
+        this.addInfo.type = "add-comment";
+    }
+
 
     private static class EditInfo {
         private String editType;
@@ -78,10 +84,16 @@ public class RequestInfo {
         String sellerUsername;
         HashMap<String, String> addingInformation;
         String type;
+        Comment comment;
+
+        public AddInfo(Comment comment) {
+            this.comment = comment;
+        }
 
         public AddInfo(String type, String sellerUsername, HashMap<String, String> addingInformation) {
             this.sellerUsername = sellerUsername;
             this.addingInformation = addingInformation;
+            this.type = type;
         }
 
     }
