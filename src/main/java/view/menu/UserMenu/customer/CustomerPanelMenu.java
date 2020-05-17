@@ -27,6 +27,7 @@ public class CustomerPanelMenu extends Menu {
         subMenus.add(new AllOffsMenu(this));
         subMenus.add(new AllProductsMenu(this));
         subMenus.add(new AllOffsMenu(this));
+        subMenus.add(new PersonalInfoMenu(this));
     }
 
     @Override

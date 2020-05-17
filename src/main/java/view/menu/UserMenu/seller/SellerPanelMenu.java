@@ -3,6 +3,7 @@ package view.menu.UserMenu.seller;
 import view.command.ExitCommand;
 import view.command.HelpCommand;
 import view.menu.Menu;
+import view.menu.UserMenu.PersonalInfoMenu;
 import view.menu.UserMenu.commands.GoToOffsMenuCommand;
 import view.menu.UserMenu.commands.GoToProductsMenuCommand;
 import view.menu.UserMenu.commands.ViewPersonalInfoCommand;
@@ -28,6 +29,7 @@ public class SellerPanelMenu extends Menu {
         subMenus.add(new AllProductsMenu(this));
         subMenus.add(new SellerProductsMenu(this));
         subMenus.add(new ViewOffsMenu(this));
+        subMenus.add(new PersonalInfoMenu(this));
     }
 
     @Override

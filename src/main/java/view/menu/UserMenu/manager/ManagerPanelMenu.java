@@ -3,6 +3,7 @@ package view.menu.UserMenu.manager;
 import view.command.ExitCommand;
 import view.command.HelpCommand;
 import view.menu.Menu;
+import view.menu.UserMenu.PersonalInfoMenu;
 import view.menu.UserMenu.commands.GoToOffsMenuCommand;
 import view.menu.UserMenu.commands.GoToProductsMenuCommand;
 import view.menu.UserMenu.commands.LoginAndRegisterCommandForUser;
@@ -33,6 +34,7 @@ public class ManagerPanelMenu extends Menu {
         subMenus.add(new ManageCategoriesMenu(this));
         subMenus.add(new ManageRequestsMenu(this));
         subMenus.add(new ViewDiscountCodesMenu(this));
+        subMenus.add(new PersonalInfoMenu(this));
     }
 
     @Override
