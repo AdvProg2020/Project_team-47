@@ -151,31 +151,31 @@ public class Database {
     }
 
     public static void removeCode(String code) {
-        removeFile(Path.CODES_FOLDER + code + ".json");
+        removeFile(Path.CODES_FOLDER.getPath() + code + ".json");
     }
 
     public static void removeOff(String offId) {
-        removeFile(Path.OFFS_FOLDER + offId + ".json");
+        removeFile(Path.OFFS_FOLDER.getPath() + offId + ".json");
     }
 
     public static void removeUser(String username) {
-        removeFile(Path.USERS_FOLDER + username + ".json");
+        removeFile(Path.USERS_FOLDER.getPath() + username + ".json");
     }
 
     public static void removeNotVerifiedUser(String username) {
-        removeFile(Path.NOT_VERIFIED_USERS_FOLDER + username + ".json");
+        removeFile(Path.NOT_VERIFIED_USERS_FOLDER.getPath() + username + ".json");
     }
 
     public static void removeRequest(String id) {
-        removeFile(Path.RESOURCE + id + ".json");
+        removeFile(Path.RESOURCE.getPath() + id + ".json");
     }
 
     public static void removeProduct(String productId) {
-        removeFile(Path.PRODUCT_FOLDER + productId + ".json");
+        removeFile(Path.PRODUCT_FOLDER.getPath() + productId + ".json");
     }
 
     public static void removeCategory(String categoryId) {
-        removeFile(Path.CATEGORIES_FOLDER + categoryId + ".json");
+        removeFile(Path.CATEGORIES_FOLDER.getPath() + categoryId + ".json");
     }
 
     private static void removeFile(String path) {
