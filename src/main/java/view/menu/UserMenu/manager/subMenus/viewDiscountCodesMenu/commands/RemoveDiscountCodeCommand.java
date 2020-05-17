@@ -34,7 +34,7 @@ public class RemoveDiscountCodeCommand extends Command {
     private void getControllerAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
-            //todo
+            //unsure
         } else {
             System.out.println(serverMessage.getFirstString());
         }

@@ -37,7 +37,7 @@ public class RateOrderCommand extends Command {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
         if (serverMessage.getType().equals("Successful")) {
-            //todo
+            //unsure
         } else {
             System.out.println(serverMessage.getFirstString());
         }

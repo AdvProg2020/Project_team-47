@@ -80,7 +80,7 @@ public class AddProductCommand extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
-            //todo
+            //unsure
         } else {
             System.out.println(serverMessage.getFirstString());
         }

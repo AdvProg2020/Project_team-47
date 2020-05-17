@@ -34,9 +34,12 @@ public class ViewSellerProductCommand extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
-            //todo
+            showProductInfo(serverMessage);
         } else {
             System.out.println(serverMessage.getFirstString());
         }
+    }
+    private void showProductInfo(ServerMessage serverMessage) {
+        //todo
     }
 }

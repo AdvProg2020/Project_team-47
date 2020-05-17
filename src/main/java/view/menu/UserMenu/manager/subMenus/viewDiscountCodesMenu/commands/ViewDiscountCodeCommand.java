@@ -34,10 +34,13 @@ public class ViewDiscountCodeCommand extends Command {
     private void getControllerAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
-            DiscountCodeInfo discountCodeInfo = serverMessage.getDiscountCodeInfo();
-            //todo
+            showDiscountCodeInfo(serverMessage);
         } else {
             System.out.println(serverMessage.getFirstString());
         }
+    }
+
+    private void showDiscountCodeInfo(ServerMessage serverMessage) {
+        //todo
     }
 }

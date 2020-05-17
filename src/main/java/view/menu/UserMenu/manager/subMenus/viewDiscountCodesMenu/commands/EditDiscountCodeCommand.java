@@ -35,7 +35,7 @@ public class EditDiscountCodeCommand extends Command {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
             DiscountCodeInfo discountCodeInfo = serverMessage.getDiscountCodeInfo();
-            //todo
+            //unsure
         } else {
             System.out.println(serverMessage.getFirstString());
         }

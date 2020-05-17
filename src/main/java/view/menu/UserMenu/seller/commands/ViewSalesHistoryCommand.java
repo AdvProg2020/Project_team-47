@@ -40,9 +40,13 @@ public class ViewSalesHistoryCommand extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
-            //todo
+            showSalesHistory(serverMessage);
         } else{
             System.out.println(serverMessage.getFirstString());
         }
+    }
+
+    private void showSalesHistory(ServerMessage serverMessage) {
+        //todo
     }
 }

@@ -35,7 +35,7 @@ public class ControllerAndViewConnector {
 
 
     public static String getAnswer() {
-        //todo
+        //unsure
         return serverAnswer;
     }
 
@@ -375,7 +375,7 @@ public class ControllerAndViewConnector {
                 OffController.disableSort();
                 break;
             default:
-                //todo
+                //unsure
         }
     }
 

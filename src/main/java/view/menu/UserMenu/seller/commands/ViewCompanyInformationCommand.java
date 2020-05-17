@@ -35,6 +35,6 @@ public class ViewCompanyInformationCommand extends Command {
     private void showCompanyInformation(ServerMessage serverMessage) {
         System.out.println("company name : " + serverMessage.getFirstString());
         System.out.println("company information :" + serverMessage.getSecondString());
-        //todo
+        //unsure
     }
 }

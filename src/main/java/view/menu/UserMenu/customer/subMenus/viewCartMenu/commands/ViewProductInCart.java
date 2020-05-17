@@ -33,10 +33,14 @@ public class ViewProductInCart extends Command {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
         if (serverMessage.getType().equals("Successful")) {
-            //todo
+            goToProductPage(serverMessage);
         } else {
             System.out.println(serverMessage.getFirstString());
         }
+    }
+
+    private void goToProductPage(ServerMessage serverMessage) {
+        //todo
     }
 
 
