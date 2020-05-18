@@ -22,8 +22,12 @@ public class LoginCommand extends Command {
         String password = Menu.getInputCommandWithTrim();
         if (password.equals("forgot")) {
             forgotPassword(text);
-            setNewPassword(text);
-            getNewPasswordAnswer();
+            if (ViewToController.getServerMessage().getType().equals("Successful")) {
+                setNewPassword(text);
+                getNewPasswordAnswer();
+            } else {
+                System.out.println(ViewToController.getServerMessage().getFirstString());
+            }
         } else {
             sendMessageToViewToController(text, password);
 
