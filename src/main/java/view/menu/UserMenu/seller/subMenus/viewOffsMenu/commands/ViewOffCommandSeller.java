@@ -8,6 +8,7 @@ import view.menu.Menu;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,11 +50,11 @@ public class ViewOffCommandSeller extends Command {
         System.out.println("percent : " + offInfo.getPercent());
         System.out.println("sellerUsername : " + offInfo.getSellerUsername());
         System.out.println("offStatus : " + offInfo.getOffStatus());
-        //todo
-        SimpleDateFormat x = new SimpleDateFormat("dd/MM/yyy");
 
-        //System.out.println("startTime : " + offInfo.get);
-        //System.out.println("finishTime : " + offInfo.get);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyy HH:mm");
+
+        System.out.println("startTime : " + dateFormat.format(offInfo.getStartTime()));
+        System.out.println("finishTime : " + dateFormat.format(offInfo.getFinishTime()));
 
         System.out.println("products");
         HashMap<String, String> productsNameAndId = offInfo.getProductsNameId();

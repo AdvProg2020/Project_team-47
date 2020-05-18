@@ -46,7 +46,6 @@ public class ShowOrderCommand extends Command {
 
         System.out.println("logId : " + logInfo.getLogId());
         System.out.println("price : " + logInfo.getPrice());
-        System.out.println("seller : " + logInfo.getSeller());
         System.out.println("status : " + logInfo.getStatus());
 
         System.out.println("products : ");
