@@ -330,16 +330,8 @@ public class ControllerAndViewConnector {
                 ProductController.digest();
                 break;
             case "add to cart" :
-                ProductController.addToCart(messageArrayListInputs.get(0));
+                ProductController.addToCart(message.getFirstString());
                 break;
-
-                // don't know what is this
-
-                //PurchaseController.gettingPurchaseInformation();
-            /*case "select seller" :
-                break;*/
-
-
             case "product attributes" :
                 ProductController.attributes();
                 break;

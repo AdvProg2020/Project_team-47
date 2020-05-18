@@ -1,7 +1,9 @@
 package view.menu.productMenu.subMenus.digestMenu.commands;
 
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
+import view.outputMessages.OutputCommands;
 
 public class AddProductToCartCommand extends Command {
     public AddProductToCartCommand(Menu menu) {
@@ -12,6 +14,21 @@ public class AddProductToCartCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        //todo
+        sendMessage();
+        getAnswer();
+    }
+
+    private void sendMessage() {
+        ViewToController.setViewMessage("add to cart");
+        getSeller();
+        ViewToController.sendMessageToController();
+    }
+
+    private void getSeller() {
+        OutputCommands.enterSellerUsername();
+        ViewToController.setFirstString(Menu.getInputCommandWithTrim());
+    }
+
+    private void getAnswer() {
     }
 }
