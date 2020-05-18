@@ -37,8 +37,15 @@ public class AddSubCategoryCommand extends Command {
     }
 
     private ArrayList<String> getSpecialProperties() {
+        OutputCommands.enterSpecialPropertyAndEnterKeyForFinish();
         ArrayList<String> specialProperties = new ArrayList<>();
-        //todo
+
+        String specialProperty = Menu.getInputCommandWithTrim();
+        while (!specialProperty.equals("\n")) {
+            specialProperties.add(specialProperty);
+            specialProperty = Menu.getInputCommandWithTrim();
+        }
+
         return specialProperties;
     }
 

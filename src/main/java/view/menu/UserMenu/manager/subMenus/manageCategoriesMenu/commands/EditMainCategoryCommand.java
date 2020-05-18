@@ -38,7 +38,7 @@ public class EditMainCategoryCommand extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
-
+            //unsure
         } else {
             System.out.println(serverMessage.getFirstString());
         }
