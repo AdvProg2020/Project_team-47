@@ -70,6 +70,19 @@ public class LogInfo {
         this.seller = seller;
     }
 
+    public ArrayList<String> getProductsInLogForShow() {
+        ArrayList<String> productsInfo = new ArrayList<>();
+        //todo
+        for (ProductInLog productInfo : this.getProductInLogs()) {
+                productsInfo.add("name : " + ""
+                        + "\nid : " + ""
+                        + "\nseller username : " + ""
+                        + "\nnumber : " + "");
+        }
+
+        return productsInfo;
+    }
+
     private static class ProductInLog {
         private String sellerUsername;
         private HashMap<String, String> productNameId;

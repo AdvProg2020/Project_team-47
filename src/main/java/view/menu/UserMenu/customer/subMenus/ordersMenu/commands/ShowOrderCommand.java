@@ -53,9 +53,14 @@ public class ShowOrderCommand extends Command {
 
         System.out.println("products : ");
 
-        /*int index;
-        private ArrayList<LogInfo.ProductInLog> productInLogs;*/
-        //todo
+         ArrayList<String> productsInfo = logInfo.getProductsInLogForShow();
+        int index;
+        for (String productInfo : productsInfo) {
+            index = productsInfo.indexOf(productInfo) + 1;
+            System.out.println(index + ".");
+            System.out.println(productInfo);
+        }
+
     }
 
 
