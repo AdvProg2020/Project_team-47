@@ -18,7 +18,7 @@ public class EditPersonalInfoMenuCommand extends Command {
     @Override
     public void doCommand(String text) {
         String field = Arrays.asList(text.split("\\s")).get(1);
-        OutputCommands.enterField();
+        OutputCommands.enterNewValue();
         String fieldNewValue = Menu.getInputCommandWithTrim();
         ViewToController.setViewMessage("edit personal info");
         ArrayList<String> messageValue = new ArrayList<>();
