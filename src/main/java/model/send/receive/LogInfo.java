@@ -78,6 +78,18 @@ public class LogInfo {
         private ProductInLog() {
             this.productNameId = new HashMap<>();
         }
+
+        public String getSellerUsername() {
+            return sellerUsername;
+        }
+
+        public HashMap<String, String> getProductNameId() {
+            return productNameId;
+        }
+
+        public int getNumber() {
+            return number;
+        }
     }
 
     public String getCustomer() {

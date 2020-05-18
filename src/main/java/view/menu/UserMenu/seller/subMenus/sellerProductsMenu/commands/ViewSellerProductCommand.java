@@ -1,5 +1,6 @@
 package view.menu.UserMenu.seller.subMenus.sellerProductsMenu.commands;
 
+import model.send.receive.ProductInfo;
 import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
@@ -7,6 +8,7 @@ import view.menu.Menu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 public class ViewSellerProductCommand extends Command {
@@ -40,6 +42,15 @@ public class ViewSellerProductCommand extends Command {
         }
     }
     private void showProductInfo(ServerMessage serverMessage) {
-        //todo
+        ProductInfo productInfo = serverMessage.getProductInfo();
+
+        System.out.println("id : " + productInfo.getId());
+        System.out.println("name : " + productInfo.getName());
+        System.out.println("mainCategory : " + productInfo.getMainCategory());
+        System.out.println("subCategory : " + productInfo.getSubCategory());
+        System.out.println("scoreAverage : " + productInfo.getScoreAverage());
+        System.out.println("status : " + productInfo.getStatus());
+        System.out.println("description : " + productInfo.getDescription());
+        System.out.println("seenTime : " + productInfo.getSeenTime());
     }
 }
