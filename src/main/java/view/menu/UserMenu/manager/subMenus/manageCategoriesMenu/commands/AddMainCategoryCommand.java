@@ -4,6 +4,7 @@ import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
+import view.outputMessages.OutputCommands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +35,14 @@ public class AddMainCategoryCommand extends Command {
 
     private ArrayList<String> getSpecialProperties() {
         ArrayList<String> specialProperties = new ArrayList<>();
-        //todo
+        OutputCommands.enterSpecialPropertyAndEnterKeyForFinish();
+
+        String specialProperty = Menu.getInputCommandWithTrim();
+        while (!specialProperty.equals("\n")) {
+            specialProperties.add(specialProperty);
+            specialProperty = Menu.getInputCommandWithTrim();
+        }
+
         return specialProperties;
     }
 
