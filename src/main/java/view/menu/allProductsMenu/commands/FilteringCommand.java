@@ -4,10 +4,20 @@ import view.command.Command;
 import view.menu.Menu;
 
 public class FilteringCommand extends Command {
-    public FilteringCommand(Menu menu) {
+    private String type; // products or offs
+    public FilteringCommand(Menu menu, String type) {
         super(menu);
         setSignature("filtering");
         setRegex("^filtering$");
+        setType(type);
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

@@ -366,7 +366,8 @@ public class ControllerAndViewConnector {
                 OffController.showAvailableFilters();
                 break;
             case "filter an available filter offs" :
-                OffController.voidShowOffs();
+                OffController.addFilter(messageArrayListInputs.get(0)
+                        , messageArrayListInputs.get(1), messageArrayListInputs.get(2));
                 break;
             case "current filters offs" :
                 OffController.currentFilter();

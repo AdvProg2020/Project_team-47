@@ -27,7 +27,7 @@ public class OffController extends Controller {
         sendAnswer(Off.getAllProductsInOffsInfo(sortField, sortDirection, filters), "off");
     }
 
-    private static void addFilter(String filterKey, String firstFilterValue, String secondFilterValue) {
+    public static void addFilter(String filterKey, String firstFilterValue, String secondFilterValue) {
         if (isFilterExist(filterKey)) {
             sendError("You are already using this filter!!");
             return;

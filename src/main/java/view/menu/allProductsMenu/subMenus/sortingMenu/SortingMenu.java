@@ -9,9 +9,19 @@ import view.menu.allProductsMenu.subMenus.sortingMenu.commands.ShowCurrentSortCo
 import view.menu.allProductsMenu.subMenus.sortingMenu.commands.SortAnAvailableSortCommand;
 
 public class SortingMenu extends Menu {
-    public SortingMenu(Menu previousMenu) {
+    private String type; // products or offs
+    public SortingMenu(Menu previousMenu, String type) {
         super(previousMenu);
         setName("sorting menu");
+        setType(type);
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
