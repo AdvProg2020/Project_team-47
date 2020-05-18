@@ -338,7 +338,7 @@ public class ControllerAndViewConnector {
                 AllProductController.showProductsWithFilterAndSort();
                 break;
             case "show product" :
-                ProductController.showProduct(messageArrayListInputs.get(0));
+                ProductController.showProduct(message.getFirstString());
                 break;
             case "digest" :
                 ProductController.digest();

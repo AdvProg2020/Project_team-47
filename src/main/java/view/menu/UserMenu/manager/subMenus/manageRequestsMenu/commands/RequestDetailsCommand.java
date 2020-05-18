@@ -46,7 +46,7 @@ public class RequestDetailsCommand extends Command {
         RequestInfo requestInfo = serverMessage.getRequestInfo();
 
         System.out.println("id : " + requestInfo.getId());
-        System.out.println("requestedSenderUsername : " + requestInfo.getRequestedSenderUsername());
+        System.out.println("sender username : " + requestInfo.getRequestedSenderUsername());
         System.out.println("type : " + requestInfo.getType());
     }
 }
