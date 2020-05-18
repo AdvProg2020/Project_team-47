@@ -1,5 +1,7 @@
 package view.menu.UserMenu.manager.subMenus.manageRequestsMenu.commands;
 
+import model.others.request.Request;
+import model.send.receive.RequestInfo;
 import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
@@ -7,6 +9,7 @@ import view.menu.Menu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class RequestDetailsCommand extends Command {
     public RequestDetailsCommand(Menu menu) {
@@ -33,15 +36,17 @@ public class RequestDetailsCommand extends Command {
     private void getAnswerFromController() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
-            printRequestInfo();
+            printRequestInfo(serverMessage);
         } else {
             System.out.println(serverMessage.getFirstString());
         }
     }
 
-    private void printRequestInfo() {
-        //todo
+    private void printRequestInfo(ServerMessage serverMessage) {
+        RequestInfo requestInfo = serverMessage.getRequestInfo();
+
+        System.out.println("id : " + requestInfo.getId());
+        System.out.println("requestedSenderUsername : " + requestInfo.getRequestedSenderUsername());
+        System.out.println("type : " + requestInfo.getType());
     }
-
-
 }
