@@ -6,7 +6,7 @@ import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class ViewOffCommandSeller extends Command {
     public ViewOffCommandSeller(Menu menu) {
@@ -34,13 +34,30 @@ public class ViewOffCommandSeller extends Command {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
         if (serverMessage.getType().equals("Successful")) {
-            showOffInfo(serverMessage.getOffInfo());
+            showOffInfo(serverMessage);
         } else {
             System.out.println(serverMessage.getFirstString());
         }
     }
 
-    private void showOffInfo(OffInfo offInfo) {
+    private void showOffInfo(ServerMessage serverMessage) {
+        OffInfo offInfo = serverMessage.getOffInfo();
+        System.out.println("offId : " + offInfo.getOffId());
+        System.out.println("percent : " + offInfo.getPercent());
+        System.out.println("sellerUsername : " + offInfo.getSellerUsername());
+        System.out.println("offStatus : " + offInfo.getOffStatus());
         //todo
+        //System.out.println("startTime : " + offInfo.get);
+        //System.out.println("finishTime : " + offInfo.get);
+
+        System.out.println("products");
+        HashMap<String, String> a = offInfo.getProductsNameId();
+
+        String[] ids = (String[]) a.values().toArray();
+        String[] names = (String[])a.keySet().toArray();
+
+        for (int i = 0; i < a.size(); i++) {
+            System.out.println("name : " + names [i] + "id : " + ids [i]);
+        }
     }
 }
