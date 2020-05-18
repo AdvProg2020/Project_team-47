@@ -27,7 +27,6 @@ public class AllProductsMenu extends Menu {
         menuCommands.add(new ViewCategoriesCommand(this));
         menuCommands.add(new FilteringCommand(this));
         menuCommands.add(new SortingCommand(this));
-        menuCommands.add(new ShowProductsCommand(this));
         menuCommands.add(new ShowProductCommand(this));
         menuCommands.add(new HelpCommand(this));
         menuCommands.add(new BackCommand(this));

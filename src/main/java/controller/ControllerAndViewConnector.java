@@ -2,6 +2,7 @@ package controller;
 
 import com.google.gson.Gson;
 import model.send.receive.ClientMessage;
+import model.user.Seller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
