@@ -1,5 +1,7 @@
 package view.menu.allProductsMenu.subMenus.sortingMenu.commands;
 
+import model.send.receive.ServerMessage;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.menu.allProductsMenu.subMenus.filteringMenu.FilteringMenu;
@@ -21,22 +23,22 @@ public class DisableSortCommand extends Command {
     private void sendMessage() {
         switch (((SortingMenu)this.getMenu()).getType()){
             case "products" :
-
+                ViewToController.setViewMessage("disable sort products");
                 break;
             case "offs" :
-
+                ViewToController.setViewMessage("disable sort offs");
                 break;
         }
+        ViewToController.sendMessageToController();
     }
 
     private void getAnswer() {
-        switch (((SortingMenu)this.getMenu()).getType()){
-            case "products" :
+        ServerMessage serverMessage = ViewToController.getServerMessage();
 
-                break;
-            case "offs" :
-
-                break;
+        if (serverMessage.getType().equals("Successful")) {
+            //unsure
+        } else {
+            System.out.println(serverMessage.getFirstString());
         }
     }
 }
