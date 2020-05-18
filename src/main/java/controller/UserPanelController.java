@@ -45,7 +45,7 @@ public class UserPanelController extends Controller {
             default:
             wrongEditFiled();
         }
-        loggedUser.updateDatabase();
+        loggedUser.updateDatabase().update();
     }
 
     private static void wrongEditFiled() {
