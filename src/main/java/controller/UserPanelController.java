@@ -43,11 +43,28 @@ public class UserPanelController extends Controller {
                     break;
                 }
             default:
-                sendError("Your entered wrong filed to edit!!");
+            wrongEditFiled();
         }
         loggedUser.updateDatabase();
     }
 
+    private static void wrongEditFiled() {
+        StringBuilder errorText = new StringBuilder("Your entered wrong filed to edit!!\n" +
+                "You can edit:\n");
+        ArrayList<String> editableField = new ArrayList<>();
+        editableField.add("first-name");
+        editableField.add("last-name");
+        editableField.add("phone-number");
+        editableField.add("password");
+        if (loggedUser instanceof Seller) {
+            editableField.add("company-name");
+            editableField.add("company-info");
+        }
+        for (int i = 0; i < editableField.size(); i++) {
+            errorText.append(i+1).append(": ").append(editableField.get(i)).append("\n");
+        }
+        sendError(errorText.toString());
+    }
     private static void editPhoneNumber(String newPhoneNumber) {
         if (!User.isPhoneValid(newPhoneNumber)) {
             sendError("Wrong phone number!!");
