@@ -12,6 +12,6 @@ public class SortingCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-        //todo
+        this.getMenu().findSubMenuWithName("sorting menu").autoExecute();
     }
 }

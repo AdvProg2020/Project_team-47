@@ -11,6 +11,7 @@ import view.menu.allProductsMenu.subMenus.filteringMenu.commands.ShowCurrentFilt
 public class FilteringMenu extends Menu {
     public FilteringMenu(Menu previousMenu) {
         super(previousMenu);
+        this.setName("filtering menu");
     }
 
     @Override

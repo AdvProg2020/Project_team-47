@@ -219,10 +219,6 @@ public class ControllerAndViewConnector {
                     PurchaseController.applyDiscountCode(message.getFirstString());
                 }
                 break;
-
-                //some other commands about purchasing
-
-
             case "view orders" :
                 if (Controller.getLoggedUser() == null) {
                     sendErrorIfNotLoggedIn();
