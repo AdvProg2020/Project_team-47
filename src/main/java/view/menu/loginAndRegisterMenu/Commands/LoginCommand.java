@@ -70,6 +70,7 @@ public class LoginCommand extends Command {
         OutputCommands.enterEmail();
         String email = Menu.getInputCommandWithTrim();
 
+        ViewToController.setViewMessage("forgot password");
         ViewToController.setFirstString(username);
         ViewToController.setSecondString(email);
 
