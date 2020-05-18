@@ -1,6 +1,7 @@
 package view.menu.UserMenu.manager.subMenus.manageUsersMenu.commands;
 
 import model.send.receive.ServerMessage;
+import model.send.receive.UserInfo;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
@@ -29,6 +30,22 @@ public class ViewUserCommand extends Command {
     }
 
     private void viewUser(ServerMessage serverMessage) {
-        //todo
+        UserInfo userInfo = serverMessage.getUserInfo();
+
+        System.out.println("type : " + userInfo.getType());
+        System.out.println("username : " + userInfo.getUsername());
+        System.out.println("firstName : " + userInfo.getFirstName());
+        System.out.println("lastName : " + userInfo.getLastName());
+        System.out.println("email : " + userInfo.getEmail());
+        System.out.println("phoneNumber : " + userInfo.getPhoneNumber());
+
+        if (!userInfo.getType().equals("manager")) {
+            System.out.println("money : " + userInfo.getMoney());
+        }
+
+        if (userInfo.getType().equals("seller")) {
+            System.out.println("companyName : " + userInfo.getCompanyName());
+            System.out.println("companyInfo : " + userInfo.getCompanyInfo());
+        }
     }
 }
