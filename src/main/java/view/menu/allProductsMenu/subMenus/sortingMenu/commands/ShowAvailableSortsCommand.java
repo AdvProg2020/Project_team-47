@@ -1,10 +1,13 @@
 package view.menu.allProductsMenu.subMenus.sortingMenu.commands;
 
+import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.menu.allProductsMenu.subMenus.filteringMenu.FilteringMenu;
 import view.menu.allProductsMenu.subMenus.sortingMenu.SortingMenu;
+
+import java.util.ArrayList;
 
 public class ShowAvailableSortsCommand extends Command {
     public ShowAvailableSortsCommand(Menu menu) {
@@ -32,13 +35,22 @@ public class ShowAvailableSortsCommand extends Command {
     }
 
     private void getAnswer() {
-        switch (((SortingMenu)this.getMenu()).getType()){
-            case "products" :
+        ServerMessage serverMessage = ViewToController.getServerMessage();
 
-                break;
-            case "offs" :
+        if (serverMessage.getType().equals("Successful")) {
+            showSorts(serverMessage);
+        } else {
+            System.out.println(serverMessage.getFirstString());
+        }
+    }
 
-                break;
+    private void showSorts(ServerMessage serverMessage) {
+        ArrayList<String> sorts = serverMessage.getStrings();
+
+        int index;
+        for (String sort : sorts) {
+            index = sorts.indexOf(sort);
+            System.out.println(index + ". " + sort);
         }
     }
 }
