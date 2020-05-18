@@ -2,7 +2,6 @@ package model.send.receive;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class LogInfo {
     private String customer;
@@ -26,87 +25,33 @@ public class LogInfo {
         this.productInLogs = new ArrayList<>();
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public void addProduct(UserInfo seller, ProductInfo productInfo, int number) {
         ProductInLog productInLog = new ProductInLog();
         productInLog.sellerUsername = seller.getUsername();
         productInLog.number = number;
-        productInLog.productNameId.put(productInfo.getName(), productInfo.getId());
+        productInLog.productId = productInfo.getId();
+        productInLog.productName = productInfo.getName();
         productInLogs.add(productInLog);
-    }
-
-    public void setCustomer(String customer) {
-        this.customer = customer;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void setCustomerRequest(String customerRequest) {
-        this.customerRequest = customerRequest;
-    }
-
-    public void setAppliedDiscount(double appliedDiscount) {
-        this.appliedDiscount = appliedDiscount;
-    }
-
-    public void setSeller(String seller) {
-        this.seller = seller;
     }
 
     public ArrayList<String> getProductsInLogForShow() {
         ArrayList<String> productsInfo = new ArrayList<>();
-
         for (ProductInLog productInfo : this.productInLogs) {
-                productsInfo.add("name : " + ""
-                        + "\nid : " + ""
-                        + "\nseller username : " + productInfo.getSellerUsername()
-                        + "\nnumber : " + productInfo.getNumber());
+            productsInfo.add("name : " + productInfo.productName
+                    + "\nid : " + productInfo.productId
+                    + "\nseller username : " + productInfo.sellerUsername
+                    + "\nnumber : " + productInfo.number);
         }
 
         return productsInfo;
     }
 
-    private static class ProductInLog {
-        private String sellerUsername;
-        private HashMap<String, String> productNameId;
-        private int number;
-
-        private ProductInLog() {
-            this.productNameId = new HashMap<>();
-        }
-
-        public String getSellerUsername() {
-            return sellerUsername;
-        }
-
-        public HashMap<String, String> getProductNameId() {
-            return productNameId;
-        }
-
-        public int getNumber() {
-            return number;
-        }
-    }
-
     public String getCustomer() {
         return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 
     public String getLogId() {
@@ -121,8 +66,16 @@ public class LogInfo {
         return price;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getLogType() {
@@ -133,27 +86,69 @@ public class LogInfo {
         return address;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getPostalCode() {
         return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getCustomerRequest() {
         return customerRequest;
+    }
+
+    public void setCustomerRequest(String customerRequest) {
+        this.customerRequest = customerRequest;
     }
 
     public double getAppliedDiscount() {
         return appliedDiscount;
     }
 
+    public void setAppliedDiscount(double appliedDiscount) {
+        this.appliedDiscount = appliedDiscount;
+    }
+
     public String getSeller() {
         return seller;
     }
 
+    public void setSeller(String seller) {
+        this.seller = seller;
+    }
+
     public ArrayList<ProductInLog> getProductInLogs() {
         return productInLogs;
+    }
+
+    private static class ProductInLog {
+        private String sellerUsername;
+        private int number;
+        private String productName;
+        private String productId;
+
+        private ProductInLog() {
+        }
+
+        public String getSellerUsername() {
+            return sellerUsername;
+        }
+
+        public int getNumber() {
+            return number;
+        }
     }
 }

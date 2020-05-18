@@ -37,6 +37,47 @@ public class Email {
         Email.htmlPage = htmlPage;
     }
 
+    public static void checkPassword() {
+        Email checkingEmailPassword = new Email(Email.email);
+        checkingEmailPassword.subject = "Checking Password";
+        checkingEmailPassword.content = "Successful";
+        checkingEmailPassword.sendWithoutThread();
+
+    }
+
+    private void sendWithoutThread() {
+        try {
+            Message message = createMessage();
+            if (message == null)
+                return;
+            Transport.send(message);
+        } catch (AuthenticationFailedException e) {
+            System.out.println("\nYou entered wrong password for email!!");
+            System.exit(2);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Message createMessage() {
+        Session session = createSession();
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("rampshop@gmail.com"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(this.recipients)
+            );
+
+            message.setSubject(this.subject);
+            message.setContent(this.content, "text/html");
+            return message;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void sendVerificationEmail() {
         this.subject = "Verification Code";
         String emailHtml = htmlPage.replace("TITLE_PLACE", "Verify your email address");
@@ -79,23 +120,7 @@ public class Email {
     }
 
     private void send() {
-        Session session = createSession();
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("rampshop@gmail.com"));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(this.recipients)
-            );
-
-            message.setSubject(this.subject);
-            message.setContent(this.content, "text/html");
-
-            (new SendingThread(message)).start();
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        (new SendingThread(createMessage())).start();
     }
 
     private Session createSession() {
@@ -121,6 +146,9 @@ public class Email {
         public void run() {
             try {
                 Transport.send(message);
+            } catch (AuthenticationFailedException e) {
+                System.out.println("\nYou entered wrong password for email!!");
+                System.exit(2);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
