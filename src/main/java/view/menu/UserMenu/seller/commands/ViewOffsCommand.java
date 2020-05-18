@@ -55,9 +55,9 @@ public class ViewOffsCommand extends Command {
 
     private void showOffsInfo(ServerMessage serverMessage) {
         ArrayList<OffInfo> offInfoArrayList = serverMessage.getOffInfoArrayList();
-
+        int offIndex;
         for (OffInfo offInfo : offInfoArrayList) {
-            int offIndex = offInfoArrayList.indexOf(offInfo) + 1;
+            offIndex = offInfoArrayList.indexOf(offInfo) + 1;
             System.out.println(offIndex + ".");
             System.out.println("offId : " + offInfo.getOffId());
             System.out.println("percent : " + offInfo.getPercent());

@@ -37,7 +37,7 @@ public class ViewDiscountCodesCommand extends Command {
     }
 
     private void showDiscountCodes(ServerMessage serverMessage) {
-        //todo
+
     }
 
 }

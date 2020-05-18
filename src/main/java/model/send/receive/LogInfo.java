@@ -79,4 +79,56 @@ public class LogInfo {
             this.productNameId = new HashMap<>();
         }
     }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public String getLogId() {
+        return logId;
+    }
+
+    public Date getLogDate() {
+        return logDate;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getLogType() {
+        return logType;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getCustomerRequest() {
+        return customerRequest;
+    }
+
+    public double getAppliedDiscount() {
+        return appliedDiscount;
+    }
+
+    public String getSeller() {
+        return seller;
+    }
+
+    public ArrayList<ProductInLog> getProductInLogs() {
+        return productInLogs;
+    }
 }
