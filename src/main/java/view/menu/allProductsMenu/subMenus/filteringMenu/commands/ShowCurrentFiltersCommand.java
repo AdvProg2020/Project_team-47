@@ -39,7 +39,7 @@ public class ShowCurrentFiltersCommand extends Command {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
             ArrayList<String> currentFilters = serverMessage.getStrings();
-            showFiltersProducts(currentFilters);
+            showFilters(currentFilters);
         } else {
             System.out.println(serverMessage.getFirstString());
         }
@@ -47,7 +47,7 @@ public class ShowCurrentFiltersCommand extends Command {
 
     }
 
-    private void showFiltersProducts(ArrayList<String> currentFilters) {
+    private void showFilters(ArrayList<String> currentFilters) {
         int index;
         for (String currentFilter : currentFilters) {
             index = currentFilters.indexOf(currentFilter) + 1;
