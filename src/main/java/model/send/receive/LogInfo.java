@@ -72,7 +72,7 @@ public class LogInfo {
 
     public ArrayList<String> getProductsInLogForShow() {
         ArrayList<String> productsInfo = new ArrayList<>();
-        //todo
+
         for (ProductInLog productInfo : this.productInLogs) {
                 productsInfo.add("name : " + ""
                         + "\nid : " + ""

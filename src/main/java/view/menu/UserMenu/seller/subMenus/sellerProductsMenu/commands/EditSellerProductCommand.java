@@ -5,9 +5,11 @@ import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.outputMessages.OutputCommands;
+import view.outputMessages.OutputComments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class EditSellerProductCommand extends Command {
     public EditSellerProductCommand(Menu menu) {
@@ -26,14 +28,52 @@ public class EditSellerProductCommand extends Command {
         ViewToController.setViewMessage("edit product");
         String productId = Arrays.asList(text.split("\\s")).get(1);
         ArrayList<String> messageInputs = new ArrayList<>();
-
         messageInputs.add(productId);
 
         OutputCommands.enterField();
-        messageInputs.add(Menu.getInputCommandWithTrim());
+        OutputComments.productFields();
+        getField(messageInputs);
 
-        //todo
 
+        ViewToController.setViewMessageArrayListInputs(messageInputs);
+        ViewToController.sendMessageToController();
+    }
+
+    private void getField(ArrayList<String> messageInputs) {
+        String field = Menu.getInputCommandWithTrim();
+        messageInputs.add(field);
+
+        if (field.equals("special-property")) {
+            getSpecialProperty();
+
+            OutputCommands.enterType();
+            OutputComments.typesOfProductSpecialPropertyEditing();
+
+            messageInputs.add(Menu.getInputCommandWithTrim());
+        } else {
+            messageInputs.add("");
+
+            OutputCommands.enterNewValue();
+            ViewToController.setViewMessageObject(Menu.getInputCommandWithTrim());
+        }
+    }
+
+    private void getSpecialProperty() {
+        HashMap<String, String> specialProperty = new HashMap<>();
+        OutputCommands.enterSpecialPropertyAndItsValueAndEnterKeyForFinish();
+
+        String specialPropertyName = Menu.getInputCommandWithTrim();
+        String specialPropertyValue;
+
+        while (!specialPropertyName.equals("\n")) {
+            specialPropertyValue = Menu.getInputCommandWithTrim();
+            specialProperty.put(specialPropertyName, specialPropertyValue);
+
+            OutputCommands.enterSpecialPropertyAndItsValueAndEnterKeyForFinish();
+            specialPropertyName = Menu.getInputCommandWithTrim();
+        }
+
+        ViewToController.setViewMessageObject(specialProperty);
     }
 
     private void getAnswer() {

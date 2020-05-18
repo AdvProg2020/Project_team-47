@@ -44,4 +44,21 @@ public class OutputComments {
     public static void goingToLoginMenu() {
         System.out.println("going to login menu");
     }
+
+    public static void productFields() {
+        System.out.println("1. name");
+        System.out.println("2. description");
+        System.out.println("3. price");
+        System.out.println("4. number-of-product");
+        System.out.println("5. category");
+        System.out.println("6. sub-category");
+        System.out.println("7. special-property");
+    }
+
+    public static void typesOfProductSpecialPropertyEditing() {
+        System.out.println("1. append");
+        System.out.println("2. replace");
+        System.out.println("3. change");
+        System.out.println("4. remove");
+    }
 }
