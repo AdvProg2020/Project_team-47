@@ -25,29 +25,28 @@ public class ShowAvailableFiltersCommand extends Command {
         switch (((FilteringMenu)this.getMenu()).getType()){
             case "products" :
                 ViewToController.setViewMessage("show available filters products");
-                ViewToController.sendMessageToController();
                 break;
             case "offs" :
-
+                ViewToController.setViewMessage("show available filters offs");
                  break;
         }
+        ViewToController.sendMessageToController();
     }
 
     private void getAnswer() {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
 
-        switch (((FilteringMenu)this.getMenu()).getType()){
-            case "products" :
-                ServerMessage serverMessage = ViewToController.getServerMessage();
-                ArrayList<String> filters = serverMessage.getStrings();
-                int index;
-                for (String filter : filters) {
-                    index = filters.indexOf(filter);
-                    System.out.println(index + ". " + filter);
-                }
-                break;
-            case "offs" :
+        if (serverMessage.getType().equals("Successful")) {
+            ArrayList<String> filters = serverMessage.getStrings();
 
-                break;
+            int index;
+            for (String filter : filters) {
+                index = filters.indexOf(filter);
+                System.out.println(index + ". " + filter);
+            }
+
+        } else {
+            System.out.println(serverMessage.getFirstString());
         }
     }
 }

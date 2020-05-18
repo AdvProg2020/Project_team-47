@@ -22,28 +22,29 @@ public class ShowCurrentFiltersCommand extends Command {
     }
 
     private void sendMessage() {
+
         switch (((FilteringMenu)this.getMenu()).getType()){
             case "products" :
                 ViewToController.setViewMessage("current filters products");
-                ViewToController.sendMessageToController();
                 break;
             case "offs" :
-
+                ViewToController.setViewMessage("current filters offs");
                 break;
         }
+        ViewToController.sendMessageToController();
     }
 
     private void getAnswer() {
-        switch (((FilteringMenu)this.getMenu()).getType()){
-            case "products" :
-                ServerMessage serverMessage = ViewToController.getServerMessage();
-                ArrayList<String> currentFilters = serverMessage.getStrings();
-                showFiltersProducts(currentFilters);
-                break;
-            case "offs" :
 
-                break;
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+        if (serverMessage.getType().equals("Successful")) {
+            ArrayList<String> currentFilters = serverMessage.getStrings();
+            showFiltersProducts(currentFilters);
+        } else {
+            System.out.println(serverMessage.getFirstString());
         }
+
+
     }
 
     private void showFiltersProducts(ArrayList<String> currentFilters) {
