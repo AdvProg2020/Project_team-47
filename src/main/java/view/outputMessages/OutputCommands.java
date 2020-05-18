@@ -169,4 +169,11 @@ public class OutputCommands {
         System.out.println("enter special property and its value and enter key for finish");
     }
 
+    public static void enterTitle() {
+        System.out.println("enter title");
+    }
+
+    public static void enterContent() {
+        System.out.println("enter content");
+    }
 }

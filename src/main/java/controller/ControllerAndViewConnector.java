@@ -353,8 +353,7 @@ public class ControllerAndViewConnector {
                 if (Controller.getLoggedUser() == null) {
                     sendErrorIfNotLoggedIn();
                 } else {
-                    ProductController.addComment(messageArrayListInputs.get(0)
-                            , messageArrayListInputs.get(1));
+                    ProductController.addComment(message.getFirstString(), message.getSecondString());
                 }
                 break;
             case "offs" :
