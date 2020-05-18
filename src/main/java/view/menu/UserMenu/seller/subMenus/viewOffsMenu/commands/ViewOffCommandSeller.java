@@ -51,13 +51,14 @@ public class ViewOffCommandSeller extends Command {
         //System.out.println("finishTime : " + offInfo.get);
 
         System.out.println("products");
-        HashMap<String, String> a = offInfo.getProductsNameId();
+        HashMap<String, String> productsNameAndId = offInfo.getProductsNameId();
 
-        String[] ids = (String[]) a.values().toArray();
-        String[] names = (String[])a.keySet().toArray();
+        for (Map.Entry<String, String> entry : productsNameAndId.entrySet()) {
+            String name = entry.getKey();
+            String id = entry.getValue();
 
-        for (int i = 0; i < a.size(); i++) {
-            System.out.println("name : " + names [i] + "id : " + ids [i]);
+            System.out.println("name : " + name + " id : " + id);
         }
+
     }
 }
