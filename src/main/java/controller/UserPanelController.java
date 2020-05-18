@@ -4,6 +4,7 @@ package controller;
 import model.user.Seller;
 import model.user.User;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class UserPanelController extends Controller {

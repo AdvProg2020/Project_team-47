@@ -4,7 +4,6 @@ import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
-import view.menu.UserMenu.customer.subMenus.viewCartMenu.subMenus.ReceiverInformationMenu;
 import view.outputMessages.OutputCommands;
 import view.outputMessages.OutputComments;
 import view.outputMessages.OutputErrors;
