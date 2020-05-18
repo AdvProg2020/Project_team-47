@@ -32,6 +32,8 @@ public class Customer extends User {
     public Customer(HashMap<String, String> userInfo) {
         super(userInfo);
         shoppingCart = new ShoppingCart();
+        buyLogs = new ArrayList<>();
+        discountCodes = new ArrayList<>();
         this.money = 10000000;
     }
 
