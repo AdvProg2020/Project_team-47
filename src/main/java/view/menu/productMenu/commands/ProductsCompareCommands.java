@@ -12,6 +12,6 @@ public class ProductsCompareCommands extends Command {
 
     @Override
     public void doCommand(String text) {
-
+        //todo
     }
 }

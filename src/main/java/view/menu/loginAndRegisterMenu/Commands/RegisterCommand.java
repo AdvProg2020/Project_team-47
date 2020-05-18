@@ -42,8 +42,6 @@ public class RegisterCommand extends Command {
         sendMessageToViewToController(text);
     }
 
-    //"username", "password", "first-name", "last-name", "email", "phone-number", "type"
-
     private void sendMessageToViewToController(String text) {
         ViewToController.setViewMessage("register");
 

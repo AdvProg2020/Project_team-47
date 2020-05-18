@@ -63,7 +63,7 @@ public class AddOffCommandSeller extends Command {
         ServerMessage serverMessage = ViewToController.getServerMessage();
 
         if (serverMessage.getType().equals("Successful")) {
-
+            //unsure
         } else {
             System.out.println(serverMessage.getFirstString());
         }

@@ -21,9 +21,9 @@ public class DeleteUserCommand extends Command {
         messageInputs.add(Arrays.asList(text.split("\\s")).get(2));
         ViewToController.sendMessageToController();
         if (ViewToController.getServerMessage().getType().equals("Successful")) {
-
+            //unsure
         } else {
-
+            System.out.println(ViewToController.getServerMessage().getFirstString());
         }
     }
 }

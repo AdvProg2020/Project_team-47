@@ -17,9 +17,10 @@ public class ShowCategoriesCommand extends Command {
     }
 
     private void sendMessage() {
-
+        //todo
     }
 
     private void getAnswer() {
+        //todo
     }
 }

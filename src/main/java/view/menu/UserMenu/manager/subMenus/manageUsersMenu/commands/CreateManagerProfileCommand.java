@@ -21,9 +21,9 @@ public class CreateManagerProfileCommand extends Command {
 
         ViewToController.sendMessageToController();
         if (ViewToController.getServerMessage().getType().equals("Successful")) {
-
+            //unsure
         } else {
-
+            System.out.println(ViewToController.getServerMessage().getFirstString());
         }
     }
 

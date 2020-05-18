@@ -32,7 +32,7 @@ public class ManageCategoriesCommand extends Command {
     }
 
     private void showCategories() {
-
+        //todo
     }
 
     private void getSortFieldAndDirection() {

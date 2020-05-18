@@ -19,6 +19,14 @@ public class Comment {
         this.status = status;
     }
 
+    public boolean isDoesCustomerBought() {
+        return doesCustomerBought;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
     public String getWhoComment() {
         return whoComment;
     }

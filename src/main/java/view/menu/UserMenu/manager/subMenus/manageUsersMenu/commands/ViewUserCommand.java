@@ -1,5 +1,6 @@
 package view.menu.UserMenu.manager.subMenus.manageUsersMenu.commands;
 
+import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
@@ -21,9 +22,13 @@ public class ViewUserCommand extends Command {
         messageInputs.add(Arrays.asList(text.split("\\s")).get(1));
         ViewToController.sendMessageToController();
         if (ViewToController.getServerMessage().getType().equals("Successful")) {
-
+            viewUser(ViewToController.getServerMessage());
         } else {
-
+            System.out.println(ViewToController.getServerMessage().getFirstString());
         }
+    }
+
+    private void viewUser(ServerMessage serverMessage) {
+        //todo
     }
 }

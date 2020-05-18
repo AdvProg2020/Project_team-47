@@ -33,7 +33,7 @@ public class AcceptRequestCommand extends Command {
     private void getAnswerFromController() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
-
+            //unsure
         } else {
             System.out.println(serverMessage.getFirstString());
         }

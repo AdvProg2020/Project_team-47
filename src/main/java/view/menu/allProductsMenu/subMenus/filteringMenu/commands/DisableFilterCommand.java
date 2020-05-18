@@ -12,6 +12,6 @@ public class DisableFilterCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-
+        //todo
     }
 }

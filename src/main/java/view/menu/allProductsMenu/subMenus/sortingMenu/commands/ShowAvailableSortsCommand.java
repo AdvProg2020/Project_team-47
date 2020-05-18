@@ -12,6 +12,6 @@ public class ShowAvailableSortsCommand extends Command {
 
     @Override
     public void doCommand(String text) {
-
+        //todo
     }
 }
