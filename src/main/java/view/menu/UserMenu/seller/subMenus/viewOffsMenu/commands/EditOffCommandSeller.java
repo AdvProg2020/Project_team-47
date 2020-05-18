@@ -26,8 +26,8 @@ public class EditOffCommandSeller extends Command {
     private void sendMessage(String text) {
         ViewToController.setViewMessage("edit off");
 
-        String offId = Arrays.asList(text.split("\\s")).get(1);
         ArrayList<String> messageInputs = new ArrayList<>();
+        String offId = Arrays.asList(text.split("\\s")).get(1);
         messageInputs.add(offId);
 
         OutputCommands.enterField();
