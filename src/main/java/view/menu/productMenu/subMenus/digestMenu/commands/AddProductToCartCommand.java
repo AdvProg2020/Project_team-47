@@ -1,5 +1,6 @@
 package view.menu.productMenu.subMenus.digestMenu.commands;
 
+import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
@@ -30,5 +31,12 @@ public class AddProductToCartCommand extends Command {
     }
 
     private void getAnswer() {
+        ServerMessage serverMessage = ViewToController.getServerMessage();
+
+        if (serverMessage.getType().equals("Successful")) {
+            //unsure
+        } else {
+            System.out.println(serverMessage.getFirstString());
+        }
     }
 }

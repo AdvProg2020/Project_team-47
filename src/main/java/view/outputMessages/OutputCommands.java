@@ -176,4 +176,12 @@ public class OutputCommands {
     public static void enterContent() {
         System.out.println("enter content");
     }
+
+    public static void enterPostalCode() {
+        System.out.println("enter postal code");
+    }
+
+    public static void enterOtherRequests() {
+        System.out.println("enter other requests");
+    }
 }

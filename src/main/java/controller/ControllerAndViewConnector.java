@@ -204,6 +204,20 @@ public class ControllerAndViewConnector {
                     PurchaseController.purchase();
                 }
                 break;
+            case "get receiver information" :
+                if (Controller.getLoggedUser() == null) {
+                    sendErrorIfNotLoggedIn();
+                } else {
+                    PurchaseController.gettingPurchaseInformation(messageHashMapInputs);
+                }
+                break;
+            case "using discount code" :
+                if (Controller.getLoggedUser() == null) {
+                    sendErrorIfNotLoggedIn();
+                } else {
+                    PurchaseController.applyDiscountCode(message.getFirstString());
+                }
+                break;
 
                 //some other commands about purchasing
 
