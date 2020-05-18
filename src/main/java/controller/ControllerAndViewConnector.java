@@ -307,7 +307,7 @@ public class ControllerAndViewConnector {
                 UserPanelController.edit(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
                 break;
             case "view categories" :
-                AllProductController.viewCategories(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
+                AllProductController.viewCategories(message.getFirstString(), message.getSecondString());
                 break;
             case "show available filters products" :
                 AllProductController.showAvailableFilter();
