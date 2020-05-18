@@ -117,6 +117,10 @@ public class ViewToController {
         clientMessage.setMessageFirstHashMapInputs(viewMessageFirstHashMapInputs);
 
         clientMessage.setMessageSecondHashMapInputs(viewMessageSecondHashMapInputs);
+
+        clientMessage.setFirstString(firstString);
+        clientMessage.setSecondString(secondString);
+
         clientMessage.setObject(viewMessageObject);
 
         ControllerAndViewConnector.setClientMessage((new Gson()).toJson(clientMessage));
