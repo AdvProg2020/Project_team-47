@@ -344,7 +344,7 @@ public class ControllerAndViewConnector {
                 ProductController.attributes();
                 break;
             case "compare products" :
-                ProductController.compare(messageArrayListInputs.get(0));
+                ProductController.compare(message.getFirstString());
                 break;
             case "comments" :
                 ProductController.comment();
