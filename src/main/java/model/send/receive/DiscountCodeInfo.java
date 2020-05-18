@@ -36,4 +36,32 @@ public class DiscountCodeInfo {
     public void setMaxDiscountAmount(int maxDiscountAmount) {
         this.maxDiscountAmount = maxDiscountAmount;
     }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public int getPercent() {
+        return percent;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public int getMaxUsableTime() {
+        return maxUsableTime;
+    }
+
+    public int getMaxDiscountAmount() {
+        return maxDiscountAmount;
+    }
+
+    public ArrayList<String> getUsersAbleToUse() {
+        return usersAbleToUse;
+    }
 }

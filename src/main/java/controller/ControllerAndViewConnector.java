@@ -204,6 +204,10 @@ public class ControllerAndViewConnector {
                     PurchaseController.purchase();
                 }
                 break;
+
+                //some other commands about purchasing
+
+
             case "view orders" :
                 if (Controller.getLoggedUser() == null) {
                     sendErrorIfNotLoggedIn();
@@ -328,8 +332,14 @@ public class ControllerAndViewConnector {
             case "add to cart" :
                 ProductController.addToCart(messageArrayListInputs.get(0));
                 break;
+
+                // don't know what is this
+
+                //PurchaseController.gettingPurchaseInformation();
             /*case "select seller" :
                 break;*/
+
+
             case "product attributes" :
                 ProductController.attributes();
                 break;

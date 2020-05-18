@@ -5,7 +5,7 @@ import view.outputMessages.OutputComments;
 import view.outputMessages.OutputFailure;
 
 public class PaymentCartMenu extends Menu {
-    public PaymentCartMenu(String name, Menu previousMenu) {
+    public PaymentCartMenu(Menu previousMenu) {
         super(previousMenu);
         setName("payment cart menu");
     }
@@ -21,6 +21,7 @@ public class PaymentCartMenu extends Menu {
     }
 
     public void manualExecute(){
+        //todo
         if (!checkIfCanPayFromController()) {
             OutputFailure.unsuccessfulPayment();
         } else {

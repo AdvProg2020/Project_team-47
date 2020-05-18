@@ -1,13 +1,16 @@
 package view.menu.UserMenu.manager.subMenus.viewDiscountCodesMenu.commands;
 
+import model.discount.DiscountCode;
 import model.send.receive.DiscountCodeInfo;
 import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class ViewDiscountCodeCommand extends Command {
     public ViewDiscountCodeCommand(Menu menu) {
@@ -41,6 +44,18 @@ public class ViewDiscountCodeCommand extends Command {
     }
 
     private void showDiscountCodeInfo(ServerMessage serverMessage) {
-        //todo
+        DiscountCodeInfo discountCodeInfo = serverMessage.getDiscountCodeInfo();
+
+        System.out.println("code : " + discountCodeInfo.getCode());
+        System.out.println("startTime : " + discountCodeInfo.getStartTime());
+        System.out.println("finishTime : " + discountCodeInfo.getFinishTime());
+        System.out.println("percent : " + discountCodeInfo.getPercent());
+        System.out.println("maxUsableTime : " + discountCodeInfo.getMaxUsableTime());
+        System.out.println("maxDiscountAmount : " + discountCodeInfo.getMaxDiscountAmount());
+
+        System.out.println("users able to use : ");
+        for (String username : discountCodeInfo.getUsersAbleToUse()) {
+            System.out.println(username);
+        }
     }
 }

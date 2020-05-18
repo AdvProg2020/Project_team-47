@@ -23,9 +23,10 @@ public class ReceiverInformationMenu extends Menu {
     }
 
     public void manualExecute(){
+        //todo
         getReceiverAddress();
         getReceiverPhoneNumber();
-        new DiscountCodeInPurchasingCartMenu("discount code", this).manualExecute();
+        new DiscountCodeInPurchasingCartMenu(this).manualExecute();
     }
 
 

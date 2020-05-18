@@ -7,7 +7,7 @@ import view.outputMessages.OutputErrors;
 import view.outputMessages.OutputQuestions;
 
 public class DiscountCodeInPurchasingCartMenu extends Menu {
-    public DiscountCodeInPurchasingCartMenu(String name, Menu previousMenu) {
+    public DiscountCodeInPurchasingCartMenu(Menu previousMenu) {
         super(previousMenu);
         setName("discount code in purchasing cart menu");
     }
@@ -22,10 +22,11 @@ public class DiscountCodeInPurchasingCartMenu extends Menu {
 
     }
     public void manualExecute() {
+        //todo
         OutputQuestions.haveDiscountCode();
         String haveDiscountCode = getInputCommandWithTrim();
         if (haveDiscountCode.equalsIgnoreCase("no")){
-            new PaymentCartMenu("payment", this).manualExecute();
+            new PaymentCartMenu(this).manualExecute();
         } else if (haveDiscountCode.equalsIgnoreCase("yes")){
             getDiscountCode();
 
@@ -44,7 +45,7 @@ public class DiscountCodeInPurchasingCartMenu extends Menu {
         } else {
             getDiscountFromController(discountCode);
             OutputComments.DiscountAddSuccessful();
-            new PaymentCartMenu("payment", this).manualExecute();
+            new PaymentCartMenu(this).manualExecute();
         }
     }
 
