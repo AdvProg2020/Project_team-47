@@ -15,7 +15,6 @@ public class AllProductsMenu extends Menu {
     }
 
 
-
     @Override
     protected void setSubMenus() {
         subMenus.add(new FilteringMenu(this));

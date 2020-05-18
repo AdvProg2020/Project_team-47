@@ -1,17 +1,25 @@
 package view.outputMessages;
 
 public class OutputCommands {
-    public static void chooseMenu(){
+    public static void chooseMenu() {
         System.out.println("choose a menu");
     }
-    public static void enterInputAgain(){
+
+    public static void enterInputAgain() {
         System.out.println("enter your input again");
     }
-    public static void enterCommand(){
+
+    public static void enterCommand() {
         System.out.println("enter your command");
     }
-    public static void registerManager(){System.out.println("you should register as manager");}
-    public static void enterPassword(){System.out.println("enter password");}
+
+    public static void registerManager() {
+        System.out.println("you should register as manager");
+    }
+
+    public static void enterPassword() {
+        System.out.println("enter password");
+    }
 
     public static void enterEmail() {
         System.out.println("enter email");

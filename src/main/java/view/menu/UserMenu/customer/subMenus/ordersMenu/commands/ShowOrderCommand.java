@@ -5,11 +5,9 @@ import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
-import view.outputMessages.OutputErrors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 public class ShowOrderCommand extends Command {
     public ShowOrderCommand(Menu menu) {
@@ -53,7 +51,7 @@ public class ShowOrderCommand extends Command {
 
         System.out.println("products : ");
 
-         ArrayList<String> productsInfo = logInfo.getProductsInLogForShow();
+        ArrayList<String> productsInfo = logInfo.getProductsInLogForShow();
         int index;
         for (String productInfo : productsInfo) {
             index = productsInfo.indexOf(productInfo) + 1;

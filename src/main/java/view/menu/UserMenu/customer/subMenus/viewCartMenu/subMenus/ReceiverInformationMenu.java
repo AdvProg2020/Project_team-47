@@ -22,7 +22,7 @@ public class ReceiverInformationMenu extends Menu {
 
     }
 
-    public void manualExecute(){
+    public void manualExecute() {
         //todo
         getReceiverAddress();
         getReceiverPhoneNumber();
@@ -37,7 +37,7 @@ public class ReceiverInformationMenu extends Menu {
     private void getReceiverPhoneNumber() {
         OutputCommands.enterPhoneNumber();
         String phoneNumber = Menu.getInputCommandWithTrim();
-        if (!isPhoneNumberValid(phoneNumber)){
+        if (!isPhoneNumberValid(phoneNumber)) {
             OutputErrors.invalidPhoneNumber();
             getReceiverPhoneNumber();
         } else {
@@ -55,7 +55,7 @@ public class ReceiverInformationMenu extends Menu {
     private void getReceiverAddress() {
         OutputCommands.enterAddress();
         String address = Menu.getInputCommandWithTrim();
-        if (!isAddressValid(address)){
+        if (!isAddressValid(address)) {
             OutputErrors.invalidAddress();
             getReceiverAddress();
         } else {

@@ -23,12 +23,26 @@ public class RegisterCommand extends Command {
         setRegex("^create account (manager|seller|customer) [^ ]+$");
     }
 
+    static void goToUserPanelMenu(String type, Command command) {
+        if (type.equalsIgnoreCase("customer")) {
+            new CustomerPanelMenu(command.getMenu()).autoExecute();
+        } else if (type.equalsIgnoreCase("seller")) {
+            new SellerPanelMenu(command.getMenu()).autoExecute();
+        } else if (type.equalsIgnoreCase("manager")) {
+            new ManagerPanelMenu(command.getMenu()).autoExecute();
+        } else {
+            OutputSystemErrors.invalidType();
+        }
+    }
+
     @Override
     public void doCommand(String text) {
         String type = Arrays.asList(text.split("\\s")).get(2);
 
         sendMessageToViewToController(text);
     }
+
+    //"username", "password", "first-name", "last-name", "email", "phone-number", "type"
 
     private void sendMessageToViewToController(String text) {
         ViewToController.setViewMessage("register");
@@ -38,8 +52,6 @@ public class RegisterCommand extends Command {
 
         register(type, username);
     }
-
-    //"username", "password", "first-name", "last-name", "email", "phone-number", "type"
 
     private void register(String type, String username) {
         OutputCommands.enterPassword();
@@ -67,21 +79,21 @@ public class RegisterCommand extends Command {
         String phoneNumber = Menu.getInputCommandWithTrim();
 
 
-            HashMap<String, String> viewMessageHashMapInputs = new HashMap<>();
+        HashMap<String, String> viewMessageHashMapInputs = new HashMap<>();
 
-            viewMessageHashMapInputs.put("username", username);
-            viewMessageHashMapInputs.put("password", password);
-            viewMessageHashMapInputs.put("first-name", firstName);
-            viewMessageHashMapInputs.put("last-name", lastName);
-            viewMessageHashMapInputs.put("email", email);
-            viewMessageHashMapInputs.put("phone-number", phoneNumber);
-            viewMessageHashMapInputs.put("type", type);
+        viewMessageHashMapInputs.put("username", username);
+        viewMessageHashMapInputs.put("password", password);
+        viewMessageHashMapInputs.put("first-name", firstName);
+        viewMessageHashMapInputs.put("last-name", lastName);
+        viewMessageHashMapInputs.put("email", email);
+        viewMessageHashMapInputs.put("phone-number", phoneNumber);
+        viewMessageHashMapInputs.put("type", type);
 
-            ViewToController.setViewMessageFirstHashMapInputs(viewMessageHashMapInputs);
+        ViewToController.setViewMessageFirstHashMapInputs(viewMessageHashMapInputs);
 
-            ViewToController.sendMessageToController();
+        ViewToController.sendMessageToController();
 
-            getPersonalInformationAnswer(username, password, type);
+        getPersonalInformationAnswer(username, password, type);
 
     }
 
@@ -124,21 +136,8 @@ public class RegisterCommand extends Command {
 
     }
 
-
     private boolean isPasswordValid(String password) {
         return Pattern.compile("^[^\\s]+$").matcher(password).find();
-    }
-
-    static void goToUserPanelMenu(String type, Command command) {
-        if (type.equalsIgnoreCase("customer")){
-            new CustomerPanelMenu(command.getMenu()).autoExecute();
-        } else if (type.equalsIgnoreCase("seller")) {
-            new SellerPanelMenu(command.getMenu()).autoExecute();
-        } else if (type.equalsIgnoreCase("manager")) {
-            new ManagerPanelMenu(command.getMenu()).autoExecute();
-        } else {
-            OutputSystemErrors.invalidType();
-        }
     }
 
 }

@@ -20,7 +20,7 @@ public class PaymentCartMenu extends Menu {
 
     }
 
-    public void manualExecute(){
+    public void manualExecute() {
         //todo
         if (!checkIfCanPayFromController()) {
             OutputFailure.unsuccessfulPayment();

@@ -4,8 +4,6 @@ import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
-import java.util.Arrays;
-
 public class GoToProductsMenuCommand extends Command {
     public GoToProductsMenuCommand(Menu menu) {
         super(menu);

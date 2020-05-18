@@ -6,7 +6,10 @@ import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ViewOffCommandSeller extends Command {
     public ViewOffCommandSeller(Menu menu) {
@@ -47,6 +50,8 @@ public class ViewOffCommandSeller extends Command {
         System.out.println("sellerUsername : " + offInfo.getSellerUsername());
         System.out.println("offStatus : " + offInfo.getOffStatus());
         //todo
+        SimpleDateFormat x = new SimpleDateFormat("dd/MM/yyy");
+
         //System.out.println("startTime : " + offInfo.get);
         //System.out.println("finishTime : " + offInfo.get);
 

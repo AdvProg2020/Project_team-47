@@ -14,6 +14,29 @@ public abstract class Command {
         this.menu = menu;
     }
 
+    public static boolean isInputCommandValid(String inputCommand, ArrayList<Command> commands) {
+        for (Command command : commands) {
+            if (command.isInputCommandThisCommand(inputCommand)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Command findCommand(String inputCommand, ArrayList<Command> commands) {
+        for (Command command : commands) {
+            if (command.isInputCommandThisCommand(inputCommand)) {
+                return command;
+            }
+        }
+        return null;
+    }
+
+    public static Command findCommandWithSignature(String inputCommand, ArrayList<Command> commands) {
+        return commands.stream().filter(command -> command.getSignature()
+                .equalsIgnoreCase(inputCommand)).findFirst().orElse(null);
+    }
+
     public String getSignature() {
         return signature;
     }
@@ -22,47 +45,23 @@ public abstract class Command {
         this.signature = signature;
     }
 
-
-
     public String getRegex() {
         return regex;
-    }
-
-    public Menu getMenu() {
-        return menu;
     }
 
     public void setRegex(String regex) {
         this.regex = regex;
     }
 
-    public static boolean isInputCommandValid(String inputCommand, ArrayList<Command> commands) {
-        for (Command command : commands) {
-            if (command.isInputCommandThisCommand(inputCommand)){
-                return true;
-            }
-        }
-        return false;
+    public Menu getMenu() {
+        return menu;
     }
 
-    private  boolean isInputCommandThisCommand(String inputCommand) {
+    private boolean isInputCommandThisCommand(String inputCommand) {
         return Pattern.compile(this.regex).matcher(inputCommand).find();
     }
 
-    public static Command findCommand(String inputCommand, ArrayList<Command> commands) {
-        for (Command command : commands) {
-            if (command.isInputCommandThisCommand(inputCommand)){
-                return command;
-            }
-        }
-        return null;
-    }
     public abstract void doCommand(String text);
-
-    public static Command findCommandWithSignature(String inputCommand, ArrayList<Command> commands){
-        return commands.stream().filter(command -> command.getSignature()
-                .equalsIgnoreCase(inputCommand)).findFirst().orElse(null);
-    }
 
 
 }

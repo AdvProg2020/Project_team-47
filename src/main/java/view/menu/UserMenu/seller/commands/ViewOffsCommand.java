@@ -8,8 +8,6 @@ import view.menu.Menu;
 import view.outputMessages.OutputCommands;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 public class ViewOffsCommand extends Command {
     public ViewOffsCommand(Menu menu) {

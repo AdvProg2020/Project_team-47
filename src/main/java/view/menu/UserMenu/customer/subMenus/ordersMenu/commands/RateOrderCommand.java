@@ -4,9 +4,7 @@ import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
-import view.outputMessages.OutputErrors;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RateOrderCommand extends Command {

@@ -7,9 +7,7 @@ import view.command.Command;
 import view.menu.Menu;
 import view.outputMessages.OutputCommands;
 
-import java.lang.management.MemoryUsage;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ViewSalesHistoryCommand extends Command {
     public ViewSalesHistoryCommand(Menu menu) {
@@ -43,7 +41,7 @@ public class ViewSalesHistoryCommand extends Command {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
             showSalesHistory(serverMessage);
-        } else{
+        } else {
             System.out.println(serverMessage.getFirstString());
         }
     }

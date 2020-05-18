@@ -1,12 +1,9 @@
 package view.menu.loginAndRegisterMenu.Commands;
 
-import view.ViewAttributes;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.menu.UserMenu.customer.CustomerPanelMenu;
-import view.outputMessages.OutputComments;
-import view.outputMessages.OutputErrors;
 
 public class LogoutCommand extends Command {
     public LogoutCommand(Menu menu) {

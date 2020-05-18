@@ -8,7 +8,6 @@ import view.menu.Menu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 
 public class ViewSellerProductCommand extends Command {
@@ -41,6 +40,7 @@ public class ViewSellerProductCommand extends Command {
             System.out.println(serverMessage.getFirstString());
         }
     }
+
     private void showProductInfo(ServerMessage serverMessage) {
         ProductInfo productInfo = serverMessage.getProductInfo();
 

@@ -26,7 +26,7 @@ public class ManagerPanelMenu extends Menu {
 
     @Override
     protected void setSubMenus() {
-        subMenus.add(new AllOffsMenu( this));
+        subMenus.add(new AllOffsMenu(this));
         subMenus.add(new AllProductsMenu(this));
         subMenus.add(new LoginAndRegisterMenu(this));
         subMenus.add(new ManageUsersMenu(this));

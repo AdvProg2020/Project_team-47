@@ -1,11 +1,11 @@
 package view.outputMessages;
 
 public class OutputComments {
-    public static void welcome(){
+    public static void welcome() {
         System.out.println("welcome!!");
     }
 
-    public static void exit(){
+    public static void exit() {
         System.out.println("exit");
     }
 

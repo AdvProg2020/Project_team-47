@@ -1,7 +1,7 @@
 package view.menu.loginAndRegisterMenu;
 
-import view.command.HelpCommand;
 import view.command.BackCommand;
+import view.command.HelpCommand;
 import view.menu.Menu;
 import view.menu.loginAndRegisterMenu.Commands.LoginCommand;
 import view.menu.loginAndRegisterMenu.Commands.LogoutCommand;

@@ -1,16 +1,13 @@
 package view.menu.UserMenu.manager.subMenus.viewDiscountCodesMenu.commands;
 
-import model.discount.DiscountCode;
 import model.send.receive.DiscountCodeInfo;
 import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 public class ViewDiscountCodeCommand extends Command {
     public ViewDiscountCodeCommand(Menu menu) {

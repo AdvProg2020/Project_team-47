@@ -21,13 +21,14 @@ public class DiscountCodeInPurchasingCartMenu extends Menu {
     protected void addCommands() {
 
     }
+
     public void manualExecute() {
         //todo
         OutputQuestions.haveDiscountCode();
         String haveDiscountCode = getInputCommandWithTrim();
-        if (haveDiscountCode.equalsIgnoreCase("no")){
+        if (haveDiscountCode.equalsIgnoreCase("no")) {
             new PaymentCartMenu(this).manualExecute();
-        } else if (haveDiscountCode.equalsIgnoreCase("yes")){
+        } else if (haveDiscountCode.equalsIgnoreCase("yes")) {
             getDiscountCode();
 
         } else {
@@ -39,7 +40,7 @@ public class DiscountCodeInPurchasingCartMenu extends Menu {
     private void getDiscountCode() {
         OutputCommands.enterDiscountCode();
         String discountCode = Menu.getInputCommandWithTrim();
-        if (!checkFromControllerIfDiscountCodeIsValid(discountCode)){
+        if (!checkFromControllerIfDiscountCodeIsValid(discountCode)) {
             OutputErrors.invalidDiscountCode();
             manualExecute();
         } else {

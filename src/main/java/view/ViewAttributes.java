@@ -8,6 +8,7 @@ public class ViewAttributes {
     private static String username;
     private static String password;
     private static String productId;
+
     static {
         userType = "customer";
         userMoney = 0;
@@ -22,8 +23,16 @@ public class ViewAttributes {
         return userType;
     }
 
+    public static void setUserType(String userType) {
+        ViewAttributes.userType = userType;
+    }
+
     public static double getUserMoney() {
         return userMoney;
+    }
+
+    public static void setUserMoney(double userMoney) {
+        ViewAttributes.userMoney = userMoney;
     }
 
     public static boolean isManagerRegister() {
@@ -38,14 +47,6 @@ public class ViewAttributes {
         return userSignedIn;
     }
 
-    public static void setUserType(String userType) {
-        ViewAttributes.userType = userType;
-    }
-
-    public static void setUserMoney(double userMoney) {
-        ViewAttributes.userMoney = userMoney;
-    }
-
     public static void setUserSignedIn(boolean userSignedIn) {
         ViewAttributes.userSignedIn = userSignedIn;
     }
@@ -54,12 +55,12 @@ public class ViewAttributes {
         return username;
     }
 
-    public static String getPassword() {
-        return password;
-    }
-
     public static void setUsername(String username) {
         ViewAttributes.username = username;
+    }
+
+    public static String getPassword() {
+        return password;
     }
 
     public static void setPassword(String password) {

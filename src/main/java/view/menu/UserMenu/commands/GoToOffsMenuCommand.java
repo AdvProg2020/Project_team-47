@@ -4,8 +4,6 @@ import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
-import javax.swing.text.View;
-
 public class GoToOffsMenuCommand extends Command {
     public GoToOffsMenuCommand(Menu menu) {
         super(menu);
@@ -23,6 +21,7 @@ public class GoToOffsMenuCommand extends Command {
 
         }
     }
+
     public void sendMessageToViewToController() {
         ViewToController.setViewMessage("offs");
         ViewToController.sendMessageToController();

@@ -65,7 +65,7 @@ public class AddProductCommand extends Command {
         OutputCommands.enterSpecialPropertyAndEnterKeyForFinish();
         String specialProperty = Menu.getInputCommandWithTrim();
         String specialPropertyValue;
-        while(!specialProperty.equals("\n")) {
+        while (!specialProperty.equals("\n")) {
             OutputCommands.enterSpecialPropertyValue();
 
             specialPropertyValue = Menu.getInputCommandWithTrim();

@@ -47,32 +47,32 @@ public class ViewToController {
         return serverMessage;
     }
 
+    public static void setServerMessage(ServerMessage serverMessage) {
+        ViewToController.serverMessage = serverMessage;
+    }
+
     public static HashMap<String, String> getViewMessageFirstHashMapInputs() {
         return viewMessageFirstHashMapInputs;
-    }
-
-    public static String getFirstString() {
-        return firstString;
-    }
-
-    public static String getSecondString() {
-        return secondString;
-    }
-
-    public static void setFirstString(String firstString) {
-        ViewToController.firstString = firstString;
-    }
-
-    public static void setSecondString(String secondString) {
-        ViewToController.secondString = secondString;
     }
 
     public static void setViewMessageFirstHashMapInputs(HashMap<String, String> viewMessageFirstHashMapInputs) {
         ViewToController.viewMessageFirstHashMapInputs = viewMessageFirstHashMapInputs;
     }
 
-    public static void setServerMessage(ServerMessage serverMessage) {
-        ViewToController.serverMessage = serverMessage;
+    public static String getFirstString() {
+        return firstString;
+    }
+
+    public static void setFirstString(String firstString) {
+        ViewToController.firstString = firstString;
+    }
+
+    public static String getSecondString() {
+        return secondString;
+    }
+
+    public static void setSecondString(String secondString) {
+        ViewToController.secondString = secondString;
     }
 
     public static String getControllerAnswer() {

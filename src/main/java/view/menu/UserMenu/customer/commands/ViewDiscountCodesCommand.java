@@ -7,7 +7,6 @@ import view.command.Command;
 import view.menu.Menu;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ViewDiscountCodesCommand extends Command {
     public ViewDiscountCodesCommand(Menu menu) {

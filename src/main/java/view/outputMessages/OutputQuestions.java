@@ -1,7 +1,7 @@
 package view.outputMessages;
 
 public class OutputQuestions {
-    public static void haveDiscountCode(){
+    public static void haveDiscountCode() {
         System.out.println("do yoy have a discount code? (yes/no)");
     }
 

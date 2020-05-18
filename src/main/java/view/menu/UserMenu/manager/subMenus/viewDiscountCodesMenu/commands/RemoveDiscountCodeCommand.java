@@ -1,6 +1,5 @@
 package view.menu.UserMenu.manager.subMenus.viewDiscountCodesMenu.commands;
 
-import model.send.receive.DiscountCodeInfo;
 import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;

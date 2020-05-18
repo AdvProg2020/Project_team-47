@@ -31,7 +31,7 @@ public class ManageProductsCommandsSeller extends Command {
         if (serverMessage.getType().equals("Successful")) {
             showSellerProducts(serverMessage);
             this.getMenu().findSubMenuWithName("seller products menu").autoExecute();
-        } else{
+        } else {
             System.out.println(serverMessage.getFirstString());
         }
     }

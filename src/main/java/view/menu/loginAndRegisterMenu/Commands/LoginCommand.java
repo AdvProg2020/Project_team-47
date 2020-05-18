@@ -1,13 +1,10 @@
 package view.menu.loginAndRegisterMenu.Commands;
 
 import model.send.receive.ServerMessage;
-import view.ViewAttributes;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.outputMessages.OutputCommands;
-import view.outputMessages.OutputComments;
-import view.outputMessages.OutputErrors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,8 +24,7 @@ public class LoginCommand extends Command {
             forgotPassword(text);
             setNewPassword(text);
             getNewPasswordAnswer();
-        }
-        else {
+        } else {
             sendMessageToViewToController(text, password);
 
             if (ViewToController.getServerMessage().getType().equals("Successful")) {

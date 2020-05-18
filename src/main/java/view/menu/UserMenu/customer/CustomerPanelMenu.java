@@ -4,8 +4,14 @@ import view.command.ExitCommand;
 import view.command.HelpCommand;
 import view.menu.Menu;
 import view.menu.UserMenu.PersonalInfoMenu;
-import view.menu.UserMenu.commands.*;
-import view.menu.UserMenu.customer.commands.*;
+import view.menu.UserMenu.commands.GoToOffsMenuCommand;
+import view.menu.UserMenu.commands.GoToProductsMenuCommand;
+import view.menu.UserMenu.commands.LoginAndRegisterCommandForUser;
+import view.menu.UserMenu.commands.ViewPersonalInfoCommand;
+import view.menu.UserMenu.customer.commands.ViewBalanceCommandCustomer;
+import view.menu.UserMenu.customer.commands.ViewCartCommand;
+import view.menu.UserMenu.customer.commands.ViewDiscountCodesCommand;
+import view.menu.UserMenu.customer.commands.ViewOrdersCommand;
 import view.menu.UserMenu.customer.subMenus.ordersMenu.OrdersMenu;
 import view.menu.UserMenu.customer.subMenus.viewCartMenu.ViewCartMenu;
 import view.menu.allProductsMenu.AllProductsMenu;
@@ -20,8 +26,8 @@ public class CustomerPanelMenu extends Menu {
 
     @Override
     protected void setSubMenus() {
-        subMenus.add(new OrdersMenu( this));
-        subMenus.add(new ViewCartMenu( this));
+        subMenus.add(new OrdersMenu(this));
+        subMenus.add(new ViewCartMenu(this));
         subMenus.add(new PersonalInfoMenu(this));
         subMenus.add(new LoginAndRegisterMenu(this));
         subMenus.add(new AllOffsMenu(this));

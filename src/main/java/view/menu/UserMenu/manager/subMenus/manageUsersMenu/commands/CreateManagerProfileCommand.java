@@ -5,8 +5,6 @@ import view.command.Command;
 import view.menu.Menu;
 import view.outputMessages.OutputCommands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class CreateManagerProfileCommand extends Command {

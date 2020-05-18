@@ -36,6 +36,7 @@ public class OutputErrors {
     public static void invalidPhoneNumber() {
         System.out.println("invalid phone number");
     }
+
     public static void invalidAddress() {
         System.out.println("invalid address");
     }

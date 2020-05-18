@@ -2,12 +2,9 @@ package view.menu.UserMenu.commands;
 
 import model.send.receive.ServerMessage;
 import model.send.receive.UserInfo;
-import view.ViewAttributes;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
-import view.outputMessages.OutputErrors;
-import view.outputMessages.OutputQuestions;
 
 public class ViewPersonalInfoCommand extends Command {
     public ViewPersonalInfoCommand(Menu menu) {
