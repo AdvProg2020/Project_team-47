@@ -323,7 +323,7 @@ public class ControllerAndViewConnector {
                 AllProductController.showAvailableSorts();
                 break;
             case "sort an available sort products" :
-                AllProductController.sort(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
+                AllProductController.sort(message.getFirstString(), message.getSecondString());
                 break;
             case "show current sort products" :
                 AllProductController.currentSort();
@@ -379,7 +379,7 @@ public class ControllerAndViewConnector {
                 OffController.showAvailableSorts();
                 break;
             case "sort an available sort offs" :
-                OffController.sort(messageArrayListInputs.get(0), messageArrayListInputs.get(1));
+                OffController.sort(message.getFirstString(), message.getSecondString());
                 break;
             case "show current sort offs" :
                 OffController.currentSort();
