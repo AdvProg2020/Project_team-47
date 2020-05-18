@@ -184,4 +184,8 @@ public class OutputCommands {
     public static void enterOtherRequests() {
         System.out.println("enter other requests");
     }
+
+    public static void enterFilterKey() {
+        System.out.println("enter filter key");
+    }
 }

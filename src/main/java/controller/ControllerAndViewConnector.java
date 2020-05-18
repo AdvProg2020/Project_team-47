@@ -317,7 +317,7 @@ public class ControllerAndViewConnector {
                 AllProductController.currentFilters();
                 break;
             case "disable a selected filter products" :
-                AllProductController.disableFilter(messageArrayListInputs.get(0));
+                AllProductController.disableFilter(message.getFirstString());
                 break;
             case "show available sorts products" :
                 AllProductController.showAvailableSorts();
@@ -373,7 +373,7 @@ public class ControllerAndViewConnector {
                 OffController.currentFilter();
                 break;
             case "disable a selected filter offs" :
-                OffController.disableFilter(messageArrayListInputs.get(0));
+                OffController.disableFilter(message.getFirstString());
                 break;
             case "show available sorts offs" :
                 OffController.showAvailableSorts();

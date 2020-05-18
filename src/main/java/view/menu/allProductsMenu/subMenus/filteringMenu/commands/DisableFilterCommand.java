@@ -1,8 +1,11 @@
 package view.menu.allProductsMenu.subMenus.filteringMenu.commands;
 
+import model.send.receive.ServerMessage;
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.menu.allProductsMenu.subMenus.filteringMenu.FilteringMenu;
+import view.outputMessages.OutputCommands;
 
 public class DisableFilterCommand extends Command {
     public DisableFilterCommand(Menu menu) {
@@ -18,24 +21,32 @@ public class DisableFilterCommand extends Command {
     }
 
     private void sendMessage() {
+
         switch (((FilteringMenu)this.getMenu()).getType()){
             case "products" :
-
+                ViewToController.setViewMessage("disable a selected filter products");
                 break;
             case "offs" :
-
+                ViewToController.setViewMessage("disable a selected filter offs");
                 break;
         }
+
+        getFilterKey();
+        ViewToController.sendMessageToController();
+    }
+
+    private void getFilterKey() {
+        OutputCommands.enterFilterKey();
+        ViewToController.setFirstString(Menu.getInputCommandWithTrim());
     }
 
     private void getAnswer() {
-        switch (((FilteringMenu)this.getMenu()).getType()){
-            case "products" :
+        ServerMessage serverMessage = ViewToController.getServerMessage();
 
-                break;
-            case "offs" :
-
-                break;
+        if (serverMessage.getType().equals("Successful")) {
+            //unsure
+        } else {
+            System.out.println(serverMessage.getFirstString());
         }
     }
 }

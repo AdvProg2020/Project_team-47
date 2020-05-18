@@ -1,5 +1,6 @@
 package view.menu.allProductsMenu.subMenus.sortingMenu.commands;
 
+import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 import view.menu.allProductsMenu.subMenus.filteringMenu.FilteringMenu;
@@ -21,12 +22,13 @@ public class ShowAvailableSortsCommand extends Command {
     private void sendMessage() {
         switch (((SortingMenu)this.getMenu()).getType()){
             case "products" :
-
+                ViewToController.setViewMessage("show available sorts products");
                 break;
             case "offs" :
-
+                ViewToController.setViewMessage("show available sorts offs");
                 break;
         }
+        ViewToController.sendMessageToController();
     }
 
     private void getAnswer() {
