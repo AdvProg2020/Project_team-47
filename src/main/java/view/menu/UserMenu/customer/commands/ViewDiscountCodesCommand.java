@@ -40,9 +40,11 @@ public class ViewDiscountCodesCommand extends Command {
 
     private void showDiscountCodes(ServerMessage serverMessage) {
         ArrayList<DiscountCodeInfo> discountCodeInfoArrayList = serverMessage.getDiscountCodeInfoArrayList();
+
         int index;
         for (DiscountCodeInfo discountCodeInfo : discountCodeInfoArrayList) {
             index = discountCodeInfoArrayList.indexOf(discountCodeInfo) + 1;
+
             System.out.println(index);
             System.out.println("code : " + discountCodeInfo.getCode());
             System.out.println("percent : " + discountCodeInfo.getPercent());

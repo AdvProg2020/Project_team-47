@@ -1,11 +1,13 @@
 package view.menu.UserMenu.customer.commands;
 
+import model.send.receive.LogInfo;
 import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ViewOrdersCommand extends Command {
     public ViewOrdersCommand(Menu menu) {
@@ -37,7 +39,19 @@ public class ViewOrdersCommand extends Command {
     }
 
     private void showOrders(ServerMessage serverMessage) {
-        //todo
+        ArrayList<LogInfo> logsInfo = serverMessage.getLogInfoArrayList();
+
+        int index;
+        for (LogInfo logInfo : logsInfo) {
+            index = logsInfo.indexOf(logInfo);
+
+            System.out.println(index);
+            System.out.println("logId : " + logInfo.getLogId());
+            System.out.println("price : " + logInfo.getPrice());
+            System.out.println("status : " + logInfo.getStatus());
+            System.out.println("seller : " + logInfo.getSeller());
+        }
     }
 
 }
+
