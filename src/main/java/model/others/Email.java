@@ -42,7 +42,6 @@ public class Email {
         checkingEmailPassword.subject = "Checking Password";
         checkingEmailPassword.content = "Successful";
         checkingEmailPassword.sendWithoutThread();
-
     }
 
     private void sendWithoutThread() {

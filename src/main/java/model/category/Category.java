@@ -105,8 +105,8 @@ abstract public class Category {
     }
 
     public static boolean isThereMainCategory(String categoryName) {
-        for (MainCategory allMainCategory : Category.allMainCategories) {
-            if (allMainCategory.getName().equalsIgnoreCase(categoryName)) {
+        for (MainCategory mainCategory : Category.allMainCategories) {
+            if (mainCategory.getName().equalsIgnoreCase(categoryName)) {
                 return true;
             }
         }
