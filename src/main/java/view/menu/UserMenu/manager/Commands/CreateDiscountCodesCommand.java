@@ -25,31 +25,38 @@ public class CreateDiscountCodesCommand extends Command {
     private void getControllerAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
-
+            //unsure
         } else {
-
+            System.out.println(serverMessage.getFirstString());
         }
     }
 
     private void getDiscountInformation() {
         HashMap<String, String> messageHashMapInputs = new HashMap<>();
         ArrayList<String> messageInputUsernames = new ArrayList<>();
+
         OutputCommands.enterStartTime();
         messageHashMapInputs.put("start-time", Menu.getInputCommandWithTrim());
+
         OutputCommands.enterFinishTime();
         messageHashMapInputs.put("finish-time", Menu.getInputCommandWithTrim());
+
         OutputCommands.enterMaxUsableTime();
         messageHashMapInputs.put("max-usable-time", Menu.getInputCommandWithTrim());
+
         OutputCommands.enterMaxDiscountAmount();
         messageHashMapInputs.put("max-discount-amount", Menu.getInputCommandWithTrim());
+
         OutputCommands.enterPercent();
         messageHashMapInputs.put("percent", Menu.getInputCommandWithTrim());
+
         OutputCommands.enterUsernamesTillEnterKey();
         String inputUsername = Menu.getInputCommandWithTrim();
         while (!inputUsername.equals("\n")) {
             messageInputUsernames.add(inputUsername);
             inputUsername = Menu.getInputCommandWithTrim();
         }
+
         sendMessageToViewToController(messageHashMapInputs, messageInputUsernames);
     }
 
