@@ -127,4 +127,12 @@ public class ViewToController {
         ControllerAndViewConnector.commandProcess();
     }
 
+    public static boolean answerContainError() {
+        if (ViewToController.getServerMessage().getType().equalsIgnoreCase("error")) {
+            System.out.println(ViewToController.getServerMessage().getFirstString());
+            return true;
+        }
+        return false;
+    }
+
 }

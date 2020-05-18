@@ -26,5 +26,8 @@ public class EditPersonalInfoMenuCommand extends Command {
         messageValue.add(fieldNewValue);
         ViewToController.setViewMessageArrayListInputs(messageValue);
         ViewToController.sendMessageToController();
+        if (!ViewToController.answerContainError()) {
+            System.out.println("Successful");
+        }
     }
 }
