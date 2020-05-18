@@ -61,4 +61,17 @@ public class OutputComments {
         System.out.println("3. change");
         System.out.println("4. remove");
     }
+
+    public static void offFields() {
+        System.out.println("1. start-time");
+        System.out.println("2. finish-time");
+        System.out.println("3. percent");
+        System.out.println("4. products");
+    }
+
+    public static void typesOfOffProductsEditing() {
+        System.out.println("1. append");
+        System.out.println("2. replace");
+        System.out.println("4. remove");
+    }
 }

@@ -1,8 +1,11 @@
 package view.menu.UserMenu.seller.subMenus.viewOffsMenu.commands;
 
+import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
+import view.outputMessages.OutputCommands;
+import view.outputMessages.OutputComments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,29 +24,15 @@ public class EditOffCommandSeller extends Command {
     }
 
     private void sendMessage(String text) {
-        String offId = Arrays.asList(text.split("\\s")).get(1);
-        ArrayList<String> messageInput = new ArrayList<>();
         ViewToController.setViewMessage("edit off");
 
-        messageInput.add(offId);
-
-
-    }
-
-    private void getAnswer() {
-    }
-}
-
-/*private void sendMessage(String text) {
-        ViewToController.setViewMessage("edit product");
-        String productId = Arrays.asList(text.split("\\s")).get(1);
+        String offId = Arrays.asList(text.split("\\s")).get(1);
         ArrayList<String> messageInputs = new ArrayList<>();
-        messageInputs.add(productId);
+        messageInputs.add(offId);
 
         OutputCommands.enterField();
-        OutputComments.productFields();
+        OutputComments.offFields();
         getField(messageInputs);
-
 
         ViewToController.setViewMessageArrayListInputs(messageInputs);
         ViewToController.sendMessageToController();
@@ -53,8 +42,8 @@ public class EditOffCommandSeller extends Command {
         String field = Menu.getInputCommandWithTrim();
         messageInputs.add(field);
 
-        if (field.equals("special-property")) {
-            getSpecialProperty();
+        if (field.equals("products")) {
+            getProducts();
 
             OutputCommands.enterType();
             OutputComments.typesOfProductSpecialPropertyEditing();
@@ -68,22 +57,17 @@ public class EditOffCommandSeller extends Command {
         }
     }
 
-    private void getSpecialProperty() {
-        HashMap<String, String> specialProperty = new HashMap<>();
-        OutputCommands.enterSpecialPropertyAndItsValueAndEnterKeyForFinish();
+    private void getProducts() {
+        ArrayList<String> products = new ArrayList<>();
+        OutputCommands.enterProductsIdAndEnterKeyToFinish();
 
-        String specialPropertyName = Menu.getInputCommandWithTrim();
-        String specialPropertyValue;
-
-        while (!specialPropertyName.equals("\n")) {
-            specialPropertyValue = Menu.getInputCommandWithTrim();
-            specialProperty.put(specialPropertyName, specialPropertyValue);
-
-            OutputCommands.enterSpecialPropertyAndItsValueAndEnterKeyForFinish();
-            specialPropertyName = Menu.getInputCommandWithTrim();
+        String product = Menu.getInputCommandWithTrim();
+        while (!product.equals("\n")) {
+            products.add(product);
+            product = Menu.getInputCommandWithTrim();
         }
 
-        ViewToController.setViewMessageObject(specialProperty);
+        ViewToController.setViewMessageObject(products);
     }
 
     private void getAnswer() {
@@ -95,4 +79,4 @@ public class EditOffCommandSeller extends Command {
             System.out.println(serverMessage.getFirstString());
         }
     }
-*/
+}

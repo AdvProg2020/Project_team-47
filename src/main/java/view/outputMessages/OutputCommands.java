@@ -168,4 +168,5 @@ public class OutputCommands {
     public static void enterSpecialPropertyAndItsValueAndEnterKeyForFinish() {
         System.out.println("enter special property and its value and enter key for finish");
     }
+
 }
