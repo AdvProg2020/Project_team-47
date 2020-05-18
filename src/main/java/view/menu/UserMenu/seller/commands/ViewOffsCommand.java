@@ -8,6 +8,8 @@ import view.menu.Menu;
 import view.outputMessages.OutputCommands;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 public class ViewOffsCommand extends Command {
     public ViewOffsCommand(Menu menu) {
@@ -43,7 +45,7 @@ public class ViewOffsCommand extends Command {
     private void getAnswer() {
         ServerMessage serverMessage = ViewToController.getServerMessage();
         if (serverMessage.getType().equals("Successful")) {
-            showOffsInfo(serverMessage.getOffInfoArrayList());
+            showOffsInfo(serverMessage);
             this.getMenu().findSubMenuWithName("view offs menu");
         } else {
             System.out.println(serverMessage.getFirstString());
@@ -51,7 +53,17 @@ public class ViewOffsCommand extends Command {
 
     }
 
-    private void showOffsInfo(ArrayList<OffInfo> offInfoArrayList) {
-        //todo
+    private void showOffsInfo(ServerMessage serverMessage) {
+        ArrayList<OffInfo> offInfoArrayList = serverMessage.getOffInfoArrayList();
+
+        for (OffInfo offInfo : offInfoArrayList) {
+            int offIndex = offInfoArrayList.indexOf(offInfo) + 1;
+            System.out.println(offIndex + ".");
+            System.out.println("offId : " + offInfo.getOffId());
+            System.out.println("percent : " + offInfo.getPercent());
+            System.out.println("startTime : " + offInfo.getStartTime());
+            System.out.println("finishTime : " + offInfo.getFinishTime());
+            System.out.println("offStatus : " + offInfo.getOffStatus());
+        }
     }
 }

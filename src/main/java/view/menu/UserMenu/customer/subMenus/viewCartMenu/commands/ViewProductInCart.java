@@ -40,7 +40,7 @@ public class ViewProductInCart extends Command {
     }
 
     private void goToProductPage(ServerMessage serverMessage) {
-        //todo
+        //unsure
     }
 
 

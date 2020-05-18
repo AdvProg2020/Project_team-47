@@ -36,4 +36,32 @@ public class OffInfo {
     public void setSellerUsername(String sellerUsername) {
         this.sellerUsername = sellerUsername;
     }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public int getPercent() {
+        return percent;
+    }
+
+    public String getOffId() {
+        return offId;
+    }
+
+    public String getOffStatus() {
+        return offStatus;
+    }
+
+    public String getSellerUsername() {
+        return sellerUsername;
+    }
+
+    public HashMap<String, String> getProductsNameId() {
+        return productsNameId;
+    }
 }
