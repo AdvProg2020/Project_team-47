@@ -57,6 +57,21 @@ public class RequestInfo {
         this.addInfo.type = "add-comment";
     }
 
+    public String getRequestedSenderUsername() {
+        return requestedSenderUsername;
+    }
+
+    public Date getApplyDate() {
+        return applyDate;
+    }
+
+    public EditInfo getEditInfo() {
+        return editInfo;
+    }
+
+    public AddInfo getAddInfo() {
+        return addInfo;
+    }
 
     private static class EditInfo {
         private String editType;

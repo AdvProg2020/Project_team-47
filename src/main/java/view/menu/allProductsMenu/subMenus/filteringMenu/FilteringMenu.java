@@ -9,8 +9,19 @@ import view.menu.allProductsMenu.subMenus.filteringMenu.commands.ShowAvailableFi
 import view.menu.allProductsMenu.subMenus.filteringMenu.commands.ShowCurrentFiltersCommand;
 
 public class FilteringMenu extends Menu {
-    public FilteringMenu(Menu previousMenu) {
+    private String type;// products or offs
+    public FilteringMenu(Menu previousMenu, String type) {
         super(previousMenu);
+        this.setName("filtering menu");
+        this.setType("type");
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

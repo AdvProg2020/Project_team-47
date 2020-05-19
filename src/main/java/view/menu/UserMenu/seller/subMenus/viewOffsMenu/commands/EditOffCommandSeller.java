@@ -59,10 +59,10 @@ public class EditOffCommandSeller extends Command {
 
     private void getProducts() {
         ArrayList<String> products = new ArrayList<>();
-        OutputCommands.enterProductsIdAndEnterKeyToFinish();
+        OutputCommands.enterProductsIdAndWriteFinishToFinish();
 
         String product = Menu.getInputCommandWithTrim();
-        while (!product.equals("\n")) {
+        while (!product.equalsIgnoreCase("finish")) {
             products.add(product);
             product = Menu.getInputCommandWithTrim();
         }

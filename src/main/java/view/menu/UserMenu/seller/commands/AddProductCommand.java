@@ -62,10 +62,10 @@ public class AddProductCommand extends Command {
     private void getProductSpecialProperties() {
         HashMap<String, String> specialProperties = new HashMap<>();
 
-        OutputCommands.enterSpecialPropertyAndEnterKeyForFinish();
+        OutputCommands.enterSpecialPropertyAndWriteFinishForFinish();
         String specialProperty = Menu.getInputCommandWithTrim();
         String specialPropertyValue;
-        while (!specialProperty.equals("\n")) {
+        while (!specialProperty.equalsIgnoreCase("finish")) {
             OutputCommands.enterSpecialPropertyValue();
 
             specialPropertyValue = Menu.getInputCommandWithTrim();

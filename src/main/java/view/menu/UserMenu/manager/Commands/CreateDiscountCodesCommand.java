@@ -50,9 +50,9 @@ public class CreateDiscountCodesCommand extends Command {
         OutputCommands.enterPercent();
         messageHashMapInputs.put("percent", Menu.getInputCommandWithTrim());
 
-        OutputCommands.enterUsernamesTillEnterKey();
+        OutputCommands.enterUsernamesTillFinish();
         String inputUsername = Menu.getInputCommandWithTrim();
-        while (!inputUsername.equals("\n")) {
+        while (!inputUsername.equalsIgnoreCase("finish")) {
             messageInputUsernames.add(inputUsername);
             inputUsername = Menu.getInputCommandWithTrim();
         }

@@ -37,11 +37,11 @@ public class AddSubCategoryCommand extends Command {
     }
 
     private ArrayList<String> getSpecialProperties() {
-        OutputCommands.enterSpecialPropertyAndEnterKeyForFinish();
+        OutputCommands.enterSpecialPropertyAndWriteFinishForFinish();
         ArrayList<String> specialProperties = new ArrayList<>();
 
         String specialProperty = Menu.getInputCommandWithTrim();
-        while (!specialProperty.equals("\n")) {
+        while (!specialProperty.equalsIgnoreCase("finish")) {
             specialProperties.add(specialProperty);
             specialProperty = Menu.getInputCommandWithTrim();
         }
