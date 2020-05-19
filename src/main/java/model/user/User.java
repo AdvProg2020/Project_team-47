@@ -80,9 +80,6 @@ abstract public class User {
     }
 
     public static boolean doesUsernameUsed(String username) {
-//        if (usedUsernames.size() == 0) {
-//            return false;
-    //    }
         return usedUsernames.contains(username);
     }
 
