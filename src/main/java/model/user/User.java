@@ -80,6 +80,9 @@ abstract public class User {
     }
 
     public static boolean doesUsernameUsed(String username) {
+//        if (usedUsernames.size() == 0) {
+//            return false;
+    //    }
         return usedUsernames.contains(username);
     }
 
@@ -127,7 +130,7 @@ abstract public class User {
     }
 
     public static boolean isEmailValid(String email) {
-        return Pattern.matches("[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-zA-Z]+", email);
+        return Pattern.matches("[a-zA-Z0-9\\._]+@[a-zA-Z0-9]+.[a-zA-Z]+", email);
     }
 
     public static boolean checkPasswordIsCorrect(String username, String password) {
