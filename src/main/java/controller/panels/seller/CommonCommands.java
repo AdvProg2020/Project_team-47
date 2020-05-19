@@ -144,7 +144,7 @@ class AddProductCommand extends CommonCommands {
     public void addProduct(HashMap<String, String> productInfo, HashMap<String, String> specialProperties) {
         //this function will check product info if it is valid then call addProduct method by seller to creating request
 
-        if (checkAddingProductInformation(productInfo)) {
+        if (!addingInformationIsValid(productInfo)) {
             return;
         }
 
@@ -174,7 +174,7 @@ class AddProductCommand extends CommonCommands {
         return true;
     }
 
-    private boolean checkAddingProductInformation(HashMap<String, String> productInformationHashMap) {
+    private boolean addingInformationIsValid(HashMap<String, String> productInformationHashMap) {
         //check that if client send all information to creating product
 
         String[] productKey = {"name", "price", "number-in-stock", "category", "description", "sub-category", "company"};
