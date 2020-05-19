@@ -4,7 +4,6 @@ import model.others.Product;
 import model.user.Seller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CartInfo {
     private ArrayList<ProductInCart> products;
@@ -26,7 +25,7 @@ public class CartInfo {
         ArrayList<String> products = new ArrayList<>();
         for (ProductInCart productInCart : this.products) {
             Product product = productInCart.getProduct();
-            products.add( "name : " + product.getName()
+            products.add("name : " + product.getName()
                     + "\nid : " + product.getId()
                     + "\nscore average : " + product.getScoreAverage()
                     + "\nseller : " + productInCart.getSeller()

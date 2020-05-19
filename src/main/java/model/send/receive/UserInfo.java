@@ -26,12 +26,16 @@ public class UserInfo {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getType() {
         return type;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getLastName() {
@@ -80,9 +84,5 @@ public class UserInfo {
 
     public void setCompanyInfo(String companyInfo) {
         this.companyInfo = companyInfo;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

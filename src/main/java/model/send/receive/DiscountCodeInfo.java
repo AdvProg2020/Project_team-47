@@ -25,18 +25,6 @@ public class DiscountCodeInfo {
         this.usersAbleToUse.add(user.getUsername());
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setMaxUsableTime(int maxUsableTime) {
-        this.maxUsableTime = maxUsableTime;
-    }
-
-    public void setMaxDiscountAmount(int maxDiscountAmount) {
-        this.maxDiscountAmount = maxDiscountAmount;
-    }
-
     public Date getStartTime() {
         return startTime;
     }
@@ -53,12 +41,24 @@ public class DiscountCodeInfo {
         return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public int getMaxUsableTime() {
         return maxUsableTime;
     }
 
+    public void setMaxUsableTime(int maxUsableTime) {
+        this.maxUsableTime = maxUsableTime;
+    }
+
     public int getMaxDiscountAmount() {
         return maxDiscountAmount;
+    }
+
+    public void setMaxDiscountAmount(int maxDiscountAmount) {
+        this.maxDiscountAmount = maxDiscountAmount;
     }
 
     public ArrayList<String> getUsersAbleToUse() {

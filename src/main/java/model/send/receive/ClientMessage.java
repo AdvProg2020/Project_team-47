@@ -3,7 +3,7 @@ package model.send.receive;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ClientMessage extends Message {
+public class ClientMessage {
     private String messageContext;
     private ArrayList<String> messageArrayListInputs;
     private HashMap<String, String> messageFirstHashMapInputs;
@@ -11,9 +11,18 @@ public class ClientMessage extends Message {
     private String firstString;
     private String secondString;
     private Object object;
+    private int firstInt;
 
     public ClientMessage() {
 
+    }
+
+    public int getFirstInt() {
+        return firstInt;
+    }
+
+    public void setFirstInt(int firstInt) {
+        this.firstInt = firstInt;
     }
 
     public Object getObject() {
@@ -24,7 +33,7 @@ public class ClientMessage extends Message {
         this.object = object;
     }
 
-    public HashMap<String, String> getMessageSecondHashMapInputs() {
+    public HashMap<String, String> getSecondHashMap() {
         return messageSecondHashMapInputs;
     }
 
@@ -48,7 +57,7 @@ public class ClientMessage extends Message {
         this.secondString = secondString;
     }
 
-    public String getMessageContext() {
+    public String getRequest() {
         return messageContext;
     }
 
@@ -56,7 +65,7 @@ public class ClientMessage extends Message {
         this.messageContext = messageContext;
     }
 
-    public ArrayList<String> getMessageArrayListInputs() {
+    public ArrayList<String> getArrayList() {
         return messageArrayListInputs;
     }
 
@@ -64,7 +73,7 @@ public class ClientMessage extends Message {
         this.messageArrayListInputs = messageArrayListInputs;
     }
 
-    public HashMap<String, String> getMessageFirstHashMapInputs() {
+    public HashMap<String, String> getFirstHashMap() {
         return messageFirstHashMapInputs;
     }
 
