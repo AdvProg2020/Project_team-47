@@ -1,6 +1,12 @@
 package controller;
 
 import com.google.gson.Gson;
+import controller.login.LoginController;
+import controller.off.OffController;
+import controller.panels.UserPanelController;
+import controller.product.AllProductsController;
+import controller.product.ProductController;
+import controller.purchase.PurchaseController;
 import model.others.ShoppingCart;
 import model.send.receive.*;
 import model.user.User;
@@ -15,25 +21,49 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 abstract public class Controller {
-    static User loggedUser;
+    protected static User loggedUser;
+    private static ArrayList<Controller> controllers;
     private static Gson gson = new Gson();
 
     static {
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
+        controllers = new ArrayList<>();
+        initializeControllers();
+    }
+
+    private static void initializeControllers() {
+        controllers.add(UserPanelController.getInstance());
+        controllers.add(LoginController.getInstance());
+        controllers.add(AllProductsController.getInstance());
+        controllers.add(OffController.getInstance());
+        controllers.add(ProductController.getInstance());
+        controllers.add(PurchaseController.getInstance());
+    }
+
+    public static void process(ClientMessage clientMessage) {
+        for (Controller controller : controllers) {
+            if (controller.canProcess(clientMessage.getRequest())) {
+                controller.processRequest(clientMessage);
+            }
+        }
     }
 
     public static User getLoggedUser() {
         return loggedUser;
     }
 
-    static void sendError(String errorMessage) {
+    public static void setLoggedUser(User loggedUser) {
+        Controller.loggedUser = loggedUser;
+    }
+
+    public static void sendError(String errorMessage) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("error");
         serverMessage.setFirstString(errorMessage);
-        send((new Gson()).toJson(serverMessage));
+        send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(ArrayList arrayList, String type) {
+    public static void sendAnswer(ArrayList arrayList, String type) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         switch (type) {
@@ -72,77 +102,77 @@ abstract public class Controller {
         send((new Gson()).toJson(serverMessage));
     }
 
-    static void sendAnswer(double number) {
+    public static void sendAnswer(double number) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setNumber(number);
         send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(CategoryInfo categoryInfo) {
+    public static void sendAnswer(CategoryInfo categoryInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setCategoryInfo(categoryInfo);
         send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(LogInfo logInfo) {
+    public static void sendAnswer(LogInfo logInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setLogInfo(logInfo);
         send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(ProductInfo productInfo) {
+    public static void sendAnswer(ProductInfo productInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setProductInfo(productInfo);
         send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(CartInfo cartInfo) {
+    public static void sendAnswer(CartInfo cartInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setCartInfo(cartInfo);
         send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(DiscountCodeInfo discountCodeInfo) {
+    public static void sendAnswer(DiscountCodeInfo discountCodeInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setDiscountCodeInfo(discountCodeInfo);
         send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(OffInfo offInfo) {
+    public static void sendAnswer(OffInfo offInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setOffInfo(offInfo);
         send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(RequestInfo requestInfo) {
+    public static void sendAnswer(RequestInfo requestInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setRequestInfo(requestInfo);
         send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(UserInfo userInfo) {
+    public static void sendAnswer(UserInfo userInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setUserInfo(userInfo);
         send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(String firstString) {
+    public static void sendAnswer(String firstString) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setFirstString(firstString);
         send(gson.toJson(serverMessage));
     }
 
-    static void sendAnswer(String firstString, String secondString) {
+    public static void sendAnswer(String firstString, String secondString) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setFirstString(firstString);
@@ -150,7 +180,7 @@ abstract public class Controller {
         send(gson.toJson(serverMessage));
     }
 
-    static void actionCompleted() {
+    public static void actionCompleted() {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         send(gson.toJson(serverMessage));
@@ -210,4 +240,8 @@ abstract public class Controller {
     public static Gson getGson() {
         return gson;
     }
+
+    public abstract void processRequest(ClientMessage request);
+
+    public abstract boolean canProcess(String request);
 }//end Controller Class
