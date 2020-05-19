@@ -188,4 +188,20 @@ public class OutputCommands {
     public static void enterFilterKey() {
         System.out.println("enter filter key");
     }
+
+    public static void enterFirstFilterValue() {
+        System.out.println("enter filter first value");
+    }
+
+    public static void enterSecondFilterValue() {
+        System.out.println("enter filter second value");
+    }
+
+    public static void enterFilterValue() {
+        System.out.println("enter filter value");
+    }
+
+    public static void enterFilterType() {
+        System.out.println("enter filter type");
+    }
 }

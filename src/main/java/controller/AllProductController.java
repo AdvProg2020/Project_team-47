@@ -51,7 +51,7 @@ public class AllProductController extends Controller {
             sendAnswer(mainCategory.categoryInfoForSending());
     }
 
-    public static void filterBy(String filterType, String filterKey, String firstFilterValue, String secondFilterValue) {
+    public static void filterBy(String filterKey, String filterType, String firstFilterValue, String secondFilterValue) {
         if (!Pattern.matches("(equality|equation)( special-property)?", filterType)) {
             sendError("Wrong filter type!!");
             return;
