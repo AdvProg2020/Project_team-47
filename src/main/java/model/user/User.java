@@ -287,7 +287,6 @@ abstract public class User {
         newEmail.setMessage(this.sendCode);
         newEmail.sendVerificationEmail();
         verificationList.add(this);
-        System.out.println(this.sendCode);//debug
         this.updateDatabase().addNorVerifiedUser();
     }
 
