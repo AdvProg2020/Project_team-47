@@ -51,6 +51,8 @@ public class GiveGiftCommand extends Command {
         messageInputs.put("percent", Menu.getInputCommandWithTrim());
 
         ViewToController.setViewMessageFirstHashMapInputs(messageInputs);
+        ViewToController.sendMessageToController();
+
         getAnswer();
     }
 
