@@ -33,6 +33,8 @@ public class ProductData {
     }
 
     static void addProducts(ArrayList<ProductData> products) {
+        if (products == null)
+            return;
         for (ProductData product : products) {
             product.createProduct();
         }

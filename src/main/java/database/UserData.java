@@ -52,12 +52,16 @@ public class UserData {
 
 
     static void addUsers(ArrayList<UserData> users) {
+        if (users == null)
+            return;
         for (UserData user : users) {
             user.createUser().addToUsersFromDatabase();
         }
     }
 
     static void addNotVerifiedUsers(ArrayList<UserData> notVerifiedUsers) {
+        if (notVerifiedUsers == null)
+            return;
         for (UserData notVerifiedUser : notVerifiedUsers) {
             notVerifiedUser.createUser().addToVerificationListFromDatabase();
         }

@@ -22,6 +22,8 @@ public class OffData {
     }
 
     static void addOffs(ArrayList<OffData> offs) {
+        if (offs == null)
+            return;
         for (OffData off : offs) {
             off.createOff();
         }

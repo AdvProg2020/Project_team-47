@@ -21,10 +21,7 @@ import java.util.Scanner;
 import java.util.TreeSet;
 
 public class Database {
-    private static InputStream inputStream;
     private static OutputStream outputStream;
-    private static Scanner scanner;
-    private static Formatter formatter;
     private static Gson gson;
 
     static {
@@ -52,6 +49,7 @@ public class Database {
         sellLogs = new ArrayList<>();
         products = new ArrayList<>();
         users = new ArrayList<>();
+        requests = new ArrayList<>();
         notVerifiedUsers = new ArrayList<>();
         usedUsernames = new TreeSet<>();
         usedProductId = new TreeSet<>();
@@ -59,8 +57,8 @@ public class Database {
 
     private static String readFile(File file) {
         try {
-            inputStream = new FileInputStream(file);
-            scanner = new Scanner(inputStream);
+            InputStream inputStream = new FileInputStream(file);
+            Scanner scanner = new Scanner(inputStream);
             StringBuilder fileContent = new StringBuilder();
             while (scanner.hasNextLine()) {
                 fileContent.append(scanner.nextLine());
@@ -198,22 +196,6 @@ public class Database {
         UserData.connectRelations(this.users, this.sellLogs, this.buyLogs);
     }
 
-    SellLog getSellLogById(String id) {
-        for (SellLog sellLog : sellLogs) {
-            if (sellLog.getLogId().equals(id))
-                return sellLog;
-        }
-        return null;
-    }
-
-    BuyLog getBuyLogById(String id) {
-        for (BuyLog buyLog : buyLogs) {
-            if (buyLog.getLogId().equals(id))
-                return buyLog;
-        }
-        return null;
-    }
-
     private void loadDatabase() {
         this.creatingFolders();
         this.loadEmail();
@@ -240,7 +222,7 @@ public class Database {
     private void loadEmail() {
         System.out.println("Enter email password!!");
         Email.setPassword(Menu.getInputCommandWithTrim());
-        Email.checkPassword();
+        // Email.checkPassword();
         File htmlPage = new File(Path.RESOURCE.getPath() + "HtmlPage.html");
         Email.setHtmlPage(readFile(htmlPage));
     }
@@ -348,7 +330,6 @@ public class Database {
                 continue;
             addBuyLog(readFile(file));
         }
-
     }
 
     private void loadSellLogs() {

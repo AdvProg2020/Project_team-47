@@ -25,6 +25,8 @@ public class CategoryData {
     }
 
     static void addCategories(ArrayList<CategoryData> categories) {
+        if (categories == null)
+            return;
         for (CategoryData category : categories) {
             category.createCategory();
         }

@@ -25,6 +25,8 @@ public class DiscountCodeData {
     }
 
     static void addCodes(ArrayList<DiscountCodeData> codes) {
+        if (codes == null)
+            return;
         for (DiscountCodeData code : codes) {
             code.createCode();
         }
