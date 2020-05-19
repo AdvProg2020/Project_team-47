@@ -23,31 +23,33 @@ public abstract class UserPanelCommands extends Command {
         return EditFieldCommand.getInstance();
     }
 
-    public static boolean checkSort(String sortField, String direction, String itemToSort) {
+    public static boolean checkSort(String field, String direction, String itemToSort) {
         //this function will check that items could sort by the given field and direction
 
-        if (sortField == null && direction == null) {
+        if (field == null && direction == null) {
             return true;
-        } else if (sortField == null || direction == null) {
+        } else if (field == null || direction == null) {
             return false;
+        } else if (field.isEmpty()&&direction.isEmpty()) {
+            return true;
         } else if (!Pattern.matches("(descending|ascending)", direction)) {
             return false;
         }
 
         switch (itemToSort) {
             case "log":
-                return sortField.equals("money");
+                return field.equals("money");
             case "request":
-                return Pattern.matches("(apply-date|sender-username)", sortField);
+                return Pattern.matches("(apply-date|sender-username)", field);
             case "user":
-                return Pattern.matches("(first-name|last-name|username)", sortField);
+                return Pattern.matches("(first-name|last-name|username)", field);
             case "off":
             case "discount-code":
-                return Pattern.matches("(start-time|finish-time|percent)", sortField);
+                return Pattern.matches("(start-time|finish-time|percent)", field);
             case "product":
-                return Pattern.matches("(name|score|seen-time|price)", sortField);
+                return Pattern.matches("(name|score|seen-time|price)", field);
             case "category":
-                return sortField.equals("name");
+                return field.equals("name");
         }
         return false;
     }
