@@ -77,8 +77,8 @@ public class OutputCommands {
         System.out.println("enter percent");
     }
 
-    public static void enterUsernamesTillEnterKey() {
-        System.out.println("enter usernames and for ending it press enter key");
+    public static void enterUsernamesTillFinish() {
+        System.out.println("enter usernames and for ending it write \"finish\"");
     }
 
     public static void enterSortField() {
@@ -129,20 +129,20 @@ public class OutputCommands {
         System.out.println("enter company");
     }
 
-    public static void enterSpecialPropertyAndEnterKeyForFinish() {
-        System.out.println("enter special property and enter key for finish");
+    public static void enterSpecialPropertyAndWriteFinishForFinish() {
+        System.out.println("enter special property and write \"finish\" for finish");
     }
 
     public static void enterSpecialPropertyValue() {
         System.out.println("enter special property value");
     }
 
-    public static void enterOffInformationAndEnterKeyForFinish() {
-        System.out.println("enter off information and enter key for finish");
+    public static void enterOffInformationAndWriteFinishForFinish() {
+        System.out.println("enter off information and write \"finish\" for finish");
     }
 
-    public static void enterProductsIdAndEnterKeyToFinish() {
-        System.out.println("enter products id and enter key for finish");
+    public static void enterProductsIdAndWriteFinishToFinish() {
+        System.out.println("enter products id and write \"finish\" for finish");
     }
 
     public static void enterSellerUsername() {
@@ -165,8 +165,8 @@ public class OutputCommands {
         System.out.println("enter type");
     }
 
-    public static void enterSpecialPropertyAndItsValueAndEnterKeyForFinish() {
-        System.out.println("enter special property and its value and enter key for finish");
+    public static void enterSpecialPropertyAndItsValueAndWriteFinishForFinish() {
+        System.out.println("enter special property and its value and write \"finish\" for finish");
     }
 
     public static void enterTitle() {

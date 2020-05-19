@@ -48,10 +48,10 @@ public class AddOffCommandSeller extends Command {
 
     private void getOffProductsId() {
         ArrayList<String> productsId = new ArrayList<>();
-        OutputCommands.enterProductsIdAndEnterKeyToFinish();
+        OutputCommands.enterProductsIdAndWriteFinishToFinish();
 
         String productId = Menu.getInputCommandWithTrim();
-        while (!productId.equals("\n")) {
+        while (!productId.equalsIgnoreCase("finish")) {
             productsId.add(productId);
             productId = Menu.getInputCommandWithTrim();
         }

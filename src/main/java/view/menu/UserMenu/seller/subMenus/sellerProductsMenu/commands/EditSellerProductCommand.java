@@ -60,16 +60,16 @@ public class EditSellerProductCommand extends Command {
 
     private void getSpecialProperty() {
         HashMap<String, String> specialProperty = new HashMap<>();
-        OutputCommands.enterSpecialPropertyAndItsValueAndEnterKeyForFinish();
+        OutputCommands.enterSpecialPropertyAndItsValueAndWriteFinishForFinish();
 
         String specialPropertyName = Menu.getInputCommandWithTrim();
         String specialPropertyValue;
 
-        while (!specialPropertyName.equals("\n")) {
+        while (!specialPropertyName.equalsIgnoreCase("finish")) {
             specialPropertyValue = Menu.getInputCommandWithTrim();
             specialProperty.put(specialPropertyName, specialPropertyValue);
 
-            OutputCommands.enterSpecialPropertyAndItsValueAndEnterKeyForFinish();
+            OutputCommands.enterSpecialPropertyAndItsValueAndWriteFinishForFinish();
             specialPropertyName = Menu.getInputCommandWithTrim();
         }
 

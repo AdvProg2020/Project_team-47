@@ -35,10 +35,10 @@ public class AddMainCategoryCommand extends Command {
 
     private ArrayList<String> getSpecialProperties() {
         ArrayList<String> specialProperties = new ArrayList<>();
-        OutputCommands.enterSpecialPropertyAndEnterKeyForFinish();
+        OutputCommands.enterSpecialPropertyAndWriteFinishForFinish();
 
         String specialProperty = Menu.getInputCommandWithTrim();
-        while (!specialProperty.equals("\n")) {
+        while (!specialProperty.equals("finish")) {
             specialProperties.add(specialProperty);
             specialProperty = Menu.getInputCommandWithTrim();
         }

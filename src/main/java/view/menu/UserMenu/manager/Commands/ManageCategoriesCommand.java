@@ -59,10 +59,13 @@ public class ManageCategoriesCommand extends Command {
 
     private void getSortFieldAndDirection() {
         ArrayList<String> messageInputs = new ArrayList<>();
+
         OutputCommands.enterSortField();
         messageInputs.add(Menu.getInputCommandWithTrim());
+
         OutputCommands.enterSortDirection();
         messageInputs.add(Menu.getInputCommandWithTrim());
+
         sendRequest(messageInputs);
     }
 
