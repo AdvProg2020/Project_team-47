@@ -41,11 +41,20 @@ abstract public class Controller {
     }
 
     public static void process(ClientMessage clientMessage) {
+        fixOutOfBounds(clientMessage);
         for (Controller controller : controllers) {
             if (controller.canProcess(clientMessage.getRequest())) {
                 controller.processRequest(clientMessage);
                 return;
             }
+        }
+    }
+
+    private static void fixOutOfBounds(ClientMessage clientMessage) {
+        if (clientMessage.getArrayList() != null) {
+            clientMessage.getArrayList().add(null);
+            clientMessage.getArrayList().add(null);
+            clientMessage.getArrayList().add(null);
         }
     }
 
@@ -100,7 +109,7 @@ abstract public class Controller {
                 sendError("Wrong ArrayList type.(Server Error!!)");
                 return;
         }
-        send((new Gson()).toJson(serverMessage));
+        send(getGson().toJson(serverMessage));
     }
 
     public static void sendAnswer(double number) {
