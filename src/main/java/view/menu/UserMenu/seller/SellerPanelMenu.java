@@ -6,12 +6,17 @@ import view.menu.Menu;
 import view.menu.UserMenu.PersonalInfoMenu;
 import view.menu.UserMenu.commands.GoToOffsMenuCommand;
 import view.menu.UserMenu.commands.GoToProductsMenuCommand;
+import view.menu.UserMenu.commands.LoginAndRegisterCommandForUser;
 import view.menu.UserMenu.commands.ViewPersonalInfoCommand;
-import view.menu.UserMenu.seller.commands.*;
+import view.menu.UserMenu.seller.commands.ManageProductsCommandsSeller;
+import view.menu.UserMenu.seller.commands.ViewBalanceCommandSeller;
+import view.menu.UserMenu.seller.commands.ViewCompanyInformationCommand;
+import view.menu.UserMenu.seller.commands.ViewSalesHistoryCommand;
 import view.menu.UserMenu.seller.subMenus.sellerProductsMenu.SellerProductsMenu;
 import view.menu.UserMenu.seller.subMenus.viewOffsMenu.ViewOffsMenu;
 import view.menu.allProductsMenu.AllProductsMenu;
 import view.menu.allProductsMenu.commands.ViewCategoriesCommand;
+import view.menu.loginAndRegisterMenu.LoginAndRegisterMenu;
 import view.menu.offsMenu.AllOffsMenu;
 
 public class SellerPanelMenu extends Menu {
@@ -28,6 +33,7 @@ public class SellerPanelMenu extends Menu {
         subMenus.add(new SellerProductsMenu(this));
         subMenus.add(new ViewOffsMenu(this));
         subMenus.add(new PersonalInfoMenu(this));
+        subMenus.add(new LoginAndRegisterMenu(this));
     }
 
     @Override
@@ -40,6 +46,7 @@ public class SellerPanelMenu extends Menu {
         menuCommands.add(new ManageProductsCommandsSeller(this));
         menuCommands.add(new ViewBalanceCommandSeller(this));
         menuCommands.add(new ViewCategoriesCommand(this));
+        menuCommands.add(new LoginAndRegisterCommandForUser(this));
         menuCommands.add(new HelpCommand(this));
         menuCommands.add(new ExitCommand(this));
     }
