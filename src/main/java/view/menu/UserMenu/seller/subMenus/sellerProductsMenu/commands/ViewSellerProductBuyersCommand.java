@@ -13,7 +13,7 @@ public class ViewSellerProductBuyersCommand extends Command {
     public ViewSellerProductBuyersCommand(Menu menu) {
         super(menu);
         setSignature("view buyers [productId]");
-        setSignature("^view buyers [^\\s]+$");
+        setRegex("^view buyers [^\\s]+$");
     }
 
     @Override

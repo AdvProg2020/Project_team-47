@@ -44,6 +44,7 @@ abstract public class Controller {
         for (Controller controller : controllers) {
             if (controller.canProcess(clientMessage.getRequest())) {
                 controller.processRequest(clientMessage);
+                return;
             }
         }
     }

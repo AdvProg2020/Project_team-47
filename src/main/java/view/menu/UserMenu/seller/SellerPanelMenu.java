@@ -39,8 +39,8 @@ public class SellerPanelMenu extends Menu {
         menuCommands.add(new ViewSalesHistoryCommand(this));
         menuCommands.add(new ManageProductsCommandsSeller(this));
         menuCommands.add(new ViewBalanceCommandSeller(this));
+        menuCommands.add(new ViewCategoriesCommand(this));
         menuCommands.add(new HelpCommand(this));
         menuCommands.add(new ExitCommand(this));
-        menuCommands.add(new ViewCategoriesCommand(this));
     }
 }

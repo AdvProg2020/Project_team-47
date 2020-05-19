@@ -15,7 +15,7 @@ public class EditSellerProductCommand extends Command {
     public EditSellerProductCommand(Menu menu) {
         super(menu);
         setSignature("edit [productId]");
-        setSignature("^edit [^\\s]+$");
+        setRegex("^edit [^\\s]+$");
     }
 
     @Override

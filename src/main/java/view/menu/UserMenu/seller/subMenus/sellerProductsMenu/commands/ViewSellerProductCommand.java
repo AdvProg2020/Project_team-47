@@ -14,7 +14,7 @@ public class ViewSellerProductCommand extends Command {
     public ViewSellerProductCommand(Menu menu) {
         super(menu);
         setSignature("view [productId]");
-        setSignature("^view [^\\s]+$");
+        setRegex("^view [^\\s]+$");
     }
 
     @Override
