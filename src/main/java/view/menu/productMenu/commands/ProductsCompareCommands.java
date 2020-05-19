@@ -1,6 +1,5 @@
 package view.menu.productMenu.commands;
 
-import model.others.Product;
 import model.send.receive.ProductInfo;
 import model.send.receive.ServerMessage;
 import view.ViewToController;
@@ -48,11 +47,11 @@ public class ProductsCompareCommands extends Command {
 
         System.out.println("name : " + "1. " + firstProductInfo.getName() + "2. " + secondProductInfo.getName());
         System.out.println("id : " + "1. " + firstProductInfo.getId() + "2. " + secondProductInfo.getId());
-        System.out.println("scoreAverage : " + "1. " +  firstProductInfo.getScoreAverage() + "2. " + secondProductInfo.getScoreAverage());
-        System.out.println("description : " + "1. " +  firstProductInfo.getDescription() + "2. " + secondProductInfo.getDescription());
-        System.out.println("status : " + "1. " +  firstProductInfo.getStatus() + "2. " + secondProductInfo.getStatus());
-        System.out.println("seenTime : " + "1. " +  firstProductInfo.getSeenTime() + "2. " + secondProductInfo.getSeenTime());
-        System.out.println("mainCategory : " + "1. " +  firstProductInfo.getMainCategory() + "2. " + secondProductInfo.getMainCategory());
-        System.out.println("subCategory : " + "1. " +  firstProductInfo.getSubCategory() + "2. " + secondProductInfo.getSubCategory());
+        System.out.println("scoreAverage : " + "1. " + firstProductInfo.getScoreAverage() + "2. " + secondProductInfo.getScoreAverage());
+        System.out.println("description : " + "1. " + firstProductInfo.getDescription() + "2. " + secondProductInfo.getDescription());
+        System.out.println("status : " + "1. " + firstProductInfo.getStatus() + "2. " + secondProductInfo.getStatus());
+        System.out.println("seenTime : " + "1. " + firstProductInfo.getSeenTime() + "2. " + secondProductInfo.getSeenTime());
+        System.out.println("mainCategory : " + "1. " + firstProductInfo.getMainCategory() + "2. " + secondProductInfo.getMainCategory());
+        System.out.println("subCategory : " + "1. " + firstProductInfo.getSubCategory() + "2. " + secondProductInfo.getSubCategory());
     }
 }

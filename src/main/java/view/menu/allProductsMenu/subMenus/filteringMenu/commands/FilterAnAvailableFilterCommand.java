@@ -1,6 +1,5 @@
 package view.menu.allProductsMenu.subMenus.filteringMenu.commands;
 
-import controller.Controller;
 import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
@@ -28,12 +27,12 @@ public class FilterAnAvailableFilterCommand extends Command {
         ArrayList<String> messageInputs = new ArrayList<>();
         messageInputs.add(Arrays.asList(text.split("\\s")).get(1));
 
-        switch (((FilteringMenu)this.getMenu()).getType()){
-            case "products" :
+        switch (((FilteringMenu) this.getMenu()).getType()) {
+            case "products":
                 ViewToController.setViewMessage("filter an available filter products");
                 getProductsFilterMessageInputs(messageInputs);
                 break;
-            case "offs" :
+            case "offs":
                 ViewToController.setViewMessage("filter an available filter offs");
                 getOffsFilterMessageInputs(messageInputs);
                 break;

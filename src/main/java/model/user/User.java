@@ -195,6 +195,8 @@ abstract public class User {
     }
 
     public static void setUsedUsernames(TreeSet<String> usedUsernames) {
+        if (usedUsernames == null)
+            return;
         User.usedUsernames = usedUsernames;
     }
 

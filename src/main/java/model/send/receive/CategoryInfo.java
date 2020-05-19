@@ -31,14 +31,6 @@ public class CategoryInfo {
         this.productsNameId.put(product.getName(), product.getId());
     }
 
-    public void setSubCategories(ArrayList<String> subCategories) {
-        this.subCategories = subCategories;
-    }
-
-    public void setMainCategory(String mainCategory) {
-        this.mainCategory = mainCategory;
-    }
-
     public String getName() {
         return name;
     }
@@ -55,7 +47,15 @@ public class CategoryInfo {
         return subCategories;
     }
 
+    public void setSubCategories(ArrayList<String> subCategories) {
+        this.subCategories = subCategories;
+    }
+
     public String getMainCategory() {
         return mainCategory;
+    }
+
+    public void setMainCategory(String mainCategory) {
+        this.mainCategory = mainCategory;
     }
 }

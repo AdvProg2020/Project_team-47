@@ -1,6 +1,5 @@
 package view.menu.UserMenu.manager.subMenus.manageRequestsMenu.commands;
 
-import model.others.request.Request;
 import model.send.receive.RequestInfo;
 import model.send.receive.ServerMessage;
 import view.ViewToController;
@@ -9,7 +8,6 @@ import view.menu.Menu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 public class RequestDetailsCommand extends Command {
     public RequestDetailsCommand(Menu menu) {

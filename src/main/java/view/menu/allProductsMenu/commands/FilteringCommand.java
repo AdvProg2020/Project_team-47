@@ -5,6 +5,7 @@ import view.menu.Menu;
 
 public class FilteringCommand extends Command {
     private String type; // products or offs
+
     public FilteringCommand(Menu menu, String type) {
         super(menu);
         setSignature("filtering");

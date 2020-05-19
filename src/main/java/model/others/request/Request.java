@@ -86,6 +86,8 @@ public class Request {
     }
 
     public static void setAllNewRequests(ArrayList<Request> allNewRequests) {
+        if (allNewRequests == null)
+            return;
         Request.allNewRequests = allNewRequests;
     }
 

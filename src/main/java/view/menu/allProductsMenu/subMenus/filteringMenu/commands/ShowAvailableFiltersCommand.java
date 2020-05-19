@@ -22,13 +22,13 @@ public class ShowAvailableFiltersCommand extends Command {
     }
 
     private void sendMessage() {
-        switch (((FilteringMenu)this.getMenu()).getType()){
-            case "products" :
+        switch (((FilteringMenu) this.getMenu()).getType()) {
+            case "products":
                 ViewToController.setViewMessage("show available filters products");
                 break;
-            case "offs" :
+            case "offs":
                 ViewToController.setViewMessage("show available filters offs");
-                 break;
+                break;
         }
         ViewToController.sendMessageToController();
     }

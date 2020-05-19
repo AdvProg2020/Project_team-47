@@ -22,11 +22,11 @@ public class DisableFilterCommand extends Command {
 
     private void sendMessage() {
 
-        switch (((FilteringMenu)this.getMenu()).getType()){
-            case "products" :
+        switch (((FilteringMenu) this.getMenu()).getType()) {
+            case "products":
                 ViewToController.setViewMessage("disable a selected filter products");
                 break;
-            case "offs" :
+            case "offs":
                 ViewToController.setViewMessage("disable a selected filter offs");
                 break;
         }

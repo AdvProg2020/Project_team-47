@@ -4,10 +4,7 @@ import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
-import view.menu.allProductsMenu.subMenus.filteringMenu.FilteringMenu;
 import view.menu.allProductsMenu.subMenus.sortingMenu.SortingMenu;
-
-import java.util.ArrayList;
 
 public class ShowCurrentSortCommand extends Command {
     public ShowCurrentSortCommand(Menu menu) {
@@ -23,11 +20,11 @@ public class ShowCurrentSortCommand extends Command {
     }
 
     private void sendMessage() {
-        switch (((SortingMenu)this.getMenu()).getType()){
-            case "products" :
+        switch (((SortingMenu) this.getMenu()).getType()) {
+            case "products":
                 ViewToController.setViewMessage("show current sort products");
                 break;
-            case "offs" :
+            case "offs":
                 ViewToController.setViewMessage("show current sort offs");
                 break;
         }

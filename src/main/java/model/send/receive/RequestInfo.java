@@ -35,10 +35,6 @@ public class RequestInfo {
         this.type = type;
     }
 
-    public void setApplyDate(Date applyDate) {
-        this.applyDate = applyDate;
-    }
-
     public void setEditInfo(String filed, String newValue, ArrayList<String> newValueArrayList) {
         this.editInfo = new EditInfo("edit-off", filed, newValue, newValueArrayList);
     }
@@ -46,7 +42,6 @@ public class RequestInfo {
     public void setEditInfo(String filed, String newValue, HashMap<String, String> newValueArrayList) {
         this.editInfo = new EditInfo("edit-product", filed, newValue, newValueArrayList);
     }
-
 
     public void setAddInfo(String type, String username, HashMap<String, String> addingInfo) {
         this.addInfo = new AddInfo(type, username, addingInfo);
@@ -63,6 +58,10 @@ public class RequestInfo {
 
     public Date getApplyDate() {
         return applyDate;
+    }
+
+    public void setApplyDate(Date applyDate) {
+        this.applyDate = applyDate;
     }
 
     public EditInfo getEditInfo() {

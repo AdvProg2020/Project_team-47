@@ -216,6 +216,8 @@ public class Product {
     }
 
     public static void setUsedId(TreeSet<String> usedId) {
+        if (usedId == null)
+            return;
         Product.usedId = usedId;
     }
 

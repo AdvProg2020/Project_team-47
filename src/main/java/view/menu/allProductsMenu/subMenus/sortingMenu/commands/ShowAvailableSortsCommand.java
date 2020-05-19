@@ -4,7 +4,6 @@ import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
-import view.menu.allProductsMenu.subMenus.filteringMenu.FilteringMenu;
 import view.menu.allProductsMenu.subMenus.sortingMenu.SortingMenu;
 
 import java.util.ArrayList;
@@ -23,11 +22,11 @@ public class ShowAvailableSortsCommand extends Command {
     }
 
     private void sendMessage() {
-        switch (((SortingMenu)this.getMenu()).getType()){
-            case "products" :
+        switch (((SortingMenu) this.getMenu()).getType()) {
+            case "products":
                 ViewToController.setViewMessage("show available sorts products");
                 break;
-            case "offs" :
+            case "offs":
                 ViewToController.setViewMessage("show available sorts offs");
                 break;
         }

@@ -23,6 +23,7 @@ abstract public class Category {
     protected ArrayList<String> specialProperties;
     protected ArrayList<Product> allProducts;
     private String id;
+
     public Category() {
         allProducts = new ArrayList<>();
         specialProperties = new ArrayList<>();

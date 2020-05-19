@@ -8,7 +8,6 @@ import view.menu.Menu;
 import view.outputMessages.OutputCommands;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ManageCategoriesCommand extends Command {
     public ManageCategoriesCommand(Menu menu) {

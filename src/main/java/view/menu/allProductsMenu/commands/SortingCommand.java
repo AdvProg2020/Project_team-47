@@ -5,6 +5,7 @@ import view.menu.Menu;
 
 public class SortingCommand extends Command {
     private String type; // products or offs
+
     public SortingCommand(Menu menu, String type) {
         super(menu);
         setSignature("sorting");

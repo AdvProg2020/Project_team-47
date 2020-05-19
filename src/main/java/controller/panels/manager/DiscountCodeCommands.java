@@ -119,7 +119,7 @@ class CreateCodeCommand extends DiscountCodeCommands {
 
     private boolean discountUsersHasError(ArrayList<String> usernames) {
         //check that users who could use code exists and check start and finish time
-        if (User.isThereCustomersWithUsername(usernames)) {
+        if (!User.isThereCustomersWithUsername(usernames)) {
             sendError("There isn't customer for some of username you entered!!");
             return true;
         }

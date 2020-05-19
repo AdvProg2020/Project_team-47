@@ -30,7 +30,7 @@ public abstract class UserPanelCommands extends Command {
             return true;
         } else if (field == null || direction == null) {
             return false;
-        } else if (field.isEmpty()&&direction.isEmpty()) {
+        } else if (field.isEmpty() && direction.isEmpty()) {
             return true;
         } else if (!Pattern.matches("(descending|ascending)", direction)) {
             return false;

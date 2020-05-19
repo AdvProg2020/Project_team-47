@@ -10,6 +10,7 @@ import view.menu.allProductsMenu.subMenus.sortingMenu.commands.SortAnAvailableSo
 
 public class SortingMenu extends Menu {
     private String type; // products or offs
+
     public SortingMenu(Menu previousMenu, String type) {
         super(previousMenu);
         setName("sorting menu");

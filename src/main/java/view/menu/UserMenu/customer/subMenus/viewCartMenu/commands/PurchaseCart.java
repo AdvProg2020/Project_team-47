@@ -66,7 +66,7 @@ public class PurchaseCart extends Command {
             OutputCommands.enterDiscountCode();
             ViewToController.setFirstString(Menu.getInputCommandWithTrim());
             ViewToController.sendMessageToController();
-        } else if(answer.equalsIgnoreCase("no")) {
+        } else if (answer.equalsIgnoreCase("no")) {
             ViewToController.setFirstString("");
             ViewToController.sendMessageToController();
         } else {

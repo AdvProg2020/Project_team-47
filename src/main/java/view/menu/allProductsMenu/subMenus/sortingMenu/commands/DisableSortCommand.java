@@ -4,7 +4,6 @@ import model.send.receive.ServerMessage;
 import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
-import view.menu.allProductsMenu.subMenus.filteringMenu.FilteringMenu;
 import view.menu.allProductsMenu.subMenus.sortingMenu.SortingMenu;
 
 public class DisableSortCommand extends Command {
@@ -21,11 +20,11 @@ public class DisableSortCommand extends Command {
     }
 
     private void sendMessage() {
-        switch (((SortingMenu)this.getMenu()).getType()){
-            case "products" :
+        switch (((SortingMenu) this.getMenu()).getType()) {
+            case "products":
                 ViewToController.setViewMessage("disable sort products");
                 break;
-            case "offs" :
+            case "offs":
                 ViewToController.setViewMessage("disable sort offs");
                 break;
         }

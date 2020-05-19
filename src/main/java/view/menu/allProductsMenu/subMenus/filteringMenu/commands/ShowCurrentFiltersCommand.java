@@ -23,11 +23,11 @@ public class ShowCurrentFiltersCommand extends Command {
 
     private void sendMessage() {
 
-        switch (((FilteringMenu)this.getMenu()).getType()){
-            case "products" :
+        switch (((FilteringMenu) this.getMenu()).getType()) {
+            case "products":
                 ViewToController.setViewMessage("current filters products");
                 break;
-            case "offs" :
+            case "offs":
                 ViewToController.setViewMessage("current filters offs");
                 break;
         }

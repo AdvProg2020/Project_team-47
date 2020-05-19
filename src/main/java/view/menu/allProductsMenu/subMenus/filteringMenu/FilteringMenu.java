@@ -10,6 +10,7 @@ import view.menu.allProductsMenu.subMenus.filteringMenu.commands.ShowCurrentFilt
 
 public class FilteringMenu extends Menu {
     private String type;// products or offs
+
     public FilteringMenu(Menu previousMenu, String type) {
         super(previousMenu);
         this.setName("filtering menu");

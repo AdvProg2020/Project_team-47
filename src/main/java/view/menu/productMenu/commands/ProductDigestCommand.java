@@ -6,9 +6,6 @@ import view.ViewToController;
 import view.command.Command;
 import view.menu.Menu;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class ProductDigestCommand extends Command {
     public ProductDigestCommand(Menu menu) {
         super(menu);
