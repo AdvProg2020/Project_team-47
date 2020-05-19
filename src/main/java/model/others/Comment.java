@@ -15,16 +15,20 @@ public class Comment {
         this.status = "IN_CONFIRM_QUEUE";
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public boolean isDoesCustomerBought() {
         return doesCustomerBought;
     }
 
+    public void setDoesCustomerBought(boolean doesCustomerBought) {
+        this.doesCustomerBought = doesCustomerBought;
+    }
+
     public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getWhoComment() {
@@ -61,10 +65,6 @@ public class Comment {
 
     public boolean doesCustomerBought() {
         return doesCustomerBought;
-    }
-
-    public void setDoesCustomerBought(boolean doesCustomerBought) {
-        this.doesCustomerBought = doesCustomerBought;
     }
 
     public String getProductId() {
