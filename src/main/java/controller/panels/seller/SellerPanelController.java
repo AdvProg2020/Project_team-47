@@ -50,7 +50,7 @@ public class SellerPanelController extends UserPanelController {
     @Override
     public void processRequest(ClientMessage request) {
         for (Command command : commands) {
-            if (canProcess(request.getRequest())) {
+            if (command.canDoIt(request.getRequest())) {
                 command.process(request);
                 return;
             }
