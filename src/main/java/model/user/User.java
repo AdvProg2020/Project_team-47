@@ -3,7 +3,11 @@ package model.user;
 import controller.Controller;
 import database.Database;
 import database.UserData;
+import model.discount.DiscountCode;
+import model.log.BuyLog;
 import model.others.Email;
+import model.others.Filter;
+import model.others.Product;
 import model.others.Sort;
 import model.send.receive.UserInfo;
 
@@ -34,13 +38,25 @@ abstract public class User {
     private String email;
     private String phoneNumber;
     private String type;
+    private ArrayList<Filter> offFilters;
+    private ArrayList<Filter> productFilters;
 
+
+    private String sortField;
+    private String sortDirection;
+    private Product productPage;
+    private BuyLog purchaseLog;
+    private DiscountCode purchaseCode;
 
     public User() {
+        this.offFilters = new ArrayList<>();
+        this.productFilters = new ArrayList<>();
     }
 
 
     public User(HashMap<String, String> userInfo) {
+        this.offFilters = new ArrayList<>();
+        this.productFilters = new ArrayList<>();
         this.username = userInfo.get("username");
         this.password = userInfo.get("password");
         this.phoneNumber = userInfo.get("phone-number");
@@ -182,6 +198,78 @@ abstract public class User {
         User.usedUsernames = usedUsernames;
     }
 
+    public void resetProductFilters() {
+        this.productFilters = new ArrayList<>();
+    }
+
+    public void resetOffFilter() {
+        this.offFilters = new ArrayList<>();
+    }
+
+    public BuyLog getPurchaseLog() {
+        return purchaseLog;
+    }
+
+    public void setPurchaseLog(BuyLog purchaseLog) {
+        this.purchaseLog = purchaseLog;
+    }
+
+    public DiscountCode getPurchaseCode() {
+        return purchaseCode;
+    }
+
+    public void setPurchaseCode(DiscountCode purchaseCode) {
+        this.purchaseCode = purchaseCode;
+    }
+
+    public void removeProductFilter(Filter filter) {
+        this.productFilters.remove(filter);
+    }
+
+    public void removeOffFilter(Filter filter) {
+        this.offFilters.remove(filter);
+    }
+
+    public void addProductFilter(Filter filter) {
+        this.productFilters.add(filter);
+    }
+
+    public void addOffFilter(Filter filter) {
+        this.offFilters.add(filter);
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
+    }
+
+    public String getSortDirection() {
+        return sortDirection;
+    }
+
+    public void setSortDirection(String sortDirection) {
+        this.sortDirection = sortDirection;
+    }
+
+    public Product getProductPage() {
+        return productPage;
+    }
+
+    public void setProductPage(Product productPage) {
+        this.productPage = productPage;
+    }
+
+    public ArrayList<Filter> getOffFilters() {
+        return offFilters;
+    }
+
+    public ArrayList<Filter> getProductFilters() {
+        return productFilters;
+    }
+
     public void confirmEmail() {
         verificationList.remove(this);
         this.removeNotVerifiedFromDatabase();
@@ -199,6 +287,7 @@ abstract public class User {
         newEmail.setMessage(this.sendCode);
         newEmail.sendVerificationEmail();
         verificationList.add(this);
+        System.out.println(this.sendCode);//debug
         this.updateDatabase().addNorVerifiedUser();
     }
 
