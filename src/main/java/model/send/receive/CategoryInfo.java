@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CategoryInfo {
-    private String Type;
+    private String type;
     private String name;
     private ArrayList<String> specialProperties;
     private HashMap<String, String> productsNameId;
@@ -20,11 +20,11 @@ public class CategoryInfo {
     }
 
     public String getType() {
-        return Type;
+        return type;
     }
 
     public void setType(String type) {
-        Type = type;
+        this.type = type;
     }
 
     public void addProduct(Product product) {

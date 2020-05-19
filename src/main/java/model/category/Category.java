@@ -23,7 +23,6 @@ abstract public class Category {
     protected ArrayList<String> specialProperties;
     protected ArrayList<Product> allProducts;
     private String id;
-    protected String type; // "main-category" or "sub-category"
     public Category() {
         allProducts = new ArrayList<>();
         specialProperties = new ArrayList<>();
@@ -127,7 +126,6 @@ abstract public class Category {
     void updateDatabase(CategoryData categoryData) {
         categoryData.setId(this.id);
         categoryData.setName(this.name);
-        categoryData.setType(this.type);
         categoryData.setSpecialProperties(this.specialProperties);
         for (Product product : allProducts) {
             categoryData.addProduct(product.getId());
@@ -161,14 +159,6 @@ abstract public class Category {
             }
         }
         this.updateDatabase();
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getName() {

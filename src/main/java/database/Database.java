@@ -216,7 +216,7 @@ public class Database {
 
     private void loadDatabase() {
         this.creatingFolders();
-        //this.loadEmail();
+        this.loadEmail();
         this.loadUsedUsernames();
         this.loadUsedProductId();
         this.loadUsedId();
@@ -240,7 +240,7 @@ public class Database {
     private void loadEmail() {
         System.out.println("Enter email password!!");
         Email.setPassword(Menu.getInputCommandWithTrim());
-        //Email.checkPassword();
+        Email.checkPassword();
         File htmlPage = new File(Path.RESOURCE.getPath() + "HtmlPage.html");
         Email.setHtmlPage(readFile(htmlPage));
     }

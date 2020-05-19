@@ -33,6 +33,7 @@ public class SubCategory extends Category {
     @Override
     public CategoryInfo categoryInfoForSending() {
         CategoryInfo categoryInfo = new CategoryInfo(this.name, this.specialProperties);
+        categoryInfo.setType("sub-category");
         categoryInfo.setMainCategory(this.mainCategory.name);
         for (Product product : allProducts) {
             categoryInfo.addProduct(product);

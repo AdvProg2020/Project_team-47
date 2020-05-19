@@ -47,6 +47,7 @@ public class MainCategory extends Category {
     @Override
     public CategoryInfo categoryInfoForSending() {
         CategoryInfo categoryInfo = new CategoryInfo(this.name, this.specialProperties);
+        categoryInfo.setType("main-category");
         for (Product product : this.allProducts) {
             categoryInfo.addProduct(product);
         }
