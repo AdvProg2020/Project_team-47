@@ -49,6 +49,7 @@ public class ManagerPanelMenu extends Menu {
         menuCommands.add(new ViewDiscountCodesCommand(this));
         menuCommands.add(new ManageRequestsCommand(this));
         menuCommands.add(new ManageCategoriesCommand(this));
+        menuCommands.add(new GiveGiftCommand(this));
         menuCommands.add(new HelpCommand(this));
         menuCommands.add(new ExitCommand(this));
 

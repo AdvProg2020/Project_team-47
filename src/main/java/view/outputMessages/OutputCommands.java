@@ -204,4 +204,8 @@ public class OutputCommands {
     public static void enterFilterType() {
         System.out.println("enter filter type");
     }
+
+    public static void enterNumberOfUsers() {
+        System.out.println("enter number of users");
+    }
 }

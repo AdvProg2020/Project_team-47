@@ -122,6 +122,9 @@ public class ControllerAndViewConnector {
             case "remove sub category" :
                 ManagerPanelController.removeSubCategory(message.getSecondString());
                 break;
+            case "give gift" :
+                ManagerPanelController.giveGift(Integer.parseInt(message.getFirstString()), messageHashMapInputs);
+                break;
             default:
                 sellerCommandProcess(message);
         }
