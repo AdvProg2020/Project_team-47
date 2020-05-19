@@ -18,6 +18,7 @@ public class ViewToController {
     private static String firstString;
     private static String secondString;
     private static Object viewMessageObject;
+    private static int integer;
 
     static {
         viewMessageArrayListInputs = new ArrayList<>();
@@ -25,6 +26,10 @@ public class ViewToController {
         viewMessageFirstHashMapInputs = new HashMap<>();
         viewMessageSecondHashMapInputs = new HashMap<>();
         viewMessageObject = new Object();
+    }
+
+    public static void setInteger(int integer) {
+        ViewToController.integer = integer;
     }
 
     public static Object getViewMessageObject() {
@@ -122,6 +127,8 @@ public class ViewToController {
         clientMessage.setSecondString(secondString);
 
         clientMessage.setObject(viewMessageObject);
+
+        clientMessage.setFirstInt(integer);
 
         ControllerAndViewConnector.setClientMessage((new Gson()).toJson(clientMessage));
         ControllerAndViewConnector.commandProcess();

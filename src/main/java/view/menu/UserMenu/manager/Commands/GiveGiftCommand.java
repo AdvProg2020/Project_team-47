@@ -33,7 +33,7 @@ public class GiveGiftCommand extends Command {
             return;
         }
 
-        ViewToController.setFirstString(userNumberInput);
+        ViewToController.setInteger(Integer.parseInt(userNumberInput));
 
         OutputCommands.enterStartTime();
         messageInputs.put("start-time", Menu.getInputCommandWithTrim());
