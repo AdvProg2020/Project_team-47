@@ -140,7 +140,6 @@ public class Seller extends User {
         Request request = new Request();
         request.setRequestSender(this);
         request.setType("edit-product " + type);
-        request.setRequestSender(this);
 
 
         EditProductRequest editProductRequest = new EditProductRequest();

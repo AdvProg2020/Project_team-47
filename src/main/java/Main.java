@@ -1,10 +1,17 @@
 import database.Database;
+import graphicView.GraphicView;
 import view.menu.UserMenu.customer.CustomerPanelMenu;
 
 public class Main {
     public static void main(String[] args) {
-        new Database().startDatabaseLoading();
-        new CustomerPanelMenu(null).autoExecute();
+        //loading database
+        //new Database().startDatabaseLoading();
+
+        //with console
+        //new CustomerPanelMenu(null).autoExecute();
+
+        //with javaFX
+        new GraphicView().run(args);
 
     }
 }
