@@ -65,24 +65,4 @@ public class ManagerPanelController extends UserPanelController {
         commands.add(ManageUsersCommands.getDeleteUserCommand());
     }
 
-    @Override
-    public void processRequest(ClientMessage request) {
-        for (Command command : commands) {
-            if (command.canDoIt(request.getRequest())) {
-                command.process(request);
-                return;
-            }
-        }
-    }
-
-
-    @Override
-    public boolean canProcess(String request) {
-        for (Command command : commands) {
-            if (command.canDoIt(request))
-                return true;
-        }
-        return false;
-    }
-
 }//end ManagerPanelController

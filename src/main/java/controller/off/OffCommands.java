@@ -2,8 +2,10 @@ package controller.off;
 
 import controller.Command;
 import model.discount.Off;
+import model.ecxeption.Exception;
 import model.others.Filter;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 import java.util.ArrayList;
 
@@ -51,12 +53,17 @@ class ShowOffCommand extends OffCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        showOffs();
+    public ServerMessage process(ClientMessage request) {
+        return showOffs();
     }
 
-    private void showOffs() {
-        sendAnswer(Off.getAllProductsInOffsInfo(sortField(), sortDirection(), filters()), "off");
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage showOffs() {
+        return sendAnswer(Off.getAllProductsInOffsInfo(sortField(), sortDirection(), filters()), "off");
     }
 }
 
@@ -75,14 +82,19 @@ class InitializePage extends OffCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
+    public ServerMessage process(ClientMessage request) {
         initializeOffsPage();
+        return actionCompleted();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
     }
 
     private void initializeOffsPage() {
         resetSort();
         resetFilters();
-        actionCompleted();
     }
 
     private void resetFilters() {

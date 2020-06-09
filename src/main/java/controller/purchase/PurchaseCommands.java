@@ -2,12 +2,17 @@ package controller.purchase;
 
 import controller.Command;
 import controller.Controller;
-import controller.Error;
 import model.discount.DiscountCode;
+import model.ecxeption.Exception;
+import model.ecxeption.common.NotEnoughInformation;
+import model.ecxeption.purchase.CodeException;
+import model.ecxeption.purchase.NotEnoughMoneyException;
+import model.ecxeption.user.UserTypeException;
 import model.log.BuyLog;
 import model.others.Email;
 import model.others.ShoppingCart;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Customer;
 
 import java.util.ArrayList;
@@ -33,20 +38,8 @@ public abstract class PurchaseCommands extends Command {
         return PayCommand.getInstance();
     }
 
-    protected boolean canUserDo() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-            return false;
-        } else if (!(getLoggedUser() instanceof Customer)) {
-            sendError(Error.NEED_CUSTOMER.getError());
-            return false;
-        }
-        return true;
-    }
-
     protected ShoppingCart getShoppingCart() {
         //this function will return customer shopping cart who logged in
-
         ShoppingCart shoppingCart = ((Customer) getLoggedUser()).getShoppingCart();
         return shoppingCart;
     }
@@ -84,22 +77,21 @@ class PurchaseInitializerCommand extends PurchaseCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        purchase();
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException {
+        shouldBeCustomer();
+        return purchase();
     }
 
-    private void purchase() {
-        //this function will update cart and send cart info
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
 
-        if (getLoggedUser() == null) {
-            sendError("You should log in first!!");
-            return;
-        }
+    }
+
+    private ServerMessage purchase() {
+        //this function will update cart and send cart info
         resetPurchasePage();
         getShoppingCart().update();
-        sendAnswer(getShoppingCart().cartInfo());
+        return sendAnswer(getShoppingCart().cartInfo());
     }
 }
 
@@ -120,26 +112,26 @@ class PurchaseInformationGetter extends PurchaseCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getFirstHashMap()))
-            return;
+    public ServerMessage process(ClientMessage request) throws Exception {
+        shouldBeCustomer();
+        containNullField(request.getFirstHashMap());
+        checkPrimaryErrors(request);
         gettingPurchaseInformation(request.getFirstHashMap());
+        return actionCompleted();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        if (!checkingPurchaseInfo(request.getFirstHashMap()))
+            throw new NotEnoughInformation();
     }
 
     private void gettingPurchaseInformation(HashMap<String, String> information) {
         //this function will get purchase information
-
-        if (!checkingPurchaseInfo(information)) {
-            sendError("Not enough information!!");
-            return;
-        }
         purchaseLog().setAddress(information.get("address"));
         purchaseLog().setPhoneNumber(information.get("phone-number"));
         purchaseLog().setPostalCode(information.get("postal-code"));
         purchaseLog().setCustomerRequests(information.get("other-requests"));
-        actionCompleted();
     }
 
     private boolean checkingPurchaseInfo(HashMap<String, String> information) {
@@ -171,33 +163,29 @@ class ApplyDiscountCodeCommand extends PurchaseCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getFirstString()))
-            return;
-        applyDiscountCode(request.getFirstString());
+    public ServerMessage process(ClientMessage request) throws Exception{
+        shouldBeCustomer();
+        containNullField(request.getFirstHashMap(),request.getFirstHashMap().get("code"));
+        return applyDiscountCode(request.getFirstHashMap().get("code"));
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
     }
 
 
-    private void applyDiscountCode(String code) {
+    private ServerMessage applyDiscountCode(String code) throws CodeException.DontHaveCode, CodeException.CantUseCodeException {
         //apply discount to this purchase
 
         Customer customer = (Customer) getLoggedUser();
-        setCode(customer.getDiscountCode(code));
-
+        DiscountCode discountCode = customer.getDiscountCode(code);
         //checking errors that may happen during apply code
-        if (purchaseCode() == null) {
-            sendError("You don't have this discount code!!");
-            return;
-        } else if (!purchaseCode().canThisPersonUseCode(customer)) {
-            sendError("Sorry you can't use this code!!");
-            setCode(null);
-            return;
-        }
+        if (!discountCode.canThisPersonUseCode(customer))
+            throw new CodeException.CantUseCodeException();
+        setCode(discountCode);
 
         //sending cart price after applying code successfully
-        sendAnswer(purchaseCode().getPriceAfterApply(getShoppingCart().getTotalPrice()));
+        return sendAnswer(purchaseCode().getPriceAfterApply(getShoppingCart().getTotalPrice()));
     }
 
 }
@@ -217,13 +205,18 @@ class PayCommand extends PurchaseCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException, NotEnoughMoneyException {
+        shouldBeCustomer();
         pay();
+        return actionCompleted();
     }
 
-    private void pay() {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private void pay() throws NotEnoughMoneyException {
         //this function is the last step for buying
 
         Customer customer = (Customer) getLoggedUser();
@@ -233,8 +226,7 @@ class PayCommand extends PurchaseCommands {
         double finalPrice = getFinalPrice(shoppingCart.getTotalPrice());
         //check if customer has enough money
         if (!customer.canUserBuy(finalPrice)) {
-            sendError("You don't have enough money to buy this products!!");
-            return;
+            throw new NotEnoughMoneyException();
         } else if (finalPrice > 1000000) {
             giveGift(customer, finalPrice);
         }
@@ -249,12 +241,10 @@ class PayCommand extends PurchaseCommands {
         customer.sendBuyingEmail(purchaseLog().getLogId());
 
         finishingPurchasing();
-        actionCompleted();
     }
 
     private void useDiscountCode(ShoppingCart shoppingCart) {
         //this function will use discount and if there was no code it will set purchase log info
-
         Customer customer = (Customer) getLoggedUser();
         double cartPrice = shoppingCart.getTotalPrice();
         purchaseLog().setAppliedDiscount(0);

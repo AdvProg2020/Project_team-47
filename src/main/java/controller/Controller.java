@@ -1,15 +1,19 @@
 package controller;
 
 import com.google.gson.Gson;
+import controller.login.LoginCommands;
 import controller.login.LoginController;
 import controller.off.OffController;
 import controller.panels.UserPanelController;
 import controller.product.AllProductsController;
 import controller.product.ProductController;
 import controller.purchase.PurchaseController;
+import model.ecxeption.CommonException;
+import model.ecxeption.Exception;
 import model.others.ShoppingCart;
 import model.send.receive.*;
 import model.user.User;
+import org.apache.maven.settings.Server;
 import view.ViewToController;
 
 import java.text.ParseException;
@@ -24,6 +28,8 @@ abstract public class Controller {
     protected static User loggedUser;
     private static ArrayList<Controller> controllers;
     private static Gson gson = new Gson();
+
+    protected ArrayList<Command> commands;
 
     static {
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
@@ -40,14 +46,13 @@ abstract public class Controller {
         controllers.add(PurchaseController.getInstance());
     }
 
-    public static void process(ClientMessage clientMessage) {
+    public static ServerMessage process(ClientMessage clientMessage) throws Exception {
         fixOutOfBounds(clientMessage);
-        for (Controller controller : controllers) {
-            if (controller.canProcess(clientMessage.getRequest())) {
-                controller.processRequest(clientMessage);
-                return;
-            }
-        }
+        for (Controller controller : controllers)
+            if (controller.canProcess(clientMessage.getRequest()))
+                return controller.processRequest(clientMessage);
+
+        throw new CommonException("Can't do this request!!");
     }
 
     private static void fixOutOfBounds(ClientMessage clientMessage) {
@@ -66,139 +71,117 @@ abstract public class Controller {
         Controller.loggedUser = loggedUser;
     }
 
-    public static void sendError(String errorMessage) {
+/*    public static void sendError(String errorMessage) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("error");
         serverMessage.setFirstString(errorMessage);
         send(gson.toJson(serverMessage));
-    }
+    }*/
 
-    public static void sendAnswer(ArrayList arrayList, String type) {
+    public static ServerMessage sendAnswer(ArrayList arrayList, String type) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         switch (type) {
-            case "category":
-                serverMessage.setCategoryInfoArrayList(arrayList);
-                break;
-            case "user":
-                serverMessage.setUserInfoArrayList(arrayList);
-                break;
-            case "code":
-                serverMessage.setDiscountCodeInfoArrayList(arrayList);
-                break;
-            case "off":
-                serverMessage.setOffInfoArrayList(arrayList);
-                break;
-            case "request":
-                serverMessage.setRequestArrayList(arrayList);
-                break;
-            case "product":
-                serverMessage.setProductInfoArrayList(arrayList);
-                break;
-            case "log":
-                serverMessage.setLogInfoArrayList(arrayList);
-                break;
-            case "comment":
-                serverMessage.setCommentArrayList(arrayList);
-                break;
-            case "sort":
-            case "filter":
-                serverMessage.setStrings(arrayList);
-                break;
-            default:
-                sendError("Wrong ArrayList type.(Server Error!!)");
-                return;
+            case "category" -> serverMessage.setCategoryInfoArrayList(arrayList);
+            case "user" -> serverMessage.setUserInfoArrayList(arrayList);
+            case "code" -> serverMessage.setDiscountCodeInfoArrayList(arrayList);
+            case "off" -> serverMessage.setOffInfoArrayList(arrayList);
+            case "request" -> serverMessage.setRequestArrayList(arrayList);
+            case "product" -> serverMessage.setProductInfoArrayList(arrayList);
+            case "log" -> serverMessage.setLogInfoArrayList(arrayList);
+            case "comment" -> serverMessage.setCommentArrayList(arrayList);
+            case "sort"->serverMessage.setStrings(arrayList);
+            case "filter" -> serverMessage.setFilters(arrayList);
         }
-        send(getGson().toJson(serverMessage));
+        return serverMessage;
     }
 
-    public static void sendAnswer(double number) {
+    public static ServerMessage sendAnswer(double number) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setNumber(number);
-        send(gson.toJson(serverMessage));
+        return serverMessage;
     }
 
-    public static void sendAnswer(CategoryInfo categoryInfo) {
+    public static ServerMessage sendAnswer(CategoryInfo categoryInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setCategoryInfo(categoryInfo);
-        send(gson.toJson(serverMessage));
+        return serverMessage;
     }
 
-    public static void sendAnswer(LogInfo logInfo) {
+    public static ServerMessage sendAnswer(LogInfo logInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setLogInfo(logInfo);
-        send(gson.toJson(serverMessage));
+        return serverMessage;
+
     }
 
-    public static void sendAnswer(ProductInfo productInfo) {
+    public static ServerMessage sendAnswer(ProductInfo productInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setProductInfo(productInfo);
-        send(gson.toJson(serverMessage));
+        return serverMessage;
     }
 
-    public static void sendAnswer(CartInfo cartInfo) {
+    public static ServerMessage sendAnswer(CartInfo cartInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setCartInfo(cartInfo);
-        send(gson.toJson(serverMessage));
+        return serverMessage;
     }
 
-    public static void sendAnswer(DiscountCodeInfo discountCodeInfo) {
+    public static ServerMessage sendAnswer(DiscountCodeInfo discountCodeInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setDiscountCodeInfo(discountCodeInfo);
-        send(gson.toJson(serverMessage));
+        return serverMessage;
     }
 
-    public static void sendAnswer(OffInfo offInfo) {
+    public static ServerMessage sendAnswer(OffInfo offInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setOffInfo(offInfo);
-        send(gson.toJson(serverMessage));
-    }
+        return serverMessage;    }
 
-    public static void sendAnswer(RequestInfo requestInfo) {
+    public static ServerMessage sendAnswer(RequestInfo requestInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setRequestInfo(requestInfo);
-        send(gson.toJson(serverMessage));
-    }
+        return serverMessage;    }
 
-    public static void sendAnswer(UserInfo userInfo) {
+    public static ServerMessage sendAnswer(UserInfo userInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setUserInfo(userInfo);
-        send(gson.toJson(serverMessage));
+        return serverMessage;
     }
 
-    public static void sendAnswer(String firstString) {
+    public static ServerMessage sendAnswer(String firstString) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setFirstString(firstString);
-        send(gson.toJson(serverMessage));
+        return serverMessage;
     }
 
-    public static void sendAnswer(String firstString, String secondString) {
+    public static ServerMessage sendAnswer(String firstString, String secondString) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setFirstString(firstString);
         serverMessage.setSecondString(secondString);
-        send(gson.toJson(serverMessage));
+        return serverMessage;
     }
 
-    public static void actionCompleted() {
+    public static ServerMessage actionCompleted() {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
-        send(gson.toJson(serverMessage));
+        return serverMessage;
     }
 
-    private static void send(String answer) {
+/*    private static void send(String answer) {
         ViewToController.setControllerAnswer(answer);
-    }
+    }*/
 
     public static String idCreator() {
         //this function will create a random string such as "AB1234"
@@ -251,7 +234,18 @@ abstract public class Controller {
         return gson;
     }
 
-    public abstract void processRequest(ClientMessage request);
+    public ServerMessage processRequest(ClientMessage request) throws Exception {
+        for (Command command : commands)
+            if (command.canDoIt(request.getRequest()))
+                return command.process(request);
+        throw new CommonException("Can't do this request!!");
+    }
 
-    public abstract boolean canProcess(String request);
+    public boolean canProcess(String request) {
+        for (Command command : commands)
+            if (command.canDoIt(request))
+                return true;
+
+        return false;
+    }
 }//end Controller Class

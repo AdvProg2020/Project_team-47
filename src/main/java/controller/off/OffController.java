@@ -12,7 +12,6 @@ public class OffController extends Controller {
     private ArrayList<Filter> filters;
     private String sortField;
     private String sortDirection;
-    private ArrayList<Command> commands;
 
     private OffController() {
         filters = new ArrayList<>();
@@ -43,25 +42,6 @@ public class OffController extends Controller {
     private void initializeOffCommands() {
         commands.add(OffCommands.getInitializePage());
         commands.add(OffCommands.getShowOffCommand());
-    }
-
-    @Override
-    public void processRequest(ClientMessage request) {
-        for (Command command : commands) {
-            if (command.canDoIt(request.getRequest())) {
-                command.process(request);
-                return;
-            }
-        }
-    }
-
-    @Override
-    public boolean canProcess(String request) {
-        for (Command command : commands) {
-            if (command.canDoIt(request))
-                return true;
-        }
-        return false;
     }
 
     void resetFilters() {

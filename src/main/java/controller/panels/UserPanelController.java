@@ -1,18 +1,21 @@
 package controller.panels;
 
 
+import controller.Command;
 import controller.Controller;
 import controller.panels.customer.CustomerPanelController;
 import controller.panels.manager.ManagerPanelController;
 import controller.panels.seller.SellerPanelController;
+import model.ecxeption.CommonException;
+import model.ecxeption.Exception;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 import java.util.ArrayList;
 
 public class UserPanelController extends Controller {
     private static UserPanelController userPanelController;
     private ArrayList<UserPanelController> subControllers;
-    private ArrayList<UserPanelCommands> commands;
 
     protected UserPanelController() {
         commands = new ArrayList<>();
@@ -33,25 +36,22 @@ public class UserPanelController extends Controller {
 
 
     @Override
-    public void processRequest(ClientMessage request) {
-        for (UserPanelCommands command : commands) {
-            if (command.canDoIt(request.getRequest())) {
-                command.process(request);
-                return;
-            }
-        }
-        for (UserPanelController subController : subControllers) {
-            if (subController.canProcess(request.getRequest())) {
-                subController.processRequest(request);
-                return;
-            }
-        }
+    public ServerMessage processRequest(ClientMessage request) throws Exception {
+        for (Command command : commands)
+            if (command.canDoIt(request.getRequest()))
+                return command.process(request);
+
+        for (Controller controller : subControllers)
+            if (controller.canProcess(request.getRequest()))
+                return controller.processRequest(request);
+
+        throw new CommonException("Can't do this request!!");
     }
 
 
     @Override
     public boolean canProcess(String request) {
-        for (UserPanelCommands command : commands) {
+        for (Command command : commands) {
             if (command.canDoIt(request))
                 return true;
         }
