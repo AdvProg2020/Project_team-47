@@ -1,8 +1,14 @@
-import database.Database;
+import graphicView.GraphicView;
 
 public class Main {
     public static void main(String[] args) {
-        new Database().startDatabaseLoading();
-        graphicView.Main.getInstance().run(args);
+        //loading database
+        //new Database().startDatabaseLoading();
+
+        //with console
+        //new CustomerPanelMenu(null).autoExecute();
+
+        //with javaFX
+        new GraphicView().run(args);
     }
 }
