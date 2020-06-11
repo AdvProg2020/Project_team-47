@@ -1,12 +1,14 @@
 package controller.panels.manager;
 
 import controller.Command;
-import controller.Error;
+import model.ecxeption.Exception;
+import model.ecxeption.filter.InvalidSortException;
 import model.others.Product;
 import model.send.receive.ClientMessage;
-import model.user.Manager;
+import model.send.receive.ServerMessage;
 
-import static controller.Controller.*;
+import static controller.Controller.actionCompleted;
+import static controller.Controller.sendAnswer;
 import static controller.panels.UserPanelCommands.checkSort;
 
 public abstract class ManageProductsCommands extends Command {
@@ -17,18 +19,6 @@ public abstract class ManageProductsCommands extends Command {
     public static RemoveProductCommand getRemoveProductCommand() {
         return RemoveProductCommand.getInstance();
     }
-
-    protected boolean canUserDo() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-            return false;
-        } else if (!(getLoggedUser() instanceof Manager)) {
-            sendError(Error.NEED_MANGER.getError());
-            return false;
-        }
-        return true;
-    }
-
 }
 
 
@@ -48,29 +38,31 @@ class ShowAllProductsCommand extends ManageProductsCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        manageAllProducts(request.getArrayList().get(0), request.getArrayList().get(1));
+    public ServerMessage process(ClientMessage request) throws InvalidSortException {
+        return manageAllProducts(request.getHashMap().get("sort field"), request.getHashMap().get("sort direction"));
     }
 
-    private void manageAllProducts(String sortField, String sortDirection) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage manageAllProducts(String sortField, String sortDirection) throws InvalidSortException {
         if (sortField != null && sortDirection != null) {
             sortField = sortField.toLowerCase();
             sortDirection = sortDirection.toLowerCase();
         }
         if (!checkSort(sortField, sortDirection, "product")) {
-            sendError("Can't sort with this field and direction!!");
-            return;
+            throw new InvalidSortException();
         }
-
-        sendAnswer(Product.getAllProductInfo(sortField, sortDirection), "product");
+        return sendAnswer(Product.getAllProductInfo(sortField, sortDirection), "product");
     }
 
 }//end ShowAllProductsCommand class
 
 class RemoveProductCommand extends ManageProductsCommands {
     private static RemoveProductCommand command;
+    private Product product;
 
     private RemoveProductCommand() {
         this.name = "remove product manager";
@@ -85,20 +77,18 @@ class RemoveProductCommand extends ManageProductsCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        removeProduct(request.getArrayList().get(0));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        checkPrimaryErrors(request);
+        removeProduct();
+        return actionCompleted();
     }
 
-    public void removeProduct(String productId) {
-        if (!Product.isThereProduct(productId)) {
-            sendError("There isn't any product with this id!!");
-            return;
-        }
-        Product.removeProduct(productId);
-        actionCompleted();
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        product = Product.getProductWithId(request.getHashMap().get("id"));
+    }
+
+    public void removeProduct() {
+        product.removeProduct();
     }
 }//end RemoveProductCommands

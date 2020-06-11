@@ -2,7 +2,12 @@ package controller.panels.manager;
 
 import controller.Command;
 import controller.panels.UserPanelController;
+import model.ecxeption.CommonException;
+import model.ecxeption.Exception;
+import model.ecxeption.user.UserTypeException;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
+import model.user.Manager;
 
 import java.util.ArrayList;
 
@@ -65,4 +70,15 @@ public class ManagerPanelController extends UserPanelController {
         commands.add(ManageUsersCommands.getDeleteUserCommand());
     }
 
+    @Override
+    public ServerMessage processRequest(ClientMessage request) throws Exception {
+        if (!(loggedUser instanceof Manager))
+            throw new UserTypeException.NeedManagerException();
+
+        for (Command command : commands)
+            if (command.canDoIt(request.getType()))
+                return command.process(request);
+
+        throw new CommonException("Can't do this request!!");
+    }
 }//end ManagerPanelController

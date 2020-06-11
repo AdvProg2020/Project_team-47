@@ -13,7 +13,7 @@ public class ManagerExistenceException extends Exception {
         }
     }
 
-    public static class ManagerDoesntExist extends  ManagerExistenceException {
+    public static class ManagerDoesntExist extends ManagerExistenceException {
         public ManagerDoesntExist() {
             super("There isn't a manager and you should register as a manager!!");
         }

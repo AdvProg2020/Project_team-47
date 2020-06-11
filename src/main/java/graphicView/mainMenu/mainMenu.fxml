@@ -1,62 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<Scene stylesheets="@../resources/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphicView.mainMenu.MainMenuController">
-    <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.Scene?>
+<?import javafx.scene.text.Font?>
+<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../resources/Others/Stylesheet.css"
+       xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="graphicView.mainMenu.MainMenuController">
+    <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+              prefWidth="600.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         </rowConstraints>
-        <Button mnemonicParsing="false" onMouseClicked="#loginAndRegister" onMouseEntered="#showTextFields" prefHeight="47.0" prefWidth="274.0" text="login-register" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="2">
+        <Button mnemonicParsing="false" onMouseClicked="#loginAndRegister" onMouseEntered="#showTextFields"
+                prefHeight="47.0" prefWidth="274.0" text="login-register" GridPane.columnIndex="3"
+                GridPane.columnSpan="3" GridPane.rowIndex="2">
             <font>
-                <Font size="22.0" />
+                <Font size="22.0"/>
             </font>
         </Button>
-        <Button layoutX="373.0" layoutY="272.0" mnemonicParsing="false" onMouseClicked="#products" onMouseEntered="#hideTextFields" prefHeight="49.0" prefWidth="274.0" text="products" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="4">
+        <Button layoutX="373.0" layoutY="272.0" mnemonicParsing="false" onMouseClicked="#products"
+                onMouseEntered="#hideTextFields" prefHeight="49.0" prefWidth="274.0" text="products"
+                GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="4">
             <font>
-                <Font size="22.0" />
+                <Font size="22.0"/>
             </font>
         </Button>
-        <Button layoutX="373.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#offs" onMouseEntered="#hideTextFields" prefHeight="52.0" prefWidth="274.0" text="offs" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="6">
+        <Button layoutX="373.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#offs"
+                onMouseEntered="#hideTextFields" prefHeight="52.0" prefWidth="274.0" text="offs"
+                GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="6">
             <font>
-                <Font size="22.0" />
+                <Font size="22.0"/>
             </font>
         </Button>
-        <Button layoutX="373.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#exit" onMouseEntered="#hideTextFields" prefHeight="48.0" prefWidth="274.0" text="exit" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="8">
+        <Button layoutX="373.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#exit"
+                onMouseEntered="#hideTextFields" prefHeight="48.0" prefWidth="274.0" text="exit"
+                GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="8">
             <font>
-                <Font size="22.0" />
+                <Font size="22.0"/>
             </font>
         </Button>
-        <TextField fx:id="username" minWidth="215.0" opacity="0.0" prefHeight="33.0" prefWidth="250.0" promptText="Enter oponent username" styleClass="normal-text-field" visible="false" GridPane.columnIndex="7" GridPane.rowIndex="2" />
-        <TextField fx:id="turnLimit" opacity="0.0" prefHeight="33.0" prefWidth="250.0" promptText="Enter turn limit" styleClass="normal-text-field" visible="false" GridPane.columnIndex="7" GridPane.rowIndex="3" />
-        <TextField fx:id="undoLimit" opacity="0.0" prefHeight="33.0" prefWidth="250.0" promptText="Enter undo limit" styleClass="normal-text-field" visible="false" GridPane.columnIndex="7" GridPane.rowIndex="4" />
-        <TextField fx:id="time" layoutX="646.0" layoutY="283.0" opacity="0.0" prefHeight="33.0" prefWidth="250.0" promptText="Enter time" styleClass="normal-text-field" visible="false" GridPane.columnIndex="7" GridPane.rowIndex="5" />
-        <Label fx:id="errorLabel" alignment="BOTTOM_LEFT" prefHeight="20.0" prefWidth="368.0" styleClass="error-label" text="Label" visible="false" GridPane.columnIndex="7" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+        <TextField fx:id="username" minWidth="215.0" opacity="0.0" prefHeight="33.0" prefWidth="250.0"
+                   promptText="Enter oponent username" styleClass="normal-text-field" visible="false"
+                   GridPane.columnIndex="7" GridPane.rowIndex="2"/>
+        <TextField fx:id="turnLimit" opacity="0.0" prefHeight="33.0" prefWidth="250.0" promptText="Enter turn limit"
+                   styleClass="normal-text-field" visible="false" GridPane.columnIndex="7" GridPane.rowIndex="3"/>
+        <TextField fx:id="undoLimit" opacity="0.0" prefHeight="33.0" prefWidth="250.0" promptText="Enter undo limit"
+                   styleClass="normal-text-field" visible="false" GridPane.columnIndex="7" GridPane.rowIndex="4"/>
+        <TextField fx:id="time" layoutX="646.0" layoutY="283.0" opacity="0.0" prefHeight="33.0" prefWidth="250.0"
+                   promptText="Enter time" styleClass="normal-text-field" visible="false" GridPane.columnIndex="7"
+                   GridPane.rowIndex="5"/>
+        <Label fx:id="errorLabel" alignment="BOTTOM_LEFT" prefHeight="20.0" prefWidth="368.0" styleClass="error-label"
+               text="Label" visible="false" GridPane.columnIndex="7" GridPane.columnSpan="4" GridPane.halignment="LEFT"
+               GridPane.rowIndex="1" GridPane.valignment="BOTTOM"/>
     </GridPane>
 </Scene>

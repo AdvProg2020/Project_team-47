@@ -1,6 +1,9 @@
 package database;
 
 import model.discount.Off;
+import model.ecxeption.common.OffDoesntExistException;
+import model.ecxeption.product.ProductDoesntExistException;
+import model.ecxeption.user.UserNotExistException;
 import model.others.Product;
 import model.user.Seller;
 import model.user.User;
@@ -36,12 +39,21 @@ public class OffData {
     }
 
     private void connectRelations() {
-        Off off = Off.getOffById(this.id);
-        off.setSeller((Seller) User.getUserByUsername(this.sellerUsername));
-        for (String productId : this.products) {
-            Product product = Product.getProductWithId(productId);
-            if (product != null)
+        try {
+            Off off = Off.getOffById(this.id);
+            off.setSeller((Seller) User.getUserByUsername(this.sellerUsername));
+            for (String productId : this.products) {
+                Product product = null;
+                try {
+                    product = Product.getProductWithId(productId);
+                } catch (ProductDoesntExistException e) {
+                    e.printStackTrace();
+                    continue;
+                }
                 off.addProduct(product);
+            }
+        } catch (UserNotExistException | OffDoesntExistException e) {
+            e.printStackTrace();
         }
     }
 

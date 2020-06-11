@@ -8,6 +8,7 @@ import controller.panels.manager.ManagerPanelController;
 import controller.panels.seller.SellerPanelController;
 import model.ecxeption.CommonException;
 import model.ecxeption.Exception;
+import model.ecxeption.user.NeedLoginException;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
@@ -37,12 +38,15 @@ public class UserPanelController extends Controller {
 
     @Override
     public ServerMessage processRequest(ClientMessage request) throws Exception {
+        if (loggedUser == null)
+            throw new NeedLoginException();
+
         for (Command command : commands)
-            if (command.canDoIt(request.getRequest()))
+            if (command.canDoIt(request.getType()))
                 return command.process(request);
 
         for (Controller controller : subControllers)
-            if (controller.canProcess(request.getRequest()))
+            if (controller.canProcess(request.getType()))
                 return controller.processRequest(request);
 
         throw new CommonException("Can't do this request!!");

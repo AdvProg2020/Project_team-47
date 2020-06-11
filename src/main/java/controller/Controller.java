@@ -1,7 +1,6 @@
 package controller;
 
 import com.google.gson.Gson;
-import controller.login.LoginCommands;
 import controller.login.LoginController;
 import controller.off.OffController;
 import controller.panels.UserPanelController;
@@ -10,11 +9,10 @@ import controller.product.ProductController;
 import controller.purchase.PurchaseController;
 import model.ecxeption.CommonException;
 import model.ecxeption.Exception;
+import model.ecxeption.common.DateException;
 import model.others.ShoppingCart;
 import model.send.receive.*;
 import model.user.User;
-import org.apache.maven.settings.Server;
-import view.ViewToController;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,13 +27,13 @@ abstract public class Controller {
     private static ArrayList<Controller> controllers;
     private static Gson gson = new Gson();
 
-    protected ArrayList<Command> commands;
-
     static {
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
         controllers = new ArrayList<>();
         initializeControllers();
     }
+
+    protected ArrayList<Command> commands;
 
     private static void initializeControllers() {
         controllers.add(UserPanelController.getInstance());
@@ -47,20 +45,11 @@ abstract public class Controller {
     }
 
     public static ServerMessage process(ClientMessage clientMessage) throws Exception {
-        fixOutOfBounds(clientMessage);
         for (Controller controller : controllers)
-            if (controller.canProcess(clientMessage.getRequest()))
+            if (controller.canProcess(clientMessage.getType()))
                 return controller.processRequest(clientMessage);
 
         throw new CommonException("Can't do this request!!");
-    }
-
-    private static void fixOutOfBounds(ClientMessage clientMessage) {
-        if (clientMessage.getArrayList() != null) {
-            clientMessage.getArrayList().add(null);
-            clientMessage.getArrayList().add(null);
-            clientMessage.getArrayList().add(null);
-        }
     }
 
     public static User getLoggedUser() {
@@ -71,12 +60,6 @@ abstract public class Controller {
         Controller.loggedUser = loggedUser;
     }
 
-/*    public static void sendError(String errorMessage) {
-        ServerMessage serverMessage = new ServerMessage();
-        serverMessage.setType("error");
-        serverMessage.setFirstString(errorMessage);
-        send(gson.toJson(serverMessage));
-    }*/
 
     public static ServerMessage sendAnswer(ArrayList arrayList, String type) {
         ServerMessage serverMessage = new ServerMessage();
@@ -90,7 +73,7 @@ abstract public class Controller {
             case "product" -> serverMessage.setProductInfoArrayList(arrayList);
             case "log" -> serverMessage.setLogInfoArrayList(arrayList);
             case "comment" -> serverMessage.setCommentArrayList(arrayList);
-            case "sort"->serverMessage.setStrings(arrayList);
+            case "sort" -> serverMessage.setStrings(arrayList);
             case "filter" -> serverMessage.setFilters(arrayList);
         }
         return serverMessage;
@@ -143,13 +126,15 @@ abstract public class Controller {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setOffInfo(offInfo);
-        return serverMessage;    }
+        return serverMessage;
+    }
 
     public static ServerMessage sendAnswer(RequestInfo requestInfo) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setRequestInfo(requestInfo);
-        return serverMessage;    }
+        return serverMessage;
+    }
 
     public static ServerMessage sendAnswer(UserInfo userInfo) {
         ServerMessage serverMessage = new ServerMessage();
@@ -218,7 +203,7 @@ abstract public class Controller {
         else return minute >= 0 && minute <= 60;
     }
 
-    public static Date getDateWithString(String dateString) {
+    public static Date getDateWithString(String dateString) throws DateException {
         if (!isDateFormatValid(dateString))
             return null;
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
@@ -226,7 +211,7 @@ abstract public class Controller {
             Date date = formatter.parse(dateString);
             return date;
         } catch (ParseException e) {
-            return null;
+            throw new DateException();
         }
     }
 
@@ -236,7 +221,7 @@ abstract public class Controller {
 
     public ServerMessage processRequest(ClientMessage request) throws Exception {
         for (Command command : commands)
-            if (command.canDoIt(request.getRequest()))
+            if (command.canDoIt(request.getType()))
                 return command.process(request);
         throw new CommonException("Can't do this request!!");
     }

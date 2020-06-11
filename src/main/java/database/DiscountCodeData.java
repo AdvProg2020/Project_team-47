@@ -1,6 +1,8 @@
 package database;
 
 import model.discount.DiscountCode;
+import model.ecxeption.CommonException;
+import model.ecxeption.user.UserNotExistException;
 import model.user.Customer;
 import model.user.User;
 
@@ -39,7 +41,13 @@ public class DiscountCodeData {
     }
 
     private void connectRelations() {
-        DiscountCode code = DiscountCode.getDiscountById(this.code);
+        DiscountCode code = null;
+        try {
+            code = DiscountCode.getDiscountById(this.code);
+        } catch (CommonException e) {
+            e.printStackTrace();
+            return;
+        }
         HashMap<Customer, Integer> userUsedTime = getUserUsedTimeHashMap();
         for (Map.Entry<Customer, Integer> entry : userUsedTime.entrySet()) {
             code.addUsers(entry.getKey(), entry.getValue());
@@ -49,7 +57,13 @@ public class DiscountCodeData {
     private HashMap<Customer, Integer> getUserUsedTimeHashMap() {
         HashMap<Customer, Integer> userUsedTime = new HashMap<>();
         for (Map.Entry<String, Integer> entry : this.userUsedHashMap.entrySet()) {
-            User user = User.getUserByUsername(entry.getKey());
+            User user = null;
+            try {
+                user = User.getUserByUsername(entry.getKey());
+            } catch (UserNotExistException e) {
+                e.printStackTrace();
+                continue;
+            }
             if (user instanceof Customer)
                 userUsedTime.put((Customer) user, entry.getValue());
         }

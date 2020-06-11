@@ -1,12 +1,18 @@
 package controller.product;
 
 import controller.Command;
+import model.ecxeption.DebugException;
+import model.ecxeption.Exception;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.filter.InvalidSortException;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import static controller.Controller.*;
+import static controller.Controller.actionCompleted;
+import static controller.Controller.sendAnswer;
 
 public abstract class SortCommands extends Command {
     public static SortCommonCommand getSortCommonCommand() {
@@ -34,7 +40,7 @@ class SortCommonCommand extends SortCommands {
     private static SortCommonCommand command;
 
     private SortCommonCommand() {
-        this.name = "(show available sorts products|show current sort products|disable sort products)";
+        this.name = "(show available sorts products|disable sort products)";
     }
 
     public static SortCommonCommand getInstance() {
@@ -45,22 +51,21 @@ class SortCommonCommand extends SortCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        switch (request.getRequest()) {
-            case "show available sorts products":
-                showAvailableSorts();
-                break;
-            case "show current sort products":
-                currentSort();
-                break;
-            case "disable sort products":
-                disableSort();
-                break;
-        }
+    public ServerMessage process(ClientMessage request) throws DebugException {
+        return switch (request.getType()) {
+            case "show available sorts products" -> showAvailableSorts();
+            case "disable sort products" -> disableSort();
+            default -> throw new DebugException();
+        };
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
     }
 
 
-    private void showAvailableSorts() {
+    private ServerMessage showAvailableSorts() {
         ArrayList<String> sorts = new ArrayList<>();
         sorts.add("Name");
         sorts.add("Score");
@@ -70,19 +75,13 @@ class SortCommonCommand extends SortCommands {
         sorts.add("Brand");
         sorts.add("Availability");
 
-        sendAnswer(sorts, "sort");
+        return sendAnswer(sorts, "sort");
     }
 
-    private void currentSort() {
-        if (sortField() == null || sortDirection() == null) {
-            sendError("You didn't any field to sort offs!!");
-        } else
-            sendAnswer(sortField(), sortDirection());
-    }
 
-    private void disableSort() {
+    private ServerMessage disableSort() {
         setSort(null, null);
-        actionCompleted();
+        return actionCompleted();
     }
 }
 
@@ -102,19 +101,24 @@ class SortCommand extends SortCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getFirstString(), request.getSecondString()))
-            return;
-        sort(request.getFirstString().toLowerCase(), request.getSecondString().toLowerCase());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, InvalidSortException {
+        containNullField(request.getHashMap().get("field"), request.getHashMap().get("direction"));
+        sort(request.getHashMap().get("field"), request.getHashMap().get("direction"));
+        return actionCompleted();
     }
 
-    public void sort(String sortField, String sortDirection) {
-        if (Pattern.matches("(name|score|seen-time|price)", sortField()) &&
-                Pattern.matches("(ascending|descending)", sortDirection())) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    public void sort(String sortField, String sortDirection) throws InvalidSortException {
+        if (Pattern.matches("(name|score|seen-time|price)", sortField) &&
+                Pattern.matches("(ascending|descending)", sortDirection)) {
 
             setSort(sortField, sortDirection);
             actionCompleted();
         } else
-            sendError("Can't sort with this field and direction!!");
+            throw new InvalidSortException();
     }
 }

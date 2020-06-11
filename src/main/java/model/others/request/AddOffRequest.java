@@ -3,6 +3,7 @@ package model.others.request;
 import com.google.gson.Gson;
 import controller.Controller;
 import model.discount.Off;
+import model.ecxeption.user.UserNotExistException;
 import model.others.Product;
 import model.send.receive.RequestInfo;
 import model.user.Seller;
@@ -31,11 +32,15 @@ public class AddOffRequest extends MainRequest {
     }
 
     @Override
-    void accept(String type) {
+    void accept() {
         Off off = new Off();
-        Seller seller = (Seller) User.getUserByUsername(sellerUsername);
-        if (seller == null)
+        Seller seller;
+        try {
+            seller = (Seller) User.getUserByUsername(sellerUsername);
+        } catch (UserNotExistException ignored) {
             return;
+        }
+
         off.setSeller(seller);
         if (startTime.before(Controller.getCurrentTime())) {
             off.setStartTime(Controller.getCurrentTime());
@@ -58,10 +63,14 @@ public class AddOffRequest extends MainRequest {
     }
 
     @Override
-    boolean update(String type) {
+    boolean update() {
         if (finishTime.before(Controller.getCurrentTime()))
             return false;
-        return (User.getUserByUsername(sellerUsername) instanceof Seller);
+        try {
+            return (User.getUserByUsername(sellerUsername) instanceof Seller);
+        } catch (UserNotExistException e) {
+            return false;
+        }
     }
 
     @Override

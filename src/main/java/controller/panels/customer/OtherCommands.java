@@ -1,10 +1,17 @@
 package controller.panels.customer;
 
 import controller.Command;
-import controller.Error;
+import model.ecxeption.CommonException;
+import model.ecxeption.Exception;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.common.NumberException;
+import model.ecxeption.product.ProductDoesntExistException;
+import model.ecxeption.user.LogDoesntExist;
+import model.ecxeption.user.UserTypeException;
 import model.log.BuyLog;
 import model.others.Product;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Customer;
 
 import static controller.Controller.*;
@@ -31,15 +38,10 @@ public abstract class OtherCommands extends Command {
         return ViewCodesCommand.getInstance();
     }
 
-    protected boolean canUserDo() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-            return false;
-        } else if (!(getLoggedUser() instanceof Customer)) {
-            sendError(Error.NEED_CUSTOMER.getError());
-            return false;
+    protected void canUserDo() throws UserTypeException.NeedCustomerException {
+        if (!(getLoggedUser() instanceof Customer)) {
+            throw new UserTypeException.NeedCustomerException();
         }
-        return true;
     }
 }
 
@@ -59,14 +61,18 @@ class ViewBalanceCommand extends OtherCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        viewBalance();
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException {
+        canUserDo();
+        return viewBalance();
     }
 
-    private void viewBalance() {
-        sendAnswer(((Customer) getLoggedUser()).getMoney());
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage viewBalance() {
+        return sendAnswer(((Customer) getLoggedUser()).getMoney());
     }
 
 }
@@ -88,14 +94,18 @@ class ViewOrdersCommand extends OtherCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        viewOrders();
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException {
+        canUserDo();
+        return viewOrders();
     }
 
-    public void viewOrders() {
-        sendAnswer(((Customer) getLoggedUser()).getAllOrdersInfo(), "log");
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    public ServerMessage viewOrders() {
+        return sendAnswer(((Customer) getLoggedUser()).getAllOrdersInfo(), "log");
     }
 }
 
@@ -116,20 +126,23 @@ class ViewOrderCommand extends OtherCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        viewOrder(request.getArrayList().get(0));
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException, NullFieldException, LogDoesntExist {
+        canUserDo();
+        containNullField(request.getHashMap().get("order id"));
+        return viewOrder(request.getHashMap().get("order id"));
     }
 
-    private void viewOrder(String orderId) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage viewOrder(String orderId) throws LogDoesntExist {
         BuyLog buyLog = ((Customer) getLoggedUser()).getBuyLog(orderId);
         if (buyLog == null) {
-            sendError("You don't have any order with this id!!");
+            throw new LogDoesntExist();
         } else {
-            sendAnswer(buyLog.getLogInfoForSending());
+            return sendAnswer(buyLog.getLogInfoForSending());
         }
     }
 }
@@ -151,22 +164,24 @@ class RateCommand extends OtherCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getFirstString()))
-            return;
-        rate(request.getFirstString(), request.getFirstInt());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, UserTypeException.NeedCustomerException, ProductDoesntExistException, NumberException, CommonException {
+        canUserDo();
+        containNullField(request.getHashMap().get("product id"));
+        rate(request.getHashMap().get("product id"), request.getFirstInt());
+        return actionCompleted();
     }
 
-    private void rate(String productId, int score) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private void rate(String productId, int score) throws ProductDoesntExistException, NumberException, CommonException {
         Product product = Product.getProductWithId(productId);
         if (score > 5 || score < 0) {
-            sendError("Wrong score!!");
-        } else if (product == null) {
-            sendError("There isn't any product with this id!!");
+            throw new NumberException("Wrong score!!");
         } else if (!((Customer) getLoggedUser()).doesUserBoughtProduct(product)) {
-            sendError("You should buy this product to rate it!!");
+            throw new CommonException("You should buy this product to rate it!!");
         } else {
             ((Customer) getLoggedUser()).rate(score, product);
         }
@@ -191,14 +206,18 @@ class ViewCodesCommand extends OtherCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        viewUserDiscountCode();
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException {
+        canUserDo();
+        return viewUserDiscountCode();
     }
 
-    private void viewUserDiscountCode() {
-        sendAnswer(((Customer) getLoggedUser()).getAllDiscountCodeInfo(), "code");
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage viewUserDiscountCode() {
+        return sendAnswer(((Customer) getLoggedUser()).getAllDiscountCodeInfo(), "code");
     }
 
 }

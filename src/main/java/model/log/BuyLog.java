@@ -2,6 +2,7 @@ package model.log;
 
 
 import database.Database;
+import model.ecxeption.user.UserNotExistException;
 import model.others.Product;
 import model.send.receive.LogInfo;
 import model.send.receive.ProductInfo;
@@ -110,7 +111,13 @@ public class BuyLog extends Log {
 
     private void updateSellersLog(HashMap<String, SellLog> sellerBuyLogHashMap) {
         for (Map.Entry<String, SellLog> entry : sellerBuyLogHashMap.entrySet()) {
-            User seller = User.getUserByUsername(entry.getKey());
+            User seller = null;
+            try {
+                seller = User.getUserByUsername(entry.getKey());
+            } catch (UserNotExistException e) {
+                e.printStackTrace();
+                continue;
+            }
             if (seller instanceof Seller) {
                 ((Seller) seller).addSellLog(entry.getValue());
                 seller.updateDatabase().update();

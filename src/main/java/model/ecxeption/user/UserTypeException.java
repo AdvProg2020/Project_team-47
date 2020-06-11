@@ -18,6 +18,7 @@ public class UserTypeException extends Exception {
             super("You should login as a Customer to do this!!");
         }
     }
+
     public static class NeedSellerException extends UserTypeException {
         public NeedSellerException() {
             super("You should login as a seller to do this!!");

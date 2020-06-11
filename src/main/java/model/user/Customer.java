@@ -2,6 +2,7 @@ package model.user;
 
 import database.UserData;
 import model.discount.DiscountCode;
+import model.ecxeption.purchase.CodeException;
 import model.log.BuyLog;
 import model.log.Log;
 import model.others.Product;
@@ -46,13 +47,13 @@ public class Customer extends User {
         this.removeFromDatabase();
     }
 
-    public DiscountCode getDiscountCode(String code) {
+    public DiscountCode getDiscountCode(String code) throws CodeException.DontHaveCode {
         for (DiscountCode discountCode : discountCodes) {
             if (discountCode.getDiscountCode().equals(code)) {
                 return discountCode;
             }
         }
-        return null;
+        throw new CodeException.DontHaveCode();
     }
 
     public void decreaseMoney(double money) {

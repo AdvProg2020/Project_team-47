@@ -1,7 +1,8 @@
 package model.send.receive;
 
+import model.others.SpecialProperty;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ProductInfo {
     private int seenTime;
@@ -11,23 +12,19 @@ public class ProductInfo {
     private ArrayList<String> sellersNames;
     private String mainCategory;
     private String subCategory;
-    private HashMap<String, String> specialProperties;
+    private ArrayList<SpecialProperty> specialProperties;
     private String description;
     private double scoreAverage;
     private ArrayList<ProductSeller> productSellers;
 
     public ProductInfo() {
         sellersNames = new ArrayList<>();
-        specialProperties = new HashMap<>();
+        specialProperties = new ArrayList<>();
         productSellers = new ArrayList<>();
     }
 
     public int getSeenTime() {
         return seenTime;
-    }
-
-    public void setSeenTime(int seenTime) {
-        this.seenTime = seenTime;
     }
 
     public String getId() {
@@ -81,11 +78,6 @@ public class ProductInfo {
         return sellersNames;
     }
 
-    public void setSellersNames(ArrayList<String> sellersNames) {
-        this.sellersNames = sellersNames;
-    }
-
-
     public String getMainCategory() {
         return mainCategory;
     }
@@ -102,11 +94,11 @@ public class ProductInfo {
         this.subCategory = subCategory;
     }
 
-    public HashMap<String, String> getSpecialProperties() {
+    public ArrayList<SpecialProperty> getSpecialProperties() {
         return specialProperties;
     }
 
-    public void setSpecialProperties(HashMap<String, String> specialProperties) {
+    public void setSpecialProperties(ArrayList<SpecialProperty> specialProperties) {
         this.specialProperties = specialProperties;
     }
 

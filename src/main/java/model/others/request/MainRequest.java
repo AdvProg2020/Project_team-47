@@ -8,9 +8,9 @@ public abstract class MainRequest {
 
     public abstract void requestInfoSetter(RequestInfo requestInfo);
 
-    abstract void accept(String type);
+    abstract void accept();
 
-    abstract boolean update(String type);
+    abstract boolean update();
 
     public abstract void decline();
 }

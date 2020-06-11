@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import static controller.Controller.*;
+import static controller.Controller.actionCompleted;
+import static controller.Controller.sendAnswer;
 
 public abstract class SortCommands extends Command {
     public static SortCommand getSortCommand() {
@@ -91,7 +92,7 @@ class SortCommonCommand extends SortCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
-        return switch (request.getRequest()) {
+        return switch (request.getType()) {
             case "show available sorts offs" -> showAvailableSorts();
             case "show current sort offs" -> currentSort();
             case "disable sort offs" -> disableSort();

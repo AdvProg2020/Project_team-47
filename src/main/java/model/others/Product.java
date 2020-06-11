@@ -3,9 +3,11 @@ package model.others;
 import controller.Controller;
 import database.Database;
 import database.ProductData;
+import model.category.Category;
 import model.category.MainCategory;
 import model.category.SubCategory;
 import model.discount.Off;
+import model.ecxeption.product.ProductDoesntExistException;
 import model.others.request.AddCommentRequest;
 import model.others.request.Request;
 import model.send.receive.ProductInfo;
@@ -13,8 +15,6 @@ import model.user.Customer;
 import model.user.Seller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TreeSet;
 
 public class Product {
@@ -34,7 +34,7 @@ public class Product {
     private ArrayList<Seller> sellers;
     private MainCategory mainCategory;
     private SubCategory subCategory;
-    private HashMap<String, String> specialProperties;
+    private ArrayList<SpecialProperty> specialProperties;
     private ArrayList<Comment> comments;
     private String description;
     private ArrayList<Score> scores;
@@ -53,8 +53,12 @@ public class Product {
     }
 
     public static void removeProduct(String id) {
-        Product product = getProductWithId(id);
-        removeProduct(product);
+        try {
+            Product product = getProductWithId(id);
+            product.removeProduct();
+        } catch (ProductDoesntExistException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void removeProduct(Product product) {
@@ -78,13 +82,13 @@ public class Product {
             return id;
     }
 
-    public static Product getProductWithId(String id) {
+    public static Product getProductWithId(String id) throws ProductDoesntExistException {
         for (Product product : allProducts) {
             if (id.equalsIgnoreCase(product.id)) {
                 return product;
             }
         }
-        return null;
+        throw new ProductDoesntExistException();
     }
 
     public static boolean isThereProduct(String id) {
@@ -221,6 +225,27 @@ public class Product {
         Product.usedId = usedId;
     }
 
+    public ArrayList<SpecialProperty> getSpecialProperties() {
+        return specialProperties;
+    }
+
+    public void setSpecialProperties(ArrayList<SpecialProperty> specialProperties) {
+        this.specialProperties = specialProperties;
+    }
+
+    public void removeProduct() {
+        allProducts.remove(this);
+        for (Seller seller : this.sellers) {
+            seller.removeProduct(this);
+        }
+        for (ProductSeller productSeller : this.productSellers) {
+            if (productSeller.getOff() != null) {
+                productSeller.off.removeProduct(this);
+            }
+        }
+        this.removeFromDatabase();
+    }
+
     public void updateDatabase() {
         ProductData productData = new ProductData();
         this.dataObjectSetter(productData);
@@ -276,17 +301,15 @@ public class Product {
     }
 
     private String getPropertyValue(String key) throws Exception {
-        for (Map.Entry<String, String> entry : this.specialProperties.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase(key)) {
-                return entry.getValue();
-            }
-        }
-        throw new Exception();
+        SpecialProperty temp = new SpecialProperty(key);
+        specialProperties.indexOf(temp);
+        return null;
+        // TODO: 6/9/2020
     }
 
     public void removeSellerFromProduct(Seller seller) {
         if (productSellers.size() == 1) {
-            removeProduct(this);
+            this.removeProduct();
             return;
         }
         this.sellers.remove(seller);
@@ -442,14 +465,6 @@ public class Product {
         return sellers;
     }
 
-    public HashMap<String, String> getSpecialProperties() {
-        return specialProperties;
-    }
-
-    public void setSpecialProperties(HashMap<String, String> specialProperties) {
-        this.specialProperties = specialProperties;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -570,6 +585,12 @@ public class Product {
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public Category getCategory() {
+        if (subCategory != null)
+            return subCategory;
+        return mainCategory;
     }
 
     static class ProductSeller {

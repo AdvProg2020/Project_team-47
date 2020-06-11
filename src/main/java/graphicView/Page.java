@@ -1,23 +1,17 @@
 package graphicView;
 
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public abstract class Page extends Application {
+public abstract class Page {
+    protected static Page page;
     protected Scene scene;
-    protected PageController controller;
-    protected Page previousPage;
 
-    public Page(Page previousPage, PageController controller, String scene) {
-        this.previousPage = previousPage;
-        this.controller = controller;
-        this.controller.setPage(this);
+    protected Page(String scenePath) {
         try {
-            this.scene = FXMLLoader.load(getClass().getResource(scene));
+            this.scene = FXMLLoader.load(getClass().getResource(scenePath));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -27,25 +21,6 @@ public abstract class Page extends Application {
         return this.scene;
     }
 
-    public PageController getController() {
-        return this.controller;
-    }
-
-    public void start() {
-        this.getController().update();
-
-        GraphicView graphicView = GraphicView.getAllViews().get(0);
-
-        Stage stage = GraphicView.getStage();
-
-
-        if (stage == null) {
-            System.out.println("salsamsdgsf");
-        }
-
-        stage.setScene(this.getScene());
-        stage.show();
-
-    }
+    public abstract PageController getController();
 
 }

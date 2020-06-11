@@ -2,12 +2,17 @@ package model.others.request;
 
 import com.google.gson.Gson;
 import model.category.Category;
+import model.ecxeption.product.CategoryDoesntExistException;
+import model.ecxeption.user.UserNotExistException;
 import model.others.Product;
+import model.others.SpecialProperty;
 import model.send.receive.RequestInfo;
 import model.user.Seller;
 import model.user.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class AddProductRequest extends MainRequest {
     private String sellerUsername;
@@ -18,7 +23,7 @@ public class AddProductRequest extends MainRequest {
     private String subCategoryName;
     private String description;
     private String company;
-    private HashMap<String, String> specialProperties;
+    private ArrayList<SpecialProperty> properties;
 
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
@@ -28,71 +33,71 @@ public class AddProductRequest extends MainRequest {
         addingInfo.put("name", name);
         addingInfo.put("number-in-stock", Integer.toString(numberInStock));
         addingInfo.put("main-category", categoryName);
-        if (subCategoryName != null)
-            addingInfo.put("sub-category", subCategoryName);
-        else
-            addingInfo.put("sub-category", "");
+        addingInfo.put("sub-category", Objects.requireNonNullElse(subCategoryName, ""));
         addingInfo.put("description", description);
         addingInfo.put("company", company);
-        addingInfo.put("special-properties", (new Gson()).toJson(specialProperties));
+        addingInfo.put("special-properties", (new Gson()).toJson(properties));
         requestInfo.setAddInfo("add-product", sellerUsername, addingInfo);
     }
 
     @Override
-    void accept(String type) {
-        Seller seller = (Seller) Seller.getUserByUsername(sellerUsername);
-        Product product = new Product();
-        product.setSpecialProperties(specialProperties);
-        product.setDescription(description);
-        product.addSeller(seller, numberInStock, price);
-        product.setMainCategory(Category.getMainCategoryByName(categoryName));
-        if (subCategoryName != null) {
-            product.setSubCategory(Category.getSubCategoryByName(subCategoryName));
+    void accept() {
+        try {
+            Seller seller = (Seller) Seller.getUserByUsername(sellerUsername);
+            Product product = new Product();
+            product.setSpecialProperties(properties);
+            product.setDescription(description);
+            product.addSeller(seller, numberInStock, price);
+            product.setMainCategory(Category.getMainCategoryByName(categoryName));
+            if (subCategoryName != null) {
+                product.setSubCategory(Category.getSubCategoryByName(subCategoryName));
+            }
+            product.setName(name);
+            product.setCompany(company);
+            product.getSellers().add(seller);
+            product.setStatus("CONFIRMED");
+            seller.addProduct(product);
+            seller.updateDatabase().update();
+            product.updateDatabase();
+        } catch (CategoryDoesntExistException | UserNotExistException ignored) {
         }
-        product.setName(name);
-        product.setCompany(company);
-        product.getSellers().add(seller);
-        product.setStatus("CONFIRMED");
-        seller.addProduct(product);
-        seller.updateDatabase().update();
-        product.updateDatabase();
     }
 
     @Override
-    boolean update(String type) {
-        User seller = User.getUserByUsername(sellerUsername);
+    boolean update() {
+        User seller = null;
+        try {
+            seller = User.getUserByUsername(sellerUsername);
+        } catch (UserNotExistException ignored) {
+        }
+
         if (!(seller instanceof Seller))
             return false;
 
-        Category category = Category.getMainCategoryByName(categoryName);
-        if (category == null)
+        Category category;
+        try {
+            category = Category.getMainCategoryByName(categoryName);
+        } catch (CategoryDoesntExistException e) {
             return false;
+        }
 
         if (subCategoryName != null) {
-            category = Category.getSubCategoryByName(subCategoryName);
-            if (category == null)
+            try {
+                category = Category.getSubCategoryByName(subCategoryName);
+            } catch (CategoryDoesntExistException e) {
                 return false;
-        }
-        for (String specialProperty : category.getSpecialProperties()) {
-            if (!isThereProperty(specialProperty)) {
-                specialProperties.put(specialProperty, "");
             }
         }
+
+        for (SpecialProperty property : category.getSpecialProperties())
+            if (!properties.contains(property)) properties.add(property);
+
         return true;
     }
 
     @Override
     public void decline() {
 
-    }
-
-    private boolean isThereProperty(String key) {
-        for (String entry : specialProperties.keySet()) {
-            if (entry.equalsIgnoreCase(key)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void setSellerUsername(String sellerUsername) {
@@ -127,8 +132,8 @@ public class AddProductRequest extends MainRequest {
         this.company = company;
     }
 
-    public void setSpecialProperties(HashMap<String, String> specialProperties) {
-        this.specialProperties = specialProperties;
+    public void setSpecialProperties(ArrayList<SpecialProperty> specialProperties) {
+        this.properties = specialProperties;
     }
 
     public void setSubCategoryName(String subCategoryName) {

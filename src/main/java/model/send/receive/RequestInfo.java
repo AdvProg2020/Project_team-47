@@ -1,8 +1,8 @@
 package model.send.receive;
 
 import model.others.Comment;
+import model.others.SpecialProperty;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -35,12 +35,12 @@ public class RequestInfo {
         this.type = type;
     }
 
-    public void setEditInfo(String filed, String newValue, ArrayList<String> newValueArrayList) {
-        this.editInfo = new EditInfo("edit-off", filed, newValue, newValueArrayList);
+    public void setEditInfo(String field, String newValue, String changeType, String id) {
+        this.editInfo = new EditInfo("edit-off", field, newValue, changeType, id);
     }
 
-    public void setEditInfo(String filed, String newValue, HashMap<String, String> newValueArrayList) {
-        this.editInfo = new EditInfo("edit-product", filed, newValue, newValueArrayList);
+    public void setEditInfo(String field, String newValue, String changeType, String id, SpecialProperty property) {
+        this.editInfo = new EditInfo("edit-off", field, newValue, changeType, id, property);
     }
 
     public void setAddInfo(String type, String username, HashMap<String, String> addingInfo) {
@@ -76,21 +76,31 @@ public class RequestInfo {
         private String editType;
         private String changeField;
         private String newValue;
-        private ArrayList<String> newValueArrayList;
-        private HashMap<String, String> newValueHashMap;
+        private String changeType;
+        private String id;
+        private SpecialProperty property;
 
-        public EditInfo(String editType, String changeField, String newValue, ArrayList<String> newValueArrayList) {
+        public EditInfo(String editType, String changeField, String newValue, String changeType, String id) {
             this.editType = editType;
             this.changeField = changeField;
             this.newValue = newValue;
-            this.newValueArrayList = newValueArrayList;
+            this.changeType = changeType;
+            this.id = id;
         }
 
-        public EditInfo(String editType, String changeField, String newValue, HashMap<String, String> newValueHashMap) {
+        public EditInfo(String editType, String changeField, String newValue) {
             this.editType = editType;
             this.changeField = changeField;
             this.newValue = newValue;
-            this.newValueHashMap = newValueHashMap;
+        }
+
+        public EditInfo(String editType, String changeField, String newValue, String changeType, String id, SpecialProperty property) {
+            this.changeField = changeField;
+            this.newValue = newValue;
+            this.changeType = changeType;
+            this.editType = editType;
+            this.id = id;
+            this.property = property;
         }
     }
 

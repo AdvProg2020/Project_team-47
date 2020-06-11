@@ -1,16 +1,13 @@
 package controller.product;
 
-import controller.Command;
 import controller.Controller;
 import model.others.Product;
-import model.send.receive.ClientMessage;
 
 import java.util.ArrayList;
 
 public class ProductController extends Controller {
     private static ProductController productController;
     private Product product;
-    private ArrayList<Command> commands;
 
     private ProductController() {
         commands = new ArrayList<>();

@@ -1,5 +1,5 @@
 .root {
-    -fx-background-image: url("main-menu-background.jpg");
+    -fx-background-image: url("../Images/main-menu-background.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch;
     -fx-min-height: 700px;
@@ -11,7 +11,7 @@
     -fx-max-width: 200px;
 }
 
-.button {
+.blue-button {
     -fx-border-radius: 0%;
     -fx-border-color: #00ffff;
     -fx-background-color: aqua;
@@ -21,11 +21,11 @@
     -fx-min-height: 20;
 }
 
-.button:hover {
+.blue-button:hover {
     -fx-background-color: #afe5e0;
 }
 
-.button:pressed {
+.blue-button:pressed {
     -fx-background-color: #afe5e0;
     -fx-translate-y: 4px;
 }

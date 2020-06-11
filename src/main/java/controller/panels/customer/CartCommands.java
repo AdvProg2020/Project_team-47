@@ -1,9 +1,14 @@
 package controller.panels.customer;
 
 import controller.Command;
+import model.ecxeption.CommonException;
+import model.ecxeption.Exception;
+import model.ecxeption.cart.CantIncreaseException;
+import model.ecxeption.product.ProductDoesntExistException;
 import model.others.Product;
 import model.others.ShoppingCart;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Customer;
 import model.user.Seller;
 import model.user.User;
@@ -27,33 +32,26 @@ public abstract class CartCommands extends Command {
         return TotalPriceCommand.getInstance();
     }
 
-    protected void changingProductInCart(String productId, String sellerUsername, String changingType) {
+    protected void changingProductInCart(String productId, String sellerUsername, String changingType) throws Exception {
         ShoppingCart shoppingCart = getShoppingCart();
         if (!shoppingCart.isProductInCart(productId, sellerUsername)) {
-            sendError("There isn't any product with this id and this seller in your shopping cart!!");
-            return;
+            throw new ProductDoesntExistException("There isn't any product with this id and this seller in your shopping cart!!");
         }
 
         Product product = Product.getProductWithId(productId);
         User seller = User.getUserByUsername(sellerUsername);
         if (!(seller instanceof Seller)) {
-            sendError("There isn't any seller with this username!!");
-            return;
-        } else if (product == null) {
-            sendError("There isn't any product with this id!!");
-            return;
+            throw new CommonException("There isn't any seller with this username!!");
         }
 
         switch (changingType) {
-            case "increase":
+            case "increase" -> {
                 if (!shoppingCart.canIncrease(product, (Seller) seller)) {
-                    sendError("Can't increase this product!!");
+                    throw new CantIncreaseException();
                 } else
                     shoppingCart.increaseProductInCart(product, (Seller) seller);
-                break;
-            case "decrease":
-                shoppingCart.decreaseProductInCart(product, (Seller) seller);
-                break;
+            }
+            case "decrease" -> shoppingCart.decreaseProductInCart(product, (Seller) seller);
         }
     }
 
@@ -65,7 +63,6 @@ public abstract class CartCommands extends Command {
             shoppingCart = ((Customer) getLoggedUser()).getShoppingCart();
         return shoppingCart;
     }
-
 }
 
 
@@ -85,15 +82,20 @@ class ViewCartCommand extends CartCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        viewProductsInCart();
+    public ServerMessage process(ClientMessage request) {
+        return viewProductsInCart();
     }
 
-    private void viewProductsInCart() {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage viewProductsInCart() {
         if (getLoggedUser() != null) {
-            sendAnswer(((Customer) getLoggedUser()).getShoppingCart().cartInfo());
+            return sendAnswer(((Customer) getLoggedUser()).getShoppingCart().cartInfo());
         } else
-            sendAnswer(ShoppingCart.getLocalShoppingCart().cartInfo());
+            return sendAnswer(ShoppingCart.getLocalShoppingCart().cartInfo());
     }
 
 }
@@ -115,13 +117,18 @@ class IncreaseCommand extends CartCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getArrayList().get(0), request.getArrayList().get(1)))
-            return;
-        increaseProductInCart(request.getArrayList().get(0), request.getArrayList().get(1));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap().get("product id"), request.getHashMap().get("seller username"));
+        increaseProductInCart(request.getHashMap().get("product id"), request.getHashMap().get("seller username"));
+        return actionCompleted();
     }
 
-    private void increaseProductInCart(String productId, String sellerUsername) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private void increaseProductInCart(String productId, String sellerUsername) throws Exception {
         changingProductInCart(productId, sellerUsername, "increase");
     }
 }
@@ -143,13 +150,18 @@ class DecreaseCommand extends CartCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getArrayList().get(0), request.getArrayList().get(1)))
-            return;
-        decreaseProductInCart(request.getArrayList().get(0), request.getArrayList().get(1));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap().get("product id"), request.getHashMap().get("seller username"));
+        decreaseProductInCart(request.getHashMap().get("product id"), request.getHashMap().get("seller username"));
+        return actionCompleted();
     }
 
-    private void decreaseProductInCart(String productId, String sellerUsername) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private void decreaseProductInCart(String productId, String sellerUsername) throws Exception {
         changingProductInCart(productId, sellerUsername, "decrease");
     }
 }
@@ -171,12 +183,17 @@ class TotalPriceCommand extends CartCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        cartPrice();
+    public ServerMessage process(ClientMessage request) {
+        return cartPrice();
     }
 
-    private void cartPrice() {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage cartPrice() {
         ShoppingCart shoppingCart = getShoppingCart();
-        sendAnswer(shoppingCart.getTotalPrice());
+        return sendAnswer(shoppingCart.getTotalPrice());
     }
 }

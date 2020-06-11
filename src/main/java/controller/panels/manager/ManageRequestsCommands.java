@@ -1,12 +1,17 @@
 package controller.panels.manager;
 
 import controller.Command;
-import controller.Error;
+import model.ecxeption.Exception;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.filter.InvalidSortException;
+import model.ecxeption.request.CantDoRequestException;
+import model.ecxeption.user.UserTypeException;
 import model.others.request.Request;
 import model.send.receive.ClientMessage;
-import model.user.Manager;
+import model.send.receive.ServerMessage;
 
-import static controller.Controller.*;
+import static controller.Controller.actionCompleted;
+import static controller.Controller.sendAnswer;
 import static controller.panels.UserPanelCommands.checkSort;
 
 public abstract class ManageRequestsCommands extends Command {
@@ -24,17 +29,6 @@ public abstract class ManageRequestsCommands extends Command {
 
     public static DeclineRequestCommand getDeclineRequestCommand() {
         return DeclineRequestCommand.getInstance();
-    }
-
-    protected boolean canUserDo() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-            return false;
-        } else if (!(getLoggedUser() instanceof Manager)) {
-            sendError(Error.NEED_MANGER.getError());
-            return false;
-        }
-        return true;
     }
 
 }
@@ -56,22 +50,26 @@ class ShowRequestsCommand extends ManageRequestsCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        manageRequest(request.getArrayList().get(0), request.getArrayList().get(1));
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedManagerException {
+        return manageRequest(request.getHashMap().get("field"), request.getHashMap().get("direction"));
     }
 
-    private void manageRequest(String sortField, String sortDirection) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        String sortField = request.getHashMap().get("sort field");
+        String sortDirection = request.getHashMap().get("sort direction");
+
         if (sortField != null && sortDirection != null) {
             sortField = sortField.toLowerCase();
             sortDirection = sortDirection.toLowerCase();
         }
 
-        if (!checkSort(sortField, sortDirection, "request")) {
-            sendError("Can't sort with this field and direction!!");
-        } else
-            sendAnswer(Request.allRequestInfo(sortField, sortDirection), "request");
+        if (!checkSort(sortField, sortDirection, "request"))
+            throw new InvalidSortException();
+    }
+
+    private ServerMessage manageRequest(String sortField, String sortDirection) {
+        return sendAnswer(Request.allRequestInfo(sortField, sortDirection), "request");
     }
 
 }//end ShowRequestsCommand Class
@@ -79,6 +77,7 @@ class ShowRequestsCommand extends ManageRequestsCommands {
 
 class RequestDetailCommand extends ManageRequestsCommands {
     private static RequestDetailCommand command;
+    private Request request;
 
     private RequestDetailCommand() {
         this.name = "request details";
@@ -93,28 +92,27 @@ class RequestDetailCommand extends ManageRequestsCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        requestDetail(request.getArrayList().get(0).toLowerCase());
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedManagerException, NullFieldException {
+        containNullField(request.getHashMap().get("id"));
+        return requestDetail();
     }
 
-    private void requestDetail(String id) {
-        if (!Request.isThereRequestWithId(id)) {
-            sendError("There isn't any request with this id!!");
-            return;
-        }
-        Request request = Request.getRequestById(id);
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        this.request = Request.getRequestById(request.getHashMap().get("id"));
+
+    }
+
+    private ServerMessage requestDetail() {
         assert request != null;
-        sendAnswer(request.detail());
+        return sendAnswer(request.detail());
     }
 
 }//end RequestDetailCommand Class
 
 class AcceptRequestCommand extends ManageRequestsCommands {
     private static AcceptRequestCommand command;
+    private Request request;
 
     private AcceptRequestCommand() {
         this.name = "accept request";
@@ -129,31 +127,31 @@ class AcceptRequestCommand extends ManageRequestsCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        acceptRequest(request.getArrayList().get(0));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap().get("id"));
+        checkPrimaryErrors(request);
+        acceptRequest(request.getHashMap().get("id"));
+        return actionCompleted();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        this.request = Request.getRequestById(request.getHashMap().get("id"));
+        if (!this.request.canDoRequest()) {
+            this.request.decline();
+            throw new CantDoRequestException();
+        }
     }
 
     private void acceptRequest(String id) {
-        if (!Request.isThereRequestWithId(id)) {
-            sendError("There isn't any request with this id!!");
-            return;
-        } else if (!Request.canDoRequest(id)) {
-            Request.declineNewRequest(id);
-            sendError("This request can't be accept now due to some change in data!!");
-            return;
-        }
-        Request.acceptNewRequest(id);
-        actionCompleted();
+        request.accept();
     }
 
 }//end AcceptRequestClass Class
 
 class DeclineRequestCommand extends ManageRequestsCommands {
     private static DeclineRequestCommand command;
+    private Request request;
 
     private DeclineRequestCommand() {
         this.name = "decline request";
@@ -168,21 +166,20 @@ class DeclineRequestCommand extends ManageRequestsCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        declineRequest(request.getArrayList().get(0));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap().get("id"));
+        checkPrimaryErrors(request);
+        declineRequest(request.getHashMap().get("id"));
+        return actionCompleted();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        this.request = Request.getRequestById(request.getHashMap().get("id"));
     }
 
     private void declineRequest(String id) {
-        if (!Request.isThereRequestWithId(id)) {
-            sendError("There isn't any request with this id!!");
-            return;
-        }
-        Request.declineNewRequest(id);
-        actionCompleted();
+        request.decline();
     }
 
 }//end DeclineRequestClass class

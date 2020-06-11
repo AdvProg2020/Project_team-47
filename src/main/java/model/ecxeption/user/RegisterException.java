@@ -24,7 +24,8 @@ public class RegisterException extends Exception {
             super("Phone number isn't valid!!");
         }
     }
-    public static  class EmailNotValidException extends RegisterException {
+
+    public static class EmailNotValidException extends RegisterException {
         public EmailNotValidException() {
             super("Email isn't valid!!");
         }

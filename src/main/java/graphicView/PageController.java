@@ -1,36 +1,20 @@
 package graphicView;
 
+import controller.ControllerAndViewConnector;
 import javafx.fxml.Initializable;
+import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 public abstract class PageController implements Initializable {
-    private Page page;
+    private static PageController controller;
 
-
-    /*protected boolean send(Message req) {
-        //this function will send a request to controller and receive the answer
-        try {
-            Controller.process(req);
-            return true;
-        } catch (Exception e) {
-            processError(e);
-            return false;
-        }
-    }//end send*/
-
-    //this function will use to process the exception which controller send as ansewr
-    public abstract void processError(Exception e);
+    public ServerMessage send(ClientMessage request) {
+        return ControllerAndViewConnector.commandProcess(request);
+    }
 
     //this function will use to clear scenes
     public abstract void clearPage();
 
     //this function will update scene objects
     public abstract void update();
-
-    public Page getPage() {
-        return page;
-    }
-
-    public void setPage(Page page) {
-        this.page = page;
-    }
 }
