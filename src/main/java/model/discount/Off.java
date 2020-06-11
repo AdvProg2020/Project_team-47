@@ -3,6 +3,8 @@ package model.discount;
 import controller.Controller;
 import database.Database;
 import database.OffData;
+import model.ecxeption.common.DateException;
+import model.ecxeption.common.OffDoesntExistException;
 import model.others.Filter;
 import model.others.Product;
 import model.others.Sort;
@@ -51,9 +53,12 @@ public class Off extends Discount {
         return allOffs.stream().anyMatch(off -> offId.equalsIgnoreCase(off.offId));
     }
 
-    public static Off getOffById(String offId) {
-        return allOffs.stream().filter(off -> offId.equalsIgnoreCase
-                (off.offId)).findAny().orElse(null);
+    public static Off getOffById(String offId) throws OffDoesntExistException {
+        for (Off off : allOffs) {
+            if (offId.equalsIgnoreCase(off.getOffId()))
+                return off;
+        }
+        throw new OffDoesntExistException();
     }
 
     public static ArrayList<OffInfo> getAllProductsInOffsInfo(String sortField, String direction, ArrayList<Filter> filters) {
@@ -83,17 +88,13 @@ public class Off extends Discount {
     }
 
     private boolean inFilter(Filter filter) {
-        switch (filter.getFilterKey()) {
-            case "time":
-                return inTimeFilter(filter);
-            case "percent":
-                return inPercentFilter(filter);
-            case "seller":
-                return inSellerFilter(filter);
-            case "off-status":
-                return inStatusFilter(filter);
-        }
-        return false;
+        return switch (filter.getFilterKey()) {
+            case "time" -> inTimeFilter(filter);
+            case "percent" -> inPercentFilter(filter);
+            case "seller" -> inSellerFilter(filter);
+            case "off-status" -> inStatusFilter(filter);
+            default -> false;
+        };
     }
 
     private boolean inStatusFilter(Filter filter) {
@@ -111,9 +112,13 @@ public class Off extends Discount {
     }
 
     private boolean inTimeFilter(Filter filter) {
-        Date start = Controller.getDateWithString(filter.getFirstFilterValue());
-        Date finish = Controller.getDateWithString(filter.getSecondFilterValue());
-        return this.startTime.after(start) && this.finishTime.before(finish);
+        try {
+            Date start = Controller.getDateWithString(filter.getFirstFilterValue());
+            Date finish = Controller.getDateWithString(filter.getSecondFilterValue());
+            return this.startTime.after(start) && this.finishTime.before(finish);
+        } catch (DateException e) {
+            return false;
+        }
     }
 
     @Override
@@ -155,12 +160,9 @@ public class Off extends Discount {
         return finishTime.after(Controller.getCurrentTime());
     }
 
-    @Override
-    public String toString() {
-        return null;
-    }
-
     public void addProduct(Product product) {
+        if (products.contains(product))
+            return;
         products.add(product);
         this.updateDatabase();
     }

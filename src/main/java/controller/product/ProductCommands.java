@@ -1,12 +1,21 @@
 package controller.product;
 
 import controller.Command;
-import controller.Error;
 import model.category.Category;
+import model.ecxeption.CommonException;
+import model.ecxeption.DebugException;
+import model.ecxeption.Exception;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.filter.InvalidSortException;
+import model.ecxeption.product.ProductDoesntExistException;
+import model.ecxeption.user.UserNotExistException;
+import model.ecxeption.user.UserTypeException;
 import model.others.Product;
 import model.others.ShoppingCart;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Customer;
+import model.user.Manager;
 import model.user.Seller;
 import model.user.User;
 
@@ -47,15 +56,9 @@ public abstract class ProductCommands extends Command {
         ProductController.getInstance().setProduct(product);
     }
 
-    protected boolean canUserDo() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-            return false;
-        } else if (!(getLoggedUser() instanceof Customer)) {
-            sendError(Error.NEED_CUSTOMER.getError());
-            return false;
-        }
-        return true;
+    protected void canUserDo() throws UserTypeException.NeedCustomerException {
+        if (getLoggedUser() instanceof Manager || getLoggedUser() instanceof Seller)
+            throw new UserTypeException.NeedCustomerException();
     }
 }
 
@@ -75,20 +78,20 @@ class ShowProductCommand extends ProductCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getFirstString()))
-            return;
-        showProduct(request.getFirstString());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, ProductDoesntExistException {
+        containNullField(request.getHashMap().get("product id"));
+        showProduct(request.getHashMap().get("product id"));
+        return actionCompleted();
     }
 
-    private void showProduct(String id) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
 
+    }
+
+    private void showProduct(String id) throws ProductDoesntExistException {
         setProduct(Product.getProductWithId(id));
-        if (product() == null) {
-            sendError("There isn't any product with this id!!");
-        } else {
-            product().addSeenTime();
-        }
+        product().addSeenTime();
     }
 
 }
@@ -109,42 +112,37 @@ class ProductInfoCommand extends ProductCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        switch (request.getRequest()) {
-            case "digest":
-                digest();
-                break;
-            case "product attributes":
-                attributes();
-                break;
-            case "comments":
-                comment();
-                break;
-        }
+    public ServerMessage process(ClientMessage request) throws CommonException, DebugException {
+        return switch (request.getType()) {
+            case "digest" -> digest();
+            case "product attributes" -> attributes();
+            case "comments" -> comment();
+            default -> throw new CommonException("Shouldn't happen!!");
+        };
     }
 
-    private void digest() {
-        if (product() == null) {
-            sendError("You can't do this in this menu!!");
-            return;
-        }
-        sendAnswer(product().digest());
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
     }
 
-    private void attributes() {
+    private ServerMessage digest() throws DebugException {
         if (product() == null) {
-            sendError("You can't do this in this menu!!");
-            return;
+            throw new DebugException();
         }
-        sendAnswer(product().attributes());
+        return sendAnswer(product().digest());
     }
 
-    public void comment() {
+    private ServerMessage attributes() throws DebugException {
         if (product() == null) {
-            sendError("You should be on a product page!!");
-        } else {
-            sendAnswer(product().getAllCommentInfo(), "comment");
+            throw new DebugException();
         }
+        return sendAnswer(product().attributes());
+    }
+
+    public ServerMessage comment() throws DebugException {
+        if (product() == null) throw new DebugException();
+        return sendAnswer(product().getAllCommentInfo(), "comment");
     }
 
 }
@@ -166,34 +164,30 @@ class AddToCartCommand extends ProductCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getFirstString()))
-            return;
-        addToCart(request.getFirstString());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, UserTypeException.NeedCustomerException, UserNotExistException, DebugException {
+        containNullField("seller username");
+        canUserDo();
+        addToCart(request.getHashMap().get("seller username"));
+        return actionCompleted();
     }
 
-    private void addToCart(String sellerUsername) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private void addToCart(String sellerUsername) throws UserNotExistException, DebugException {
         User seller = User.getUserByUsername(sellerUsername);
         if (!(seller instanceof Seller)) {
-            sendError("There isn't any seller with this username!!");
+            throw new UserNotExistException("Seller not exist!!");
         }
-
-        int flag = 0;
         if (product() == null) {
-            sendError("You can't do this in this menu!!");
-            flag = 1;
-        } else if (!(getLoggedUser() instanceof Customer)) {
-            sendError("You can't do this!!");
-            flag = 1;
+            throw new DebugException();
         } else if (!product().isUserInSellerList((Seller) seller)) {
-            sendError("This seller doesn't have this product!!");
-            flag = 1;
+            throw new DebugException();
         } else if (product().getNumberInStock((Seller) seller) == 0) {
-            sendError("This seller doesn't have this product now!!");
-            flag = 1;
+            throw new DebugException();
         }
-        if (flag == 1)
-            return;
 
         //check if user didn't logged in and add product to local cart or user cart
         if (getLoggedUser() == null) {
@@ -202,7 +196,6 @@ class AddToCartCommand extends ProductCommands {
             Customer customer = (Customer) getLoggedUser();
             customer.getShoppingCart().addToCart(product(), (Seller) seller);
         }
-        actionCompleted();
     }
 
     private void addToLocalCart(Seller seller) {
@@ -225,17 +218,23 @@ class AddCommentCommand extends ProductCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getFirstString(), request.getSecondString()))
-            return;
-        addComment(request.getFirstString(), request.getSecondString());
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException, NullFieldException, DebugException {
+        canUserDo();
+        if (getLoggedUser() == null)
+            throw new UserTypeException.NeedCustomerException();
+        containNullField(request.getHashMap().get("title"), request.getHashMap().get("content"));
+        addComment(request.getHashMap().get("title"), request.getHashMap().get("content"));
+        return actionCompleted();
     }
 
-    private void addComment(String title, String content) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private void addComment(String title, String content) throws DebugException {
         if (product() == null) {
-            sendError("You should be on a product page!!");
+            throw new DebugException();
         } else {
             product().addComment(title, content, ((Customer) getLoggedUser()));
             actionCompleted();
@@ -260,22 +259,22 @@ class CompareCommand extends ProductCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getFirstString()))
-            return;
-        compare(request.getFirstString());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, ProductDoesntExistException, DebugException {
+        containNullField(request.getHashMap().get("id"));
+        return compare(request.getHashMap().get("id"));
     }
 
-    private void compare(String secondProductId) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage compare(String secondProductId) throws DebugException, ProductDoesntExistException {
         if (product() == null) {
-            sendError("You should be on a product page!!");
-        } else if (Product.isThereProduct(secondProductId)) {
-            sendError("Second product doesn't exist!!");
-        } else {
-            Product secondProduct = Product.getProductWithId(secondProductId);
-            assert secondProduct != null;
-            sendAnswer(product().compare(secondProduct), "product");
+            throw new DebugException();
         }
+        Product secondProduct = Product.getProductWithId(secondProductId);
+        return sendAnswer(product().compare(secondProduct), "product");
     }
 
 }
@@ -296,20 +295,23 @@ class ShowCategoriesCommand extends ProductCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        viewCategories(request.getFirstString(), request.getSecondString());
+    public ServerMessage process(ClientMessage request) throws InvalidSortException {
+        return viewCategories(request.getHashMap().get("sort field"), request.getHashMap().get("sort direction"));
     }
 
-    private void viewCategories(String sortField, String sortDirection) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage viewCategories(String sortField, String sortDirection) throws InvalidSortException {
         if (sortDirection != null && sortField != null) {
             sortDirection = sortDirection.toLowerCase();
             sortField = sortField.toLowerCase();
         }
-        if (!checkSort(sortField, sortDirection, "category")) {
-            sendError(Error.CANT_SORT.getError());
-            return;
-        }
-        sendAnswer(Category.getAllCategoriesInfo(sortField, sortDirection), "category");
+        if (!checkSort(sortField, sortDirection, "category"))
+            throw new InvalidSortException();
+        return sendAnswer(Category.getAllCategoriesInfo(sortField, sortDirection), "category");
     }
 
 }

@@ -6,4 +6,8 @@ public class DateException extends Exception {
     public DateException() {
         super("Enter valid date!!");
     }
+
+    public DateException(String message) {
+        super(message);
+    }
 }

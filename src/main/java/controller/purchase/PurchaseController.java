@@ -3,8 +3,12 @@ package controller.purchase;
 import controller.Command;
 import controller.Controller;
 import model.discount.DiscountCode;
+import model.ecxeption.Exception;
+import model.ecxeption.user.UserTypeException;
 import model.log.BuyLog;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
+import model.user.Customer;
 
 import java.util.ArrayList;
 
@@ -47,5 +51,12 @@ public class PurchaseController extends Controller {
 
     private void setPurchaseLog(BuyLog purchaseLog) {
         loggedUser.setPurchaseLog(purchaseLog);
+    }
+
+    @Override
+    public ServerMessage processRequest(ClientMessage request) throws Exception {
+        if (!(loggedUser instanceof Customer))
+            throw new UserTypeException.NeedCustomerException();
+        return super.processRequest(request);
     }
 }//end purchase controller class

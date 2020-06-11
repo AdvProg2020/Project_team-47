@@ -3,15 +3,25 @@ package controller.product;
 import controller.Command;
 import model.category.Category;
 import model.category.MainCategory;
-import model.category.SubCategory;
+import model.ecxeption.DebugException;
+import model.ecxeption.Exception;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.common.NumberException;
+import model.ecxeption.product.CategoryDoesntExistException;
+import model.ecxeption.user.UserNotExistException;
+import model.others.ClientFilter;
 import model.others.Filter;
+import model.others.SpecialProperty;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import static controller.Controller.*;
+import static controller.Controller.actionCompleted;
+import static controller.Controller.sendAnswer;
 
 public abstract class FilterCommands extends Command {
     public static FilterCommonCommand getFilterCommonCommand() {
@@ -29,9 +39,17 @@ public abstract class FilterCommands extends Command {
     protected Category getCategoryInFilter() {
         for (Filter filter : filters()) {
             if (filter.getFilterKey().equals("category")) {
-                return Category.getMainCategoryByName(filter.getFirstFilterValue());
+                try {
+                    return Category.getMainCategoryByName(filter.getFirstFilterValue());
+                } catch (CategoryDoesntExistException e) {
+                    e.printStackTrace();
+                }
             } else if (filter.getFilterKey().equals("sub-category")) {
-                return Category.getSubCategoryByName(filter.getFirstFilterValue());
+                try {
+                    return Category.getSubCategoryByName(filter.getFirstFilterValue());
+                } catch (CategoryDoesntExistException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return null;
@@ -65,37 +83,44 @@ class FilterCommonCommand extends FilterCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        switch (request.getRequest()) {
-            case "show available filters products":
-                showAvailableFilter();
-                break;
-            case "current filters products":
-                currentFilters();
-                break;
-        }
+    public ServerMessage process(ClientMessage request) throws DebugException {
+        return switch (request.getType()) {
+            case "show available filters products" -> showAvailableFilter();
+            case "current filters products" -> currentFilters();
+            default -> throw new DebugException();
+        };
     }
 
-    private void showAvailableFilter() {
-        ArrayList<String> availableFilters = new ArrayList<>();
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage showAvailableFilter() {
+        ArrayList<ClientFilter> availableFilters = new ArrayList<>();
         Category category = getCategoryInFilter();
-        availableFilters.add("Price");
-        availableFilters.add("Score");
-        availableFilters.add("Category");
-        availableFilters.add("Sub Category");
-        availableFilters.add("Name");
+        availableFilters.add(new ClientFilter("Price", "numeric", "%", "Price"));
+        availableFilters.add(new ClientFilter("Score", "numeric", "", "Score"));
+        availableFilters.add(new ClientFilter("Category", "text", "", "Main Category"));
+        availableFilters.add(new ClientFilter("Category", "text", "", "Sub Category"));
+        availableFilters.add(new ClientFilter("Common", "text", "", "Name", "Brand", "Seller"));
+        availableFilters.add(new ClientFilter("availability", "check box", "", "Yes", "No"));
         if (category != null) {
-            availableFilters.addAll(category.getSpecialProperties());
+            for (SpecialProperty property : category.getSpecialProperties()) {
+                availableFilters.add(new ClientFilter("Special Property", property.getType(),
+                        property.getUnit(), property.getKey()));
+            }
         }
-        sendAnswer(availableFilters, "filter");
+        return sendAnswer(availableFilters, "filter");
     }
 
-    private void currentFilters() {
-        ArrayList<String> currentFilters = new ArrayList<>();
-        for (Filter filter : filters()) {
-            currentFilters.add(filter.toString());
-        }
-        sendAnswer(currentFilters, "filter");
+    private ServerMessage currentFilters() {
+        return null;
+//        ArrayList<String> currentFilters = new ArrayList<>();
+//        for (Filter filter : filters()) {
+//            currentFilters.add(filter.toString());
+//        }
+//        sendAnswer(currentFilters, "filter");
     }
 }
 
@@ -114,86 +139,91 @@ class AddFilterCommand extends FilterCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        ArrayList<String> reqInfo = getReqInfo(request);
-        if (containNullField(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2)) || containNullField(reqInfo.get(3)))
-            return;
-        filterBy(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2), reqInfo.get(3));
+    public ServerMessage process(ClientMessage request) throws NullFieldException, CategoryDoesntExistException,
+            DebugException, UserNotExistException, NumberException {
+        HashMap<String, String> req = getReqInfo(request);
+        containNullField(req.get("filter key"), req.get("first filter value"), req.get("second filter value"));
+        filterBy(req.get("filter key"), req.get("first filter value"), req.get("second filter value"));
+        return actionCompleted();
     }
 
-    private void filterBy(String filterType, String filterKey, String firstFilterValue, String secondFilterValue) {
-        if (!Pattern.matches("(equality|equation)( special-property)?", filterType)) {
-            sendError("Wrong filter type!!");
-            return;
-        }
-        if (doesFilterExist(filterKey)) {
-            sendError("There is already a filter with this key!!");
-            return;
-        } else if (Pattern.matches("(equality|equation)", filterType)) {
-            addNonPropertyFilter(filterKey, firstFilterValue, secondFilterValue);
-            return;
-        }
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
 
-        Category category = getCategoryInFilter();
-        if (filterType.equals("equality special-property")) {
-            addPropertiesEqualityFilter(filterKey, firstFilterValue, category);
-        } else if (filterType.equals("equation special-property")) {
-            addPropertiesEquationFilter(filterKey, firstFilterValue, secondFilterValue, category);
-        }
     }
 
-    private void addNonPropertyFilter(String filterKey, String firstFilterValue, String secondFilterValue) {
+    private void filterBy(String filterKey, String firstFilterValue, String secondFilterValue) throws NumberException, DebugException, CategoryDoesntExistException, UserNotExistException {
+        deleteLastFilter(filterKey);
+        int flag = 1;
         switch (filterKey) {
-            case "price":
-                addPriceFilter(firstFilterValue, secondFilterValue);
-                break;
-            case "score":
-                addScoreFilter(firstFilterValue, secondFilterValue);
-                break;
-            case "category":
-                addCategoryFilter(firstFilterValue);
-                break;
-            case "sub-category":
-                addSubCategoryFilter(firstFilterValue);
-                break;
-            case "name":
-                addNameFilter(firstFilterValue);
-                break;
-            case "brand":
-                addBrandFilter(firstFilterValue);
-                break;
-            case "availability":
-                addAvailabilityFilter(firstFilterValue);
-            case "seller":
-                addSellerFilter(firstFilterValue);
-            default:
-                sendError("Wrong key!!");
+            case "price" -> addPriceFilter(firstFilterValue, secondFilterValue);
+            case "score" -> addScoreFilter(firstFilterValue, secondFilterValue);
+            case "brand" -> addBrandFilter(firstFilterValue);
+            case "name" -> addNameFilter(firstFilterValue);
+            case "seller" -> addSellerFilter(firstFilterValue);
+            case "category" -> addCategoryFilter(firstFilterValue);
+            case "sub-category" -> addSubCategoryFilter(firstFilterValue);
+            case "availability" -> addAvailabilityFilter(firstFilterValue);
+            default -> flag = 0;
         }
+        if (flag == 1)
+            return;
+        Category category = getCategoryInFilter();
+        if (category == null)
+            throw new DebugException();
+
+        addPropertyFilter(category, filterKey, firstFilterValue, secondFilterValue);
     }
 
-    private void addSellerFilter(String sellerUsername) {
-        if (!User.isThereSeller(sellerUsername)) {
-            sendError("There isn't any seller with this username!!");
-            return;
+    private void addPropertyFilter(Category category, String filterKey, String firstFilterValue, String secondFilterValue)
+            throws NumberException {
+
+        SpecialProperty property = null;
+        for (SpecialProperty iterator : category.getSpecialProperties()) {
+            if (iterator.getKey().equalsIgnoreCase(filterKey)) {
+                property = iterator;
+                break;
+            }
         }
+        assert property != null;
+        Filter filter = new Filter();
+        filter.setFilterKey(filterKey);
+        if (property.getType().equals("text")) {
+            filter.setType("equality");
+            filter.setFirstFilterValue(firstFilterValue);
+        } else {
+            filter.setType("equation");
+            try {
+                filter.setFirstDouble(Double.parseDouble(firstFilterValue));
+                filter.setSecondDouble(Double.parseDouble(secondFilterValue));
+            } catch (NumberFormatException e) {
+                throw new NumberException();
+            }
+        }
+
+        addFilter(filter);
+    }
+
+    private void addSellerFilter(String sellerUsername) throws UserNotExistException {
+        if (!User.isThereSeller(sellerUsername))
+            throw new UserNotExistException("There isn't any seller with this username!!");
+
         Filter filter = new Filter();
         filter.setType("equality");
         filter.setFilterKey("seller");
         filter.setFirstFilterValue(sellerUsername);
         addFilter(filter);
-        actionCompleted();
     }
 
-    private void addAvailabilityFilter(String availability) {
+    private void addAvailabilityFilter(String availability) throws DebugException {
         if (!Pattern.matches("(yes|no)", availability.toLowerCase())) {
-            sendError("Wrong value!!");
+            throw new DebugException();
         } else {
             Filter filter = new Filter();
             filter.setType("equality");
             filter.setFilterKey("availability");
             filter.setFirstFilterValue(availability);
             addFilter(filter);
-            actionCompleted();
         }
     }
 
@@ -203,53 +233,6 @@ class AddFilterCommand extends FilterCommands {
         filter.setFilterKey("brand");
         filter.setFirstFilterValue(brand);
         addFilter(filter);
-        actionCompleted();
-    }
-
-    private void addPropertiesEqualityFilter(String filterKey, String firstValue, Category category) {
-        if (category == null) {
-            sendError("You should filter products by a category or subcategory at the first!!");
-        } else if (!category.getSpecialProperties().contains(filterKey)) {
-            sendError("The category you choose doesn't have this properties!!");
-        } else {
-            Filter filter = new Filter();
-            filter.setType("equality special-property");
-            filter.setFilterKey(filterKey);
-            filter.setFirstFilterValue(firstValue);
-            addFilter(filter);
-            actionCompleted();
-        }
-    }
-
-    private void addPropertiesEquationFilter(String filterKey, String firstValue, String secondValue, Category category) {
-        if (category == null) {
-            sendError("You should filter products by a category or subcategory at the first!!");
-        } else if (!category.getSpecialProperties().contains(filterKey)) {
-            sendError("The category you choose doesn't have this property!!");
-        } else {
-            Filter filter = new Filter();
-            filter.setType("equation special-property");
-            filter.setFilterKey(filterKey);
-            try {
-                filter.setFirstDouble(Double.parseDouble(firstValue));
-                filter.setSecondDouble(Double.parseDouble(secondValue));
-            } catch (NumberFormatException e) {
-                sendError("Please enter valid number!!");
-            }
-            addFilter(filter);
-            actionCompleted();
-        }
-    }
-
-    private boolean hasCategoryFilter() {
-        for (Filter filter : filters()) {
-            if (filter.getFilterKey().equals("category")) {
-                return Category.isThereMainCategory(filter.getFirstFilterValue());
-            } else if (filter.getFilterKey().equals("sub-category")) {
-                return Category.isThereSubCategory(filter.getFirstFilterValue());
-            }
-        }
-        return false;
     }
 
     private void addNameFilter(String productName) {
@@ -258,64 +241,47 @@ class AddFilterCommand extends FilterCommands {
         filter.setFilterKey("name");
         filter.setFirstFilterValue(productName);
         addFilter(filter);
-        actionCompleted();
     }
 
-    private void addSubCategoryFilter(String subcategoryName) {
-        SubCategory subCategory = Category.getSubCategoryByName(subcategoryName);
-        if (subCategory == null) {
-            sendError("There isn't any category with this name!!");
-        } else {
-            Filter filter = new Filter();
-            filter.setType("equality");
-            filter.setFilterKey("sub-category");
-            filter.setFirstFilterValue(subcategoryName);
-            addFilter(filter);
-            actionCompleted();
-        }
+    private void addSubCategoryFilter(String subcategoryName) throws CategoryDoesntExistException {
+        Category.getSubCategoryByName(subcategoryName);
+        Filter filter = new Filter();
+        filter.setType("equality");
+        filter.setFilterKey("sub-category");
+        filter.setFirstFilterValue(subcategoryName);
+        addFilter(filter);
     }
 
-    private void addCategoryFilter(String categoryName) {
-        MainCategory mainCategory = MainCategory.getMainCategoryByName(categoryName);
-        if (mainCategory == null) {
-            sendError("There isn't any category with this name!!");
-        } else {
-            Filter filter = new Filter();
-            filter.setType("equality");
-            filter.setFilterKey("category");
-            filter.setFirstFilterValue(categoryName);
-            addFilter(filter);
-            actionCompleted();
-        }
+    private void addCategoryFilter(String categoryName) throws CategoryDoesntExistException {
+        MainCategory.getMainCategoryByName(categoryName);
+        Filter filter = new Filter();
+        filter.setType("equality");
+        filter.setFilterKey("category");
+        filter.setFirstFilterValue(categoryName);
+        addFilter(filter);
     }
 
-    private void addScoreFilter(String firstValue, String secondValue) {
+    private void addScoreFilter(String firstValue, String secondValue) throws NumberException {
         try {
             double min = Double.parseDouble(firstValue);
             double max = Double.parseDouble(secondValue);
-            if (min < 0 || max < min || max > 5) {
-                sendError("Please enter numbers between 0 and 5!!");
-                return;
-            }
+            if (min < 0 || max < min || max > 5) throw new NumberException();
             Filter filter = new Filter();
             filter.setType("equation");
             filter.setFilterKey("score");
             filter.setFirstDouble(min);
             filter.setSecondDouble(max);
             addFilter(filter);
-            actionCompleted();
         } catch (NumberFormatException e) {
-            sendError("Please enter valid value!!");
+            throw new NumberException();
         }
     }
 
-    private void addPriceFilter(String firstValue, String secondValue) {
+    private void addPriceFilter(String firstValue, String secondValue) throws NumberException {
         try {
             double min = Double.parseDouble(firstValue);
             double max = Double.parseDouble(secondValue);
-            if (min < 0 || min > max) {
-                throw new NumberFormatException();
-            }
+            if (min < 0 || min > max) throw new NumberException();
             Filter filter = new Filter();
             filter.setType("equation");
             filter.setFilterKey("price");
@@ -324,26 +290,20 @@ class AddFilterCommand extends FilterCommands {
             addFilter(filter);
             actionCompleted();
         } catch (NumberFormatException e) {
-            sendError("Please enter valid number!!");
+            throw new NumberException();
         }
     }
 
-    private boolean doesFilterExist(String filterKey) {
+    private void deleteLastFilter(String filterKey) {
         int flag = 1;
         if (Pattern.matches("(category|sub-category)", filterKey))
             flag = 0;
-        for (Filter filter : filters()) {
+        for (Filter filter : filters())
             if (flag == 0) {
-                if (filter.getFilterKey().contains(filterKey))
-                    return true;
-
+                if (filter.getFilterKey().contains(filterKey)) filters().remove(filter);
             } else {
-                if (filter.getFilterKey().equals(filterKey))
-                    return true;
-
+                if (filter.getFilterKey().equals(filterKey)) filters().remove(filter);
             }
-        }
-        return false;
     }
 }
 
@@ -362,20 +322,24 @@ class DisableFilterCommand extends FilterCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getFirstString()))
-            return;
-        disableFilter(request.getFirstString());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, DebugException {
+        containNullField(request.getHashMap().get("filter key"));
+        disableFilter(request.getHashMap().get("filter key"));
+        return actionCompleted();
     }
 
-    private void disableFilter(String filterKey) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private void disableFilter(String filterKey) throws DebugException {
         for (Filter filter : filters()) {
-            if (filter.getFilterKey().equals(filterKey)) {
+            if (filter.getFilterKey().equalsIgnoreCase(filterKey)) {
                 removeFilter(filter);
-                actionCompleted();
                 return;
             }
         }
-        sendError("There isn't any filter with this key!!");
+        throw new DebugException();
     }
 }

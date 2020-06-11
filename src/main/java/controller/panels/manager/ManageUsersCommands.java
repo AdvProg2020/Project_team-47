@@ -1,12 +1,18 @@
 package controller.panels.manager;
 
 import controller.Command;
-import controller.Error;
+import model.ecxeption.Exception;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.filter.InvalidSortException;
+import model.ecxeption.user.PasswordNotValidException;
+import model.ecxeption.user.RegisterException;
+import model.ecxeption.user.UserTypeException;
+import model.ecxeption.user.manager.RemoveYourselfException;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Manager;
 import model.user.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static controller.Controller.*;
@@ -30,17 +36,6 @@ public abstract class ManageUsersCommands extends Command {
     public static ViewUserCommand getViewUserCommand() {
         return ViewUserCommand.getInstance();
     }
-
-    protected boolean canUserDo() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-            return false;
-        } else if (!(getLoggedUser() instanceof Manager)) {
-            sendError(Error.NEED_MANGER.getError());
-            return false;
-        }
-        return true;
-    }
 }
 
 
@@ -59,25 +54,27 @@ class ShowUsersCommand extends ManageUsersCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        ArrayList<String> reqInfo = getReqInfo(request);
-        manageUsers(reqInfo.get(0), reqInfo.get(1));
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedManagerException, NullFieldException, InvalidSortException {
+        containNullField(request.getHashMap());
+        return manageUsers(request.getHashMap().get("field"), request.getHashMap().get("direction"));
     }
 
-    private void manageUsers(String field, String direction) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage manageUsers(String field, String direction) throws InvalidSortException {
         if (field != null && direction != null) {
             field = field.toLowerCase();
             direction = direction.toLowerCase();
         }
 
         if (!checkSort(field, direction, "user")) {
-            sendError(Error.CANT_SORT.getError());
-            return;
+            throw new InvalidSortException();
         }
 
-        sendAnswer(User.getAllUsers(field, direction), "user");
+        return sendAnswer(User.getAllUsers(field, direction), "user");
     }
 
 }//end ShowUsersCommand Class
@@ -85,6 +82,7 @@ class ShowUsersCommand extends ManageUsersCommands {
 
 class DeleteUserCommand extends ManageUsersCommands {
     private static DeleteUserCommand command;
+    private User user;
 
     private DeleteUserCommand() {
         this.name = "delete user";
@@ -99,27 +97,23 @@ class DeleteUserCommand extends ManageUsersCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        deleteUser(request.getArrayList().get(0));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap().get("username"));
+        checkPrimaryErrors(request);
+        deleteUser();
+        return actionCompleted();
     }
 
-    public void deleteUser(String username) {
-        if (!User.isThereUserWithUsername(username)) {
-            sendError(Error.USER_NOT_EXIST.getError());
-            return;
-        }
-        User user = User.getUserByUsername(username);
-        if (user == getLoggedUser()) {
-            sendError(Error.REMOVE_YOURSELF.getError());
-            return;
-        }
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        user = User.getUserByUsername(request.getHashMap().get("username"));
+        if (user == getLoggedUser())
+            throw new RemoveYourselfException();
+    }
+
+    public void deleteUser() {
         assert user != null;
         user.deleteUser();
-        actionCompleted();
     }
 
 }//end DeleteUserCommand Class
@@ -142,36 +136,49 @@ class CreateManagerCommand extends ManageUsersCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getFirstHashMap()))
-            return;
-        createManager(request.getFirstHashMap());
+    public ServerMessage process(ClientMessage request) throws Exception {
+        checkPrimaryErrors(request);
+        createManager(request.getHashMap());
+        return actionCompleted();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        checkRegisterInfoKey(request.getHashMap());
+
+        if (!User.isUsernameValid(request.getHashMap().get("username"))) {
+            throw new RegisterException.UsernameNotValidException();
+        } else if (User.doesUsernameUsed(request.getHashMap().get("username"))) {
+            throw new RegisterException.UsernameUsedException();
+        } else if (!User.isEmailValid(request.getHashMap().get("email"))) {
+            throw new RegisterException.EmailNotValidException();
+        } else if (!User.isPhoneValid(request.getHashMap().get("phone-number"))) {
+            throw new RegisterException.PhoneNumberNotValidException();
+        } else if (User.isThereUserWithEmail(request.getHashMap().get("email"))) {
+            throw new RegisterException.EmailUsedException();
+        } else if (User.isThereUserWithPhone(request.getHashMap().get("phone-number"))) {
+            throw new RegisterException.PhoneNumberUsedException();
+        } else if (!User.isPasswordValid(request.getHashMap().get("password"))) {
+            throw new PasswordNotValidException();
+        }
     }
 
     private void createManager(HashMap<String, String> managerInformationHashMap) {
-
-        managerInformationHashMap.put("type", "manager");
-        if (!checkRegisterInfoKey(managerInformationHashMap)) {
-            sendError("Not enough information!!");
-        } else {
-            registerManager(managerInformationHashMap);
-            actionCompleted();
-        }
+        registerManager(managerInformationHashMap);
     }
 
     private void registerManager(HashMap<String, String> userInformation) {
         User newUser;
         newUser = new Manager(userInformation);
         newUser.emailVerification();
-        actionCompleted();
+        newUser.confirmEmail();
     }
 }//end CreateManagerCommand class
 
 
 class ViewUserCommand extends ManageUsersCommands {
     private static ViewUserCommand command;
+    private User user;
 
     private ViewUserCommand() {
         this.name = "view user";
@@ -186,23 +193,20 @@ class ViewUserCommand extends ManageUsersCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        viewUser(request.getArrayList().get(0));
+    public ServerMessage process(ClientMessage request) throws UserTypeException.NeedManagerException, NullFieldException {
+        containNullField(request.getHashMap().get("username"));
+        return viewUser(request.getHashMap().get("username"));
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        user = User.getUserByUsername(request.getHashMap().get("username"));
     }
 
 
-    private void viewUser(String username) {
-        if (!User.isThereUserWithUsername(username)) {
-            sendError("There isn't any account with this username!!");
-        } else {
-            User user = User.getUserByUsername(username);
-            assert user != null;
-            sendAnswer(user.userInfoForSending());
-        }
+    private ServerMessage viewUser(String username) {
+        assert user != null;
+        return sendAnswer(user.userInfoForSending());
     }
 
 }//end ViewUserCommand class

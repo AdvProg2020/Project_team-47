@@ -1,7 +1,6 @@
 package controller.login;
 
 import controller.Command;
-import controller.Error;
 import model.ecxeption.Exception;
 import model.ecxeption.user.*;
 import model.others.ShoppingCart;
@@ -63,15 +62,15 @@ class RegisterCommand extends LoginCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
-        containNullField(request.getFirstHashMap());
+        containNullField(request.getHashMap());
         checkPrimaryErrors(request);
-        register(request.getFirstHashMap());
+        register(request.getHashMap());
         return actionCompleted();
     }
 
     @Override
     public void checkPrimaryErrors(ClientMessage request) throws Exception {
-        HashMap<String, String> registerInformationHashMap = request.getFirstHashMap();
+        HashMap<String, String> registerInformationHashMap = request.getHashMap();
 
         checkRegisterInfoKey(registerInformationHashMap);
         if (registerInformationHashMap.get("type").equals("manager") && User.isThereManager()) {
@@ -139,9 +138,9 @@ class LoginCommand extends LoginCommands {
 
 
     @Override
-    public ServerMessage process(ClientMessage request) throws  Exception{
-        HashMap<String,String> reqInfo = getReqInfo(request);
-        containNullField(reqInfo,reqInfo.get("username"), reqInfo.get("password"));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        containNullField(reqInfo, reqInfo.get("username"), reqInfo.get("password"));
         checkPrimaryErrors(request);
         return login(reqInfo.get("username"));
     }
@@ -186,8 +185,8 @@ class ConfirmEmailCommand extends LoginCommands {
 
 
     @Override
-    public ServerMessage process(ClientMessage request) throws  Exception {
-        HashMap<String,String> reqInfo = getReqInfo(request);
+    public ServerMessage process(ClientMessage request) throws Exception {
+        HashMap<String, String> reqInfo = getReqInfo(request);
         containNullField(reqInfo);
         containNullField(reqInfo.get("username"), reqInfo.get("password"), reqInfo.get("verification code"));
         return confirmEmail();
@@ -244,8 +243,8 @@ class ForgotPasswordCommand extends LoginCommands {
 
     @Override
     public void checkPrimaryErrors(ClientMessage request) throws Exception {
-        user = User.getUserByUsername(request.getFirstHashMap().get("username"));
-        if (user == null || !user.checkEmail(request.getFirstHashMap().get("email"))) {
+        user = User.getUserByUsername(request.getHashMap().get("username"));
+        if (user == null || !user.checkEmail(request.getHashMap().get("email"))) {
             throw new UserNotExistException();
         }
     }
@@ -278,19 +277,19 @@ class NewPasswordCommand extends LoginCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
-        HashMap<String,String> reqInfo = getReqInfo(request);
-        containNullField(reqInfo.get("username"),reqInfo.get("code"),reqInfo.get("new password"));
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        containNullField(reqInfo.get("username"), reqInfo.get("code"), reqInfo.get("new password"));
 
         return newPassword(reqInfo.get("new password"));
     }
 
     @Override
     public void checkPrimaryErrors(ClientMessage request) throws Exception {
-        String username = request.getFirstHashMap().get("username");
-        String code = request.getFirstHashMap().get("code");
-        String newPassword = request.getFirstHashMap().get("new password");
+        String username = request.getHashMap().get("username");
+        String code = request.getHashMap().get("code");
+        String newPassword = request.getHashMap().get("new password");
         user = User.getUserByUsername(username);
-         if (!user.doesCodeSend()) {
+        if (!user.doesCodeSend()) {
             throw new Exception("Error!!");
         } else if (!user.sendCodeIsCorrect(code)) {
             throw new ConfirmException("Wrong code!!");
@@ -332,7 +331,7 @@ class LogoutCommand extends LoginCommands {
 
     @Override
     public void checkPrimaryErrors(ClientMessage request) throws NeedLoginException {
-        if(getLoggedUser() == null)
+        if (getLoggedUser() == null)
             throw new NeedLoginException();
     }
 

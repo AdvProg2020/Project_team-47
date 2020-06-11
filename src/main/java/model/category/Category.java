@@ -3,12 +3,13 @@ package model.category;
 import controller.Controller;
 import database.CategoryData;
 import database.Database;
+import model.ecxeption.product.CategoryDoesntExistException;
 import model.others.Product;
 import model.others.Sort;
+import model.others.SpecialProperty;
 import model.send.receive.CategoryInfo;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 abstract public class Category {
     static ArrayList<MainCategory> allMainCategories;
@@ -20,7 +21,7 @@ abstract public class Category {
     }
 
     protected String name;
-    protected ArrayList<String> specialProperties;
+    protected ArrayList<SpecialProperty> specialProperties;
     protected ArrayList<Product> allProducts;
     private String id;
 
@@ -74,34 +75,36 @@ abstract public class Category {
     }
 
     public static void removeMainCategory(String categoryName) {
-        MainCategory mainCategory = getMainCategoryByName(categoryName);
-        if (mainCategory == null)
-            return;
-        mainCategory.remove();
+        try {
+            MainCategory mainCategory = getMainCategoryByName(categoryName);
+            mainCategory.remove();
+        } catch (CategoryDoesntExistException ignored) {
+        }
     }
 
     public static void removeSubCategory(String categoryName) {
-        SubCategory subCategory = getSubCategoryByName(categoryName);
-        if (subCategory == null)
-            return;
-        subCategory.remove();
+        try {
+            SubCategory subCategory = getSubCategoryByName(categoryName);
+            subCategory.remove();
+        } catch (CategoryDoesntExistException ignored) {
+        }
     }
 
-    public static SubCategory getSubCategoryByName(String name) {
+    public static SubCategory getSubCategoryByName(String name) throws CategoryDoesntExistException {
         for (SubCategory subCategory : allSubCategories) {
             if (subCategory.name.equalsIgnoreCase(name))
                 return subCategory;
         }
-        return null;
+        throw new CategoryDoesntExistException();
     }
 
-    public static MainCategory getMainCategoryByName(String name) {
+    public static MainCategory getMainCategoryByName(String name) throws CategoryDoesntExistException {
         for (MainCategory mainCategory : Category.allMainCategories) {
             if (mainCategory.name.equalsIgnoreCase(name)) {
                 return mainCategory;
             }
         }
-        return null;
+        throw new CategoryDoesntExistException();
     }
 
     public static boolean isThereMainCategory(String categoryName) {
@@ -146,19 +149,19 @@ abstract public class Category {
         this.updateDatabase();
     }
 
-    public void addSpecialProperties(String properties) {
-        specialProperties.add(properties);
+    public void addNumericProperty(String property, String unit) {
+        specialProperties.add(new SpecialProperty(property, 0, unit));
         this.updateDatabase();
     }
 
-    public void removeSpecialProperties(String properties) {
-        Iterator<String> iterator = specialProperties.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().equalsIgnoreCase(properties)) {
-                iterator.remove();
-                break;
-            }
-        }
+    public void addTextProperty(String property) {
+        specialProperties.add(new SpecialProperty(property, null));
+        this.updateDatabase();
+    }
+
+    public void removeSpecialProperties(String property) {
+        SpecialProperty temp = new SpecialProperty(property);
+        specialProperties.remove(temp);
         this.updateDatabase();
     }
 
@@ -170,11 +173,11 @@ abstract public class Category {
         this.name = name;
     }
 
-    public ArrayList<String> getSpecialProperties() {
+    public ArrayList<SpecialProperty> getSpecialProperties() {
         return specialProperties;
     }
 
-    public void setSpecialProperties(ArrayList<String> specialProperties) {
+    public void setSpecialProperties(ArrayList<SpecialProperty> specialProperties) {
         this.specialProperties = specialProperties;
     }
 

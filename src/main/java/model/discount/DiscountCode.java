@@ -3,6 +3,7 @@ package model.discount;
 import controller.Controller;
 import database.Database;
 import database.DiscountCodeData;
+import model.ecxeption.CommonException;
 import model.others.Sort;
 import model.send.receive.DiscountCodeInfo;
 import model.user.Customer;
@@ -42,10 +43,12 @@ public class DiscountCode extends Discount {
         this.discountCode = codeCreator();
     }
 
-    public static DiscountCode getDiscountById(String id) {
-        return allDiscountCodes.stream().
-                filter(discount -> id.equalsIgnoreCase(discount.discountCode))
-                .findAny().orElse(null);
+    public static DiscountCode getDiscountById(String id) throws CommonException {
+        for (DiscountCode discountCode : allDiscountCodes) {
+            if (discountCode.discountCode.equalsIgnoreCase(id))
+                return discountCode;
+        }
+        throw new CommonException("There isn't any code with this id!!");
     }
 
     public static boolean isThereDiscountWithCode(String code) {

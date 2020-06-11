@@ -1,12 +1,23 @@
 package controller.panels.seller;
 
 import controller.Command;
-import controller.Error;
 import model.category.Category;
+import model.ecxeption.Exception;
+import model.ecxeption.common.NotEnoughInformation;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.common.NumberException;
+import model.ecxeption.filter.InvalidSortException;
+import model.ecxeption.product.CategoryDoesntExistException;
+import model.ecxeption.product.ProductDoesntExistException;
 import model.others.Product;
+import model.others.SpecialProperty;
+import model.others.request.AddProductRequest;
+import model.others.request.Request;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Seller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static controller.Controller.*;
@@ -29,23 +40,14 @@ public abstract class CommonCommands extends Command {
         return RemoveProductCommand.getInstance();
     }
 
+/*
     public static ShowCategoriesCommand getShowCategoriesCommand() {
         return ShowCategoriesCommand.getInstance();
     }
+*/
 
     public static ViewBalanceCommand getViewBalanceCommand() {
         return ViewBalanceCommand.getInstance();
-    }
-
-    protected boolean canUserDo() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-            return false;
-        } else if (!(getLoggedUser() instanceof Seller)) {
-            sendError(Error.NEED_SELLER.getError());
-            return false;
-        }
-        return true;
     }
 
 }
@@ -66,15 +68,18 @@ class ViewCompanyInfoCommand extends CommonCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        companyInfo();
+    public ServerMessage process(ClientMessage request) {
+        return companyInfo();
     }
 
-    private void companyInfo() {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage companyInfo() {
         Seller seller = (Seller) getLoggedUser();
-        sendAnswer(seller.getCompanyName(), seller.getCompanyInfo());
+        return sendAnswer(seller.getCompanyName(), seller.getCompanyInfo());
     }
 
 }//end ViewCompanyInfoCommand class
@@ -95,13 +100,16 @@ class ViewSalesHistoryCommand extends CommonCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        salesHistory(request.getArrayList().get(0), request.getArrayList().get(1));
+    public ServerMessage process(ClientMessage request) throws InvalidSortException {
+        return salesHistory(request.getHashMap().get("field"), request.getHashMap().get("direction"));
     }
 
-    private void salesHistory(String field, String direction) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage salesHistory(String field, String direction) throws InvalidSortException {
         //this function will sending selling log info to the client
         if (field != null && direction != null) {
             field = field.toLowerCase();
@@ -109,15 +117,15 @@ class ViewSalesHistoryCommand extends CommonCommands {
         }
 
         if (checkSort(field, direction, "log")) {
-            sendError("Can't sort log with this field or direction!!");
-            return;
+            throw new InvalidSortException();
         }
-        sendAnswer(((Seller) getLoggedUser()).getAllSellLogsInfo(field, direction), "log");
+        return sendAnswer(((Seller) getLoggedUser()).getAllSellLogsInfo(field, direction), "log");
     }
 }//end ViewSalesHistoryCommand class
 
 class AddProductCommand extends CommonCommands {
     private static AddProductCommand command;
+    private Category category;
 
     private AddProductCommand() {
         this.name = "add product";
@@ -132,80 +140,84 @@ class AddProductCommand extends CommonCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getFirstHashMap(), request.getSecondHashMap()))
-            return;
-        addProduct(request.getFirstHashMap(), request.getSecondHashMap());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, CategoryDoesntExistException,
+            NumberException, NotEnoughInformation {
+        containNullField(request.getProperties());
+        addProduct(request.getHashMap(), request.getProperties());
+        return actionCompleted();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
     }
 
 
-    public void addProduct(HashMap<String, String> productInfo, HashMap<String, String> specialProperties) {
+    public void addProduct(HashMap<String, String> productInfo, ArrayList<SpecialProperty> properties) throws
+            CategoryDoesntExistException, NumberException, NotEnoughInformation {
         //this function will check product info if it is valid then call addProduct method by seller to creating request
+        addingInformationIsValid(productInfo);
+        correctProperties(properties);
+        createRequest(productInfo, properties);
+    }
 
-        if (!addingInformationIsValid(productInfo)) {
-            return;
-        }
+    private void createRequest(HashMap<String, String> productInfo, ArrayList<SpecialProperty> properties) {
+        //this function will create a request to adding product to intended seller
+        Request request = new Request();
+        request.setRequestSender(getLoggedUser());
+        request.setType("add-product");
 
-        Category category = Category.getSubCategoryByName(productInfo.get("sub-category"));
-        if (category == null) {
-            category = Category.getMainCategoryByName(productInfo.get("category"));
-        }
-        assert category != null;
-        if (!productPropertiesIsValid(specialProperties, category)) {
-            return;
-        }
+        AddProductRequest addProductRequest = new AddProductRequest();
+        addProductRequest.setSellerUsername(getLoggedUser().getUsername());
+        addProductRequest.setCategoryName(productInfo.get("category"));
+        addProductRequest.setSubCategoryName(productInfo.get("sub-category"));
+        addProductRequest.setCompany(productInfo.get("company"));
+        addProductRequest.setDescription(productInfo.get("description"));
+        addProductRequest.setName(productInfo.get("name"));
+        addProductRequest.setNumberInStock(Integer.parseInt(productInfo.get("number-in-stock")));
+        addProductRequest.setPrice(Double.parseDouble(productInfo.get("price")));
+        addProductRequest.setSpecialProperties(properties);
 
-        ((Seller) getLoggedUser()).addProduct(productInfo, specialProperties);
+        request.setMainRequest(addProductRequest);
+        request.addToDatabase();
     }
 
 
-    private boolean productPropertiesIsValid(HashMap<String, String> properties, Category category) {
+    private void correctProperties(ArrayList<SpecialProperty> properties) {
         //this function will check category properties and
         //if product has all its category's properties it will return true
-
-        for (String specialProperty : category.getSpecialProperties()) {
-            if (!properties.containsKey(specialProperty)) {
-                sendError("This product with this category should have this property:\n" + specialProperty);
-                return false;
+        for (SpecialProperty property : category.getSpecialProperties()) {
+            if (!properties.contains(property)) {
+                properties.add(property);
+            } else {
+                int i = properties.indexOf(property);
+                properties.get(i).confirmProperty(property);
             }
         }
-        return true;
     }
 
-    private boolean addingInformationIsValid(HashMap<String, String> productInformationHashMap) {
+    private void addingInformationIsValid(HashMap<String, String> productInfo) throws NotEnoughInformation,
+            CategoryDoesntExistException, NumberException {
         //check that if client send all information to creating product
 
         String[] productKey = {"name", "price", "number-in-stock", "category", "description", "sub-category", "company"};
-        for (String key : productKey) {
-            if (!productInformationHashMap.containsKey(key)) {
-                sendError("Not enough information!!");
-                return false;
-            }
-        }
-        if (!Category.isThereMainCategory(productInformationHashMap.get("category"))) {
-            sendError("There isn't category with this name!!");
-            return false;
-        }
+        for (String key : productKey) if (!productInfo.containsKey(key)) throw new NotEnoughInformation();
 
-        String subCategory = productInformationHashMap.get("sub-category");
-        if (!subCategory.isEmpty() && !Category.isThereSubCategory(subCategory)) {
-            sendError("There isn't sub category with this name!!");
-            return false;
-        }
+        category = Category.getMainCategoryByName(productInfo.get("category"));
 
-        return checkProductIntegerValue(productInformationHashMap);
+        String subCategory = productInfo.get("sub-category");
+        if (!subCategory.isEmpty() && !Category.isThereSubCategory(subCategory))
+            category = Category.getSubCategoryByName(subCategory);
+
+        checkProductIntegerValue(productInfo);
     }
 
-    private boolean checkProductIntegerValue(HashMap<String, String> productInfo) {
+    private void checkProductIntegerValue(HashMap<String, String> productInfo) throws NumberException {
         try {
             Integer.parseInt(productInfo.get("number-in-stock"));
             Double.parseDouble(productInfo.get("price"));
-            return true;
         } catch (NumberFormatException e) {
-            sendError("Please enter a valid number!!");
-            return false;
+            throw new NumberException("Please enter valid number!!");
         }
     }
 
@@ -227,26 +239,25 @@ class RemoveProductCommand extends CommonCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getFirstString()))
-            return;
-        removeProduct(request.getFirstString());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, ProductDoesntExistException {
+        containNullField(request.getHashMap().get("product id"));
+        removeProduct(request.getHashMap().get("product id"));
+        return actionCompleted();
     }
 
-    private void removeProduct(String productId) {
-        Product product = Product.getProductWithId(productId);
-        if (product == null || !((Seller) getLoggedUser()).getAllProducts().contains(product)) {
-            sendError("There isn't any product with this id in your selling list!!");
-            return;
-        }
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
 
+    }
+
+    private void removeProduct(String productId) throws ProductDoesntExistException {
+        Product product = Product.getProductWithId(productId);
         ((Seller) getLoggedUser()).removeProduct(product);
         product.removeSellerFromProduct((Seller) getLoggedUser());
     }
 }//end RemoveProductCommand class
 
+/*
 class ShowCategoriesCommand extends CommonCommands {
     private static ShowCategoriesCommand command;
 
@@ -280,6 +291,7 @@ class ShowCategoriesCommand extends CommonCommands {
     }
 
 }//end ShowCategoriesCommand class
+*/
 
 class ViewBalanceCommand extends CommonCommands {
     private static ViewBalanceCommand command;
@@ -296,15 +308,18 @@ class ViewBalanceCommand extends CommonCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        viewBalance();
+    public ServerMessage process(ClientMessage request) {
+        return viewBalance();
     }
 
-    public void viewBalance() {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    public ServerMessage viewBalance() {
         double money = ((Seller) getLoggedUser()).getMoney();
-        sendAnswer(money);
+        return sendAnswer(money);
     }
 
 }

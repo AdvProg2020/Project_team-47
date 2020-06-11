@@ -2,14 +2,18 @@ package database;
 
 import model.category.Category;
 import model.discount.Off;
+import model.ecxeption.common.OffDoesntExistException;
+import model.ecxeption.product.CategoryDoesntExistException;
+import model.ecxeption.product.ProductDoesntExistException;
+import model.ecxeption.user.UserNotExistException;
 import model.others.Comment;
 import model.others.Product;
 import model.others.Score;
+import model.others.SpecialProperty;
 import model.user.Seller;
 import model.user.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ProductData {
     private int seenTime;
@@ -25,7 +29,7 @@ public class ProductData {
     private ArrayList<Comment> comments;
     private ArrayList<String> sellersUsernames;
     private ArrayList<ProductSeller> productSellers;
-    private HashMap<String, String> specialProperties;
+    private ArrayList<SpecialProperty> specialProperties;
 
     public ProductData() {
         this.sellersUsernames = new ArrayList<>();
@@ -47,19 +51,27 @@ public class ProductData {
     }
 
     private void connectRelations() {
-        Product product = Product.getProductWithId(this.id);
-        product.setMainCategory(Category.getMainCategoryByName(this.mainCategory));
-        if (this.subCategory != null)
-            product.setSubCategory(Category.getSubCategoryByName(this.subCategory));
-        this.connectSellers(product);
-        this.connectSellers(product);
+        try {
+            Product product = Product.getProductWithId(this.id);
+            product.setMainCategory(Category.getMainCategoryByName(this.mainCategory));
+            if (this.subCategory != null)
+                product.setSubCategory(Category.getSubCategoryByName(this.subCategory));
+            this.connectSellers(product);
+            this.connectSellers(product);
+        } catch (ProductDoesntExistException | CategoryDoesntExistException e) {
+            e.printStackTrace();
+        }
     }
 
     private void connectSellers(Product product) {
-        for (ProductSeller productSeller : productSellers) {
-            Off off = Off.getOffById(productSeller.offId);
-            Seller seller = (Seller) User.getUserByUsername(productSeller.sellerUsername);
-            product.addSellerFromDatabase(seller, off, productSeller.price, productSeller.numberInStock);
+        try {
+            for (ProductSeller productSeller : productSellers) {
+                Off off = Off.getOffById(productSeller.offId);
+                Seller seller = (Seller) User.getUserByUsername(productSeller.sellerUsername);
+                product.addSellerFromDatabase(seller, off, productSeller.price, productSeller.numberInStock);
+            }
+        } catch (UserNotExistException | OffDoesntExistException e) {
+            e.printStackTrace();
         }
     }
 
@@ -122,7 +134,7 @@ public class ProductData {
         this.subCategory = subCategory;
     }
 
-    public void setSpecialProperties(HashMap<String, String> specialProperties) {
+    public void setSpecialProperties(ArrayList<SpecialProperty> specialProperties) {
         this.specialProperties = specialProperties;
     }
 

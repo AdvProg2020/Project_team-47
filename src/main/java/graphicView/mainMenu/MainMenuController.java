@@ -1,11 +1,9 @@
 package graphicView.mainMenu;
 
 import graphicView.PageController;
-import graphicView.productsMenu.ProductsMenuPage;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -54,8 +52,7 @@ public class MainMenuController extends PageController {
 
     @FXML
     private void products() {
-        ProductsMenuPage page = new ProductsMenuPage(this.getPage());
-        page.start();
+
         /*
         clearPage();
         MainView.getInstance().changeScene(ScoreBoardPage.getInstance());
@@ -140,11 +137,6 @@ public class MainMenuController extends PageController {
         }
     }
 
-    @Override
-    public void processError(Exception e) {
-        errorLabel.setText(e.getMessage());
-        errorLabel.setVisible(true);
-    }
 
     @Override
     public void clearPage() {

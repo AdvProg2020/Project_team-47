@@ -6,4 +6,8 @@ public class NumberException extends Exception {
     public NumberException() {
         super("Enter valid number!!");
     }
+
+    public NumberException(String message) {
+        super(message);
+    }
 }

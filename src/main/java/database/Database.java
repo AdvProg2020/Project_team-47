@@ -10,7 +10,6 @@ import model.others.Email;
 import model.others.Product;
 import model.others.request.Request;
 import model.user.User;
-import view.menu.Menu;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -221,9 +220,9 @@ public class Database {
 
     private void loadEmail() {
         System.out.println("Enter email password!!");
-        Email.setPassword(Menu.getInputCommandWithTrim());
+        //Email.setPassword(Menu.getInputCommandWithTrim());
         // Email.checkPassword();
-        File htmlPage = new File(Path.RESOURCE.getPath() + "HtmlPage.html");
+        File htmlPage = new File(Path.RESOURCE.getPath() + "Others/HtmlPage.html");
         Email.setHtmlPage(readFile(htmlPage));
     }
 

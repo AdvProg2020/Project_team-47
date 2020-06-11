@@ -1,7 +1,6 @@
 package controller.panels;
 
 import controller.Command;
-import controller.Error;
 import model.category.Category;
 import model.ecxeption.CommonException;
 import model.ecxeption.Exception;
@@ -10,12 +9,12 @@ import model.ecxeption.common.NotEnoughInformation;
 import model.ecxeption.user.NeedLoginException;
 import model.ecxeption.user.PasswordNotValidException;
 import model.ecxeption.user.RegisterException;
+import model.others.SpecialProperty;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import model.user.Seller;
 import model.user.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -79,11 +78,8 @@ public abstract class UserPanelCommands extends Command {
     }
 
     public static boolean isThereProperty(Category category, String property) {
-        for (String specialProperty : category.getSpecialProperties()) {
-            if (specialProperty.equalsIgnoreCase(property))
-                return true;
-        }
-        return false;
+        SpecialProperty temp = new SpecialProperty(property);
+        return category.getSpecialProperties().contains(temp);
     }
 }
 
@@ -106,7 +102,6 @@ class ViewPersonalInfoCommand extends UserPanelCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws NeedLoginException {
-        shouldLoggedIn();
         return personalInfo();
     }
 
@@ -139,7 +134,6 @@ class EditFieldCommand extends UserPanelCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
-        shouldLoggedIn();
         HashMap<String, String> reqInfo = getReqInfo(request);
         containNullField(reqInfo, reqInfo.get("field"), reqInfo.get("new value"));
         edit(reqInfo.get("field"), reqInfo.get("new value"));
@@ -147,7 +141,8 @@ class EditFieldCommand extends UserPanelCommands {
     }
 
     @Override
-    public void checkPrimaryErrors(ClientMessage request) throws Exception {}
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+    }
 
 
     public void edit(String field, String newValue) throws EmptyFieldException, CommonException, RegisterException, PasswordNotValidException {
@@ -155,10 +150,10 @@ class EditFieldCommand extends UserPanelCommands {
             throw new EmptyFieldException("New value");
         }
         switch (field) {
-            case "first-name"-> getLoggedUser().setFirstName(newValue);
-            case "last-name"-> getLoggedUser().setLastName(newValue);
-            case "phone-number"-> editPhoneNumber(newValue);
-            case "password"-> editPassword(newValue);
+            case "first-name" -> getLoggedUser().setFirstName(newValue);
+            case "last-name" -> getLoggedUser().setLastName(newValue);
+            case "phone-number" -> editPhoneNumber(newValue);
+            case "password" -> editPassword(newValue);
             case "company-name" -> {
                 if (getLoggedUser() instanceof Seller)
                     editCompanyName(newValue);

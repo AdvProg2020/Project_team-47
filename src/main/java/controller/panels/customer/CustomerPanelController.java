@@ -2,7 +2,10 @@ package controller.panels.customer;
 
 import controller.Command;
 import controller.panels.UserPanelController;
+import model.ecxeption.CommonException;
+import model.ecxeption.Exception;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 import java.util.ArrayList;
 
@@ -36,6 +39,15 @@ public class CustomerPanelController extends UserPanelController {
         commands.add(CartCommands.getIncreaseCommand());
         commands.add(CartCommands.getTotalPriceCommand());
         commands.add(CartCommands.getViewCartCommand());
+    }
+
+    @Override
+    public ServerMessage processRequest(ClientMessage request) throws Exception {
+        for (Command command : commands)
+            if (command.canDoIt(request.getType()))
+                return command.process(request);
+
+        throw new CommonException("Can't do this request!!");
     }
 
 }//end CustomerPanelController class

@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import static controller.Controller.*;
+import static controller.Controller.actionCompleted;
+import static controller.Controller.sendAnswer;
 
 public abstract class FilterCommands extends Command {
     public static FilterCommonCommands getFilterCommonCommands() {
@@ -67,7 +68,7 @@ class FilterCommonCommands extends FilterCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) {
-        if ("show available filters offs".equals(request.getRequest())) {
+        if ("show available filters offs".equals(request.getType())) {
             return showAvailableFilters();
         } else {
             return currentFilters();
@@ -148,9 +149,9 @@ class AddFilterCommand extends FilterCommands {
                     throw new NumberException();
                 }
             }
-            case "seller"-> createFilterForSeller(firstFilterValue);
-            case "off-status"-> createFilterForOffStatus(firstFilterValue);
-            default-> throw new WrongFilterException();
+            case "seller" -> createFilterForSeller(firstFilterValue);
+            case "off-status" -> createFilterForOffStatus(firstFilterValue);
+            default -> throw new WrongFilterException();
         }
         return actionCompleted();
     }
@@ -200,7 +201,7 @@ class AddFilterCommand extends FilterCommands {
     private void createFilterForTime(String startDate, String finishDate) throws DateException {
         Date start = Controller.getDateWithString(startDate);
         Date finish = Controller.getDateWithString(finishDate);
-        if(start==null||finish==null)
+        if (start == null || finish == null)
             throw new DateException();
         if (start.after(finish))
             throw new DateException();
@@ -216,14 +217,14 @@ class AddFilterCommand extends FilterCommands {
     private boolean isFilterExist(String key) {
         //check that if there is a filter with given key
         switch (key) {
-            case "time","percent","seller", "off-status" -> {
-                    for (Filter filter : filters()) {
-                        if (filter.getFilterKey().equals(key)) {
-                            return true;
-                        }
+            case "time", "percent", "seller", "off-status" -> {
+                for (Filter filter : filters()) {
+                    if (filter.getFilterKey().equals(key)) {
+                        return true;
                     }
-                    return false;
                 }
+                return false;
+            }
 
             default -> {
                 return true;
@@ -248,13 +249,14 @@ class DisableFilterCommand extends FilterCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws NullFieldException, FilterNotExistException {
-        containNullField(request.getFirstHashMap(),request.getFirstHashMap().get("filter key"));
-        disableFilter(request.getFirstString().toLowerCase());
+        containNullField(request.getHashMap(), request.getHashMap().get("filter key"));
+        disableFilter(request.getHashMap().get("filter key").toLowerCase());
         return actionCompleted();
     }
 
     @Override
-    public void checkPrimaryErrors(ClientMessage request) {}
+    public void checkPrimaryErrors(ClientMessage request) {
+    }
 
     private void disableFilter(String filterKey) throws FilterNotExistException {
         for (Filter filter : filters()) {

@@ -78,7 +78,6 @@ class PurchaseInitializerCommand extends PurchaseCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException {
-        shouldBeCustomer();
         return purchase();
     }
 
@@ -113,16 +112,15 @@ class PurchaseInformationGetter extends PurchaseCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
-        shouldBeCustomer();
-        containNullField(request.getFirstHashMap());
+        containNullField(request.getHashMap());
         checkPrimaryErrors(request);
-        gettingPurchaseInformation(request.getFirstHashMap());
+        gettingPurchaseInformation(request.getHashMap());
         return actionCompleted();
     }
 
     @Override
     public void checkPrimaryErrors(ClientMessage request) throws Exception {
-        if (!checkingPurchaseInfo(request.getFirstHashMap()))
+        if (!checkingPurchaseInfo(request.getHashMap()))
             throw new NotEnoughInformation();
     }
 
@@ -163,10 +161,9 @@ class ApplyDiscountCodeCommand extends PurchaseCommands {
     }
 
     @Override
-    public ServerMessage process(ClientMessage request) throws Exception{
-        shouldBeCustomer();
-        containNullField(request.getFirstHashMap(),request.getFirstHashMap().get("code"));
-        return applyDiscountCode(request.getFirstHashMap().get("code"));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap(), request.getHashMap().get("code"));
+        return applyDiscountCode(request.getHashMap().get("code"));
     }
 
     @Override
@@ -206,7 +203,6 @@ class PayCommand extends PurchaseCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException, NotEnoughMoneyException {
-        shouldBeCustomer();
         pay();
         return actionCompleted();
     }

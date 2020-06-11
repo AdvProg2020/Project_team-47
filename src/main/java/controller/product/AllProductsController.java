@@ -1,9 +1,7 @@
 package controller.product;
 
-import controller.Command;
 import controller.Controller;
 import model.others.Filter;
-import model.send.receive.ClientMessage;
 
 import java.util.ArrayList;
 
@@ -12,7 +10,6 @@ public class AllProductsController extends Controller {
     private ArrayList<Filter> filters;
     private String sortField;
     private String sortDirection;
-    private ArrayList<Command> commands;
 
     private AllProductsController() {
         filters = new ArrayList<>();

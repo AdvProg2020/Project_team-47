@@ -7,10 +7,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class OffsMenuController extends PageController {
-    @Override
-    public void processError(Exception e) {
-
-    }
 
     @Override
     public void clearPage() {

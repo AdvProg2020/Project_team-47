@@ -1,6 +1,7 @@
 package model.send.receive;
 
 import model.others.Product;
+import model.others.SpecialProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,12 +9,12 @@ import java.util.HashMap;
 public class CategoryInfo {
     private String type;
     private String name;
-    private ArrayList<String> specialProperties;
+    private ArrayList<SpecialProperty> specialProperties;
     private HashMap<String, String> productsNameId;
     private ArrayList<String> subCategories;
     private String mainCategory;
 
-    public CategoryInfo(String name, ArrayList<String> properties) {
+    public CategoryInfo(String name, ArrayList<SpecialProperty> properties) {
         this.name = name;
         this.specialProperties = properties;
         this.productsNameId = new HashMap<>();
@@ -35,7 +36,7 @@ public class CategoryInfo {
         return name;
     }
 
-    public ArrayList<String> getSpecialProperties() {
+    public ArrayList<SpecialProperty> getSpecialProperties() {
         return specialProperties;
     }
 

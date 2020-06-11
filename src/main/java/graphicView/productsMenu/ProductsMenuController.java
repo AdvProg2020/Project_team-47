@@ -8,12 +8,6 @@ import java.util.ResourceBundle;
 
 public class ProductsMenuController extends PageController {
 
-
-    @Override
-    public void processError(Exception e) {
-
-    }
-
     @Override
     public void clearPage() {
 
