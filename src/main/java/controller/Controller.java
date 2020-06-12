@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 
 abstract public class Controller {
     protected static User loggedUser;
-    private static ArrayList<Controller> controllers;
-    private static Gson gson = new Gson();
+    private static final ArrayList<Controller> controllers;
+    private static final Gson gson = new Gson();
 
     static {
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
@@ -60,7 +60,7 @@ abstract public class Controller {
         Controller.loggedUser = loggedUser;
     }
 
-
+    @SuppressWarnings("unchecked")
     public static ServerMessage sendAnswer(ArrayList arrayList, String type) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");

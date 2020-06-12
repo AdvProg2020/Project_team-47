@@ -11,6 +11,7 @@ import model.user.User;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unchecked")
 public class Sort {
     public static ArrayList<MainCategory> sortMainCategories(String field, String direction, ArrayList<MainCategory> categories) {
         ArrayList<MainCategory> categoriesClone = (ArrayList<MainCategory>) categories.clone();
