@@ -12,7 +12,7 @@ public class GraphicView extends Application {
     private final ArrayList<Scene> scenes;
     private Stage window;
 
-    public GraphicView() {
+    private GraphicView() {
         scenes = new ArrayList<>();
     }
 

@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import java.io.IOException;
 
 public abstract class Page {
-    protected static Page page;
     protected Scene scene;
 
     protected Page(String scenePath) {

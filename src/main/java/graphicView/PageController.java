@@ -6,7 +6,6 @@ import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
 public abstract class PageController implements Initializable {
-    private static PageController controller;
 
     public ServerMessage send(ClientMessage request) {
         return ControllerAndViewConnector.commandProcess(request);
