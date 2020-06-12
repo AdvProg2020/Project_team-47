@@ -6,8 +6,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class GraphicView extends Application {
-
+public class GraphicView {
     private static GraphicView graphicView;
     private final ArrayList<Scene> scenes;
     private Stage window;
@@ -22,11 +21,6 @@ public class GraphicView extends Application {
         return graphicView;
     }
 
-    public void run(String[] args) {
-        launch(args);
-    }
-
-    @Override
     public void start(Stage window) throws Exception {
         this.window = window;
         window.setTitle("AP SHOP");

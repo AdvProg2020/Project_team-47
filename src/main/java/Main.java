@@ -3,15 +3,14 @@ import graphicView.GraphicView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class Main {
+public class Main extends Application {
     public static void main(String[] args) {
-        //loading database
         new Database().startDatabaseLoading();
+        launch(args);
+    }
 
-        //with console
-        //new CustomerPanelMenu(null).autoExecute();
-
-        //with javaFX
-        GraphicView.getInstance().run(args);
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        GraphicView.getInstance().start(primaryStage);
     }
 }
