@@ -12,7 +12,7 @@ public class ControllerAndViewConnector {
         try {
             answer = Controller.process(request);
         } catch (Exception e) {
-            answer = new ServerMessage("error", e.getMessage());
+            answer = new ServerMessage("Error", e.getMessage());
         }
         return answer;
     }

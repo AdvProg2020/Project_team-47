@@ -17,6 +17,10 @@ public class ClientMessage {
 
     }
 
+    public ClientMessage(String type) {
+        this.type = type;
+    }
+
     public int getFirstInt() {
         return firstInt;
     }
@@ -43,5 +47,9 @@ public class ClientMessage {
 
     public void setProperty(SpecialProperty property) {
         this.property = property;
+    }
+
+    public void setHashMap(HashMap<String, String> hashMap) {
+        this.hashMap = hashMap;
     }
 }

@@ -39,6 +39,10 @@ public class ServerMessage {
         this.errorMessage = errorMessage;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
     public CartInfo getCartInfo() {
         return cartInfo;
     }

@@ -215,6 +215,11 @@ abstract public class Controller {
         }
     }
 
+    public static String getDateString(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return formatter.format(date);
+    }
+
     public static Gson getGson() {
         return gson;
     }

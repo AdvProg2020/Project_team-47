@@ -45,7 +45,7 @@ class ShowOffsCommand extends ManageOffCommands {
     private static ShowOffsCommand command;
 
     private ShowOffsCommand() {
-        this.name = "view offs";
+        this.name = "view offs seller";
     }
 
     public static ShowOffsCommand getInstance() {
@@ -84,7 +84,7 @@ class ViewOffCommand extends ManageOffCommands {
     private static ViewOffCommand command;
 
     private ViewOffCommand() {
-        this.name = "view off";
+        this.name = "view off seller";
     }
 
     public static ViewOffCommand getInstance() {

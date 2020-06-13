@@ -134,6 +134,14 @@ public class LogInfo {
         return productInLogs;
     }
 
+    public String getProduct(int index) {
+        ProductInLog temp = productInLogs.get(index);
+        return temp.productName + "(" + temp.productId + ")   " + temp.number;
+    }
+
+    public int productsNumber() {
+        return productInLogs.size();
+    }
     private static class ProductInLog {
         private String sellerUsername;
         private int number;
