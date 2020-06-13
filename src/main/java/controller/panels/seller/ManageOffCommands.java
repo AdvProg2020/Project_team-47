@@ -134,11 +134,9 @@ class EditOffCommand extends ManageOffCommands {
     @Override
     public ServerMessage process(ClientMessage request) throws NullFieldException, OffDoesntExistException,
             ProductDoesntExistException, CommonException, DateException, NumberException {
-        containNullField(request.getHashMap().get("off id"), request.getHashMap().get("field"),
-                request.getHashMap().get("type"));
+        containNullField(request.getHashMap().get("off id"), request.getHashMap().get("field"));
         containNullField(request.getHashMap().get("new value"), request.getHashMap().get("change type"));
-        editOff(request.getHashMap().get("off id"), request.getHashMap().get("field"),
-                request.getHashMap().get("type"), request);
+        editOff(request.getHashMap().get("off id"), request.getHashMap().get("field"), request);
         return actionCompleted();
     }
 
@@ -147,7 +145,7 @@ class EditOffCommand extends ManageOffCommands {
 
     }
 
-    private void editOff(String offId, String field, String type, ClientMessage req) throws OffDoesntExistException, NumberException, DateException,
+    private void editOff(String offId, String field, ClientMessage req) throws OffDoesntExistException, NumberException, DateException,
             CommonException, ProductDoesntExistException {
         off = ((Seller) getLoggedUser()).getOffById(offId);
         switch (field) {
@@ -161,7 +159,7 @@ class EditOffCommand extends ManageOffCommands {
     private void editProduct(String productId, String changeType) throws ProductDoesntExistException, CommonException {
         Product.getProductWithId(productId);
         if (!(changeType.equals("add") || changeType.equals("remove")))
-            throw new CommonException("Wront type!!");
+            throw new CommonException("Wrong type!!");
         editOffRequest = new EditOffRequest("product", productId, changeType);
         createRequest();
     }
