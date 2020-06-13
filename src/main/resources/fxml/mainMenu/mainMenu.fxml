@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.Scene?>
 <?import javafx.scene.text.Font?>
-<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../resources/Others/Stylesheet.css"
+<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../Others/Stylesheet.css"
        xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="graphicView.mainMenu.MainMenuController">
     <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
               prefWidth="600.0">

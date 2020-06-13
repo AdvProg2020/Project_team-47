@@ -1,5 +1,6 @@
 package graphicView;
 
+import graphicView.mainMenu.MainMenuPage;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -26,6 +27,7 @@ public class GraphicView {
         window.setOnCloseRequest((event) -> System.exit(0));
         window.setTitle("AP SHOP");
         window.setResizable(false);
+        goToFirstPage();
         window.show();
     }
 
@@ -51,7 +53,8 @@ public class GraphicView {
     public void goToFirstPage() {
         //this function will change window scene to first scene(login scene)
         scenes.clear();
-        //scenes.add(LoginPage.getInstance().getScene());
+
+        scenes.add(MainMenuPage.getInstance().getScene());
         window.setScene(scenes.get(0));
     }
 
