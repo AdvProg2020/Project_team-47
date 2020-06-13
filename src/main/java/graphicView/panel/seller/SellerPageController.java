@@ -3,6 +3,7 @@ package graphicView.panel.seller;
 import graphicView.GraphicView;
 import graphicView.PageController;
 import graphicView.panel.seller.log.LogPage;
+import graphicView.panel.seller.offs.ManageOffsPage;
 import javafx.fxml.FXML;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
@@ -32,12 +33,12 @@ public class SellerPageController extends PageController {
 
     @FXML
     private void accountInfo() {
-        // TODO: 6/12/2020  
+        // TODO: 6/12/2020
     }
 
     @FXML
     private void manageOffs() {
-        // TODO: 6/12/2020  
+        GraphicView.getInstance().changeScene(ManageOffsPage.getInstance());
     }
 
     @FXML

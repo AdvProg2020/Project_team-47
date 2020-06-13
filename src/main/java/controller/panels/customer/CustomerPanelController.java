@@ -42,6 +42,15 @@ public class CustomerPanelController extends UserPanelController {
     }
 
     @Override
+    public boolean canProcess(String request) {
+        for (Command command : commands) {
+            if (command.canDoIt(request))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public ServerMessage processRequest(ClientMessage request) throws Exception {
         for (Command command : commands)
             if (command.canDoIt(request.getType()))

@@ -15,7 +15,7 @@ public class ShowOffPage extends Page {
 
     public static Page getInstance() {
         if(page==null)
-            page = new ShowOffPage("ShowOffPage.fxml");
+            page = new ShowOffPage("/fxml/panel/seller/off/show/ShowOffPage.fxml");
         return page;
     }
 

@@ -39,7 +39,7 @@
             <Font size="17.0" />
          </font>
       </TextField>
-      <Text fill="RED" layoutX="610.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" visible="false" wrappingWidth="45.60345458984375" AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="328.0" AnchorPane.topAnchor="104.0">
+      <Text fx:id="error" fill="RED" layoutX="610.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" visible="false" wrappingWidth="45.60345458984375" AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="328.0" AnchorPane.topAnchor="104.0">
          <font>
             <Font size="13.0" />
          </font>

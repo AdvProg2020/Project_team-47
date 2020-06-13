@@ -18,7 +18,7 @@
       <Button layoutX="6.0" layoutY="590.0" mnemonicParsing="false" onAction="#back" prefHeight="70.0"
               prefWidth="91.0" text="Back">
          <font>
-            <Font name="Segoe UI Black Italic" size="19.0"/>
+            <Font name="Segoe UI Black Italic" size="19.0" />
          </font>
       </Button>
    </AnchorPane>

@@ -52,4 +52,8 @@ public class ClientMessage {
     public void setHashMap(HashMap<String, String> hashMap) {
         this.hashMap = hashMap;
     }
+
+    public void setArrayList(ArrayList<String> arrayList) {
+        this.arrayList = arrayList;
+    }
 }

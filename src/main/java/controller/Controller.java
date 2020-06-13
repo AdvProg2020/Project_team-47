@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +46,7 @@ abstract public class Controller {
     }
 
     public static ServerMessage process(ClientMessage clientMessage) throws Exception {
+        if(clientMessage.getHashMap()==null) clientMessage.setHashMap(new HashMap<>());
         for (Controller controller : controllers)
             if (controller.canProcess(clientMessage.getType()))
                 return controller.processRequest(clientMessage);
@@ -205,7 +207,7 @@ abstract public class Controller {
 
     public static Date getDateWithString(String dateString) throws DateException {
         if (!isDateFormatValid(dateString))
-            return null;
+            throw new DateException("Please enter valid date!!");
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         try {
             Date date = formatter.parse(dateString);

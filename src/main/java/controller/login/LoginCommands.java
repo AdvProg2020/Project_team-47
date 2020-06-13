@@ -76,7 +76,7 @@ class RegisterCommand extends LoginCommands {
         if (registerInformationHashMap.get("type").equals("manager") && User.isThereManager()) {
             throw new ManagerExistenceException.ManagerExist();
         } else if (!registerInformationHashMap.get("type").equals("manager") && !User.isThereManager()) {
-            throw new ManagerExistenceException.ManagerDoesntExist();
+            //throw new ManagerExistenceException.ManagerDoesntExist();
         }
 
         registerInformationIsValid(registerInformationHashMap);
@@ -116,6 +116,8 @@ class RegisterCommand extends LoginCommands {
             default -> throw new RegisterException("Enter valid type!!");
         };
         newUser.emailVerification();
+        newUser.confirmEmail();
+        setLoggedUser(newUser);
     }
 
 }//end RegisterCommand Class

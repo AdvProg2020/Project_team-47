@@ -12,7 +12,7 @@ public class LogPage extends Page {
 
     public static Page getInstance() {
         if(page==null)
-            page = new LogPage("LogsPage.fxml");
+            page = new LogPage("/fxml/panel/seller/log/LogsPage.fxml");
         return page;
     }
 

@@ -249,10 +249,10 @@ class AddOffCommand extends ManageOffCommands {
         //check that if HashMap has all required key
         String[] offInfoKey = {"start-time", "finish-time", "percent"};
         for (String key : offInfoKey) {
-            if (request.getHashMap().containsKey(key)) throw new NotEnoughInformation();
+            if (!request.getHashMap().containsKey(key)) throw new NotEnoughInformation();
         }
         startDate = getDateWithString(request.getHashMap().get("start-time"));
-        finishDate = getDateWithString(request.getHashMap().get("finish-date"));
+        finishDate = getDateWithString(request.getHashMap().get("finish-time"));
         if (startDate.before(getCurrentTime()) ||
                 finishDate.before(getCurrentTime()) ||
                 !startDate.before(finishDate)) throw new DateException();

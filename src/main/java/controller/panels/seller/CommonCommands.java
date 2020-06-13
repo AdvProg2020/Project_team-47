@@ -116,7 +116,7 @@ class ViewSalesHistoryCommand extends CommonCommands {
             direction = direction.toLowerCase();
         }
 
-        if (checkSort(field, direction, "log")) {
+        if (!checkSort(field, direction, "log")) {
             throw new InvalidSortException();
         }
         return sendAnswer(((Seller) getLoggedUser()).getAllSellLogsInfo(field, direction), "log");

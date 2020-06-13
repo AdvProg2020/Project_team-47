@@ -219,9 +219,11 @@ public class Database {
     }
 
     private void loadEmail() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter email password!!");
-        //Email.setPassword(Menu.getInputCommandWithTrim());
-        // Email.checkPassword();
+        Email.setPassword(scanner.nextLine());
+        Email.checkPassword();
+        scanner.close();
         File htmlPage = new File(Path.RESOURCE.getPath() + "Others/HtmlPage.html");
         Email.setHtmlPage(readFile(htmlPage));
     }

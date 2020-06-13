@@ -94,6 +94,7 @@ public class ManageOffsPageController extends PageController {
         ServerMessage answer = send(clientMessage);
         if (answer.getType().equals("Error")) {
             error.setText(answer.getErrorMessage());
+            error.setVisible(true);
         } else {
             clearPage();
             ((ShowOffPage)ShowOffPage.getInstance()).initializePage(answer.getOffInfo());
@@ -104,7 +105,7 @@ public class ManageOffsPageController extends PageController {
     @FXML
     private void addOff() {
         clearPage();
-        GraphicView.getInstance().changeScene(ShowOffPage.getInstance());
+        GraphicView.getInstance().changeScene(AddOffPage.getInstance());
     }
 
     @Override

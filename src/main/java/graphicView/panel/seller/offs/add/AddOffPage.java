@@ -1,19 +1,20 @@
-package graphicView.panel.seller.offs;
+package graphicView.panel.seller.offs.add;
 
 import graphicView.Page;
 import graphicView.PageController;
-import graphicView.panel.seller.log.LogPage;
+import graphicView.panel.seller.offs.ManageOffsPage;
+import graphicView.panel.seller.offs.ManageOffsPageController;
 
-public class ManageOffsPage extends Page {
+public class AddOffPage extends Page {
     private static Page page;
 
-    private ManageOffsPage(String scenePath) {
+    private AddOffPage(String scenePath) {
         super(scenePath);
     }
 
     public static Page getInstance() {
         if(page==null)
-            page = new ManageOffsPage("/fxml/panel/seller/off/ManageOffsPage.fxml");
+            page = new AddOffPage("/fxml/panel/seller/off/add/AddOffPage.fxml");
         return page;
     }
 

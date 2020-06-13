@@ -48,9 +48,10 @@ public class LogsPageController extends PageController {
         controller = this;
         ClientMessage request = new ClientMessage("view sales history");
         logsInfo = send(request).getLogInfoArrayList();
-        if(logsInfo.size()==0)
-            return;
         pagination.setPageCount((logsInfo.size() - 1) / 4 + 1);
+        if(logsInfo.size()==0) {
+            return;
+        }
         initializeAnchorPane();
         initializePagination();
     }
@@ -88,6 +89,7 @@ public class LogsPageController extends PageController {
             }
             return vBox;
         });
+        pagination.setPageCount(10);
     }
 
     @Override
