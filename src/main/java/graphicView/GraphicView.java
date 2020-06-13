@@ -23,6 +23,7 @@ public class GraphicView {
 
     public void start(Stage window) throws Exception {
         this.window = window;
+        window.setOnCloseRequest((event) -> System.exit(0));
         window.setTitle("AP SHOP");
         window.setResizable(false);
         window.show();
