@@ -24,6 +24,6 @@ public class MainMenuPage extends Page {
 
     @Override
     public PageController getController() {
-        return null;
+        return MainMenuController.getInstance();
     }
 }

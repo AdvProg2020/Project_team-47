@@ -1,6 +1,8 @@
 package graphicView.mainMenu;
 
+import graphicView.GraphicView;
 import graphicView.PageController;
+import graphicView.registerAndLoginMenu.registerAndLogin.RegisterAndLoginPage;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -11,59 +13,37 @@ import java.util.ResourceBundle;
 
 public class MainMenuController extends PageController {
 
-    /*@FXML
-    private TextField username;
-    @FXML
-    private TextField undoLimit;
-    @FXML
-    private TextField turnLimit;
-    @FXML
-    private TextField time;*/
+    private static PageController controller;
+
     @FXML
     private Label errorLabel;
+
+    public static PageController getInstance() {
+        if (controller == null) {
+            controller = new MainMenuController();
+        }
+        return controller;
+    }
 
 
     @FXML
     private void exit() {
-        /*
-        Message req = new Message("logout");
-        if (send(req)) {
-            clearPage();
-            MainView.getInstance().changeScene(LoginPage.getInstance());
-        }*/
         System.exit(0);
     }
 
     @FXML
     private void loginAndRegister() {
-
-        /*Message req = new Message("new game");
-        HashMap<String, String> reqInfo = new HashMap<>();
-        reqInfo.put("username", username.getText());
-        reqInfo.put("turn limit", turnLimit.getText());
-        reqInfo.put("undo limit", undoLimit.getText());
-        reqInfo.put("time", time.getText());
-        req.setReqInfo(reqInfo);
-        if (send(req)) {
-            clearPage();
-            MainView.getInstance().changeScene(GamePage.getNewInstance());
-        }*/
+        GraphicView.getInstance().changeScene(RegisterAndLoginPage.getInstance());
     }
 
     @FXML
     private void products() {
 
-        /*
-        clearPage();
-        MainView.getInstance().changeScene(ScoreBoardPage.getInstance());
-        */
     }
 
     @FXML
     private void offs() {
-        /*
-        clearPage();
-        MainView.getInstance().changeScene(AccountPage.getInstance());*/
+
     }
 
 
@@ -163,4 +143,6 @@ public class MainMenuController extends PageController {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
+
 }

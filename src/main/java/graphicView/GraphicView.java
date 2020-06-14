@@ -58,4 +58,8 @@ public class GraphicView {
         window.setScene(scenes.get(0));
     }
 
+    public Stage getWindow() {
+        return window;
+    }
+
 }
