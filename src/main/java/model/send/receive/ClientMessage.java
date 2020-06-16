@@ -12,6 +12,24 @@ public class ClientMessage {
     private ArrayList<SpecialProperty> properties;
     private int firstInt;
     private SpecialProperty property;
+    private byte[] file;
+    private String fileExtension;
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
+    }
 
     public ClientMessage() {
 

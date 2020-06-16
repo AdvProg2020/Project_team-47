@@ -198,7 +198,7 @@ abstract public class Controller {
             return false;
         else if (month < 1 || month > 12)
             return false;
-        else if (year < 1970 || year > 2500)
+        else if (year < 0 || year > 2500)
             return false;
         else if (hour < 0 || hour > 24)
             return false;
@@ -210,8 +210,7 @@ abstract public class Controller {
             throw new DateException("Please enter valid date!!");
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         try {
-            Date date = formatter.parse(dateString);
-            return date;
+            return formatter.parse(dateString);
         } catch (ParseException e) {
             throw new DateException();
         }

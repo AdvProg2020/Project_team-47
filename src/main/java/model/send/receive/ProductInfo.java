@@ -9,18 +9,36 @@ public class ProductInfo {
     private String id;
     private String name;
     private String status;
-    private ArrayList<String> sellersNames;
+    private final ArrayList<String> sellersNames;
     private String mainCategory;
     private String subCategory;
     private ArrayList<SpecialProperty> specialProperties;
     private String description;
     private double scoreAverage;
-    private ArrayList<ProductSeller> productSellers;
+    private final ArrayList<ProductSeller> productSellers;
+    private byte[] file;
+    private String fileExtension;
 
     public ProductInfo() {
         sellersNames = new ArrayList<>();
         specialProperties = new ArrayList<>();
         productSellers = new ArrayList<>();
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
     }
 
     public int getSeenTime() {
