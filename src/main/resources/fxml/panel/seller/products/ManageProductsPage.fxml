@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="graphicView.panel.seller.products.ManageProductsPageController"
-            prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+<Scene stylesheets="@../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.products.ManageProductsPageController">
+   <root>
+      <AnchorPane prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Button layoutX="388.0" layoutY="119.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="197.0" text="Show All Products" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.4">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button layoutX="388.0" layoutY="247.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="198.0" text="Edit Product" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.0">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
+            <Button layoutX="388.0" layoutY="367.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="198.0" text="Add Product" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.0">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
+            <Button layoutX="388.0" layoutY="492.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="198.0" text="Back" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </root>
+</Scene>

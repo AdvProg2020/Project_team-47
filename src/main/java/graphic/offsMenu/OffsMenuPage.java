@@ -1,7 +1,7 @@
-package graphicView.offsMenu;
+package graphic.offsMenu;
 
-import graphicView.Page;
-import graphicView.PageController;
+import graphic.Page;
+import graphic.PageController;
 
 
 public class OffsMenuPage extends Page {

@@ -1,4 +1,4 @@
-package graphicView;
+package graphic;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

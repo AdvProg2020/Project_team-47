@@ -1,8 +1,7 @@
-package graphicView.mainMenu;
+package graphic.mainMenu;
 
-import graphicView.Page;
-import graphicView.PageController;
-import graphicView.panel.seller.SellerPage;
+import graphic.Page;
+import graphic.PageController;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 

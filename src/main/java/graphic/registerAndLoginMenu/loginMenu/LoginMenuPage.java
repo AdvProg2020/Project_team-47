@@ -1,8 +1,8 @@
-package graphicView.registerAndLoginMenu.loginMenu;
+package graphic.registerAndLoginMenu.loginMenu;
 
-import graphicView.Page;
-import graphicView.PageController;
-import graphicView.mainMenu.MainMenuPage;
+import graphic.Page;
+import graphic.PageController;
+import graphic.mainMenu.MainMenuPage;
 
 public class LoginMenuPage extends Page {
     private static Page page;

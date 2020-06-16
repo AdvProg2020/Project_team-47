@@ -1,8 +1,8 @@
-package graphicView.mainMenu;
+package graphic.mainMenu;
 
-import graphicView.GraphicView;
-import graphicView.PageController;
-import graphicView.registerAndLoginMenu.registerAndLogin.RegisterAndLoginPage;
+import graphic.GraphicView;
+import graphic.PageController;
+import graphic.registerAndLoginMenu.registerAndLogin.RegisterAndLoginPage;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

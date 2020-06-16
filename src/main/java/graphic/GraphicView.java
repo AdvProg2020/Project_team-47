@@ -1,7 +1,6 @@
-package graphicView;
+package graphic;
 
-import graphicView.mainMenu.MainMenuPage;
-import javafx.application.Application;
+import graphic.mainMenu.MainMenuPage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -11,6 +10,8 @@ public class GraphicView {
     private static GraphicView graphicView;
     private final ArrayList<Scene> scenes;
     private Stage window;
+    private boolean loggedIn;
+    private String accountType;//can be seller,customer,manager
 
     private GraphicView() {
         scenes = new ArrayList<>();
@@ -62,4 +63,19 @@ public class GraphicView {
         return window;
     }
 
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
 }

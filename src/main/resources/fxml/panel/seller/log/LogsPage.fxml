@@ -8,7 +8,7 @@
 
 
 <Scene stylesheets="@../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1"
-       xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphicView.panel.seller.log.LogsPageController">
+       xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.log.LogsPageController">
    <AnchorPane>
       <Pagination fx:id="pagination" layoutX="194.0" layoutY="39.0" prefHeight="623.0" prefWidth="791.0"
                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0"

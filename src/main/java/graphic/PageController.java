@@ -1,4 +1,4 @@
-package graphicView;
+package graphic;
 
 import controller.ControllerAndViewConnector;
 import javafx.fxml.Initializable;

@@ -1,7 +1,7 @@
-package graphicView.productsMenu;
+package graphic.productsMenu;
 
 
-import graphicView.PageController;
+import graphic.PageController;
 
 import java.net.URL;
 import java.util.ResourceBundle;

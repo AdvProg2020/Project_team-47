@@ -1,7 +1,7 @@
-package graphicView.productsMenu;
+package graphic.productsMenu;
 
-import graphicView.Page;
-import graphicView.PageController;
+import graphic.Page;
+import graphic.PageController;
 
 public class ProductsMenuPage extends Page {
     public ProductsMenuPage(Page previousPage) {

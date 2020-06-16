@@ -1,7 +1,7 @@
-package graphicView.registerAndLoginMenu.registerMenu;
+package graphic.registerAndLoginMenu.registerMenu;
 
-import graphicView.GraphicView;
-import graphicView.PageController;
+import graphic.GraphicView;
+import graphic.PageController;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;

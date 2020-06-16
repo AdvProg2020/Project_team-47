@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Scene?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Scene stylesheets="@../../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphicView.panel.seller.offs.show.ShowOffPageController">
+<Scene stylesheets="@../../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.offs.show.ShowOffPageController">
    <root>
       <AnchorPane prefHeight="400.0" prefWidth="600.0">
          <children>
@@ -114,8 +107,8 @@
                 <TableColumn fx:id="productId" prefWidth="196.533447265625" text="Product Id" />
               </columns>
             </TableView>
-            <Text fx:id="productError" fill="RED" layoutX="416.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" wrappingWidth="254.67001342773438" />
-            <Text fx:id="editError" fill="RED" layoutX="18.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" wrappingWidth="254.67001342773438" />
+            <Text fx:id="productError" fill="RED" layoutX="416.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" visible="false" wrappingWidth="254.67001342773438" />
+            <Text fx:id="editError" fill="RED" layoutX="18.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" visible="false" wrappingWidth="254.67001342773438" />
          </children></AnchorPane>
    </root>
 </Scene>
