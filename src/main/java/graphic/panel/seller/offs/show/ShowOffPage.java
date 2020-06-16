@@ -1,9 +1,7 @@
-package graphicView.panel.seller.offs.show;
+package graphic.panel.seller.offs.show;
 
-import graphicView.Page;
-import graphicView.PageController;
-import graphicView.panel.seller.offs.ManageOffsPage;
-import graphicView.panel.seller.offs.ManageOffsPageController;
+import graphic.Page;
+import graphic.PageController;
 import model.send.receive.OffInfo;
 
 public class ShowOffPage extends Page {

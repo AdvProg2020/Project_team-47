@@ -1,9 +1,9 @@
-package graphicView.panel.seller;
+package graphic.panel.seller;
 
-import graphicView.GraphicView;
-import graphicView.PageController;
-import graphicView.panel.seller.log.LogPage;
-import graphicView.panel.seller.offs.ManageOffsPage;
+import graphic.GraphicView;
+import graphic.PageController;
+import graphic.panel.seller.log.LogPage;
+import graphic.panel.seller.offs.ManageOffsPage;
 import javafx.fxml.FXML;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;

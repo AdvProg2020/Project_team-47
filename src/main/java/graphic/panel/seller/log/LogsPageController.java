@@ -1,7 +1,7 @@
-package graphicView.panel.seller.log;
+package graphic.panel.seller.log;
 
-import graphicView.GraphicView;
-import graphicView.PageController;
+import graphic.GraphicView;
+import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;

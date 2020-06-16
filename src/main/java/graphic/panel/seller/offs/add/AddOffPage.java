@@ -1,9 +1,8 @@
-package graphicView.panel.seller.offs.add;
+package graphic.panel.seller.offs.add;
 
-import graphicView.Page;
-import graphicView.PageController;
-import graphicView.panel.seller.offs.ManageOffsPage;
-import graphicView.panel.seller.offs.ManageOffsPageController;
+import graphic.Page;
+import graphic.PageController;
+import graphic.panel.seller.offs.ManageOffsPageController;
 
 public class AddOffPage extends Page {
     private static Page page;

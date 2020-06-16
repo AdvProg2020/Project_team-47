@@ -1,7 +1,7 @@
-package graphicView.panel.seller.offs.show;
+package graphic.panel.seller.offs.show;
 
 import controller.Controller;
-import graphicView.PageController;
+import graphic.PageController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

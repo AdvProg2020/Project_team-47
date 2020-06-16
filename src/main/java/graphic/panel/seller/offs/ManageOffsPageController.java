@@ -1,10 +1,10 @@
-package graphicView.panel.seller.offs;
+package graphic.panel.seller.offs;
 
 import controller.Controller;
-import graphicView.GraphicView;
-import graphicView.PageController;
-import graphicView.panel.seller.offs.add.AddOffPage;
-import graphicView.panel.seller.offs.show.ShowOffPage;
+import graphic.GraphicView;
+import graphic.PageController;
+import graphic.panel.seller.offs.add.AddOffPage;
+import graphic.panel.seller.offs.show.ShowOffPage;
 import javafx.animation.FadeTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

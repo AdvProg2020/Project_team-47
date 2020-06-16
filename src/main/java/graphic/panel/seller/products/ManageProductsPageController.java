@@ -1,6 +1,6 @@
-package graphicView.panel.seller.products;
+package graphic.panel.seller.products;
 
-import graphicView.PageController;
+import graphic.PageController;
 
 import java.net.URL;
 import java.util.ResourceBundle;

@@ -1,7 +1,7 @@
-package graphicView.panel.seller;
+package graphic.panel.seller;
 
-import graphicView.Page;
-import graphicView.PageController;
+import graphic.Page;
+import graphic.PageController;
 
 public class SellerPage extends Page {
     private static Page page;

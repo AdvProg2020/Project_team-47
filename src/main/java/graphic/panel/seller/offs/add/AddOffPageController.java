@@ -1,9 +1,7 @@
-package graphicView.panel.seller.offs.add;
+package graphic.panel.seller.offs.add;
 
-import controller.Controller;
-import graphicView.GraphicView;
-import graphicView.PageController;
-import graphicView.panel.seller.offs.show.ShowOffPageController;
+import graphic.GraphicView;
+import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;

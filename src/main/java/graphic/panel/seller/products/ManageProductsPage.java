@@ -1,11 +1,9 @@
-package graphicView.panel.seller.products;
+package graphic.panel.seller.products;
 
-import graphicView.Page;
-import graphicView.PageController;
-import graphicView.panel.seller.offs.ManageOffsPage;
-import graphicView.panel.seller.offs.ManageOffsPageController;
+import graphic.Page;
+import graphic.PageController;
 
-public class ManageProductsPage extends Page {
+public class  ManageProductsPage extends Page {
     private static Page page;
 
     private ManageProductsPage(String scenePath) {

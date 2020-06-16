@@ -1,8 +1,7 @@
-package graphicView.panel.seller.offs;
+package graphic.panel.seller.offs;
 
-import graphicView.Page;
-import graphicView.PageController;
-import graphicView.panel.seller.log.LogPage;
+import graphic.Page;
+import graphic.PageController;
 
 public class ManageOffsPage extends Page {
     private static Page page;
