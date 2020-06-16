@@ -142,8 +142,8 @@ class AddProductCommand extends CommonCommands {
     @Override
     public ServerMessage process(ClientMessage request) throws NullFieldException, CategoryDoesntExistException,
             NumberException, NotEnoughInformation {
-        containNullField(request.getProperties());
-        addProduct(request.getHashMap(), request.getProperties());
+        containNullField(request.getProperties(),request.getFile(),request.getFileExtension());
+        addProduct(request.getHashMap(), request);
         return actionCompleted();
     }
 
@@ -153,15 +153,15 @@ class AddProductCommand extends CommonCommands {
     }
 
 
-    public void addProduct(HashMap<String, String> productInfo, ArrayList<SpecialProperty> properties) throws
+    public void addProduct(HashMap<String, String> productInfo, ClientMessage request) throws
             CategoryDoesntExistException, NumberException, NotEnoughInformation {
         //this function will check product info if it is valid then call addProduct method by seller to creating request
         addingInformationIsValid(productInfo);
-        correctProperties(properties);
-        createRequest(productInfo, properties);
+        correctProperties(request.getProperties());
+        createRequest(productInfo, request);
     }
 
-    private void createRequest(HashMap<String, String> productInfo, ArrayList<SpecialProperty> properties) {
+    private void createRequest(HashMap<String, String> productInfo, ClientMessage clientMessage) {
         //this function will create a request to adding product to intended seller
         Request request = new Request();
         request.setRequestSender(getLoggedUser());
@@ -176,7 +176,9 @@ class AddProductCommand extends CommonCommands {
         addProductRequest.setName(productInfo.get("name"));
         addProductRequest.setNumberInStock(Integer.parseInt(productInfo.get("number-in-stock")));
         addProductRequest.setPrice(Double.parseDouble(productInfo.get("price")));
-        addProductRequest.setSpecialProperties(properties);
+        addProductRequest.setSpecialProperties(clientMessage.getProperties());
+        addProductRequest.setFile(clientMessage.getFile());
+        addProductRequest.setFileExtension(clientMessage.getFileExtension());
 
         request.setMainRequest(addProductRequest);
         request.addToDatabase();
@@ -322,4 +324,49 @@ class ViewBalanceCommand extends CommonCommands {
         return sendAnswer(money);
     }
 
+}
+
+class AddToSeller extends CommonCommands {
+    private static AddToSeller command;
+
+    private AddToSeller() {
+        this.name = "add to seller";
+    }
+
+    public static AddToSeller getInstance() {
+        if(command == null)
+            command = new AddToSeller();
+        return command;
+    }
+
+    @Override
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap().get("product id"), request.getHashMap().get("number in stock"),
+                request.getHashMap().get("price"));
+        addToSeller(request.getHashMap().get("product id"), request.getHashMap().get("number in stock"),
+                request.getHashMap().get("price"));
+        return actionCompleted();
+    }
+
+    private void addToSeller(String productId, String numberInStockString, String priceString) throws ProductDoesntExistException, NumberException {
+        Product product = Product.getProductWithId(productId);
+        double price;
+        int numberInStock;
+        try {
+            price = Double.parseDouble(priceString);
+            numberInStock = Integer.parseInt(numberInStockString);
+        } catch (NumberFormatException e) {
+            throw new NumberException();
+        }
+        product.addSeller((Seller) getLoggedUser(), numberInStock, price);
+
+        ((Seller) getLoggedUser()).addProduct(product);
+        product.updateDatabase();
+        getLoggedUser().updateDatabase().update();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
 }

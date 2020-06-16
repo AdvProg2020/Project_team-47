@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 public class Product {
-    private static ArrayList<Product> allProducts;
+    private static final ArrayList<Product> allProducts;
     private static TreeSet<String> usedId;
 
     static {
@@ -27,20 +27,22 @@ public class Product {
         usedId = new TreeSet<>();
     }
 
+    private final ArrayList<Seller> sellers;
+    private final ArrayList<ProductSeller> productSellers;
     private int seenTime;
     private String id;
     private String name;
     private String company;
     private String status;
-    private final ArrayList<Seller> sellers;
     private MainCategory mainCategory;
     private SubCategory subCategory;
     private ArrayList<SpecialProperty> specialProperties;
     private ArrayList<Comment> comments;
     private String description;
     private ArrayList<Score> scores;
+    private byte[] file;
+    private String fileExtension;
     private double scoreAverage;
-    private final ArrayList<ProductSeller> productSellers;
 
     public Product() {
         this.sellers = new ArrayList<>();
@@ -129,7 +131,7 @@ public class Product {
 
     private static boolean inFilter(Product product, ArrayList<Filter> filters) {
         for (Filter filter : filters) {
-            if(!inFilter(product,filter))
+            if (!inFilter(product, filter))
                 return false;
         }
         return true;
@@ -137,16 +139,30 @@ public class Product {
 
     private static boolean inFilter(Product product, Filter filter) {
         return switch (filter.getFilterKey()) {
-            case "price"-> product.inPriceFilter(filter);
-            case "score"-> product.inScoreFilter(filter);
-            case "brand"-> product.inBrandFilter(filter);
+            case "price" -> product.inPriceFilter(filter);
+            case "score" -> product.inScoreFilter(filter);
+            case "brand" -> product.inBrandFilter(filter);
             case "name" -> product.inNameFilter(filter);
             case "seller" -> product.inSellerFilter(filter);
-            case "category" ->product.inCategoryFilter(filter);
+            case "category" -> product.inCategoryFilter(filter);
             case "sub-category" -> product.inSubcategoryFilter(filter);
             case "availability" -> product.inAvailabilityFilter(filter);
             default -> product.inPropertiesFilter(filter);
         };
+    }
+
+    public static void setUsedId(TreeSet<String> usedId) {
+        if (usedId == null)
+            return;
+        Product.usedId = usedId;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
     }
 
     private boolean inPropertiesFilter(Filter filter) {
@@ -164,7 +180,7 @@ public class Product {
 
     private SpecialProperty getProperty(String filterKey) throws Exception {
         Category category = mainCategory;
-        if(subCategory!=null) category = subCategory;
+        if (subCategory != null) category = subCategory;
         SpecialProperty temp = new SpecialProperty(filterKey);
         for (SpecialProperty property : specialProperties) if (property.equals(filterKey)) return property;
         throw new Exception("");
@@ -209,12 +225,6 @@ public class Product {
         } catch (NullPointerException e) {
             return false;
         }
-    }
-
-    public static void setUsedId(TreeSet<String> usedId) {
-        if (usedId == null)
-            return;
-        Product.usedId = usedId;
     }
 
     public ArrayList<SpecialProperty> getSpecialProperties() {
@@ -274,6 +284,8 @@ public class Product {
         productData.setSpecialProperties(this.specialProperties);
         productData.setStatus(this.status);
         productData.setName(this.name);
+        productData.setFile(this.file);
+        productData.setFileExtension(this.fileExtension);
     }
 
     private boolean hasSeller(String username) {
@@ -328,6 +340,8 @@ public class Product {
         productInfo.setScoreAverage(this.scoreAverage);
         productInfo.setSpecialProperties(specialProperties);
         productInfo.setDescription(this.description);
+        productInfo.setFile(this.file);
+        productInfo.setFileExtension(this.fileExtension);
         for (ProductSeller productSeller : productSellers) {
             productInfo.addProductSeller(productSeller.getSeller().getUsername(), productSeller.getPrice(),
                     productSeller.getPriceWithOff(), productSeller.getNumberInStock());

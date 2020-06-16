@@ -30,6 +30,8 @@ public class ProductData {
     private ArrayList<String> sellersUsernames;
     private ArrayList<ProductSeller> productSellers;
     private ArrayList<SpecialProperty> specialProperties;
+    private String fileExtension;
+    private byte[] file;
 
     public ProductData() {
         this.sellersUsernames = new ArrayList<>();
@@ -87,6 +89,8 @@ public class ProductData {
         product.setScoreAverage(this.scoreAverage);
         product.setScores(this.scores);
         product.setStatus(this.status);
+        product.setFileExtension(this.fileExtension);
+        product.setFile(this.file);
     }
 
     public void addToDatabase() {
@@ -152,6 +156,14 @@ public class ProductData {
 
     public void setScoreAverage(double scoreAverage) {
         this.scoreAverage = scoreAverage;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 
     private static class ProductSeller {

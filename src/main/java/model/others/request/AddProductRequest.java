@@ -24,6 +24,16 @@ public class AddProductRequest extends MainRequest {
     private String description;
     private String company;
     private ArrayList<SpecialProperty> properties;
+    private byte[] file;
+    private String fileExtension;
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
+    }
 
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
@@ -47,6 +57,8 @@ public class AddProductRequest extends MainRequest {
             Product product = new Product();
             product.setSpecialProperties(properties);
             product.setDescription(description);
+            product.setFile(file);
+            product.setFileExtension(fileExtension);
             product.addSeller(seller, numberInStock, price);
             product.setMainCategory(Category.getMainCategoryByName(categoryName));
             if (subCategoryName != null) {
