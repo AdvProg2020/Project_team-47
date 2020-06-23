@@ -2,6 +2,7 @@ package graphic.registerAndLoginMenu.registerMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
+import graphic.registerAndLoginMenu.loginMenu.LoginMenuPage;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
@@ -52,9 +53,19 @@ public class RegisterMenuController extends PageController {
         GraphicView.getInstance().back();
     }
 
+    public void goToRegisterCustomer(MouseEvent mouseEvent) {
+        GraphicView.getInstance().changeScene(RegisterCustomerPage.getInstance());
+    }
+
+    public void GoToRegisterSeller(MouseEvent mouseEvent) {
+        GraphicView.getInstance().changeScene(RegisterSellerPage.getInstance());
+    }
+
     public void registerCustomer(MouseEvent mouseEvent) {
+
     }
 
     public void registerSeller(MouseEvent mouseEvent) {
+
     }
 }

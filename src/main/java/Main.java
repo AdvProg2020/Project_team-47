@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     public static void main(String[] args) {
-        new Database().startDatabaseLoading();
+        //new Database().startDatabaseLoading();
         launch(args);
     }
 
