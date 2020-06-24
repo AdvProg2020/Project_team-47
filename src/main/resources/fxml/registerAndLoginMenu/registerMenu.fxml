@@ -58,18 +58,5 @@
                 <Font size="22.0"/>
             </font>
         </Button>
-        <TextField fx:id="username" minWidth="215.0" opacity="0.0" prefHeight="33.0" prefWidth="250.0"
-                   promptText="Enter oponent username" styleClass="normal-text-field" visible="false"
-                   GridPane.columnIndex="7" GridPane.rowIndex="2"/>
-        <TextField fx:id="turnLimit" opacity="0.0" prefHeight="33.0" prefWidth="250.0" promptText="Enter turn limit"
-                   styleClass="normal-text-field" visible="false" GridPane.columnIndex="7" GridPane.rowIndex="3"/>
-        <TextField fx:id="undoLimit" opacity="0.0" prefHeight="33.0" prefWidth="250.0" promptText="Enter undo limit"
-                   styleClass="normal-text-field" visible="false" GridPane.columnIndex="7" GridPane.rowIndex="4"/>
-        <TextField fx:id="time" layoutX="646.0" layoutY="283.0" opacity="0.0" prefHeight="33.0" prefWidth="250.0"
-                   promptText="Enter time" styleClass="normal-text-field" visible="false" GridPane.columnIndex="7"
-                   GridPane.rowIndex="5"/>
-        <Label fx:id="errorLabel" alignment="BOTTOM_LEFT" prefHeight="20.0" prefWidth="368.0" styleClass="error-label"
-               text="Label" visible="false" GridPane.columnIndex="7" GridPane.columnSpan="4" GridPane.halignment="LEFT"
-               GridPane.rowIndex="1" GridPane.valignment="BOTTOM"/>
-    </GridPane>
+        </GridPane>
 </Scene>

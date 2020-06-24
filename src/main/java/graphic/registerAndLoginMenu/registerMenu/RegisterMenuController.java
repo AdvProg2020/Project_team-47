@@ -2,7 +2,9 @@ package graphic.registerAndLoginMenu.registerMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
-import graphic.registerAndLoginMenu.loginMenu.LoginMenuPage;
+import graphic.registerAndLoginMenu.registerMenu.customer.RegisterCustomerPage;
+import graphic.registerAndLoginMenu.registerMenu.seller.RegisterSellerPage;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
@@ -11,6 +13,7 @@ import java.util.ResourceBundle;
 public class RegisterMenuController extends PageController {
 
     private static PageController controller;
+
 
     public static PageController getInstance() {
         if (controller == null) {

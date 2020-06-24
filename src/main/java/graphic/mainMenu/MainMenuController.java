@@ -49,37 +49,12 @@ public class MainMenuController extends PageController {
 
     @FXML
     private void showTextFields() {
-        /*
-        //this function will use to show fields when user move mouse to new game button
-        if (username.isVisible())
-            return;
-        Thread thread = new Thread(() -> {
-            username.setVisible(true);
-            turnLimit.setVisible(true);
-            undoLimit.setVisible(true);
-            time.setVisible(true);
-            createFadeAnimations(0, 1);
-        });
-        thread.start();
-*/
+
     }
 
     @FXML
     private void hideTextFields() {
-        /*
-        //this function will use to hide new game fields when user move mouse to other buttons except
-        //new game button
-        if (!username.isVisible())
-            return;
-        Thread thread = new Thread(() -> {
-            createFadeAnimations(1, 0);
-            username.setVisible(false);
-            turnLimit.setVisible(false);
-            undoLimit.setVisible(false);
-            time.setVisible(false);
-        });
-        thread.start();
-        */
+
     }
 
     private FadeTransition[] getFadingAnimation() {
@@ -121,18 +96,7 @@ public class MainMenuController extends PageController {
     @Override
     public void clearPage() {
         errorLabel.setVisible(false);
-        /*username.setVisible(false);
-        username.setOpacity(0);
-        username.setText("");
-        undoLimit.setText("");
-        time.setText("");
-        time.setVisible(false);
-        time.setOpacity(0);
-        undoLimit.setVisible(false);
-        undoLimit.setOpacity(0);
-        turnLimit.setText("");
-        turnLimit.setVisible(false);
-        turnLimit.setOpacity(0);*/
+
     }
 
     @Override

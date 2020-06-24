@@ -2,19 +2,29 @@ package graphic.productsMenu;
 
 import graphic.Page;
 import graphic.PageController;
+import graphic.mainMenu.MainMenuController;
+import graphic.mainMenu.MainMenuPage;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.Style;
 
 public class ProductsMenuPage extends Page {
-    public ProductsMenuPage(Page previousPage) {
-        super("productsMenu.fxml");
-        /*try {
-            this.scene = FXMLLoader.load(getClass().getResource("productsMenu.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+    private static Page page;
+
+    public ProductsMenuPage(String path) {
+        super(path);
+        JMetro jMetro = new JMetro(Style.DARK);
+        jMetro.setScene(scene);
     }
+
+    public static Page getInstance() {
+        if(page==null)
+            page = new ProductsMenuPage("/fxml/mainMenu/mainMenu.fxml");
+        return page;
+    }
+
 
     @Override
     public PageController getController() {
-        return null;
+        return MainMenuController.getInstance();
     }
 }
