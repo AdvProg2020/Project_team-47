@@ -37,17 +37,17 @@ public class CartInfo {
         this.price = price;
     }
 
-    private static class ProductInCart {
-        private Seller seller;
+    public static class ProductInCart {
+        private String seller;
         private ProductInfo product;
         private int numberInCart;
 
-        public Seller getSeller() {
+        public String getSeller() {
             return seller;
         }
 
         public void setSeller(Seller seller) {
-            this.seller = seller;
+            this.seller = seller.getUsername();
         }
 
         public ProductInfo getProduct() {
@@ -64,6 +64,10 @@ public class CartInfo {
 
         public void setNumberInCart(int numberInCart) {
             this.numberInCart = numberInCart;
+        }
+
+        public void getPrice() {
+            product.getPrice(this.seller);
         }
     }
 
