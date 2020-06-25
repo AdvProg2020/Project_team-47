@@ -50,6 +50,9 @@ public abstract class CommonCommands extends Command {
         return ViewBalanceCommand.getInstance();
     }
 
+    public static Command getAddSellerCommand() {
+        return AddToSeller.getInstance();
+    }
 }
 
 
