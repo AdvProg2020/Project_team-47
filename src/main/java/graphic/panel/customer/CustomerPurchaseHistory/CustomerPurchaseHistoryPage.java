@@ -4,13 +4,9 @@ import graphic.Page;
 import graphic.PageController;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
-import model.send.receive.LogInfo;
-
-import java.util.ArrayList;
 
 public class CustomerPurchaseHistoryPage extends Page {
     private static Page page;
-    private ArrayList<LogInfo> logInfoArrayList;
     protected CustomerPurchaseHistoryPage(String scenePath) {
         super(scenePath);
         JMetro jMetro = new JMetro(Style.DARK);
@@ -28,11 +24,4 @@ public class CustomerPurchaseHistoryPage extends Page {
         return CustomerPurchaseHistoryController.getInstance();
     }
 
-    public ArrayList<LogInfo> getLogInfoArrayList() {
-        return logInfoArrayList;
-    }
-
-    public void setLogInfoArrayList(ArrayList<LogInfo> logInfoArrayList) {
-        this.logInfoArrayList = logInfoArrayList;
-    }
 }

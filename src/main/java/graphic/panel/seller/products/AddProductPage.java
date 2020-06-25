@@ -319,6 +319,7 @@ public class AddProductPage extends PageController {
         }
     }
 
+
     private boolean doubleIsValid(String number) {
         if(number.isEmpty()) return false;
         try {

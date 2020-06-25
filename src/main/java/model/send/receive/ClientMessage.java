@@ -18,6 +18,10 @@ public class ClientMessage {
 
     }
 
+    public void setProperties(ArrayList<SpecialProperty> properties) {
+        this.properties = properties;
+    }
+
     public ClientMessage(String type) {
         this.type = type;
     }
@@ -66,9 +70,6 @@ public class ClientMessage {
         return properties;
     }
 
-    public void setProperties(ArrayList<SpecialProperty> properties) {
-        this.properties = properties;
-    }
 
     public SpecialProperty getProperty() {
         return property;
