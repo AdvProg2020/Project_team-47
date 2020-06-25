@@ -1,111 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Scene?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
+
+<?import javafx.scene.control.*?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-
-<Scene stylesheets="@../../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1"
-       xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.products.EditProductPage">
-   <AnchorPane prefHeight="400.0" prefWidth="600.0">
-      <ImageView fitHeight="165.0" fitWidth="169.0" layoutX="32.0" layoutY="29.0" pickOnBounds="true">
-         <effect>
-            <DropShadow height="128.1" radius="57.0325" spread="0.25" width="102.03"/>
-         </effect>
-         <Image url="@../../../../../Images/main-menu-background.jpg"/>
-      </ImageView>
-      <Label layoutX="37.0" layoutY="259.0" prefHeight="52.0" prefWidth="189.0" text="Price:    "
-             AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="220.0">
-         <font>
-            <Font size="23.0"/>
-         </font>
-      </Label>
-      <Label layoutX="61.0" layoutY="321.0" prefHeight="52.0" prefWidth="192.0" text="Number In Stock:"
-             AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="271.0">
-         <font>
-            <Font size="23.0"/>
-         </font>
-      </Label>
-      <Label layoutX="42.0" layoutY="397.0" prefHeight="52.0" prefWidth="192.0" text="Category: "
-             AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="320.0">
-         <font>
-            <Font size="23.0"/>
-         </font>
-      </Label>
-      <Label layoutX="28.0" layoutY="306.0" prefHeight="52.0" prefWidth="192.0" text="Sub Category:"
-             AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="369.0">
-         <font>
-            <Font size="23.0"/>
-         </font>
-      </Label>
-      <Label layoutX="28.0" layoutY="436.0" prefHeight="52.0" prefWidth="192.0" text="Description:"
-             AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="415.0">
-         <font>
-            <Font size="23.0"/>
-         </font>
-      </Label>
-      <TextArea editable="false" layoutX="227.0" layoutY="436.0" prefHeight="187.0" prefWidth="273.0"
-                promptText="Description" AnchorPane.leftAnchor="220.0">
-         <font>
-            <Font size="14.0"/>
-         </font>
-      </TextArea>
-      <Label layoutX="40.0" layoutY="230.0" prefHeight="52.0" prefWidth="189.0" text="Price:    "
-             AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="219.0">
-         <font>
-            <Font size="23.0"/>
-         </font>
-      </Label>
-      <Label layoutX="40.0" layoutY="281.0" prefHeight="52.0" prefWidth="192.0" text="Number In Stock:"
-             AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="271.0">
-         <font>
-            <Font size="23.0"/>
-         </font>
-      </Label>
-      <Label layoutX="40.0" layoutY="330.0" prefHeight="52.0" prefWidth="192.0" text="Category: "
-             AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="320.0">
-         <font>
-            <Font size="23.0"/>
-         </font>
-      </Label>
-      <Label layoutX="40.0" layoutY="379.0" prefHeight="52.0" prefWidth="192.0" text="Sub Category:"
-             AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="369.0">
-         <font>
-            <Font size="23.0"/>
-         </font>
-      </Label>
-      <Label layoutX="260.0" layoutY="37.0" prefHeight="52.0" prefWidth="189.0" text="Id">
-         <font>
-            <Font size="23.0"/>
-         </font>
-      </Label>
-      <ScrollPane layoutX="548.0" layoutY="65.0" prefHeight="481.0" prefWidth="325.0">
-         <VBox prefHeight="478.0" prefWidth="323.0"/>
-      </ScrollPane>
-      <TextField layoutX="562.0" layoutY="585.0" prefHeight="39.0" prefWidth="124.0" promptText="Edit Field">
-         <font>
-            <Font size="15.0"/>
-         </font>
-      </TextField>
-      <TextField layoutX="706.0" layoutY="583.0" prefHeight="42.0" prefWidth="134.0" promptText="Edit Value">
-         <font>
-            <Font size="15.0"/>
-         </font>
-      </TextField>
-      <Button layoutX="867.0" layoutY="582.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="113.0"
-              text="Edit">
-         <font>
-            <Font size="17.0"/>
-         </font>
-      </Button>
-   </AnchorPane>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.text.*?>
+<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../../../Others/Stylesheet.css"
+       xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.seller.products.EditProductPage">
+    <AnchorPane prefHeight="400.0" prefWidth="600.0">
+        <ImageView fitHeight="165.0" fitWidth="169.0" layoutX="32.0" layoutY="29.0" pickOnBounds="true">
+            <effect>
+                <DropShadow height="128.1" radius="57.0325" spread="0.25" width="102.03"/>
+            </effect>
+            <Image url="@../../../../../Images/main-menu-background.jpg"/>
+        </ImageView>
+        <Label layoutX="37.0" layoutY="259.0" prefHeight="52.0" prefWidth="189.0" text="Price:    "
+               AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="220.0">
+            <font>
+                <Font size="23.0"/>
+            </font>
+        </Label>
+        <Label layoutX="61.0" layoutY="321.0" prefHeight="52.0" prefWidth="192.0" text="Number In Stock:"
+               AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="271.0">
+            <font>
+                <Font size="23.0"/>
+            </font>
+        </Label>
+        <Label layoutX="42.0" layoutY="397.0" prefHeight="52.0" prefWidth="192.0" text="Category: "
+               AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="320.0">
+            <font>
+                <Font size="23.0"/>
+            </font>
+        </Label>
+        <Label layoutX="28.0" layoutY="306.0" prefHeight="52.0" prefWidth="192.0" text="Sub Category:"
+               AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="369.0">
+            <font>
+                <Font size="23.0"/>
+            </font>
+        </Label>
+        <Label layoutX="28.0" layoutY="436.0" prefHeight="52.0" prefWidth="192.0" text="Description:"
+               AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="415.0">
+            <font>
+                <Font size="23.0"/>
+            </font>
+        </Label>
+        <TextArea editable="false" layoutX="227.0" layoutY="436.0" prefHeight="187.0" prefWidth="273.0"
+                  promptText="Description" AnchorPane.leftAnchor="220.0">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </TextArea>
+        <Label layoutX="40.0" layoutY="230.0" prefHeight="52.0" prefWidth="189.0" text="Price:    "
+               AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="219.0">
+            <font>
+                <Font size="23.0"/>
+            </font>
+        </Label>
+        <Label layoutX="40.0" layoutY="281.0" prefHeight="52.0" prefWidth="192.0" text="Number In Stock:"
+               AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="271.0">
+            <font>
+                <Font size="23.0"/>
+            </font>
+        </Label>
+        <Label layoutX="40.0" layoutY="330.0" prefHeight="52.0" prefWidth="192.0" text="Category: "
+               AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="320.0">
+            <font>
+                <Font size="23.0"/>
+            </font>
+        </Label>
+        <Label layoutX="40.0" layoutY="379.0" prefHeight="52.0" prefWidth="192.0" text="Sub Category:"
+               AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="369.0">
+            <font>
+                <Font size="23.0"/>
+            </font>
+        </Label>
+        <Label layoutX="260.0" layoutY="37.0" prefHeight="52.0" prefWidth="189.0" text="Id">
+            <font>
+                <Font size="23.0"/>
+            </font>
+        </Label>
+        <ScrollPane layoutX="548.0" layoutY="65.0" prefHeight="481.0" prefWidth="325.0">
+            <VBox prefHeight="478.0" prefWidth="323.0"/>
+        </ScrollPane>
+        <TextField layoutX="562.0" layoutY="585.0" prefHeight="39.0" prefWidth="124.0" promptText="Edit Field">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </TextField>
+        <TextField layoutX="706.0" layoutY="583.0" prefHeight="42.0" prefWidth="134.0" promptText="Edit Value">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </TextField>
+        <Button layoutX="867.0" layoutY="582.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="113.0"
+                text="Edit">
+            <font>
+                <Font size="17.0"/>
+            </font>
+        </Button>
+    </AnchorPane>
 </Scene>

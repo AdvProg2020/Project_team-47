@@ -21,9 +21,6 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class ManageDiscountPage extends PageController {
-    public static Scene getScene() {
-        return getScene("/fxml/panel/manager/ManageDiscountPage.fxml");
-    }
     @FXML
     private VBox codesVBox;
     @FXML
@@ -35,6 +32,9 @@ public class ManageDiscountPage extends PageController {
     @FXML
     private Text editError;
 
+    public static Scene getScene() {
+        return getScene("/fxml/panel/manager/ManageDiscountPage.fxml");
+    }
 
     @Override
     public void clearPage() {
