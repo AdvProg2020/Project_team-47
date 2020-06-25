@@ -59,14 +59,6 @@ public class CustomerDiscountCodesController extends PageController {
         return controller;
     }
 
-    /*public static Page getInstance() {
-        if(page==null)
-            page = new CustomerPurchaseHistoryPage("/fxml/panel/customer/files/customerPurchaseHistory.fxml");
-        return page;
-    }*/
-
-
-
     @Override
     public void clearPage() {
 
@@ -102,7 +94,5 @@ public class CustomerDiscountCodesController extends PageController {
     public void back(MouseEvent mouseEvent) {
         GraphicView.getInstance().back();
     }
-
-
 
 }
