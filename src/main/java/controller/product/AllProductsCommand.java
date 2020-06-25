@@ -121,8 +121,8 @@ class CategoryCommand extends AllProductsCommand {
     }
 
     private ServerMessage viewSubCategory(String subCategoryName) throws CategoryDoesntExistException {
-        SubCategory mainCategory = Category.getSubCategoryByName(subCategoryName);
-        return sendAnswer(mainCategory.categoryInfoForSending());
+        SubCategory subCategory = Category.getSubCategoryByName(subCategoryName);
+        return sendAnswer(subCategory.categoryInfoForSending());
     }
 
     private ServerMessage viewSubcategories(String mainCategoryName, String sortField, String sortDirection) throws CategoryDoesntExistException, InvalidSortException {

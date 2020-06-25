@@ -2,35 +2,38 @@
 
 <?import javafx.scene.Scene?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-
-<Scene stylesheets="@../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.products.ManageProductsPageController">
-   <root>
-      <AnchorPane prefHeight="400.0" prefWidth="600.0">
-         <children>
-            <Button layoutX="388.0" layoutY="119.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="197.0" text="Show All Products" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.4">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-            <Button layoutX="388.0" layoutY="247.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="198.0" text="Edit Product" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.0">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Button>
-            <Button layoutX="388.0" layoutY="367.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="198.0" text="Add Product" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.0">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Button>
-            <Button layoutX="388.0" layoutY="492.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="198.0" text="Back" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-         </children>
-      </AnchorPane>
-   </root>
+<Scene stylesheets="@../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.products.ManageProductsPage">
+   <AnchorPane prefHeight="400.0" prefWidth="600.0">
+      <Button layoutX="388.0" layoutY="119.0" mnemonicParsing="false" onAction="#showAllProducts" onMouseDragEntered="#hideTextField" prefHeight="63.0" prefWidth="197.0" text="Show All Products" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.4">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="388.0" layoutY="247.0" mnemonicParsing="false" onAction="#editProduct" onMouseDragEntered="#showTextField" prefHeight="56.0" prefWidth="198.0" text="Edit Product" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.0">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Button>
+      <Button layoutX="388.0" layoutY="367.0" mnemonicParsing="false" onAction="#addProduct" onMouseDragEntered="#hideTextField" prefHeight="60.0" prefWidth="198.0" text="Add Product" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.0">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Button>
+      <Button layoutX="388.0" layoutY="492.0" mnemonicParsing="false" onAction="#back" onMouseDragEntered="#hideTextField" prefHeight="56.0" prefWidth="198.0" text="Back" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="414.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <TextField fx:id="productId" layoutX="621.0" layoutY="252.0" prefHeight="46.0" prefWidth="219.0" promptText="Product Id">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <Text fx:id="error" fill="RED" layoutX="625.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" />
+   </AnchorPane>
 </Scene>

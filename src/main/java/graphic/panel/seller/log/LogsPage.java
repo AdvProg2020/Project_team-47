@@ -4,6 +4,7 @@ import graphic.GraphicView;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.layout.AnchorPane;
@@ -17,7 +18,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class LogsPageController extends PageController {
+public class LogsPage extends PageController {
     private static PageController controller;
     private ArrayList<LogInfo> logsInfo;
     private AnchorPane[] anchorPanes;
@@ -38,6 +39,10 @@ public class LogsPageController extends PageController {
         return controller;
     }
 
+    public static Scene getScene() {
+        return getScene("/fxml/panel/seller/log/LogsPage.fxml");
+    }
+
     @FXML
     private void back() {
         GraphicView.getInstance().back();
@@ -46,14 +51,17 @@ public class LogsPageController extends PageController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         controller = this;
+        update();
         ClientMessage request = new ClientMessage("view sales history");
         logsInfo = send(request).getLogInfoArrayList();
         pagination.setPageCount((logsInfo.size() - 1) / 4 + 1);
-        if(logsInfo.size()==0) {
+        if (logsInfo.size() == 0) {
             return;
         }
         initializeAnchorPane();
         initializePagination();
+        VBox vBox = new VBox();
+        vBox.getChildren().add(vBox);
     }
 
     private void initializeAnchorPane() {
@@ -82,7 +90,7 @@ public class LogsPageController extends PageController {
     }
 
     private void initializePagination() {
-        pagination.setPageFactory((Integer page) ->{
+        pagination.setPageFactory((Integer page) -> {
             VBox vBox = new VBox();
             for (int i = 0; i < 4; i++) {
                 vBox.getChildren().add(anchorPanes[page * 4 + i]);

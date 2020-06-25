@@ -1,9 +1,10 @@
-package graphic.panel.seller.offs.add;
+package graphic.panel.seller.offs;
 
 import graphic.GraphicView;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -18,9 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class AddOffPageController extends PageController {
+public class AddOffPage extends PageController {
     private static PageController controller;
-
     @FXML
     private Text error;
     @FXML
@@ -49,6 +49,10 @@ public class AddOffPageController extends PageController {
     private TextField startMinute;
     @FXML
     private TextField finishMinute;
+
+    public static Scene getScene() {
+        return getScene("/fxml/panel/seller/off/add/AddOffPage.fxml");
+    }
 
     public static PageController getInstance() {
         return controller;
@@ -87,8 +91,8 @@ public class AddOffPageController extends PageController {
 
     @FXML
     private void addOff() {
-        if(timeHasError()) return;
-        if(percentHasError()) return;
+        if (timeHasError()) return;
+        if (percentHasError()) return;
         if (vBox.getChildren().size() == 0) {
             error.setText("You should choose add at least one product!!");
             return;
@@ -193,18 +197,20 @@ public class AddOffPageController extends PageController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         controller = this;
+        update();
     }
 
     private void checkYear(String year) throws Exception {
-        if(year.isEmpty()) throw new Exception("Year field shouldn't be empty!!");
+        if (year.isEmpty()) throw new Exception("Year field shouldn't be empty!!");
         try {
             Integer.parseInt(year);
         } catch (NumberFormatException e) {
             throw new Exception("Please enter valid number!!");
         }
     }
+
     private void checkMonth(String monthString) throws Exception {
-        if(monthString.isEmpty()) throw new Exception("Month field shouldn't be empty!!");
+        if (monthString.isEmpty()) throw new Exception("Month field shouldn't be empty!!");
         try {
             int month = Integer.parseInt(monthString);
             if (month < 1 || month > 12)
@@ -213,8 +219,9 @@ public class AddOffPageController extends PageController {
             throw new Exception("Please enter valid number!!");
         }
     }
+
     private void checkDay(String dayString) throws Exception {
-        if(dayString.isEmpty()) throw new Exception("Day field shouldn't be empty!!");
+        if (dayString.isEmpty()) throw new Exception("Day field shouldn't be empty!!");
         try {
             int day = Integer.parseInt(dayString);
             if (day < 1 || day > 31)
@@ -223,8 +230,9 @@ public class AddOffPageController extends PageController {
             throw new Exception("Please enter valid number!!");
         }
     }
+
     private void checkHour(String hourString) throws Exception {
-        if(hourString.isEmpty()) throw new Exception("Hour field shouldn't be empty!!");
+        if (hourString.isEmpty()) throw new Exception("Hour field shouldn't be empty!!");
         try {
             int hour = Integer.parseInt(hourString);
             if (hour < 0 || hour > 24)
@@ -233,6 +241,7 @@ public class AddOffPageController extends PageController {
             throw new Exception("Please enter valid number!!");
         }
     }
+
     private void checkMinute(String minuteString) throws Exception {
         if (minuteString.isEmpty()) throw new Exception("Minute field shouldn't be empty!!");
         try {
@@ -243,4 +252,5 @@ public class AddOffPageController extends PageController {
             throw new Exception("Please enter valid number!!");
         }
     }
+
 }

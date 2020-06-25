@@ -1,6 +1,6 @@
 package graphic;
 
-import graphic.mainMenu.MainMenuPage;
+import graphic.panel.seller.SellerPage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -12,6 +12,7 @@ public class GraphicView {
     private Stage window;
     private boolean loggedIn;
     private String accountType;//can be seller,customer,manager
+    private String myUsername;
 
     private GraphicView() {
         scenes = new ArrayList<>();
@@ -41,6 +42,11 @@ public class GraphicView {
         Scene scene = page.getScene();
         scenes.add(page.getScene());
         page.getController().update();
+        window.setScene(scene);
+    }
+
+    public void changeScene(Scene scene) {
+        scenes.add(scene);
         window.setScene(scene);
     }
 
@@ -78,4 +84,14 @@ public class GraphicView {
     public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
+
+
+    public String getMyUsername() {
+        return myUsername;
+    }
+
+    public void setMyUsername(String myUsername) {
+        this.myUsername = myUsername;
+    }
+
 }
