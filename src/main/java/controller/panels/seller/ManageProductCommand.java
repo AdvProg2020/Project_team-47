@@ -133,7 +133,8 @@ class ViewBuyersCommand extends ManageProductCommand {
 
 
     @Override
-    public ServerMessage process(ClientMessage request) throws NullFieldException, ProductDoesntExistException, CommonException {
+    public ServerMessage process(ClientMessage request) throws NullFieldException,
+            ProductDoesntExistException, CommonException {
         containNullField(request.getHashMap().get("product id"));
         return viewBuyers(request.getHashMap().get("product id"));
     }

@@ -31,6 +31,10 @@ public abstract class PageController implements Initializable {
         return null;
     }
 
+    public static byte[] imageToByte(Image image) {
+        return null;
+    }
+
     private static class FxmlLoaderClass {
         private static final FxmlLoaderClass loader;
 

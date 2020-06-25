@@ -36,6 +36,7 @@ public class SellerPanelController extends UserPanelController {
         commands.add(CommonCommands.getViewBalanceCommand());
         commands.add(CommonCommands.getViewCompanyInfoCommand());
         commands.add(CommonCommands.getViewSalesHistoryCommand());
+        commands.add(CommonCommands.getAddSellerCommand());
     }
 
     private void initializeManageOffCommands() {

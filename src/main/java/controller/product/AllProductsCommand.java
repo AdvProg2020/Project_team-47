@@ -88,7 +88,7 @@ class CategoryCommand extends AllProductsCommand {
     private static CategoryCommand command;
 
     private CategoryCommand() {
-        this.name = "(show category info|show sub category info|view sub category of main category)";
+        this.name = "(show category info|show sub category info|view sub categories of main category)";
     }
 
     public static CategoryCommand getInstance() {
@@ -104,7 +104,7 @@ class CategoryCommand extends AllProductsCommand {
         return switch (request.getType()) {
             case "show category info" -> viewCategory(request.getHashMap().get("main category"));
             case "show sub category info" -> viewSubCategory(request.getHashMap().get("sub category"));
-            case "view sub category of main category" -> viewSubcategories(request.getHashMap().get("sub category"),
+            case "view sub categories of main category" -> viewSubcategories(request.getHashMap().get("main category"),
                     request.getHashMap().get("sort field"), request.getHashMap().get("sort direction"));
             default -> throw new DebugException();
         };
