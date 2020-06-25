@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class DiscountCodeInfo {
-    private Date startTime;
-    private Date finishTime;
-    private int percent;
+    private final Date startTime;
+    private final Date finishTime;
+    private final int percent;
     private String code;
     private int maxUsableTime;
     private int maxDiscountAmount;
-    private ArrayList<String> usersAbleToUse;
+    private final ArrayList<String> usersAbleToUse;
 
     public DiscountCodeInfo(Date startTime, Date finishTime, int percent) {
         this.startTime = startTime;

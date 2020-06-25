@@ -16,22 +16,9 @@ public class CartInfo {
     public void addProductInfo(Product product, Seller seller, int numberInCart) {
         ProductInCart productInCart = new ProductInCart();
         productInCart.setNumberInCart(numberInCart);
-        productInCart.setProduct(product);
+        productInCart.setProduct(product.getProductInfo());
         productInCart.setSeller(seller);
         products.add(productInCart);
-    }
-
-    public ArrayList<String> getProductsInCartForShow() {
-        ArrayList<String> products = new ArrayList<>();
-        for (ProductInCart productInCart : this.products) {
-            Product product = productInCart.getProduct();
-            products.add("name : " + product.getName()
-                    + "\nid : " + product.getId()
-                    + "\nscore average : " + product.getScoreAverage()
-                    + "\nseller : " + productInCart.getSeller()
-                    + "\nnumber in cart : " + productInCart.getNumberInCart());
-        }
-        return products;
     }
 
     public ArrayList<ProductInCart> getProducts() {
@@ -52,7 +39,7 @@ public class CartInfo {
 
     private static class ProductInCart {
         private Seller seller;
-        private Product product;
+        private ProductInfo product;
         private int numberInCart;
 
         public Seller getSeller() {
@@ -63,11 +50,11 @@ public class CartInfo {
             this.seller = seller;
         }
 
-        public Product getProduct() {
+        public ProductInfo getProduct() {
             return product;
         }
 
-        public void setProduct(Product product) {
+        public void setProduct(ProductInfo product) {
             this.product = product;
         }
 

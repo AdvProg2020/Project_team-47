@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 public class PurchaseController extends Controller {
     private static PurchaseController purchaseController;
-    private ArrayList<Command> commands;
 
     private PurchaseController() {
         commands = new ArrayList<>();

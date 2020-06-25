@@ -260,10 +260,11 @@ class EditCodeCommand extends DiscountCodeCommands {
     }
 
     @Override
-    public ServerMessage process(ClientMessage request) throws NullFieldException, CommonException, DateException, NumberException, InvalidPercentException {
+    public ServerMessage process(ClientMessage request) throws NullFieldException, CommonException,
+            DateException, NumberException, InvalidPercentException {
         HashMap<String, String> reqInfo = getReqInfo(request);
         containNullField(reqInfo.get("code"), reqInfo.get("field"), reqInfo.get("new value"));
-        editDiscountCode(reqInfo.get("code"), reqInfo.get("field"), reqInfo.get("new value"));
+        editDiscountCode( reqInfo.get("field"), reqInfo.get("new value"));
         return actionCompleted();
     }
 
@@ -272,7 +273,7 @@ class EditCodeCommand extends DiscountCodeCommands {
         code = DiscountCode.getDiscountById(request.getHashMap().get("code"));
     }
 
-    public void editDiscountCode(String code, String field, String newValue) throws CommonException, DateException, NumberException, InvalidPercentException {
+    public void editDiscountCode(String field, String newValue) throws CommonException, DateException, NumberException, InvalidPercentException {
         switch (field) {
             case "start-time" -> editCodeTime(this.code, newValue, "Starting time");
             case "finish-time" -> editCodeTime(this.code, newValue, "Finishing time");
