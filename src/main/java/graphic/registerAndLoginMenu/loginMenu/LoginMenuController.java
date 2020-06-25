@@ -2,7 +2,7 @@ package graphic.registerAndLoginMenu.loginMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
-import graphic.productsMenu.ProductsMenuPage;
+import graphic.registerAndLoginMenu.registerAndLogin.RegisterAndLoginPage;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import model.send.receive.ClientMessage;
@@ -60,10 +60,10 @@ public class LoginMenuController extends PageController {
         clientMessage.setHashMap(hashMap);
         ServerMessage answer = send(clientMessage);
         if(answer.getType().equals("Successful")){
-            GraphicView.getInstance().changeScene(ProductsMenuPage.getInstance());
+            GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForCustomer());
         } else {
             //todo amir
-            GraphicView.getInstance().changeScene(ProductsMenuPage.getInstance());
+            GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForCustomer());
         }
     }
 }

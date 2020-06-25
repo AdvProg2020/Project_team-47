@@ -34,7 +34,7 @@ public class MainMenuController extends PageController {
 
     @FXML
     private void loginAndRegister() {
-        GraphicView.getInstance().changeScene(RegisterAndLoginPage.getInstance());
+        GraphicView.getInstance().changeScene(RegisterAndLoginPage.getInstance(ProductsMenuPage.getInstance(), ProductsMenuPage.getInstance()));
     }
 
     @FXML

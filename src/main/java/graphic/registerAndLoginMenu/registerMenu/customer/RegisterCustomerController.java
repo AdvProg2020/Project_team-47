@@ -1,9 +1,8 @@
 package graphic.registerAndLoginMenu.registerMenu.customer;
 
-import com.sun.tools.javac.Main;
 import graphic.GraphicView;
 import graphic.PageController;
-import graphic.productsMenu.ProductsMenuPage;
+import graphic.registerAndLoginMenu.registerAndLogin.RegisterAndLoginPage;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import model.send.receive.ClientMessage;
@@ -63,12 +62,11 @@ public class RegisterCustomerController extends PageController {
         request.setHashMap(hashMap);
         ServerMessage answer = send(request);
 
-
         if(answer.getType().equals("Successful")){
-            GraphicView.getInstance().changeScene(ProductsMenuPage.getInstance());
+            GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForCustomer());
         } else {
             //todo amir
-            GraphicView.getInstance().changeScene(ProductsMenuPage.getInstance());
+            GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForCustomer());
         }
     }
 

@@ -2,16 +2,27 @@ package graphic.registerAndLoginMenu.registerAndLogin;
 
 import graphic.Page;
 import graphic.PageController;
-import graphic.mainMenu.MainMenuPage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
 public class RegisterAndLoginPage extends Page {
     private static Page page;
-    protected RegisterAndLoginPage(String scenePath) {
+    private static Page nextPageForCustomer;
+    private static Page nextPageForSeller;
+    protected RegisterAndLoginPage(String scenePath, Page nextPageForCustomer, Page nextPageForSeller) {
         super(scenePath);
+        RegisterAndLoginPage.nextPageForCustomer = nextPageForCustomer;
+        RegisterAndLoginPage.nextPageForSeller = nextPageForSeller;
         JMetro jMetro = new JMetro(Style.DARK);
         jMetro.setScene(scene);
+    }
+
+    public static Page getNextPageForCustomer() {
+        return nextPageForCustomer;
+    }
+
+    public static Page getNextPageForSeller() {
+        return nextPageForSeller;
     }
 
     @Override
@@ -19,9 +30,9 @@ public class RegisterAndLoginPage extends Page {
         return RegisterAndLoginController.getInstance();
     }
 
-    public static Page getInstance() {
+    public static Page getInstance(Page nextPageForCustomer, Page nextPageForSeller) {
         if(page==null)
-            page = new RegisterAndLoginPage("/fxml/registerAndLoginMenu/registerAndLogin.fxml");
+            page = new RegisterAndLoginPage("/fxml/registerAndLoginMenu/registerAndLogin.fxml", nextPageForCustomer, nextPageForSeller);
         return page;
     }
 }
