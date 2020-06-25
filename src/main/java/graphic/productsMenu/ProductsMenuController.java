@@ -39,4 +39,14 @@ public class ProductsMenuController extends PageController {
     public void back(MouseEvent mouseEvent) {
         GraphicView.getInstance().back();
     }
+
+    public void showFiltersOnMouseEnter(MouseEvent mouseEvent) {
+    }
+
+    public void showCategoriesOnMouseEnter(MouseEvent mouseEvent) {
+    }
+
+    public void goToUserPanelMenu(MouseEvent mouseEvent) {
+
+    }
 }

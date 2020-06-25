@@ -2,6 +2,7 @@ package graphic.mainMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
+import graphic.productsMenu.ProductsMenuPage;
 import graphic.registerAndLoginMenu.registerAndLogin.RegisterAndLoginPage;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
@@ -38,7 +39,7 @@ public class MainMenuController extends PageController {
 
     @FXML
     private void products() {
-
+        GraphicView.getInstance().changeScene(ProductsMenuPage.getInstance());
     }
 
     @FXML

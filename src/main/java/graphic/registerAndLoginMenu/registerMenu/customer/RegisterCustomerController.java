@@ -10,6 +10,7 @@ import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 
@@ -49,12 +50,26 @@ public class RegisterCustomerController extends PageController {
 
     }
 
-    public void registerCustomer(MouseEvent mouseEvent) {
+    public void registerCustomer() {
         ClientMessage request = new ClientMessage("register");
+        HashMap<String, String> hashMap = new HashMap<>();
 
+        hashMap.put("username", inputUsername.getText());
+        hashMap.put("password", inputPassword.getText());
+        hashMap.put("first-name", inputFirstName.getText());
+        hashMap.put("last-name", inputLastName.getText());
+        hashMap.put("email", inputEmail.getText());
+
+        request.setHashMap(hashMap);
         ServerMessage answer = send(request);
-        if(answer.getType().equals("Successful"))
+
+
+        if(answer.getType().equals("Successful")){
             GraphicView.getInstance().changeScene(ProductsMenuPage.getInstance());
+        } else {
+            //todo amir
+            GraphicView.getInstance().changeScene(ProductsMenuPage.getInstance());
+        }
     }
 
     public void back(MouseEvent mouseEvent) {
