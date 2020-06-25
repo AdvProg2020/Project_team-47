@@ -8,11 +8,10 @@ import graphic.panel.customer.CustomerDiscountCodes.CustomerDiscountCodesControl
 import graphic.panel.customer.CustomerDiscountCodes.CustomerDiscountCodesPage;
 import graphic.panel.customer.CustomerPurchaseHistory.CustomerPurchaseHistoryController;
 import graphic.panel.customer.CustomerPurchaseHistory.CustomerPurchaseHistoryPage;
+import graphic.panel.customer.cart.CustomerCartController;
+import graphic.panel.customer.cart.CustomerCartPage;
 import javafx.scene.input.MouseEvent;
-import model.send.receive.ClientMessage;
-import model.send.receive.DiscountCodeInfo;
-import model.send.receive.LogInfo;
-import model.send.receive.ServerMessage;
+import model.send.receive.*;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,13 +43,56 @@ public class CustomerPageController extends PageController {
 
     }
 
-    public void showPersonalInfo(MouseEvent mouseEvent) {
+    public void showPersonalInfo() {
         //getting information
 
         GraphicView.getInstance().changeScene(AccountPage.getScene());
     }
 
-    public void goToShoppingCart(MouseEvent mouseEvent) {
+    public boolean bol = false;
+    public void goToShoppingCart() {
+        //getting purchase history
+        ClientMessage request = new ClientMessage("show products in cart");
+        //todo
+
+        ServerMessage answer = send(request);
+
+        if(answer.getType().equals("Successful") || true){
+            //ArrayList<CartInfo.ProductInCart> productInCartArrayList = answer.getCartInfo().getProducts();
+            ArrayList<CartInfo.ProductInCart> productInCartArrayList = new ArrayList<>();
+            CartInfo cartInfo = new CartInfo();
+            cartInfo.setPrice(200);
+
+            CartInfo.ProductInCart p1 = new CartInfo.ProductInCart();
+            ProductInfo pf1 = new ProductInfo();
+            p1.setProduct(pf1);
+            if (bol) {
+                p1.setNumberInCart(3);
+
+            } else {
+                p1.setNumberInCart(2);
+            }
+            pf1.setName("ali");
+            productInCartArrayList.add(p1);
+
+            CartInfo.ProductInCart p2 = new CartInfo.ProductInCart();
+            ProductInfo pf2 = new ProductInfo();
+            p2.setProduct(pf2);
+            p2.setNumberInCart(22);
+            pf2.setName("ali2");
+            productInCartArrayList.add(p2);
+
+
+            CustomerCartController.cartInfo = cartInfo;
+            CustomerCartController.productsInCart = productInCartArrayList;
+            //CustomerCartController.cartInfo = answer.getCartInfo();
+            //((CustomerPurchaseHistoryPage)CustomerPurchaseHistoryPage.getInstance()).setLogInfoArrayList(logInfoArrayList);
+            GraphicView.getInstance().changeScene(CustomerCartPage.getInstance());
+        } else {
+            //todo amir
+            System.out.println("oops");
+        }
+
     }
 
     public void showPurchaseHistory(MouseEvent mouseEvent) {

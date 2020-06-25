@@ -66,8 +66,8 @@ public class CartInfo {
             this.numberInCart = numberInCart;
         }
 
-        public void getPrice() {
-            product.getPrice(this.seller);
+        public double getPrice() {
+            return product.getPrice(this.seller);
         }
     }
 
