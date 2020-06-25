@@ -1,5 +1,7 @@
 package graphic;
 
+import graphic.mainMenu.MainMenuPage;
+import graphic.panel.customer.CustomerPage;
 import graphic.panel.seller.SellerPage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -45,6 +47,7 @@ public class GraphicView {
         window.setScene(scene);
     }
 
+
     public void changeScene(Scene scene) {
         scenes.add(scene);
         window.setScene(scene);
@@ -62,6 +65,8 @@ public class GraphicView {
         scenes.clear();
 
         scenes.add(MainMenuPage.getInstance().getScene());
+        //scenes.add(CustomerPage.getInstance().getScene());
+
         window.setScene(scenes.get(0));
     }
 

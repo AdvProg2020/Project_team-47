@@ -2,11 +2,13 @@ package graphic.mainMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
+import graphic.panel.customer.CustomerPage;
 import graphic.productsMenu.ProductsMenuPage;
 import graphic.registerAndLoginMenu.registerAndLogin.RegisterAndLoginPage;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -110,4 +112,9 @@ public class MainMenuController extends PageController {
     }
 
 
+    public void viewPersonalInfo(MouseEvent mouseEvent) {
+        // send message to server to check if user is logged in
+
+        GraphicView.getInstance().changeScene(CustomerPage.getInstance());
+    }
 }

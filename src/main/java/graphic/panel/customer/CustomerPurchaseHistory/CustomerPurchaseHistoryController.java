@@ -1,27 +1,29 @@
-package graphic.panel.customer;
+package graphic.panel.customer.CustomerPurchaseHistory;
 
 import graphic.GraphicView;
 import graphic.PageController;
 import graphic.mainMenu.MainMenuController;
-import graphic.panel.customer.CustomerPurchaseHistory.CustomerPurchaseHistoryController;
 import graphic.panel.customer.CustomerPurchaseHistory.CustomerPurchaseHistoryPage;
 import graphic.productsMenu.ProductsMenuPage;
 import graphic.registerAndLoginMenu.registerAndLogin.RegisterAndLoginPage;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
-import model.send.receive.ClientMessage;
-import model.send.receive.LogInfo;
-import model.send.receive.ServerMessage;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class CustomerPageController extends PageController {
+public class CustomerPurchaseHistoryController extends PageController {
     private static PageController controller;
+    public TableView tableView;
+    public TableColumn username;
+    public TableColumn score;
+    public Button backButton;
 
     public static PageController getInstance() {
         if (controller == null) {
-            controller = new CustomerPageController();
+            controller = new CustomerPurchaseHistoryController();
         }
         return controller;
     }
@@ -48,23 +50,9 @@ public class CustomerPageController extends PageController {
     }
 
     public void showPurchaseHistory(MouseEvent mouseEvent) {
-        //getting purchase history
-        ClientMessage request = new ClientMessage("view orders");
-        //todo
+        //get purchase history
+        //goto purchase history
 
-        ServerMessage answer = send(request);
-
-        if(answer.getType().equals("Successful")){
-            ArrayList<LogInfo> logInfoArrayList = answer.getLogInfoArrayList();
-            ((CustomerPurchaseHistoryPage)CustomerPurchaseHistoryPage.getInstance()).setLogInfoArrayList(logInfoArrayList);
-            GraphicView.getInstance().changeScene(CustomerPurchaseHistoryPage.getInstance());
-        } else {
-            //todo amir
-            System.out.println("oops");
-        }
-
-
-        //going purchase history
         GraphicView.getInstance().changeScene(CustomerPurchaseHistoryPage.getInstance());
 
     }
