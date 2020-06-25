@@ -1,4 +1,4 @@
-package graphic.panel.seller.offs.show;
+package graphic.panel.seller.offs;
 
 import controller.Controller;
 import graphic.PageController;
@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
@@ -20,8 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class ShowOffPageController extends PageController {
-    private static ShowOffPageController controller;
+public class ShowOffPage extends PageController {
+    private static ShowOffPage controller;
     private OffInfo offInfo;
     private String editType;
     @FXML
@@ -59,8 +60,11 @@ public class ShowOffPageController extends PageController {
     @FXML
     private Text editError;
 
+    public static Scene getScene() {
+        return getScene("/fxml/panel/seller/off/show/ShowOffPage.fxml");
+    }
 
-    public static ShowOffPageController getInstance() {
+    public static ShowOffPage getInstance() {
         return controller;
     }
 
@@ -136,7 +140,7 @@ public class ShowOffPageController extends PageController {
                     "-" + yearTextField.getText() + " " + hourTextField + ":" + minuteTextFiled);
             clientMessage.setHashMap(reqInfo);
             ServerMessage answer = send(clientMessage);
-            if(answer.getType().equals("Error"))
+            if (answer.getType().equals("Error"))
                 throw new Exception(answer.getErrorMessage());
             hideTextFields();
             editError.setVisible(false);
@@ -147,7 +151,7 @@ public class ShowOffPageController extends PageController {
     }
 
     private void checkYear() throws Exception {
-        if(yearTextField.getText().isEmpty()) throw new Exception("Year field shouldn't be empty!!");
+        if (yearTextField.getText().isEmpty()) throw new Exception("Year field shouldn't be empty!!");
         try {
             Integer.parseInt(yearTextField.getText());
         } catch (NumberFormatException e) {
@@ -156,7 +160,7 @@ public class ShowOffPageController extends PageController {
     }
 
     private void checkMonth() throws Exception {
-        if(monthTextField.getText().isEmpty()) throw new Exception("Month field shouldn't be empty!!");
+        if (monthTextField.getText().isEmpty()) throw new Exception("Month field shouldn't be empty!!");
         try {
             int month = Integer.parseInt(monthTextField.getText());
             if (month < 1 || month > 12)
@@ -167,7 +171,7 @@ public class ShowOffPageController extends PageController {
     }
 
     private void checkDay() throws Exception {
-        if(dayTextField.getText().isEmpty()) throw new Exception("Day field shouldn't be empty!!");
+        if (dayTextField.getText().isEmpty()) throw new Exception("Day field shouldn't be empty!!");
         try {
             int day = Integer.parseInt(dayTextField.getText());
             if (day < 1 || day > 31)
@@ -178,7 +182,7 @@ public class ShowOffPageController extends PageController {
     }
 
     private void checkHour() throws Exception {
-        if(hourTextField.getText().isEmpty()) throw new Exception("Hour field shouldn't be empty!!");
+        if (hourTextField.getText().isEmpty()) throw new Exception("Hour field shouldn't be empty!!");
         try {
             int hour = Integer.parseInt(hourTextField.getText());
             if (hour < 0 || hour > 24)
@@ -305,9 +309,13 @@ public class ShowOffPageController extends PageController {
         submitButton.setVisible(false);
     }
 
+    public void initializePage(OffInfo offInfo) {
+
+    }
+
     private static class ProductId {
-        private SimpleStringProperty productName;
-        private SimpleStringProperty productId;
+        private final SimpleStringProperty productName;
+        private final SimpleStringProperty productId;
 
         public ProductId(String productName, String productId) {
             this.productName = new SimpleStringProperty(productName);

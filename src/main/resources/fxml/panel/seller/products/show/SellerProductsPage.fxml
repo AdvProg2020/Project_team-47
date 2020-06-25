@@ -6,15 +6,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<Scene stylesheets="@../../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1"
-       xmlns:fx="http://javafx.com/fxml/1">
+<Scene stylesheets="@../../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.products.SellerProductPage">
     <AnchorPane prefHeight="400.0" prefWidth="600.0">
-        <Pagination layoutX="4.0" layoutY="4.0" prefHeight="691.0" prefWidth="850.0"/>
-        <Button layoutX="878.0" layoutY="585.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="109.0"
-                text="Back">
+        <Pagination fx:id="pagination" layoutX="4.0" layoutY="4.0" prefHeight="691.0" prefWidth="850.0" />
+        <Button layoutX="878.0" layoutY="585.0" mnemonicParsing="false" onAction="#back" prefHeight="54.0" prefWidth="109.0" text="Back">
             <font>
-                <Font name="Segoe UI Semilight Italic" size="22.0"/>
+                <Font name="Segoe UI Semilight Italic" size="22.0" />
             </font>
         </Button>
     </AnchorPane>

@@ -136,6 +136,13 @@ public class ProductInfo {
         this.scoreAverage = scoreAverage;
     }
 
+    public int getNumberInStock(String seller) {
+        for (ProductSeller productSeller : productSellers) {
+            if(productSeller.sellerName.equalsIgnoreCase(seller)) return productSeller.numberInStock;
+        }
+        return 0;
+    }
+
     private static class ProductSeller {
         private String sellerName;
         private double price;
