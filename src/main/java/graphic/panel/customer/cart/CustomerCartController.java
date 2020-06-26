@@ -7,6 +7,7 @@ import graphic.panel.customer.CustomerDiscountCodes.CustomerDiscountCodesControl
 import graphic.panel.customer.CustomerDiscountCodes.DiscountCodesTable;
 import graphic.panel.customer.CustomerPageController;
 import graphic.panel.customer.cart.purchasing.PurchasePage;
+import graphic.productMenu.ProductPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -90,7 +91,7 @@ public class CustomerCartController extends PageController {
             double totalPrice = productInCart.getPrice() * productInCart.getNumberInCart();
             data.add(new CartTable(productInfo.getName(), productInCart.getPrice(), productInCart.getNumberInCart(), totalPrice));
         }
-        totalPriceOfCart.setText("total price of cart : " + cartInfo.getPrice());
+        totalPriceOfCart.setText("total price of cart   : " + cartInfo.getPrice());
     }
 
     public void back(MouseEvent mouseEvent) {
@@ -101,6 +102,9 @@ public class CustomerCartController extends PageController {
         CartTable selectedTable;
         selectedTable = tableView.getSelectionModel().getSelectedItem();
         //todo amir send message to controller
+
+        //going to product page
+        GraphicView.getInstance().changeScene(ProductPage.getInstance());
 
     }
 
