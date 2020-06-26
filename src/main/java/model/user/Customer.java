@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Customer extends User {
-    private ArrayList<BuyLog> buyLogs;
-    private ShoppingCart shoppingCart;
-    private ArrayList<DiscountCode> discountCodes;
+    private final ArrayList<BuyLog> buyLogs;
+    private final ShoppingCart shoppingCart;
+    private final ArrayList<DiscountCode> discountCodes;
     private double money;
 
 

@@ -26,6 +26,9 @@ public class EditProductRequest extends MainRequest {
         this.property = property;
     }
 
+    public EditProductRequest() {
+    }
+
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
         requestInfo.setEditInfo(field, newValue, changeType, productId, property);

@@ -27,8 +27,8 @@ public class ProductData {
     private double scoreAverage;
     private ArrayList<Score> scores;
     private ArrayList<Comment> comments;
-    private ArrayList<String> sellersUsernames;
-    private ArrayList<ProductSeller> productSellers;
+    private final ArrayList<String> sellersUsernames;
+    private final ArrayList<ProductSeller> productSellers;
     private ArrayList<SpecialProperty> specialProperties;
     private String fileExtension;
     private byte[] file;

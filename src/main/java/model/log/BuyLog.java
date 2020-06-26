@@ -19,7 +19,7 @@ public class BuyLog extends Log {
     private String postalCode;
     private String phoneNumber;
     private String customerRequests;
-    private ArrayList<ProductInLog> products;
+    private final ArrayList<ProductInLog> products;
     private double appliedDiscount;
 
 

@@ -2,26 +2,30 @@ package model.send.receive;
 
 import model.others.Product;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 public class OffInfo {
-    private Date startTime;
-    private Date finishTime;
-    private int percent;
+    private final Date startTime;
+    private final Date finishTime;
+    private final int percent;
     private String offId;
     private String offStatus;
     private String sellerUsername;
     private HashMap<String, String> productsNameId;
+    private final ArrayList<ProductInfo> products;
 
     public OffInfo(Date startTime, Date finishTime, int percent) {
         this.startTime = startTime;
         this.finishTime = finishTime;
         this.percent = percent;
         this.productsNameId = new HashMap<>();
+        this.products = new ArrayList<>();
     }
 
     public void addProduct(Product product) {
+        this.products.add(product.getProductInfo());
         this.productsNameId.put(product.getName(), product.getId());
     }
 
@@ -59,6 +63,10 @@ public class OffInfo {
 
     public void setSellerUsername(String sellerUsername) {
         this.sellerUsername = sellerUsername;
+    }
+
+    public ArrayList<ProductInfo> getProducts() {
+        return products;
     }
 
     public HashMap<String, String> getProductsNameId() {

@@ -74,6 +74,7 @@ public class LoginMenuController extends PageController {
     }
 
     private void successfulLogin(String userType) {
+        GraphicView.getInstance().setMyUsername(username.getText());
         if (shouldBack) {
             GraphicView.getInstance().back();
         } else {

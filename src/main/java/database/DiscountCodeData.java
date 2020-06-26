@@ -18,8 +18,8 @@ public class DiscountCodeData {
     private String code;
     private int maxUsableTime;
     private int maxDiscountAmount;
-    private HashMap<String, Integer> userUsedHashMap;
-    private ArrayList<String> userAbleToUse;
+    private final HashMap<String, Integer> userUsedHashMap;
+    private final ArrayList<String> userAbleToUse;
 
     public DiscountCodeData() {
         userUsedHashMap = new HashMap<>();

@@ -3,9 +3,8 @@ package model.send.receive;
 import model.others.Comment;
 import model.others.SpecialProperty;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RequestInfo {
     private String id;
@@ -17,19 +16,19 @@ public class RequestInfo {
 
     @Override
     public String toString() {
-        if(editInfo==null)
-            return "Id='" + id +
-                    "\nWho Send='" + requestedSenderUsername +
-                    "\nType='" + type +
+        if (editInfo == null)
+            return "Id: " + id +
+                    "\nWho Send: " + requestedSenderUsername +
+                    "\nType: " + type + "\n" +
                     addInfo.toString();
-        if(addInfo==null)
-            return "Id='" + id +
-                    "\nWho Send='" + requestedSenderUsername +
-                    "\nType='" + type +
+        if (addInfo == null)
+            return "Id: " + id +
+                    "\nWho Send: " + requestedSenderUsername +
+                    "\nType: " + type + "\n" +
                     editInfo.toString();
-        return "Id='" + id +
-                "\nWho Send='" + requestedSenderUsername +
-                "\nType='" + type;
+        return "Id: " + id +
+                "\nWho Send: " + requestedSenderUsername +
+                "\nType: " + type;
     }
 
     public String getId() {
@@ -60,7 +59,7 @@ public class RequestInfo {
         this.editInfo = new EditInfo("edit-off", field, newValue, changeType, id, property);
     }
 
-    public void setAddInfo(String type, String username, HashMap<String, String> addingInfo) {
+    public void setAddInfo(String type, String username, ArrayList<String> addingInfo) {
         this.addInfo = new AddInfo(type, username, addingInfo);
     }
 
@@ -90,9 +89,9 @@ public class RequestInfo {
     }
 
     private static class EditInfo {
-        private String editType;
-        private String changeField;
-        private String newValue;
+        private final String editType;
+        private final String changeField;
+        private final String newValue;
         private String changeType;
         private String id;
         private SpecialProperty property;
@@ -123,18 +122,18 @@ public class RequestInfo {
         @Override
         public String toString() {
             StringBuilder stringBuilder = new StringBuilder("Edit Info:");
-            if(editType!=null) stringBuilder.append("\nEdit Type: ").append(editType);
-            if(changeField!=null) stringBuilder.append("\nChange Field: ").append(changeField);
-            if(newValue!=null) stringBuilder.append("\nNew Value: ").append(newValue);
-            if(changeType!=null) stringBuilder.append("\nChange Type: ").append(changeType);
-            if(property!=null) stringBuilder.append("\nSpecial Property: ").append(property.toString());
+            if (editType != null) stringBuilder.append("\nEdit Type: ").append(editType);
+            if (changeField != null) stringBuilder.append("\nChange Field: ").append(changeField);
+            if (newValue != null) stringBuilder.append("\nNew Value: ").append(newValue);
+            if (changeType != null) stringBuilder.append("\nChange Type: ").append(changeType);
+            if (property != null) stringBuilder.append("\nSpecial Property: ").append(property.toString());
             return stringBuilder.toString();
         }
     }
 
     private static class AddInfo {
         String sellerUsername;
-        HashMap<String, String> addingInformation;
+        ArrayList<String> addingInformation;
         String type;
         Comment comment;
 
@@ -142,7 +141,7 @@ public class RequestInfo {
             this.comment = comment;
         }
 
-        public AddInfo(String type, String sellerUsername, HashMap<String, String> addingInformation) {
+        public AddInfo(String type, String sellerUsername, ArrayList<String> addingInformation) {
             this.sellerUsername = sellerUsername;
             this.addingInformation = addingInformation;
             this.type = type;
@@ -155,9 +154,9 @@ public class RequestInfo {
             } else {
                 StringBuilder stringBuilder = new StringBuilder("AddInfo:\n" +
                         "Seller Username: " + sellerUsername +
-                        "Type: " + type + "\n");
-                for (Map.Entry<String, String> entry : addingInformation.entrySet()) {
-                    stringBuilder.append(entry.getKey()).append(entry.getValue()).append("\n");
+                        "\nType: " + type + "\n");
+                for (String info : addingInformation) {
+                    stringBuilder.append(info).append("\n");
                 }
                 return stringBuilder.toString();
             }

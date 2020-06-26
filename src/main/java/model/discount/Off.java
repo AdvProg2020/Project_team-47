@@ -15,13 +15,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Off extends Discount {
-    private static ArrayList<Off> allOffs;
+    private static final ArrayList<Off> allOffs;
 
     static {
         allOffs = new ArrayList<>();
     }
 
-    private String offId;
+    private final String offId;
     private String offStatus;
     private ArrayList<Product> products;
     private Seller seller;

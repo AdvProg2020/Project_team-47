@@ -82,6 +82,7 @@ public class RegisterPage extends PageController {
             error.setVisible(true);
         } else {
             update();
+            GraphicView.getInstance().setMyUsername(usernameString);
             if (shouldBack) {
                 back();
             } else {

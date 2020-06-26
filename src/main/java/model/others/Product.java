@@ -16,6 +16,7 @@ import model.user.Customer;
 import model.user.Seller;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.TreeSet;
 
 public class Product {
@@ -259,7 +260,7 @@ public class Product {
     private void addSellersInfoToData(ProductData productData) {
         for (ProductSeller sellerInfo : this.productSellers) {
             productData.addSeller(sellerInfo.seller.getUsername(),
-                    sellerInfo.off.getOffId(),
+                    Objects.requireNonNullElse(sellerInfo.off.getOffId(), null),
                     sellerInfo.price, sellerInfo.numberInStock);
         }
     }

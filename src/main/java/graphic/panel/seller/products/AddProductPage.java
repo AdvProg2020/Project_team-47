@@ -163,7 +163,7 @@ public class AddProductPage extends PageController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.jpg"));
         File imageFile = fileChooser.showOpenDialog(GraphicView.getInstance().getWindow());
         try {
-            image = new File(imageFile.toURI().toString());
+            image = imageFile;
         } catch (Exception e) {
             image = null;
         }

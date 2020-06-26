@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 public class CategoryInfo {
     private String type;
-    private String name;
-    private ArrayList<SpecialProperty> specialProperties;
-    private HashMap<String, String> productsNameId;
+    private final String name;
+    private final ArrayList<SpecialProperty> specialProperties;
+    private final HashMap<String, String> productsNameId;
     private ArrayList<String> subCategories;
     private String mainCategory;
 

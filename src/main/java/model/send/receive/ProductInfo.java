@@ -5,17 +5,17 @@ import model.others.SpecialProperty;
 import java.util.ArrayList;
 
 public class ProductInfo {
+    private final ArrayList<String> sellersNames;
+    private final ArrayList<ProductSeller> productSellers;
     private int seenTime;
     private String id;
     private String name;
     private String status;
-    private final ArrayList<String> sellersNames;
     private String mainCategory;
     private String subCategory;
     private ArrayList<SpecialProperty> specialProperties;
     private String description;
     private double scoreAverage;
-    private final ArrayList<ProductSeller> productSellers;
     private byte[] file;
     private String fileExtension;
 
@@ -138,7 +138,7 @@ public class ProductInfo {
 
     public int getNumberInStock(String seller) {
         for (ProductSeller productSeller : productSellers) {
-            if(productSeller.sellerName.equalsIgnoreCase(seller)) return productSeller.numberInStock;
+            if (productSeller.sellerName.equalsIgnoreCase(seller)) return productSeller.numberInStock;
         }
         return 0;
     }
