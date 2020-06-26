@@ -1,10 +1,7 @@
 package graphic.panel.customer.cart;
 
 import graphic.GraphicView;
-import graphic.Page;
 import graphic.PageController;
-import graphic.panel.customer.CustomerDiscountCodes.CustomerDiscountCodesController;
-import graphic.panel.customer.CustomerDiscountCodes.DiscountCodesTable;
 import graphic.panel.customer.CustomerPageController;
 import graphic.panel.customer.cart.purchasing.PurchasePage;
 import graphic.productMenu.ProductPage;
@@ -16,14 +13,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Text;
-import model.others.Product;
-import model.others.ShoppingCart;
 import model.send.receive.*;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class CustomerCartController extends PageController {
@@ -50,6 +44,9 @@ public class CustomerCartController extends PageController {
     @FXML
     TableColumn<CartTable, Double> totalPrice;
 
+    @FXML
+    TableColumn<CartTable, String> sellerId;
+
 
     ObservableList<CartTable> data = FXCollections.observableArrayList();
 
@@ -69,12 +66,24 @@ public class CustomerCartController extends PageController {
 
     @Override
     public void update() {
+        ClientMessage request = new ClientMessage("show products in cart");
+        ServerMessage answer = send(request);
 
+        if(answer.getType().equals("Successful")){
+            //CustomerCartController.cartInfo = answer.getCartInfo();
+            setFields();
+        } else {
+            GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
+        }
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setFields();
+    }
+
+    private void setFields() {
         setData();
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         price.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -85,12 +94,13 @@ public class CustomerCartController extends PageController {
     }
 
     private void setData() {
-
+        productsInCart = cartInfo.getProducts();
         for (CartInfo.ProductInCart productInCart : CustomerCartController.productsInCart) {
             ProductInfo productInfo = productInCart.getProduct();
             double totalPrice = productInCart.getPrice() * productInCart.getNumberInCart();
-            data.add(new CartTable(productInfo.getName(), productInCart.getPrice(), productInCart.getNumberInCart(), totalPrice));
+            data.add(new CartTable(productInfo.getName(), productInCart.getPrice(), productInCart.getNumberInCart(), totalPrice, productInCart.getSeller()));
         }
+
         totalPriceOfCart.setText("total price of cart   : " + cartInfo.getPrice());
     }
 
@@ -101,44 +111,48 @@ public class CustomerCartController extends PageController {
     public void showProduct(MouseEvent mouseEvent) {
         CartTable selectedTable;
         selectedTable = tableView.getSelectionModel().getSelectedItem();
-        //todo amir send message to controller
+        ClientMessage clientMessage = new ClientMessage("view product in cart");
 
-        //going to product page
-        GraphicView.getInstance().changeScene(ProductPage.getInstance());
-
-    }
-
-    public void increase(MouseEvent mouseEvent) {
-        CartTable selectedTable;
-        selectedTable = tableView.getSelectionModel().getSelectedItem();
-        ClientMessage clientMessage = new ClientMessage("increase product in cart");
-        // todo amir setting properties
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("product id", selectedTable.getName());
+        clientMessage.setHashMap(hashMap);
         ServerMessage answer = send(clientMessage);
-        ((CustomerPageController)CustomerPageController.getInstance()).bol = true;
-        if (answer.getType().equals("Successful") || true) {
-
-            //((CustomerPageController)CustomerPageController.getInstance()).goToShoppingCart();
-            // todo amir refreshing page
-            update();
-
-
+        if (answer.getType().equals("Successful")) {
+            GraphicView.getInstance().changeScene(ProductPage.getInstance());
+        } else {
+            GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
         }
     }
 
+    public void increase(MouseEvent mouseEvent) {
+        increaseAndDecrease("increase product in cart");
+    }
+
     public void decrease(MouseEvent mouseEvent) {
+        increaseAndDecrease("decrease product in cart");
+    }
+
+    private void increaseAndDecrease(String clientMessageText) {
         CartTable selectedTable;
         selectedTable = tableView.getSelectionModel().getSelectedItem();
-        ClientMessage clientMessage = new ClientMessage("decrease product in cart");
-        // todo amir setting properties
+        ClientMessage clientMessage = new ClientMessage(clientMessageText);
+
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("product id", selectedTable.getName());
+        hashMap.put("seller username", selectedTable.getSellerId());
+
+        clientMessage.setHashMap(hashMap);
+
         ServerMessage answer = send(clientMessage);
 
-        if (answer.getType().equals("Successful") || true) {
-            // todo amir refreshing page
+        if (answer.getType().equals("Successful")) {
+            update();
+        } else {
+            GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
         }
     }
 
     public void buyCart(MouseEvent mouseEvent) {
-        // todo amir sending message to server
         GraphicView.getInstance().changeScene(PurchasePage.getInstance());
     }
 }
