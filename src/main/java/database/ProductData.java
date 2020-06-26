@@ -68,11 +68,14 @@ public class ProductData {
     private void connectSellers(Product product) {
         try {
             for (ProductSeller productSeller : productSellers) {
-                Off off = Off.getOffById(productSeller.offId);
+                Off off = null;
+                try {
+                    off = Off.getOffById(productSeller.offId);
+                } catch (OffDoesntExistException ignored) {}
                 Seller seller = (Seller) User.getUserByUsername(productSeller.sellerUsername);
                 product.addSellerFromDatabase(seller, off, productSeller.price, productSeller.numberInStock);
             }
-        } catch (UserNotExistException | OffDoesntExistException e) {
+        } catch (UserNotExistException e) {
             e.printStackTrace();
         }
     }

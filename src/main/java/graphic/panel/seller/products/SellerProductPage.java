@@ -4,13 +4,16 @@ import graphic.GraphicView;
 import graphic.PageController;
 import graphic.panel.ProductPane;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Pagination;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import model.send.receive.ClientMessage;
 import model.send.receive.ProductInfo;
 import model.send.receive.ServerMessage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -55,7 +58,12 @@ public class SellerProductPage extends PageController {
         VBox vBox = new VBox();
         try {
             for (int i = 0; i < 3; i++) {
-                vBox.getChildren().add(ProductPane.getPane(productInfoArrayList.get(pageNum * 3 + i)));
+                try {
+                    ProductPane.setProduct(productInfoArrayList.get(pageNum * 3 + i));
+                    vBox.getChildren().add(FXMLLoader.load(getClass().getResource("/fxml/panel/ProductPane.fxml")));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } catch (IndexOutOfBoundsException ignored) {
         }

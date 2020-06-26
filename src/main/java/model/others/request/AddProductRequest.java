@@ -1,6 +1,8 @@
 package model.others.request;
 
 import model.category.Category;
+import model.category.MainCategory;
+import model.category.SubCategory;
 import model.ecxeption.product.CategoryDoesntExistException;
 import model.ecxeption.user.UserNotExistException;
 import model.others.Product;
@@ -63,10 +65,13 @@ public class AddProductRequest extends MainRequest {
             product.setFile(file);
             product.setFileExtension(fileExtension);
             product.addSeller(seller, numberInStock, price);
-            product.setMainCategory(Category.getMainCategoryByName(categoryName));
+            Category category = Category.getMainCategoryByName(categoryName);
+            product.setMainCategory((MainCategory) category);
             if (subCategoryName != null) {
-                product.setSubCategory(Category.getSubCategoryByName(subCategoryName));
+                category = Category.getSubCategoryByName(subCategoryName);
+                product.setSubCategory((SubCategory) category);
             }
+            category.addProduct(product);
             product.setName(name);
             product.setCompany(company);
             product.getSellers().add(seller);
@@ -74,6 +79,7 @@ public class AddProductRequest extends MainRequest {
             seller.addProduct(product);
             seller.updateDatabase().update();
             product.updateDatabase();
+            category.updateDatabase();
         } catch (CategoryDoesntExistException | UserNotExistException ignored) {
         }
     }

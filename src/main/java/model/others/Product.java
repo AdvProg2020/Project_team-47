@@ -259,9 +259,14 @@ public class Product {
 
     private void addSellersInfoToData(ProductData productData) {
         for (ProductSeller sellerInfo : this.productSellers) {
-            productData.addSeller(sellerInfo.seller.getUsername(),
-                    Objects.requireNonNullElse(sellerInfo.off.getOffId(), null),
-                    sellerInfo.price, sellerInfo.numberInStock);
+            if (sellerInfo.off == null) {
+                productData.addSeller(sellerInfo.seller.getUsername(), null, sellerInfo.price,
+                        sellerInfo.numberInStock);
+            } else {
+                productData.addSeller(sellerInfo.seller.getUsername(),
+                        sellerInfo.off.getOffId(),
+                        sellerInfo.price, sellerInfo.numberInStock);
+            }
         }
     }
 
