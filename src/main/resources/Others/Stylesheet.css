@@ -1,0 +1,6 @@
+.root {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: stretch;
+    -fx-min-height: 700px;
+    -fx-min-width: 1000px;
+}

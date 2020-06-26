@@ -16,22 +16,9 @@ public class CartInfo {
     public void addProductInfo(Product product, Seller seller, int numberInCart) {
         ProductInCart productInCart = new ProductInCart();
         productInCart.setNumberInCart(numberInCart);
-        productInCart.setProduct(product);
+        productInCart.setProduct(product.getProductInfo());
         productInCart.setSeller(seller);
         products.add(productInCart);
-    }
-
-    public ArrayList<String> getProductsInCartForShow() {
-        ArrayList<String> products = new ArrayList<>();
-        for (ProductInCart productInCart : this.products) {
-            Product product = productInCart.getProduct();
-            products.add("name : " + product.getName()
-                    + "\nid : " + product.getId()
-                    + "\nscore average : " + product.getScoreAverage()
-                    + "\nseller : " + productInCart.getSeller()
-                    + "\nnumber in cart : " + productInCart.getNumberInCart());
-        }
-        return products;
     }
 
     public ArrayList<ProductInCart> getProducts() {
@@ -50,24 +37,24 @@ public class CartInfo {
         this.price = price;
     }
 
-    private static class ProductInCart {
-        private Seller seller;
-        private Product product;
+    public static class ProductInCart {
+        private String seller;
+        private ProductInfo product;
         private int numberInCart;
 
-        public Seller getSeller() {
+        public String getSeller() {
             return seller;
         }
 
         public void setSeller(Seller seller) {
-            this.seller = seller;
+            this.seller = seller.getUsername();
         }
 
-        public Product getProduct() {
+        public ProductInfo getProduct() {
             return product;
         }
 
-        public void setProduct(Product product) {
+        public void setProduct(ProductInfo product) {
             this.product = product;
         }
 
@@ -77,6 +64,10 @@ public class CartInfo {
 
         public void setNumberInCart(int numberInCart) {
             this.numberInCart = numberInCart;
+        }
+
+        public double getPrice() {
+            return product.getPrice(this.seller);
         }
     }
 

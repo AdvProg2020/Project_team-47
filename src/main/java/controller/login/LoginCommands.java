@@ -1,15 +1,16 @@
 package controller.login;
 
 import controller.Command;
-import controller.Error;
+import model.ecxeption.Exception;
+import model.ecxeption.user.*;
 import model.others.ShoppingCart;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Customer;
 import model.user.Manager;
 import model.user.Seller;
 import model.user.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static controller.Controller.*;
@@ -60,70 +61,63 @@ class RegisterCommand extends LoginCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getFirstHashMap()))
-            return;
-        register(request.getFirstHashMap());
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap());
+        checkPrimaryErrors(request);
+        register(request.getHashMap());
+        return actionCompleted();
     }
 
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        HashMap<String, String> registerInformationHashMap = request.getHashMap();
 
-    public void register(HashMap<String, String> registerInformationHashMap) {
-        //this function will check some error may occur during register and if
-        //there wasn't any error it will call registerUser function to completing register
-
-        if (checkRegisterInfoKey(registerInformationHashMap)) {
-            sendError("Not enough information!!");
-        } else if (registerInformationHashMap.get("type").equals("manager") && User.isThereManager()) {
-            sendError("There is manager and you can't register as a manager!!");
+        checkRegisterInfoKey(registerInformationHashMap);
+        if (registerInformationHashMap.get("type").equals("manager") && User.isThereManager()) {
+            throw new ManagerExistenceException.ManagerExist();
         } else if (!registerInformationHashMap.get("type").equals("manager") && !User.isThereManager()) {
-            sendError("There isn't a manager and you should register as a manager!!");
-        } else if (registerInformationIsValid(registerInformationHashMap)) {
-            registerUser(registerInformationHashMap, registerInformationHashMap.get("type"));
+            //throw new ManagerExistenceException.ManagerDoesntExist();
         }
+
+        registerInformationIsValid(registerInformationHashMap);
     }
 
 
-    private boolean registerInformationIsValid(HashMap<String, String> userInfo) {
+    public void register(HashMap<String, String> registerInformationHashMap) throws RegisterException {
+        //this function will register user
+        registerUser(registerInformationHashMap, registerInformationHashMap.get("type"));
+    }
+
+
+    private void registerInformationIsValid(HashMap<String, String> userInfo) throws RegisterException, PasswordNotValidException {
         if (!User.isUsernameValid(userInfo.get("username"))) {
-            sendError("Username isn't valid!!\nit should contains " +
-                    "more than five letters and only letters and numbers");
+            throw new RegisterException.UsernameNotValidException();
         } else if (User.doesUsernameUsed(userInfo.get("username"))) {
-            sendError("There is user with this username already!!");
+            throw new RegisterException.UsernameUsedException();
         } else if (!User.isEmailValid(userInfo.get("email"))) {
-            sendError("Email isn't valid!!");
+            throw new RegisterException.EmailNotValidException();
         } else if (!User.isPhoneValid(userInfo.get("phone-number"))) {
-            sendError("Phone number isn't valid!!");
+            throw new RegisterException.PhoneNumberNotValidException();
         } else if (User.isThereUserWithEmail(userInfo.get("email"))) {
-            sendError("There is a user with this email already!!");
+            throw new RegisterException.EmailUsedException();
         } else if (User.isThereUserWithPhone(userInfo.get("phone-number"))) {
-            sendError("There is a user with this phone number already!!");
+            throw new RegisterException.PhoneNumberUsedException();
         } else if (!User.isPasswordValid(userInfo.get("password"))) {
-            sendError("Password isn't valid!!");
-        } else {
-            return true;
+            throw new PasswordNotValidException();
         }
-        return false;
     }
 
 
-    private void registerUser(HashMap<String, String> userInformation, String userType) {
-        User newUser;
-        switch (userType) {
-            case "customer":
-                newUser = new Customer(userInformation);
-                break;
-            case "seller":
-                newUser = new Seller(userInformation);
-                break;
-            case "manager":
-                newUser = new Manager(userInformation);
-                break;
-            default:
-                sendError("Please enter valid type!!");
-                return;
-        }
+    private void registerUser(HashMap<String, String> userInformation, String userType) throws RegisterException {
+        User newUser = switch (userType) {
+            case "customer" -> new Customer(userInformation);
+            case "seller" -> new Seller(userInformation);
+            case "manager" -> new Manager(userInformation);
+            default -> throw new RegisterException("Enter valid type!!");
+        };
         newUser.emailVerification();
-        actionCompleted();
+        //newUser.confirmEmail();
+        setLoggedUser(newUser);
     }
 
 }//end RegisterCommand Class
@@ -131,6 +125,7 @@ class RegisterCommand extends LoginCommands {
 
 class LoginCommand extends LoginCommands {
     private static LoginCommand command;
+    private User user;
 
     private LoginCommand() {
         this.name = "login";
@@ -145,30 +140,30 @@ class LoginCommand extends LoginCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        ArrayList<String> reqInfo = getReqInfo(request);
-        if (containNullField(reqInfo.get(0), reqInfo.get(1)))
-            return;
+    public ServerMessage process(ClientMessage request) throws Exception {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        containNullField(reqInfo, reqInfo.get("username"), reqInfo.get("password"));
+        checkPrimaryErrors(request);
+        return login(reqInfo.get("username"));
+    }
 
-        login(reqInfo.get(0), reqInfo.get(1));
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        String username = reqInfo.get("username");
+        String password = reqInfo.get("password");
+        user = User.getUserByUsername(username);
+        user.checkPassword(password);
     }
 
 
-    public void login(String username, String password) {
-        if (!User.isUsernameValid(username)) {
-            sendError(Error.USERNAME_NOT_VALID.getError());
-        } else if (!User.isPasswordValid(password)) {
-            sendError(Error.PASSWORD_NOT_VALID.getError());
-        } else if (!User.isThereUserWithUsername(username) ||
-                !User.checkPasswordIsCorrect(username, password)) {
-            sendError(Error.USER_PASS_NOT_EXIST.getError());
-        } else {
-            setLoggedUser(User.getUserByUsername(username));
-            if (getLoggedUser() instanceof Customer) {
-                ((Customer) getLoggedUser()).getShoppingCart().mergingWithLocalCart(ShoppingCart.getLocalShoppingCart());
-            }
-            sendAnswer(getLoggedUser().getType());
+    public ServerMessage login(String username) {
+        assert user != null;
+        setLoggedUser(user);
+        if (user instanceof Customer) {
+            ((Customer) user).getShoppingCart().mergingWithLocalCart(ShoppingCart.getLocalShoppingCart());
         }
+        return sendAnswer(getLoggedUser().getType());
     }
 
 }//end Login command Class
@@ -176,6 +171,7 @@ class LoginCommand extends LoginCommands {
 
 class ConfirmEmailCommand extends LoginCommands {
     private static ConfirmEmailCommand command;
+    private User user;
 
     private ConfirmEmailCommand() {
         this.name = "confirm email";
@@ -191,29 +187,35 @@ class ConfirmEmailCommand extends LoginCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        ArrayList<String> reqInfo = getReqInfo(request);
-        if (containNullField(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2)))
-            return;
-        confirmEmail(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        containNullField(reqInfo);
+        containNullField(reqInfo.get("username"), reqInfo.get("password"), reqInfo.get("verification code"));
+        checkPrimaryErrors(request);
+        return confirmEmail();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws ConfirmException, UserNotExistException, WrongPasswordException {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        String username = reqInfo.get("username");
+        String password = reqInfo.get("password");
+        String verificationCode = reqInfo.get("verification code");
+
+        user = User.getUserInVerificationList(username);
+        user.checkPassword(password);
+        if (!user.doesCodeSend()) {
+            throw new ConfirmException("We didn't send any code to your email!!");
+        } else if (!user.sendCodeIsCorrect(verificationCode)) {
+            throw new ConfirmException("Incorrect code!!");
+        }
     }
 
 
-    private void confirmEmail(String username, String password, String verificationCode) {
-        User user = User.getUserInVerificationList(username);
-        if (user == null) {
-            sendError("There isn't any user with this username in verification list!!");
-        } else if (!user.checkPasswordIsCorrect(password)) {
-            sendError("Password isn't correct!!");
-        } else if (!user.doesCodeSend()) {
-            sendError("We didn't send any code to your email!!");
-        } else if (!user.sendCodeIsCorrect(verificationCode)) {
-            sendError("Incorrect code!!");
-        } else {
-            user.confirmEmail();
-            setLoggedUser(user);
-            actionCompleted();
-        }
+    private ServerMessage confirmEmail() {
+        user.confirmEmail();
+        setLoggedUser(user);
+        return actionCompleted();
     }
 
 }//end ConfirmEmailCommand Class
@@ -221,11 +223,11 @@ class ConfirmEmailCommand extends LoginCommands {
 
 class ForgotPasswordCommand extends LoginCommands {
     private static ForgotPasswordCommand command;
+    private User user;
 
     private ForgotPasswordCommand() {
         this.name = "forgot password";
     }
-
 
     public static ForgotPasswordCommand getInstance() {
         if (command != null)
@@ -234,24 +236,26 @@ class ForgotPasswordCommand extends LoginCommands {
         return command;
     }
 
+    @Override
+    public ServerMessage process(ClientMessage request) throws Exception {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        containNullField(reqInfo.get("username"), reqInfo.get("email"));
+        checkPrimaryErrors(request);
+        return forgotPassword(reqInfo.get("username"), reqInfo.get("email"));
+    }
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getFirstString(), request.getSecondString()))
-            return;
-
-        forgotPassword(request.getFirstString(), request.getSecondString());
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        user = User.getUserByUsername(request.getHashMap().get("username"));
+        if (user == null || !user.checkEmail(request.getHashMap().get("email"))) {
+            throw new UserNotExistException();
+        }
     }
 
 
-    private void forgotPassword(String username, String email) {
-        User user = User.getUserByUsername(username);
-        if (user == null || !user.checkEmail(email)) {
-            sendError(Error.USER_EMAIL_NOT_EXIST.getError());
-        } else {
-            user.sendForgotPasswordCode();
-            actionCompleted();
-        }
+    private ServerMessage forgotPassword(String username, String email) throws UserNotExistException {
+        user.sendForgotPasswordCode();
+        return actionCompleted();
     }
 
 }//end ForgotPassWordCommand Class
@@ -259,6 +263,7 @@ class ForgotPasswordCommand extends LoginCommands {
 
 class NewPasswordCommand extends LoginCommands {
     private static NewPasswordCommand command;
+    private User user;
 
     private NewPasswordCommand() {
         this.name = "new password";
@@ -274,32 +279,35 @@ class NewPasswordCommand extends LoginCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        ArrayList<String> reqInfo = getReqInfo(request);
-        if (containNullField(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2)))
-            return;
+    public ServerMessage process(ClientMessage request) throws Exception {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        containNullField(reqInfo.get("username"), reqInfo.get("code"), reqInfo.get("new password"));
 
-        newPassword(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2));
+        return newPassword(reqInfo.get("new password"));
     }
 
-
-    private void newPassword(String username, String code, String newPassword) {
-        User user = User.getUserByUsername(username);
-        if (user == null) {
-            sendError(Error.USER_NOT_EXIST.getError());
-        } else if (!user.doesCodeSend()) {
-            sendError(Error.ERROR.getError());
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        String username = request.getHashMap().get("username");
+        String code = request.getHashMap().get("code");
+        String newPassword = request.getHashMap().get("new password");
+        user = User.getUserByUsername(username);
+        if (!user.doesCodeSend()) {
+            throw new Exception("Error!!");
         } else if (!user.sendCodeIsCorrect(code)) {
-            sendError(Error.INCORRECT_CODE.getError());
+            throw new ConfirmException("Wrong code!!");
         } else if (!User.isPasswordValid(newPassword)) {
-            sendError(Error.PASSWORD_NOT_VALID.getError());
-        } else {
-            user.setSendCode("");
-            user.setPassword(newPassword);
-            user.updateDatabase().update();
+            throw new PasswordNotValidException();
         }
     }
 
+
+    private ServerMessage newPassword(String newPassword) {
+        user.setSendCode("");
+        user.setPassword(newPassword);
+        user.updateDatabase().update();
+        return actionCompleted();
+    }
 }//end NewPasswordCommand Class
 
 
@@ -320,19 +328,21 @@ class LogoutCommand extends LoginCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        logout();
+    public ServerMessage process(ClientMessage request) {
+        return logout();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws NeedLoginException {
+        if (getLoggedUser() == null)
+            throw new NeedLoginException();
     }
 
 
-    private void logout() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-        } else {
-            setLoggedUser(null);
-            ShoppingCart.setLocalShoppingCart(new ShoppingCart());
-            actionCompleted();
-        }
+    private ServerMessage logout() {
+        setLoggedUser(null);
+        ShoppingCart.setLocalShoppingCart(new ShoppingCart());
+        return actionCompleted();
     }
 
 }//end LogoutCommand Class

@@ -4,13 +4,20 @@ import controller.Command;
 import model.category.Category;
 import model.category.MainCategory;
 import model.category.SubCategory;
+import model.ecxeption.DebugException;
+import model.ecxeption.Exception;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.filter.InvalidSortException;
+import model.ecxeption.product.CategoryDoesntExistException;
 import model.others.Filter;
 import model.others.Product;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 import java.util.ArrayList;
 
-import static controller.Controller.*;
+import static controller.Controller.actionCompleted;
+import static controller.Controller.sendAnswer;
 import static controller.panels.UserPanelCommands.checkSort;
 
 public abstract class AllProductsCommand extends Command {
@@ -63,21 +70,25 @@ class ShowProductsWithFilterAndSortCommand extends AllProductsCommand {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        showProductsWithFilterAndSort();
+    public ServerMessage process(ClientMessage request) {
+        return showProductsWithFilterAndSort();
     }
 
-    private void showProductsWithFilterAndSort() {
-        sendAnswer(Product.getProductsFiltered(sortField(), sortDirection(), filters()), "product");
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage showProductsWithFilterAndSort() {
+        return sendAnswer(Product.getProductsFiltered(sortField(), sortDirection(), filters()), "product");
     }
 }
-
 
 class CategoryCommand extends AllProductsCommand {
     private static CategoryCommand command;
 
     private CategoryCommand() {
-        this.name = "(show category info|show sub category info|view sub category of main category)";
+        this.name = "(show category info|show sub category info|view sub categories of main category)";
     }
 
     public static CategoryCommand getInstance() {
@@ -88,50 +99,42 @@ class CategoryCommand extends AllProductsCommand {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getFirstString()))
-            return;
-        switch (request.getRequest()) {
-            case "show category info":
-                viewCategory(request.getFirstString());
-                break;
-            case "show sub category info":
-                viewSubCategory(request.getFirstString());
-                break;
-            case "view sub category of main category":
-                viewSubcategories(request.getFirstString(), request.getArrayList().get(0), request.getArrayList().get(1));
-                break;
-        }
+    public ServerMessage process(ClientMessage request) throws DebugException, NullFieldException, CategoryDoesntExistException, InvalidSortException {
+        containNullField(request.getHashMap().get("main category"), request.getHashMap().get("sub category"));
+        return switch (request.getType()) {
+            case "show category info" -> viewCategory(request.getHashMap().get("main category"));
+            case "show sub category info" -> viewSubCategory(request.getHashMap().get("sub category"));
+            case "view sub categories of main category" -> viewSubcategories(request.getHashMap().get("main category"),
+                    request.getHashMap().get("sort field"), request.getHashMap().get("sort direction"));
+            default -> throw new DebugException();
+        };
     }
 
-    private void viewCategory(String categoryName) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage viewCategory(String categoryName) throws CategoryDoesntExistException {
         MainCategory mainCategory = Category.getMainCategoryByName(categoryName);
-        if (mainCategory == null) {
-            sendError("There isn't any main category with this name!!");
-        } else
-            sendAnswer(mainCategory.categoryInfoForSending());
+        return sendAnswer(mainCategory.categoryInfoForSending());
     }
 
-    private void viewSubCategory(String subCategoryName) {
-        SubCategory mainCategory = Category.getSubCategoryByName(subCategoryName);
-        if (mainCategory == null) {
-            sendError("There isn't any sub category with this name!!");
-        } else
-            sendAnswer(mainCategory.categoryInfoForSending());
+    private ServerMessage viewSubCategory(String subCategoryName) throws CategoryDoesntExistException {
+        SubCategory subCategory = Category.getSubCategoryByName(subCategoryName);
+        return sendAnswer(subCategory.categoryInfoForSending());
     }
 
-    private void viewSubcategories(String mainCategoryName, String sortField, String sortDirection) {
+    private ServerMessage viewSubcategories(String mainCategoryName, String sortField, String sortDirection) throws CategoryDoesntExistException, InvalidSortException {
         if (sortField != null && sortDirection != null) {
             sortDirection = sortDirection.toLowerCase();
             sortField = sortField.toLowerCase();
         }
         MainCategory mainCategory = MainCategory.getMainCategoryByName(mainCategoryName);
-        if (mainCategory == null) {
-            sendError("There isn't any main category with this name!!");
-        } else if (!checkSort(sortField, sortDirection, "category")) {
-            sendError("Can't sort with this field and direction!!");
+        if (!checkSort(sortField, sortDirection, "category")) {
+            throw new InvalidSortException();
         } else {
-            sendAnswer(mainCategory.getSubcategoriesInfo(sortField, sortDirection), "category");
+            return sendAnswer(mainCategory.getSubcategoriesInfo(sortField, sortDirection), "category");
         }
     }
 
@@ -152,13 +155,18 @@ class InitializePage extends AllProductsCommand {
     }
 
     @Override
-    public void process(ClientMessage request) {
+    public ServerMessage process(ClientMessage request) {
         initializeAllProductPage();
+        return actionCompleted();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
     }
 
     private void initializeAllProductPage() {
         resetFilters();
         resetSort();
-        actionCompleted();
     }
 }

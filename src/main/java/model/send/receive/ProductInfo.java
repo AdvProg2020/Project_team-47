@@ -1,33 +1,48 @@
 package model.send.receive;
 
+import model.others.SpecialProperty;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ProductInfo {
+    private final ArrayList<String> sellersNames;
+    private final ArrayList<ProductSeller> productSellers;
     private int seenTime;
     private String id;
     private String name;
     private String status;
-    private ArrayList<String> sellersNames;
     private String mainCategory;
     private String subCategory;
-    private HashMap<String, String> specialProperties;
+    private ArrayList<SpecialProperty> specialProperties;
     private String description;
     private double scoreAverage;
-    private ArrayList<ProductSeller> productSellers;
+    private byte[] file;
+    private String fileExtension;
 
     public ProductInfo() {
         sellersNames = new ArrayList<>();
-        specialProperties = new HashMap<>();
+        specialProperties = new ArrayList<>();
         productSellers = new ArrayList<>();
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
     }
 
     public int getSeenTime() {
         return seenTime;
-    }
-
-    public void setSeenTime(int seenTime) {
-        this.seenTime = seenTime;
     }
 
     public String getId() {
@@ -81,11 +96,6 @@ public class ProductInfo {
         return sellersNames;
     }
 
-    public void setSellersNames(ArrayList<String> sellersNames) {
-        this.sellersNames = sellersNames;
-    }
-
-
     public String getMainCategory() {
         return mainCategory;
     }
@@ -102,11 +112,11 @@ public class ProductInfo {
         this.subCategory = subCategory;
     }
 
-    public HashMap<String, String> getSpecialProperties() {
+    public ArrayList<SpecialProperty> getSpecialProperties() {
         return specialProperties;
     }
 
-    public void setSpecialProperties(HashMap<String, String> specialProperties) {
+    public void setSpecialProperties(ArrayList<SpecialProperty> specialProperties) {
         this.specialProperties = specialProperties;
     }
 
@@ -124,6 +134,13 @@ public class ProductInfo {
 
     public void setScoreAverage(double scoreAverage) {
         this.scoreAverage = scoreAverage;
+    }
+
+    public int getNumberInStock(String seller) {
+        for (ProductSeller productSeller : productSellers) {
+            if (productSeller.sellerName.equalsIgnoreCase(seller)) return productSeller.numberInStock;
+        }
+        return 0;
     }
 
     private static class ProductSeller {

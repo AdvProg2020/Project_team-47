@@ -2,9 +2,15 @@ package controller.panels.manager;
 
 import controller.Command;
 import controller.Controller;
-import controller.Error;
 import model.discount.DiscountCode;
+import model.ecxeption.CommonException;
+import model.ecxeption.Exception;
+import model.ecxeption.common.*;
+import model.ecxeption.filter.InvalidSortException;
+import model.ecxeption.user.UserNotExistException;
+import model.send.receive.CartInfo;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Customer;
 import model.user.Manager;
 import model.user.User;
@@ -13,7 +19,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import static controller.Controller.*;
+import static controller.Controller.actionCompleted;
+import static controller.Controller.sendAnswer;
 import static controller.panels.UserPanelCommands.checkSort;
 
 public abstract class DiscountCodeCommands extends Command {
@@ -40,22 +47,15 @@ public abstract class DiscountCodeCommands extends Command {
     public static GiveGiftCommand getGiveGiftCommand() {
         return GiveGiftCommand.getInstance();
     }
-
-    protected boolean canUserDo() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-            return false;
-        } else if (!(getLoggedUser() instanceof Manager)) {
-            sendError(Error.NEED_MANGER.getError());
-            return false;
-        }
-        return true;
-    }
-
 }
 
 class CreateCodeCommand extends DiscountCodeCommands {
     private static CreateCodeCommand command;
+    private Date startDate;
+    private Date finishDate;
+    private int percent;
+    private int maxUsableTime;
+    private int maxAmount;
 
     private CreateCodeCommand() {
         this.name = "create discount code";
@@ -69,124 +69,99 @@ class CreateCodeCommand extends DiscountCodeCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getFirstHashMap(), request.getArrayList()))
-            return;
-        createDiscountCode(request.getFirstHashMap(), request.getArrayList());
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap(), request.getArrayList());
+        checkPrimaryErrors(request);
+        return createDiscountCode(request.getHashMap(), request.getArrayList());
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        HashMap<String, String> discountInfo = getReqInfo(request);
+        ArrayList<String> usernames = request.getArrayList();
+        checkDiscountInfoKeys(discountInfo);
+        checkDiscountInfoUsernames(usernames);
+        checkDiscountInfoDate(discountInfo.get("start-time"), discountInfo.get("finish-time"));
+        checkDiscountInfoIntegers(discountInfo);
     }
 
 
-    private void createDiscountCode(HashMap<String, String> discountInfo, ArrayList<String> usernames) {
-        if (discountCodeInfoHasError(discountInfo, usernames))
-            return;
+    private ServerMessage createDiscountCode(HashMap<String, String> discountInfo, ArrayList<String> usernames) throws UserNotExistException {
 
         ArrayList<Customer> users = new ArrayList<>();
         for (String username : usernames) {
             Customer user = (Customer) User.getUserByUsername(username);
-            if (user != null)
-                users.add(user);
+            users.add(user);
         }
 
-        createDiscountCodeAfterChecking(discountInfo, users);
+        return createDiscountCodeAfterChecking(discountInfo, users);
     }
 
-    private boolean discountCodeInfoHasError(HashMap<String, String> discountInfo, ArrayList<String> usernames) {
-        if (discountInfoHasError(discountInfo))
-            return true;
-        else if (discountUsersHasError(usernames))
-            return true;
-        else if (discountDateHasError(discountInfo.get("start-time"), discountInfo.get("finish-time")))
-            return true;
-        else
-            return discountInfoHasWrongIntegers(discountInfo);
-    }
-
-
-    boolean discountInfoHasError(HashMap<String, String> discountInfo) {
+    void checkDiscountInfoKeys(HashMap<String, String> discountInfo) throws NotEnoughInformation {
         //checking that discount info HashMap contains all required key
         String[] discountKey = {"start-time", "finish-time", "max-usable-time", "max-discount-amount", "percent"};
         for (String key : discountKey) {
             if (!discountInfo.containsKey(key)) {
-                sendError("Not enough information!!");
-                return true;
+                throw new NotEnoughInformation();
             }
         }
-        return false;
     }
 
 
-    private boolean discountUsersHasError(ArrayList<String> usernames) {
+    private void checkDiscountInfoUsernames(ArrayList<String> usernames) throws UserNotExistException {
         //check that users who could use code exists and check start and finish time
-        if (User.isThereCustomersWithUsername(usernames)) {
-            sendError("There isn't customer for some of username you entered!!");
-            return true;
-        }
-        return false;
+        User.isThereCustomersWithUsername(usernames);
     }
 
 
-    boolean discountDateHasError(String start, String finish) {
+    void checkDiscountInfoDate(String start, String finish) throws DateException {
         //this function will check that discount starting and finishing time entered correctly
 
-        if (!(Controller.isDateFormatValid(start) && Controller.isDateFormatValid(finish))) {
-            sendError("Wrong format for date!!");
-            return false;
-        }
+        if (!(Controller.isDateFormatValid(start) && Controller.isDateFormatValid(finish)))
+            throw new DateException();
 
-        Date startDate = Controller.getDateWithString(start);
-        Date finishDate = Controller.getDateWithString(finish);
+        startDate = Controller.getDateWithString(start);
+        finishDate = Controller.getDateWithString(finish);
 
-        if (startDate.before(Controller.getCurrentTime())) {
-            sendError("Can't set start time to this value!!");
-            return false;
-        } else if (finishDate.before(Controller.getCurrentTime())) {
-            sendError("Can't set finish time to this value!!");
-            return false;
-        } else if (!startDate.before(finishDate)) {
-            sendError("Start time should be before finish time!!");
-            return false;
-        }
-        return true;
+        assert startDate != null;
+        assert finishDate != null;
+        if (startDate.before(Controller.getCurrentTime()))
+            throw new DateException("Can't set start time to this value!!");
+        else if (finishDate.before(Controller.getCurrentTime()))
+            throw new DateException("Can't set finish time to this value!!");
+        else if (!startDate.before(finishDate))
+            throw new DateException("Start time should be before finish time!!");
     }
 
 
-    boolean discountInfoHasWrongIntegers(HashMap<String, String> discountInfo) {
+    void checkDiscountInfoIntegers(HashMap<String, String> discountInfo) throws NumberException, InvalidPercentException {
         //check that integer value entered correctly
         try {
-            int percent = Integer.parseInt(discountInfo.get("percent"));
-            int maxDiscountAmount = Integer.parseInt(discountInfo.get("max-discount-amount"));
-            int maxUsableTime = Integer.parseInt(discountInfo.get("max-usable-time"));
+            percent = Integer.parseInt(discountInfo.get("percent"));
+            maxAmount = Integer.parseInt(discountInfo.get("max-discount-amount"));
+            maxUsableTime = Integer.parseInt(discountInfo.get("max-usable-time"));
 
             if (percent >= 100 || percent <= 0) {
-                sendError("Percent should be a number between 0 and 100!!");
-                return true;
-            } else if (maxDiscountAmount <= 0) {
-                sendError("Max discount amount should be positive!!");
-                return true;
+                throw new InvalidPercentException();
+            } else if (maxAmount <= 0) {
+                throw new NumberException();
             } else if (maxUsableTime <= 0) {
-                sendError("Max usable time should be positive!!");
-                return true;
+                throw new NumberException();
             }
         } catch (NumberFormatException e) {
-            sendError("Please enter a valid number!!");
-            return true;
+            throw new NumberException();
         }
-
-        return false;
     }
 
 
-    void createDiscountCodeAfterChecking(HashMap<String, String> discountInfo, ArrayList<Customer> users) {
-        int maxUsableTime, maxDiscountAmount, percent;
+    ServerMessage createDiscountCodeAfterChecking(HashMap<String, String> discountInfo, ArrayList<Customer> users) {
         percent = Integer.parseInt(discountInfo.get("percent"));
-        maxDiscountAmount = Integer.parseInt(discountInfo.get("max-discount-amount"));
+        maxAmount = Integer.parseInt(discountInfo.get("max-discount-amount"));
         maxUsableTime = Integer.parseInt(discountInfo.get("max-usable-time"));
 
-        DiscountCode discountCode = new DiscountCode(maxDiscountAmount, maxUsableTime);
-        discountCode.setStartTime(Controller.getDateWithString(discountInfo.get("start-time")));
-        discountCode.setFinishTime(Controller.getDateWithString(discountInfo.get("finish-time")));
+        DiscountCode discountCode = new DiscountCode(maxAmount, maxUsableTime);
+        discountCode.setStartTime(startDate);
+        discountCode.setFinishTime(finishDate);
         discountCode.setUsersAbleToUse(users);
         discountCode.setPercent(percent);
         discountCode.updateDatabase();
@@ -195,7 +170,7 @@ class CreateCodeCommand extends DiscountCodeCommands {
             user.updateDatabase().update();
         }
 
-        sendAnswer(discountCode.getDiscountCode());
+        return sendAnswer(discountCode.getDiscountCode());
     }
 
 }//end CreateDiscountCodeCommand class
@@ -216,22 +191,25 @@ class ViewCodesCommand extends DiscountCodeCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        viewAllDiscountCodes(request.getArrayList().get(0), request.getArrayList().get(1));
+    public ServerMessage process(ClientMessage request) throws InvalidSortException {
+        return viewAllDiscountCodes(request.getHashMap().get("field"), request.getHashMap().get("direction"));
     }
 
-    private void viewAllDiscountCodes(String field, String direction) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage viewAllDiscountCodes(String field, String direction) throws InvalidSortException {
         if (field != null && direction != null) {
             field = field.toLowerCase();
             direction = direction.toLowerCase();
         }
 
         if (!checkSort(field, direction, "discount-code")) {
-            sendError(Error.CANT_SORT.getError());
+            throw new InvalidSortException();
         } else
-            sendAnswer(DiscountCode.getAllDiscountCodeInfo(field, direction), "code");
+            return sendAnswer(DiscountCode.getAllDiscountCodeInfo(field, direction), "code");
     }
 }//end ViewCodesCommand class
 
@@ -252,25 +230,25 @@ class ViewCodeCommand extends DiscountCodeCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        viewDiscountCode(request.getArrayList().get(0).toLowerCase());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, CommonException {
+        containNullField(request.getHashMap().get("code"));
+        return viewDiscountCode(request.getHashMap().get("code").toLowerCase());
     }
 
-    private void viewDiscountCode(String code) {
-        if (!DiscountCode.isThereDiscountWithCode(code)) {
-            sendError("There isn't discount code with this code!!");
-        } else
-            sendAnswer(DiscountCode.getDiscountById(code).discountCodeInfo());
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage viewDiscountCode(String code) throws CommonException {
+        return sendAnswer(DiscountCode.getDiscountById(code).discountCodeInfo());
     }
 }//end ViewCodeCommands class
 
 
 class EditCodeCommand extends DiscountCodeCommands {
     private static EditCodeCommand command;
+    private DiscountCode code;
 
     private EditCodeCommand() {
         this.name = "edit discount code manager";
@@ -284,93 +262,63 @@ class EditCodeCommand extends DiscountCodeCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0), request.getArrayList().get(1), request.getArrayList().get(2)))
-            return;
-        editDiscountCode(request.getArrayList().get(0), request.getArrayList().get(1).toLowerCase(), request.getArrayList().get(2));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        containNullField(reqInfo.get("code"), reqInfo.get("field"), reqInfo.get("new value"));
+        checkPrimaryErrors(request);
+        editDiscountCode( reqInfo.get("field"), reqInfo.get("new value"));
+        return actionCompleted();
     }
 
-    public void editDiscountCode(String code, String field, String newValue) {
-        if (!DiscountCode.isThereDiscountWithCode(code)) {
-            sendError("There isn't discount code with this code!!");
-            return;
-        }
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        code = DiscountCode.getDiscountById(request.getHashMap().get("code"));
+    }
 
-        DiscountCode discountCode = DiscountCode.getDiscountById(code);
+    public void editDiscountCode(String field, String newValue) throws CommonException, DateException, NumberException, InvalidPercentException {
         switch (field) {
-            case "start-time":
-                editCodeTime(discountCode, newValue, "Starting time");
-                return;
-            case "finish-time":
-                editCodeTime(discountCode, newValue, "Finishing time");
-                return;
-            case "max-discount-amount":
-                editCodeIntegersValues(discountCode, "max-discount-amount", newValue);
-                break;
-            case "percent":
-                editCodeIntegersValues(discountCode, "percent", newValue);
-                break;
-            case "max-usable-time":
-                editCodeIntegersValues(discountCode, "max-usable-time", newValue);
-                break;
-            default:
-                sendError("You can't change this field!!");
+            case "start-time" -> editCodeTime(this.code, newValue, "Starting time");
+            case "finish-time" -> editCodeTime(this.code, newValue, "Finishing time");
+            case "max-discount-amount" -> editCodeIntegersValues(this.code, "max-discount-amount", newValue);
+            case "percent" -> editCodeIntegersValues(this.code, "percent", newValue);
+            case "max-usable-time" -> editCodeIntegersValues(this.code, "max-usable-time", newValue);
+            default -> throw new CommonException("Wrong field!!");
         }
-        discountCode.updateDatabase();
+        this.code.updateDatabase();
     }
 
-    private void editCodeTime(DiscountCode discountCode, String timeString, String type) {
-        if (!Controller.isDateFormatValid(timeString)) {
-            sendError("Please enter right value!!");
-            return;
-        }
+    private void editCodeTime(DiscountCode discountCode, String timeString, String type) throws DateException, CommonException {
+        if (!Controller.isDateFormatValid(timeString)) throw new DateException();
+
         Date time = Controller.getDateWithString(timeString);
-        if (time.before(Controller.getCurrentTime())) {
-            sendError(type + " can't change to this value!!");
-            return;
-        }
+        assert time != null;
+
+        if (time.before(Controller.getCurrentTime())) throw new CommonException(type + " can't change to this value!!");
+
         switch (type) {
-            case "Starting time":
-                discountCode.setStartTime(time);
-                break;
-            case "Finishing time":
-                discountCode.setFinishTime(time);
-                break;
+            case "Starting time" -> discountCode.setStartTime(time);
+            case "Finishing time" -> discountCode.setFinishTime(time);
         }
-        actionCompleted();
     }
 
-    private void editCodeIntegersValues(DiscountCode discountCode, String type, String integerString) {
+    private void editCodeIntegersValues(DiscountCode discountCode, String type, String integerString) throws NumberException, InvalidPercentException {
         int integer;
         try {
             integer = Integer.parseInt(integerString);
         } catch (NumberFormatException e) {
-            sendError("Please enter a valid number!!");
-            return;
+            throw new NumberException();
         }
 
-        if (integer <= 0) {
-            sendError("Please enter a positive value!!");
-            return;
-        }
+        if (integer <= 0) throw new NumberException();
+
         switch (type) {
-            case "max-usable-time":
-                discountCode.setMaxUsableTime(integer);
-                break;
-            case "max-discount-amount":
-                discountCode.setMaxDiscountAmount(integer);
-                break;
-            case "percent":
-                if (integer >= 100) {
-                    sendError("Percent should be a number between 0 and 100!!");
-                    return;
-                }
+            case "max-usable-time" -> discountCode.setMaxUsableTime(integer);
+            case "max-discount-amount" -> discountCode.setMaxDiscountAmount(integer);
+            case "percent" -> {
+                if (integer >= 100) throw new InvalidPercentException();
                 discountCode.setPercent(integer);
-                break;
+            }
         }
-        actionCompleted();
     }
 }//end EditCodeCommand class
 
@@ -391,23 +339,23 @@ class RemoveCodeCommand extends DiscountCodeCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        removeDiscountCode(request.getArrayList().get(0).toLowerCase());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, CommonException {
+        containNullField(request.getHashMap().get("code"));
+        removeDiscountCode(request.getHashMap().get("code").toLowerCase());
+        return actionCompleted();
     }
 
-    private void removeDiscountCode(String code) {
-        if (!DiscountCode.isThereDiscountWithCode(code)) {
-            sendError("There isn't discount code with this code!!");
-            return;
-        }
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private void removeDiscountCode(String code) throws CommonException {
         DiscountCode discountCode = DiscountCode.getDiscountById(code);
         discountCode.remove();
     }
 }//end RemoveCodeCommand class
+
 
 class GiveGiftCommand extends DiscountCodeCommands {
     private static GiveGiftCommand command;
@@ -425,28 +373,36 @@ class GiveGiftCommand extends DiscountCodeCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getFirstHashMap()))
-            return;
-        giveGift(request.getFirstInt(), request.getFirstHashMap());
+    public ServerMessage process(ClientMessage request) throws NotEnoughInformation, CommonException, InvalidPercentException, DateException, NumberException {
+        return giveGift(request.getHashMap());
     }
 
-    private void giveGift(int numberOfUser, HashMap<String, String> giftInfo) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage giveGift(HashMap<String, String> giftInfo) throws NotEnoughInformation, NumberException, DateException, InvalidPercentException, CommonException {
+        if (!giftInfo.containsKey("number of user"))
+            throw new NotEnoughInformation();
+
+        int numberOfUser;
+
+        try {
+            numberOfUser = Integer.parseInt(giftInfo.get("number of user"));
+        } catch (NumberFormatException e) {
+            throw new NumberException();
+        }
+
+        if (numberOfUser < 1) throw new CommonException("You should at least add this code 1 customer!!");
+
         CreateCodeCommand createCodeCommand = DiscountCodeCommands.getCreateCodeCommand();
 
-        if (createCodeCommand.discountInfoHasError(giftInfo)) {
-            return;
-        } else if (createCodeCommand.discountDateHasError(giftInfo.get("start-time"), giftInfo.get("finish-time"))) {
-            return;
-        } else if (createCodeCommand.discountInfoHasWrongIntegers(giftInfo)) {
-            return;
-        } else if (numberOfUser < 1) {
-            sendError("You should at least add this code to 1 customer!!");
-            return;
-        }
-        createCodeCommand.createDiscountCodeAfterChecking(giftInfo, Manager.getCustomersForGift(numberOfUser));
+        createCodeCommand.checkDiscountInfoKeys(giftInfo);
+        createCodeCommand.checkDiscountInfoDate(giftInfo.get("start-time"), giftInfo.get("finish-time"));
+        createCodeCommand.checkDiscountInfoIntegers(giftInfo);
+
+        return createCodeCommand.createDiscountCodeAfterChecking(giftInfo, Manager.getCustomersForGift(numberOfUser));
     }
 
 }//end GiveGiftCommand

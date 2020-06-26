@@ -1,83 +1,81 @@
 package model.send.receive;
 
+import model.others.SpecialProperty;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ClientMessage {
-    private String messageContext;
-    private ArrayList<String> messageArrayListInputs;
-    private HashMap<String, String> messageFirstHashMapInputs;
-    private HashMap<String, String> messageSecondHashMapInputs;
-    private String firstString;
-    private String secondString;
-    private Object object;
+    private String type;
+    private ArrayList<String> arrayList;
+    private HashMap<String, String> hashMap;
+    private ArrayList<SpecialProperty> properties;
     private int firstInt;
+    private SpecialProperty property;
+    private byte[] file;
+    private String fileExtension;
 
     public ClientMessage() {
 
+    }
+
+    public ClientMessage(String type) {
+        this.type = type;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
     }
 
     public int getFirstInt() {
         return firstInt;
     }
 
-    public void setFirstInt(int firstInt) {
-        this.firstInt = firstInt;
-    }
-
-    public Object getObject() {
-        return object;
-    }
-
-    public void setObject(Object object) {
-        this.object = object;
-    }
-
-    public HashMap<String, String> getSecondHashMap() {
-        return messageSecondHashMapInputs;
-    }
-
-    public void setMessageSecondHashMapInputs(HashMap<String, String> messageSecondHashMapInputs) {
-        this.messageSecondHashMapInputs = messageSecondHashMapInputs;
-    }
-
-    public String getFirstString() {
-        return firstString;
-    }
-
-    public void setFirstString(String firstString) {
-        this.firstString = firstString;
-    }
-
-    public String getSecondString() {
-        return secondString;
-    }
-
-    public void setSecondString(String secondString) {
-        this.secondString = secondString;
-    }
-
-    public String getRequest() {
-        return messageContext;
-    }
-
-    public void setMessageContext(String messageContext) {
-        this.messageContext = messageContext;
+    public String getType() {
+        return type;
     }
 
     public ArrayList<String> getArrayList() {
-        return messageArrayListInputs;
+        return arrayList;
     }
 
-    public void setMessageArrayListInputs(ArrayList<String> messageArrayListInputs) {
-        this.messageArrayListInputs = messageArrayListInputs;
+    public void setArrayList(ArrayList<String> arrayList) {
+        this.arrayList = arrayList;
     }
 
-    public HashMap<String, String> getFirstHashMap() {
-        return messageFirstHashMapInputs;
+    public HashMap<String, String> getHashMap() {
+        return hashMap;
     }
 
-    public void setMessageFirstHashMapInputs(HashMap<String, String> messageFirstHashMapInputs) {
-        this.messageFirstHashMapInputs = messageFirstHashMapInputs;
+    public void setHashMap(HashMap<String, String> hashMap) {
+        this.hashMap = hashMap;
+    }
+
+    public ArrayList<SpecialProperty> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(ArrayList<SpecialProperty> properties) {
+        this.properties = properties;
+    }
+
+    public SpecialProperty getProperty() {
+        return property;
+    }
+
+    public void setProperty(SpecialProperty property) {
+        this.property = property;
     }
 }

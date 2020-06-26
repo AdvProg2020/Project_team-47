@@ -4,6 +4,8 @@ import controller.Controller;
 import database.Database;
 import database.UserData;
 import model.discount.DiscountCode;
+import model.ecxeption.user.UserNotExistException;
+import model.ecxeption.user.WrongPasswordException;
 import model.log.BuyLog;
 import model.others.Email;
 import model.others.Filter;
@@ -21,7 +23,7 @@ abstract public class User {
     static ArrayList<User> allUsers;
     private static TreeSet<String> usedUsernames;
     private static int managersNumber;
-    private static HashSet<User> verificationList;
+    private static final HashSet<User> verificationList;
 
     static {
         allUsers = new ArrayList<>();
@@ -68,23 +70,26 @@ abstract public class User {
         Database.updateUsedUsernames(usedUsernames);
     }
 
-    public static User getUserInVerificationList(String username) {
+    public static User getUserInVerificationList(String username) throws UserNotExistException {
         for (User user : verificationList) {
             if (user.username.equals(username)) {
                 return user;
             }
         }
-        return null;
+        throw new UserNotExistException();
     }
 
-    public static boolean isThereCustomersWithUsername(ArrayList<String> userNames) {
+    public static void isThereCustomersWithUsername(ArrayList<String> userNames) throws UserNotExistException {
         for (String username : userNames) {
-            User user = getUserByUsername(username);
-            if (!(user instanceof Customer)) {
-                return false;
+            try {
+                User user = getUserByUsername(username);
+                if (!(user instanceof Customer)) {
+                    throw new UserNotExistException();
+                }
+            } catch (UserNotExistException e) {
+                throw new UserNotExistException("There isn't any customer with this username: " + username);
             }
         }
-        return true;
     }
 
     public static boolean isThereSeller(Seller seller) {
@@ -92,7 +97,11 @@ abstract public class User {
     }
 
     public static boolean isThereSeller(String username) {
-        return getUserByUsername(username) instanceof Seller;
+        try {
+            return getUserByUsername(username) instanceof Seller;
+        } catch (UserNotExistException e) {
+            return false;
+        }
     }
 
     public static boolean doesUsernameUsed(String username) {
@@ -146,24 +155,17 @@ abstract public class User {
         return Pattern.matches("[a-zA-Z0-9._]+@[a-zA-Z0-9]+.[a-zA-Z]+", email);
     }
 
-    public static boolean checkPasswordIsCorrect(String username, String password) {
-        User user = getUserByUsername(username);
-        if (user == null)
-            return false;
-        return user.password.equals(password);
-    }
-
     public static boolean isThereManager() {
         return managersNumber > 0;
     }
 
-    public static User getUserByUsername(String username) {
+    public static User getUserByUsername(String username) throws UserNotExistException {
         for (User user : allUsers) {
             if (user.username.equalsIgnoreCase(username)) {
                 return user;
             }
         }
-        return null;
+        throw new UserNotExistException();
     }
 
     private static void copyUserInfo(User destinationUser, User sourceUser) {
@@ -195,6 +197,8 @@ abstract public class User {
     }
 
     public static void setUsedUsernames(TreeSet<String> usedUsernames) {
+        if (usedUsernames == null)
+            return;
         User.usedUsernames = usedUsernames;
     }
 
@@ -313,8 +317,10 @@ abstract public class User {
         return !this.sendCode.isEmpty();
     }
 
-    public boolean checkPasswordIsCorrect(String password) {
-        return this.password.equals(password);
+    public void checkPassword(String password) throws WrongPasswordException {
+        if (!this.password.equals(password)) {
+            throw new WrongPasswordException();
+        }
     }
 
     public abstract void deleteUser();
@@ -332,21 +338,21 @@ abstract public class User {
     public void changeRole(String newRole) {
 
         switch (newRole) {
-            case "manager":
+            case "manager" -> {
                 if (this instanceof Manager)
                     return;
                 this.changeUserToManager();
-                break;
-            case "customer":
+            }
+            case "customer" -> {
                 if (this instanceof Customer)
                     return;
                 this.changeUserToCustomer();
-                break;
-            case "seller":
+            }
+            case "seller" -> {
                 if (this instanceof Seller)
                     return;
                 this.changeUserToSeller();
-                break;
+            }
         }
         this.deleteUser();
     }

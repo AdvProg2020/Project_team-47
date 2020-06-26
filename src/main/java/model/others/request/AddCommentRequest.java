@@ -1,5 +1,6 @@
 package model.others.request;
 
+import model.ecxeption.product.ProductDoesntExistException;
 import model.others.Comment;
 import model.others.Product;
 import model.send.receive.RequestInfo;
@@ -11,20 +12,26 @@ public class AddCommentRequest extends MainRequest {
         this.comment = comment;
     }
 
+    public AddCommentRequest() {
+    }
+
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
         requestInfo.setAddComment(comment);
     }
 
     @Override
-    void accept(String type) {
-        Product product = Product.getProductWithId(comment.getProductId());
-        product.addComment(comment);
-        comment.setStatus("CONFIRMED");
+    void accept() {
+        try {
+            Product product = Product.getProductWithId(comment.getProductId());
+            product.addComment(comment);
+            comment.setStatus("CONFIRMED");
+        } catch (ProductDoesntExistException ignored) {
+        }
     }
 
     @Override
-    boolean update(String type) {
+    boolean update() {
         return Product.isThereProduct(comment.getProductId());
     }
 

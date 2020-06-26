@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Scene stylesheets="@../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.manager.RequestPage">
+   <root>
+      <AnchorPane prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <TextArea fx:id="textArea" editable="false" layoutX="62.0" layoutY="95.0" prefHeight="501.0" prefWidth="565.0">
+               <font>
+                  <Font name="Segoe UI Semibold Italic" size="18.0" />
+               </font></TextArea>
+            <Text fx:id="error" fill="RED" layoutX="704.0" layoutY="189.0" text="Error" wrappingWidth="245.00000619888306">
+               <font>
+                  <Font size="13.0" />
+               </font></Text>
+            <Button layoutX="784.0" layoutY="206.0" mnemonicParsing="false" onAction="#accept" prefHeight="68.0" prefWidth="168.0" text="Accept" AnchorPane.leftAnchor="782.0" AnchorPane.rightAnchor="50.0">
+               <font>
+                  <Font name="Consolas" size="25.0" />
+               </font>
+            </Button>
+            <Button layoutX="785.0" layoutY="290.0" mnemonicParsing="false" onAction="#decline" prefHeight="68.0" prefWidth="168.0" text="Decline" AnchorPane.leftAnchor="782.0" AnchorPane.rightAnchor="50.0">
+               <font>
+                  <Font name="Consolas" size="25.0" />
+               </font>
+            </Button>
+            <Button layoutX="782.0" layoutY="453.0" mnemonicParsing="false" onAction="#back" prefHeight="68.0" prefWidth="168.0" text="Back" AnchorPane.leftAnchor="782.0" AnchorPane.rightAnchor="50.0">
+               <font>
+                  <Font name="Consolas" size="25.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </root>
+</Scene>

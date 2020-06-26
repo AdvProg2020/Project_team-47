@@ -1,15 +1,21 @@
 package controller.panels.seller;
 
 import controller.Command;
-import controller.Error;
 import model.category.Category;
+import model.ecxeption.CommonException;
+import model.ecxeption.Exception;
+import model.ecxeption.common.EmptyFieldException;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.common.NumberException;
+import model.ecxeption.product.CategoryDoesntExistException;
+import model.ecxeption.product.ProductDoesntExistException;
 import model.others.Product;
+import model.others.SpecialProperty;
+import model.others.request.EditProductRequest;
+import model.others.request.Request;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Seller;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static controller.Controller.*;
 
@@ -33,17 +39,6 @@ public abstract class ManageProductCommand extends Command {
     public static EditProductCommand getEditProductCommand() {
         return EditProductCommand.getInstance();
     }
-
-    protected boolean canUserDo() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-            return false;
-        } else if (!(getLoggedUser() instanceof Seller)) {
-            sendError(Error.NEED_SELLER.getError());
-            return false;
-        }
-        return true;
-    }
 }
 
 
@@ -63,16 +58,19 @@ class ShowSellerProductCommand extends ManageProductCommand {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        showProducts();
+    public ServerMessage process(ClientMessage request) {
+        return showProducts();
     }
 
-    private void showProducts() {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage showProducts() {
         //this function will sending seller products info by sorting by seen time
 
-        sendAnswer(((Seller) getLoggedUser()).getAllProductInfo("seen-time", "ascending"), "product");
+        return sendAnswer(((Seller) getLoggedUser()).getAllProductInfo("seen-time", "ascending"), "product");
     }
 }
 
@@ -93,27 +91,28 @@ class ViewProductCommand extends ManageProductCommand {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        viewProduct(request.getArrayList().get(0));
+    public ServerMessage process(ClientMessage request) throws NullFieldException, ProductDoesntExistException, CommonException {
+        containNullField(request.getHashMap().get("product id"));
+        return viewProduct(request.getHashMap().get("product id"));
     }
 
-    private void viewProduct(String id) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage viewProduct(String id) throws ProductDoesntExistException, CommonException {
         //this function will send a product info that is in the seller's selling list
 
         Product product = Product.getProductWithId(id);
 
         //checking that seller has this product or not
         if (!sellerHasProduct(product)) {
-            sendError("You don't have this product in your selling list!!");
-            return;
+            throw new CommonException("You don't have this product!!");
         }
 
         //send product info(if seller has this product)
-        sendAnswer(product.getProductInfo());
+        return sendAnswer(product.getProductInfo());
     }
 }
 
@@ -134,28 +133,30 @@ class ViewBuyersCommand extends ManageProductCommand {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        viewBuyers(request.getArrayList().get(0));
+    public ServerMessage process(ClientMessage request) throws NullFieldException,
+            ProductDoesntExistException, CommonException {
+        containNullField(request.getHashMap().get("product id"));
+        return viewBuyers(request.getHashMap().get("product id"));
     }
 
-    private void viewBuyers(String productId) {
-        Product product = Product.getProductWithId(productId);
-        if (!sellerHasProduct(product)) {
-            sendError("You don't have this product in your selling list!!");
-            return;
-        }
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
 
-        sendAnswer(((Seller) getLoggedUser()).getBuyers(product), "user");
+    }
+
+    private ServerMessage viewBuyers(String productId) throws ProductDoesntExistException, CommonException {
+        Product product = Product.getProductWithId(productId);
+        if (!sellerHasProduct(product)) throw new CommonException("You don't have this product!!");
+
+        return sendAnswer(((Seller) getLoggedUser()).getBuyers(product), "user");
     }
 }
 
 
 class EditProductCommand extends ManageProductCommand {
     private static EditProductCommand command;
+    private Product product;
+
 
     private EditProductCommand() {
         this.name = "edit product";
@@ -170,188 +171,112 @@ class EditProductCommand extends ManageProductCommand {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        ArrayList<String> reqInfo = getReqInfo(request);
-        if (containNullField(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2)) || containNullField(request.getObject()))
-            return;
-        editProduct(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2), request.getObject());
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap().get("product id"), request.getHashMap().get("field"), request.getProperty());
+        containNullField(request.getHashMap().get("change type"), request.getHashMap().get("new value"));
+        checkPrimaryErrors(request);
+        String field = request.getHashMap().get("field");
+        editProduct(field, request.getHashMap().get("new value"),
+                request.getHashMap().get("change type"), request);
+        return actionCompleted();
     }
+/*
 
-    private void editProduct(String productId, String field, String editType, Object newValue) {
-        //this function use to edit product and new value could be a string or HashMap of
-        //string to change special properties
-
-        Product product = Product.getProductWithId(productId);
-
-        if (!sellerHasProduct(product)) {
-            //check that seller has product and seller can edit product with that field and new value
-            sendError("You don't have this product in your selling list!!");
-            return;
-        } else if (!canEditProduct(field, newValue, editType, product)) {
-            //if seller can't edit product with this field and new value the error will send by canEditProduct function
-            return;
+    private void editProperty(String changeType, SpecialProperty property) throws CommonException {
+        if (changeType.equals("remove")) {
+            product.getSpecialProperties().remove(property);
+        } else {
+            if(product.getSpecialProperties().contains(property))
+                changeProperty(property);
+            else
+                product.getSpecialProperties().add(property);
         }
-
-        ((Seller) getLoggedUser()).editProduct(editType, field, newValue, product);
-
-        actionCompleted();
     }
 
-    private boolean canEditProduct(String field, Object newValue, String editType, Product product) {
-        //check that product can be edited with intended field and value
+    private void changeProperty(SpecialProperty property) throws CommonException {
+        int i = product.getSpecialProperties().indexOf(property);
+        if(!property.getType().equals(product.getSpecialProperties().get(i).getType()))
+            throw new CommonException("You can't change this property to this value!!");
+        SpecialProperty lastProperty = product.getSpecialProperties().get(i);
+        lastProperty.setNumericValue(property.getNumericValue());
+        lastProperty.setValue(property.getValue());
+    }
+*/
 
-        if (newValue instanceof String) {
-            return canEditStringField(field, (String) newValue);
-        } else if (newValue instanceof HashMap) {
-            try {
-                HashMap<String, String> specialProperties = (HashMap<String, String>) newValue;
-                if (field.equalsIgnoreCase("special-property") &&
-                        canEditProductSpecialProperties(specialProperties, editType, product)) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        product = Product.getProductWithId(request.getHashMap().get("product id"));
 
-                    return true;
-                }
-            } catch (Exception e) {
-                sendError("Wrong properties!!");
-            }
+        //check that seller has product and seller can edit product with that field and new value
+        if (!sellerHasProduct(product)) throw new CommonException("You don't have this product!!");
+        checkErrors(request.getHashMap().get("new value"), request.getHashMap().get("field"));
+        if (request.getHashMap().get("field").equals("property"))
+            canEditProperty(request.getProperty(), request.getHashMap().get("change type"));
+    }
+
+    private void canEditProperty(SpecialProperty property, String changeType) throws CommonException {
+        if (!property.isItValid()) throw new CommonException("Invalid property!!");
+        if ("remove".equals(changeType)) {
+            if (product.getCategory().getSpecialProperties().contains(property))
+                throw new CommonException("Can't remove this property!!");
+        } else {
+            int i = product.getSpecialProperties().indexOf(property);
+            if (!property.getType().equals(product.getSpecialProperties().get(i).getType()))
+                throw new CommonException("You can't change this property to this value!!");
         }
-        return false;
     }
 
-    private boolean canEditStringField(String field, String newValue) {
+    private void checkErrors(String newValue, String field) throws EmptyFieldException, NumberException,
+            CategoryDoesntExistException {
         switch (field) {
-            case "name":
-            case "description":
-                if (newValue.isEmpty()) {
-                    sendError("This field can't be empty!!");
-                    return false;
-                }
-                return true;
-
-            case "price":
-                return isItDouble(newValue);
-
-            case "number-of-product":
-                return isItInteger(newValue);
-
-            case "category":
-                return canEditMainCategory(newValue);
-
-            case "sub-category":
-                return canEditSubCategory(newValue);
-        }
-        return false;
-    }
-
-    private boolean canEditSubCategory(String newValue) {
-        if (Category.isThereSubCategory(newValue)) {
-            return true;
-        }
-        sendError("There isn't any subcategory with this name!!");
-        return false;
-    }
-
-    private boolean canEditMainCategory(String newValue) {
-        if (Category.isThereMainCategory(newValue)) {
-            return true;
-        }
-        sendError("There isn't any category with this name!!");
-        return false;
-    }
-
-    private boolean isItDouble(String newValue) {
-        try {
-            Double.parseDouble(newValue);
-            return true;
-        } catch (NumberFormatException e) {
-            sendError("Please enter valid number!!");
-            return false;
-        }
-    }
-
-    private boolean isItInteger(String newValue) {
-        try {
-            Integer.parseInt(newValue);
-            return true;
-        } catch (NumberFormatException e) {
-            sendError("Please enter valid number!!");
-            return false;
-        }
-    }
-
-    private boolean canEditProductSpecialProperties(HashMap<String, String> specialProperties, String editType, Product product) {
-        switch (editType) {
-            case "append":
-                return canAppendSpecialProperties(specialProperties, product);
-            case "replace":
-                return canReplaceSpecialProperties(specialProperties, product);
-            case "change":
-                return canChangeSpecialProperties(specialProperties, product);
-            case "remove":
-                return canRemoveSpecialProperties(specialProperties, product);
-            default:
-                return false;
-        }
-    }
-
-    private boolean canChangeSpecialProperties(HashMap<String, String> specialProperties, Product product) {
-        //this function check that if special properties entered by use has all product special properties
-
-        for (Map.Entry<String, String> temp : specialProperties.entrySet()) {
-            if (!canChangeSpecialProperties(temp, product)) {
-                sendError("Can't change this properties!!");
-                return false;
+            case "name", "description" -> {
+                if (newValue.isEmpty()) throw new EmptyFieldException(field);
             }
-        }
-        return true;
-    }
-
-    private boolean canChangeSpecialProperties(Map.Entry<String, String> changingEntry, Product product) {
-        for (Map.Entry<String, String> productEntry : product.getSpecialProperties().entrySet()) {
-            if (changingEntry.getKey().equals(productEntry.getKey())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean canReplaceSpecialProperties(HashMap<String, String> specialProperties, Product product) {
-        Category category = product.getSubCategory();
-        if (category == null)
-            category = product.getMainCategory();
-        for (String specialProperty : category.getSpecialProperties()) {
-            if (!specialProperties.containsKey(specialProperty)) {
-                sendError("Can't replace this properties!!");
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean canRemoveSpecialProperties(HashMap<String, String> specialProperties, Product product) {
-        Category category = product.getSubCategory();
-        if (category == null)
-            category = product.getMainCategory();
-        for (String specialProperty : category.getSpecialProperties()) {
-            if (specialProperties.containsKey(specialProperty)) {
-                sendError("Can't remove this properties!!");
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean canAppendSpecialProperties(HashMap<String, String> specialProperties, Product product) {
-        for (Map.Entry<String, String> productEntry : product.getSpecialProperties().entrySet()) {
-            for (Map.Entry<String, String> temp : specialProperties.entrySet()) {
-                if (productEntry.getKey().equals(temp.getKey())) {
-                    sendError("Cant't append this properties!!");
-                    return false;
+            case "price" -> {
+                try {
+                    Double.parseDouble(newValue);
+                } catch (NumberFormatException e) {
+                    throw new NumberException();
                 }
             }
+
+            case "number-of-product" -> {
+                try {
+                    Integer.parseInt(newValue);
+                } catch (NumberFormatException e) {
+                    throw new NumberException();
+                }
+            }
+
+            case "category" -> canEditMainCategory(newValue);
+
+            case "sub-category" -> canEditSubCategory(newValue);
         }
-        return true;
     }
 
+    private void editProduct(String field, String newValue, String changeType, ClientMessage req) {
+        //this function will create a new request for this seller to editing product with data given to this function
+        Request request = new Request();
+        request.setRequestSender(getLoggedUser());
+        request.setType("edit-product");
+
+
+        EditProductRequest editProductRequest = new EditProductRequest(field, newValue, changeType, req.getProperty());
+        editProductRequest.setField(field);
+        editProductRequest.setProductId(product.getId());
+        editProductRequest.setSeller(getLoggedUser().getUsername());
+
+        request.setMainRequest(editProductRequest);
+        request.addToDatabase();
+
+        product.setStatus("IN_EDITING_QUEUE");
+    }
+
+    private void canEditSubCategory(String newValue) throws CategoryDoesntExistException {
+        Category.getSubCategoryByName(newValue);
+    }
+
+    private void canEditMainCategory(String newValue) throws CategoryDoesntExistException {
+        Category.getMainCategoryByName(newValue);
+    }
 }

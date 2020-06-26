@@ -2,10 +2,17 @@ package controller.panels.seller;
 
 import controller.Command;
 import controller.Controller;
-import controller.Error;
 import model.discount.Off;
+import model.ecxeption.CommonException;
+import model.ecxeption.Exception;
+import model.ecxeption.common.*;
+import model.ecxeption.filter.InvalidSortException;
+import model.ecxeption.product.ProductDoesntExistException;
 import model.others.Product;
+import model.others.request.EditOffRequest;
+import model.others.request.Request;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Seller;
 
 import java.util.ArrayList;
@@ -31,17 +38,6 @@ public abstract class ManageOffCommands extends Command {
     public static AddOffCommand getAddOffCommand() {
         return AddOffCommand.getInstance();
     }
-
-    protected boolean canUserDo() {
-        if (getLoggedUser() == null) {
-            sendError(Error.NEED_LOGIN.getError());
-            return false;
-        } else if (!(getLoggedUser() instanceof Seller)) {
-            sendError(Error.NEED_SELLER.getError());
-            return false;
-        }
-        return true;
-    }
 }
 
 
@@ -49,7 +45,7 @@ class ShowOffsCommand extends ManageOffCommands {
     private static ShowOffsCommand command;
 
     private ShowOffsCommand() {
-        this.name = "view offs";
+        this.name = "view offs seller";
     }
 
     public static ShowOffsCommand getInstance() {
@@ -60,22 +56,25 @@ class ShowOffsCommand extends ManageOffCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        showSellerOffs(request.getArrayList().get(0), request.getArrayList().get(1));
+    public ServerMessage process(ClientMessage request) throws InvalidSortException {
+        return showSellerOffs(request.getHashMap().get("sort field"), request.getHashMap().get("sort direction"));
     }
 
-    private void showSellerOffs(String sortField, String sortDirection) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage showSellerOffs(String sortField, String sortDirection) throws InvalidSortException {
         if (sortField != null && sortDirection != null) {
             sortDirection = sortDirection.toLowerCase();
             sortField = sortField.toLowerCase();
         }
 
         if (!checkSort(sortField, sortDirection, "off")) {
-            sendError("Can't sort with this field and direction!!");
+            throw new InvalidSortException();
         } else {
-            sendAnswer(((Seller) getLoggedUser()).getAllOffsInfo(sortField, sortDirection), "off");
+            return sendAnswer(((Seller) getLoggedUser()).getAllOffsInfo(sortField, sortDirection), "off");
         }
     }
 }
@@ -85,7 +84,7 @@ class ViewOffCommand extends ManageOffCommands {
     private static ViewOffCommand command;
 
     private ViewOffCommand() {
-        this.name = "view off";
+        this.name = "view off seller";
     }
 
     public static ViewOffCommand getInstance() {
@@ -96,19 +95,21 @@ class ViewOffCommand extends ManageOffCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getArrayList().get(0)))
-            return;
-        showOff(request.getArrayList().get(0));
+    public ServerMessage process(ClientMessage request) throws NullFieldException, OffDoesntExistException {
+        containNullField(request.getHashMap().get("off id"));
+        return showOff(request.getHashMap().get("off id"));
     }
 
-    private void showOff(String offId) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage showOff(String offId) throws OffDoesntExistException {
         if (!((Seller) getLoggedUser()).sellerHasThisOff(offId)) {
-            sendError("You don't have this off!!");
+            throw new OffDoesntExistException();
         } else {
-            sendAnswer(((Seller) getLoggedUser()).getOffInfo(offId));
+            return sendAnswer(((Seller) getLoggedUser()).getOffInfo(offId));
         }
     }
 }
@@ -116,6 +117,8 @@ class ViewOffCommand extends ManageOffCommands {
 
 class EditOffCommand extends ManageOffCommands {
     private static EditOffCommand command;
+    private Off off;
+    private EditOffRequest editOffRequest;
 
     private EditOffCommand() {
         this.name = "edit off";
@@ -129,136 +132,98 @@ class EditOffCommand extends ManageOffCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        ArrayList<String> reqInfo = getReqInfo(request);
-        if (containNullField(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2)) || containNullField(request.getObject()))
-            return;
-        editOff(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2), request.getObject());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, OffDoesntExistException,
+            ProductDoesntExistException, CommonException, DateException, NumberException {
+        containNullField(request.getHashMap().get("off id"), request.getHashMap().get("field"));
+        containNullField(request.getHashMap().get("new value"), request.getHashMap().get("change type"));
+        editOff(request.getHashMap().get("off id"), request.getHashMap().get("field"), request);
+        return actionCompleted();
     }
 
-    private void editOff(String offId, String field, String type, Object newValue) {
-        //this function will check that if off can be edited with this value and
-        //if yes then it calls editOff function on seller to creating request
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
 
-        Off off = ((Seller) getLoggedUser()).getOffById(offId);
-        if (off == null) {
-            sendError("There isn't off with this id in your offs!!");
-            return;
-        }
-        if (!canEditOff(field, type, newValue, off)) {
-            return;
-        }
-
-        ((Seller) getLoggedUser()).editOff(off, field, newValue, type);
     }
 
-    private boolean canEditOff(String field, String type, Object newValue, Off off) {
+    private void editOff(String offId, String field, ClientMessage req) throws OffDoesntExistException, NumberException, DateException,
+            CommonException, ProductDoesntExistException {
+        off = ((Seller) getLoggedUser()).getOffById(offId);
         switch (field) {
-            case "start-time":
-            case "finish-time":
-                return canEditOffTime(newValue, off, field);
-
-            case "percent":
-                try {
-                    int temp = Integer.parseInt((String) newValue);
-                    if (temp < 100 && temp > 0) {
-                        return true;
-                    }
-                    sendError("Percent should be between 0 and 100!!");
-                    return false;
-                } catch (NumberFormatException e) {
-                    sendError("Wrong number!!");
-                    return false;
-                }
-
-            case "products":
-                return canEditProductInOff(off, newValue, type);
+            case "start-time" -> editStartTime(req.getHashMap().get("new value"));
+            case "finish-time" -> editFinishTime(req.getHashMap().get("new value"));
+            case "percent" -> editPercent(req.getHashMap().get("new value"));
+            case "products" -> editProduct(req.getHashMap().get("new value"), req.getHashMap().get("change type"));
         }
-
-        return false;
     }
 
-    private boolean canEditProductInOff(Off off, Object newValue, String type) {
-        ArrayList<String> productsId;
+    private void editProduct(String productId, String changeType) throws ProductDoesntExistException, CommonException {
+        Product.getProductWithId(productId);
+        if (!(changeType.equals("add") || changeType.equals("remove")))
+            throw new CommonException("Wrong type!!");
+        editOffRequest = new EditOffRequest("product", productId, changeType);
+        createRequest();
+    }
+
+    private void editPercent(String percentString) throws NumberException {
         try {
-            productsId = (ArrayList<String>) newValue;
-        } catch (ClassCastException e) {
-            sendError("Wrong command!!");
-            return false;
+            Integer.parseInt(percentString);
+        } catch (NumberFormatException e) {
+            throw new NumberException("Please enter valid number!!");
         }
-
-        //finding products by their id and save it to products array list
-        ArrayList<Product> products = new ArrayList<>();
-        for (String id : productsId) {
-            Product product = Product.getProductWithId(id);
-            if (product == null) {
-                sendError("There isn't product with this id: " + id + " !!");
-                return false;
-            } else
-                products.add(product);
-        }
-
-        if (type == null) {
-            sendError("Wrong command!!");
-            return false;
-        }
-
-        switch (type) {
-            case "append":
-                for (Product product : products) {
-                    if (off.isItInOff(product)) {
-                        products.remove(product);
-                    }
-                }
-            case "replace":
-                return true;
-            case "remove":
-                for (Product product : products) {
-                    if (!off.isItInOff(product)) {
-                        sendError("Some of this products doesn't exist on off's products!!");
-                        return false;
-                    }
-                }
-                return true;
-            default:
-                return false;
-        }
+        editOffRequest = new EditOffRequest("percent", percentString);
+        createRequest();
     }
 
-    private boolean canEditOffTime(Object newValue, Off off, String field) {
-        int flag = 1;
-        if (!(newValue instanceof String)) {
-            sendError("Wrong command!!");
-        } else if (!Controller.isDateFormatValid((String) newValue)) {
-            sendError("Wrong format for date!!");
-        }
+    private void createRequest() {
+        Request request = new Request();
+        request.setRequestSender(getLoggedUser());
+        request.setType("edit-off");
+        editOffRequest.setOffId(off.getOffId());
+        request.setMainRequest(editOffRequest);
+        request.addToDatabase();
 
-        Date date = Controller.getDateWithString((String) newValue);
+        off.setOffStatus("IN_EDITING_QUEUE");
+    }
+
+    private void editFinishTime(String finishTime) throws DateException {
+        canEditOffTime(finishTime, "finish-time");
+        editOffRequest = new EditOffRequest("finish-time", finishTime);
+        createRequest();
+    }
+
+    private void editStartTime(String startTime) throws DateException {
+        canEditOffTime(startTime, "start-time");
+        editOffRequest = new EditOffRequest("start-time", startTime);
+        createRequest();
+    }
+
+    private void canEditOffTime(String newValue, String field) throws DateException {
+        if (!Controller.isDateFormatValid(newValue)) throw new DateException();
+
+        Date date = Controller.getDateWithString(newValue);
 
         if (field.equals("start-time") && off.isOffStarted()) {
-            sendError("This off started now and you can't change it's starting time!");
+            throw new DateException("This off started now and you can't change it's starting time!");
         } else if (field.equals("start-time") && date.before(Controller.getCurrentTime())) {
-            sendError("Can't change start time to this value!!");
+            throw new DateException("Can't change start time to this value!!");
         } else if (field.equals("finish-time") && off.isOffFinished()) {
-            sendError("This off finished now and you can't change it!!");
+            throw new DateException("This off finished now and you can't change it!!");
         } else if (field.equals("finish-time") && date.before(Controller.getCurrentTime())) {
-            sendError("Can't change finish time to this value!!");
+            throw new DateException("Can't change finish time to this value!!");
         } else if (field.equals("start-time") && date.after(off.getFinishTime())) {
-            sendError("Can't change start time to this value!!");
+            throw new DateException("Can't change start time to this value!!");
         } else if (field.equals("finish-time") && date.before(off.getStartTime())) {
-            sendError("Can't change finish time to this value!!");
-        } else {
-            flag = 0;
+            throw new DateException("Can't change finish time to this value!!");
         }
-        return flag == 0;
     }
 }
 
 
 class AddOffCommand extends ManageOffCommands {
     private static AddOffCommand command;
+    int percent;
+    Date startDate;
+    Date finishDate;
 
     private AddOffCommand() {
         this.name = "add off";
@@ -272,83 +237,40 @@ class AddOffCommand extends ManageOffCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (!canUserDo())
-            return;
-        if (containNullField(request.getFirstHashMap(), request.getArrayList()))
-            return;
-        addOff(request.getFirstHashMap(), request.getArrayList());
+    public ServerMessage process(ClientMessage request) throws Exception {
+        containNullField(request.getHashMap(), request.getArrayList());
+        checkPrimaryErrors(request);
+        addOff(request.getHashMap(), request.getArrayList());
+        return actionCompleted();
     }
 
-    public void addOff(HashMap<String, String> offInformationHashMap, ArrayList<String> products) {
-        if (!isOffInfoValid(offInformationHashMap))
-            return;
-
-        for (String productId : products) {
-            if (!((Seller) getLoggedUser()).hasProduct(productId)) {
-                sendError("You don't have product with this id: " + productId + "!!");
-                return;
-            }
-        }
-        ((Seller) getLoggedUser()).addOff(offInformationHashMap, products);
-
-    }
-
-    private boolean isOffInfoValid(HashMap<String, String> offInfo) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
         //check that if HashMap has all required key
         String[] offInfoKey = {"start-time", "finish-time", "percent"};
         for (String key : offInfoKey) {
-            if (offInfo.containsKey(key)) {
-                sendError("Not enough information!!");
-                return false;
-            }
+            if (!request.getHashMap().containsKey(key)) throw new NotEnoughInformation();
         }
-        if (!isOffDatesValid(offInfo.get("start-time"), offInfo.get("finish-time")))
-            return false;
-        else return isPercentValid(offInfo.get("percent"));
-
-        //all error that could be happened checked and didn't find any error so function should return true
-    }
-
-    private boolean isPercentValid(String percentString) {
-        //check that if percent is valid
+        startDate = getDateWithString(request.getHashMap().get("start-time"));
+        finishDate = getDateWithString(request.getHashMap().get("finish-time"));
+        if (startDate.before(getCurrentTime()) ||
+                finishDate.before(getCurrentTime()) ||
+                !startDate.before(finishDate)) throw new DateException();
         try {
-            int percent = Integer.parseInt(percentString);
+            percent = Integer.parseInt(request.getHashMap().get("percent"));
             if (percent >= 100 || percent <= 0) {
-                sendError("Percent should be a number between 0 and 100!!");
-                return false;
+                throw new InvalidPercentException();
             }
         } catch (NumberFormatException e) {
-            sendError("Please enter valid number for off percent!!");
-            return false;
+            throw new NumberException();
         }
-        return true;
     }
 
-    private boolean isOffDatesValid(String start, String finish) {
-        //check that if starting and finishing date is valid
-
-        if (!Controller.isDateFormatValid(start) ||
-                !Controller.isDateFormatValid(finish)) {
-
-            sendError("Wrong date format!!");
-            return false;
-        }
-
-
-        Date startingDate = Controller.getDateWithString(start);
-        Date finishingDate = Controller.getDateWithString(finish);
-        Date currentDate = Controller.getCurrentTime();
-        if (startingDate.before(currentDate) ||
-                finishingDate.before(currentDate) ||
-                !startingDate.before(finishingDate)) {
-
-            sendError("Wrong Date!!");
-            return false;
-        }
-
-        return true;
+    public void addOff(HashMap<String, String> offInfo, ArrayList<String> products) throws CommonException, DateException {
+        for (String productId : products)
+            if (!((Seller) getLoggedUser()).hasProduct(productId))
+                throw new CommonException("You don't have product with this id: " + productId + "!!");
+        ((Seller) getLoggedUser()).addOff(offInfo, products);
     }
-
 }
 

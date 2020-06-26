@@ -1,9 +1,7 @@
 package controller.product;
 
-import controller.Command;
 import controller.Controller;
 import model.others.Filter;
-import model.send.receive.ClientMessage;
 
 import java.util.ArrayList;
 
@@ -12,7 +10,6 @@ public class AllProductsController extends Controller {
     private ArrayList<Filter> filters;
     private String sortField;
     private String sortDirection;
-    private ArrayList<Command> commands;
 
     private AllProductsController() {
         filters = new ArrayList<>();
@@ -45,26 +42,6 @@ public class AllProductsController extends Controller {
         commands.add(FilterCommands.getDisableFilterCommand());
         commands.add(FilterCommands.getFilterCommonCommand());
     }
-
-    @Override
-    public void processRequest(ClientMessage request) {
-        for (Command command : commands) {
-            if (command.canDoIt(request.getRequest())) {
-                command.process(request);
-                return;
-            }
-        }
-    }
-
-    @Override
-    public boolean canProcess(String request) {
-        for (Command command : commands) {
-            if (command.canDoIt(request))
-                return true;
-        }
-        return false;
-    }
-
 
     void resetFilters() {
         if (loggedUser != null) {

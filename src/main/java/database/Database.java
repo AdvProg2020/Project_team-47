@@ -10,7 +10,6 @@ import model.others.Email;
 import model.others.Product;
 import model.others.request.Request;
 import model.user.User;
-import view.menu.Menu;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -21,25 +20,22 @@ import java.util.Scanner;
 import java.util.TreeSet;
 
 public class Database {
-    private static InputStream inputStream;
+    private static final Gson gson;
     private static OutputStream outputStream;
-    private static Scanner scanner;
-    private static Formatter formatter;
-    private static Gson gson;
 
     static {
         gson = Controller.getGson();
     }
 
-    private ArrayList<CategoryData> categories;
-    private ArrayList<DiscountCodeData> codes;
-    private ArrayList<BuyLog> buyLogs;
-    private ArrayList<SellLog> sellLogs;
-    private ArrayList<OffData> offs;
-    private ArrayList<ProductData> products;
-    private ArrayList<UserData> users;
-    private ArrayList<UserData> notVerifiedUsers;
-    private ArrayList<Request> requests;
+    private final ArrayList<CategoryData> categories;
+    private final ArrayList<DiscountCodeData> codes;
+    private final ArrayList<BuyLog> buyLogs;
+    private final ArrayList<SellLog> sellLogs;
+    private final ArrayList<OffData> offs;
+    private final ArrayList<ProductData> products;
+    private final ArrayList<UserData> users;
+    private final ArrayList<UserData> notVerifiedUsers;
+    private final ArrayList<Request> requests;
     private TreeSet<String> usedUsernames;
     private TreeSet<String> usedProductId;
 
@@ -52,6 +48,7 @@ public class Database {
         sellLogs = new ArrayList<>();
         products = new ArrayList<>();
         users = new ArrayList<>();
+        requests = new ArrayList<>();
         notVerifiedUsers = new ArrayList<>();
         usedUsernames = new TreeSet<>();
         usedProductId = new TreeSet<>();
@@ -59,8 +56,8 @@ public class Database {
 
     private static String readFile(File file) {
         try {
-            inputStream = new FileInputStream(file);
-            scanner = new Scanner(inputStream);
+            InputStream inputStream = new FileInputStream(file);
+            Scanner scanner = new Scanner(inputStream);
             StringBuilder fileContent = new StringBuilder();
             while (scanner.hasNextLine()) {
                 fileContent.append(scanner.nextLine());
@@ -111,7 +108,7 @@ public class Database {
         saveInFile(category, Path.CATEGORIES_FOLDER.getPath() + category.getId() + ".json");
     }
 
-    public static void addRequestToDatabase(Request request, String requestId) {
+    public static void addRequestToDatabase(RequestData request, String requestId) {
         saveInFile(request, Path.REQUESTS_FOLDER.getPath() + requestId + ".json");
     }
 
@@ -135,9 +132,9 @@ public class Database {
         try {
             File file = new File(path);
             outputStream = new FileOutputStream(file);
-            String usedUsernamesString = Controller.getGson().toJson(objectToSave);
+            String object = Controller.getGson().toJson(objectToSave);
             Formatter formatter = new Formatter(outputStream);
-            formatter.format(usedUsernamesString);
+            formatter.format(object);
             formatter.close();
         } catch (FileNotFoundException ignored) {
         } finally {
@@ -167,7 +164,7 @@ public class Database {
     }
 
     public static void removeRequest(String id) {
-        removeFile(Path.RESOURCE.getPath() + id + ".json");
+        removeFile(Path.REQUESTS_FOLDER.getPath() + id + ".json");
     }
 
     public static void removeProduct(String productId) {
@@ -198,22 +195,6 @@ public class Database {
         UserData.connectRelations(this.users, this.sellLogs, this.buyLogs);
     }
 
-    SellLog getSellLogById(String id) {
-        for (SellLog sellLog : sellLogs) {
-            if (sellLog.getLogId().equals(id))
-                return sellLog;
-        }
-        return null;
-    }
-
-    BuyLog getBuyLogById(String id) {
-        for (BuyLog buyLog : buyLogs) {
-            if (buyLog.getLogId().equals(id))
-                return buyLog;
-        }
-        return null;
-    }
-
     private void loadDatabase() {
         this.creatingFolders();
         this.loadEmail();
@@ -238,10 +219,12 @@ public class Database {
     }
 
     private void loadEmail() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter email password!!");
-        Email.setPassword(Menu.getInputCommandWithTrim());
+        Email.setPassword(scanner.nextLine());
         Email.checkPassword();
-        File htmlPage = new File(Path.RESOURCE.getPath() + "HtmlPage.html");
+        scanner.close();
+        File htmlPage = new File(Path.RESOURCE.getPath() + "Others/HtmlPage.html");
         Email.setHtmlPage(readFile(htmlPage));
     }
 
@@ -335,8 +318,10 @@ public class Database {
         Request.setAllNewRequests(requests);
     }
 
-    private void addRequest(String request) {
-        requests.add(gson.fromJson(request, Request.class));
+    private void addRequest(String requestString) {
+        RequestData requestData = gson.fromJson(requestString, RequestData.class);
+        requestData.addToRequests();
+        requests.add(requestData.getRequest());
     }
 
     private void loadBuyLogs() {
@@ -348,7 +333,6 @@ public class Database {
                 continue;
             addBuyLog(readFile(file));
         }
-
     }
 
     private void loadSellLogs() {
@@ -432,10 +416,11 @@ public class Database {
         CODES_FOLDER("src/main/resources/Codes/"),
         OFFS_FOLDER("src/main/resources/Offs/"),
         BUY_LOGS_FOLDER("src/main/resources/Logs/BuyLogs/"),
-        SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs");
+        SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs/"),
+        TEMP_FOLDER("src/main/resources/Temp/");
 
 
-        private String path;
+        private final String path;
 
         Path(String path) {
             this.path = path;

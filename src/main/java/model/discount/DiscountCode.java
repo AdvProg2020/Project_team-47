@@ -3,6 +3,7 @@ package model.discount;
 import controller.Controller;
 import database.Database;
 import database.DiscountCodeData;
+import model.ecxeption.CommonException;
 import model.others.Sort;
 import model.send.receive.DiscountCodeInfo;
 import model.user.Customer;
@@ -13,16 +14,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DiscountCode extends Discount {
-    private static ArrayList<DiscountCode> allDiscountCodes;
+    private static final ArrayList<DiscountCode> allDiscountCodes;
 
     static {
         allDiscountCodes = new ArrayList<>();
     }
 
-    private String discountCode;
+    private final String discountCode;
+    private final HashMap<User, Integer> userUsedTimeHashMap;
     private int maxUsableTime;
     private int maxDiscountAmount;
-    private HashMap<User, Integer> userUsedTimeHashMap;
     private ArrayList<Customer> usersAbleToUse;
 
     public DiscountCode(String code, int percent) {
@@ -42,10 +43,12 @@ public class DiscountCode extends Discount {
         this.discountCode = codeCreator();
     }
 
-    public static DiscountCode getDiscountById(String id) {
-        return allDiscountCodes.stream().
-                filter(discount -> id.equalsIgnoreCase(discount.discountCode))
-                .findAny().orElse(null);
+    public static DiscountCode getDiscountById(String id) throws CommonException {
+        for (DiscountCode discountCode : allDiscountCodes) {
+            if (discountCode.discountCode.equalsIgnoreCase(id))
+                return discountCode;
+        }
+        throw new CommonException("There isn't any code with this id!!");
     }
 
     public static boolean isThereDiscountWithCode(String code) {

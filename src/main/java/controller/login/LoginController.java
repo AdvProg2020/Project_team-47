@@ -1,13 +1,11 @@
 package controller.login;
 
 import controller.Controller;
-import model.send.receive.ClientMessage;
 
 import java.util.ArrayList;
 
 public class LoginController extends Controller {
     private static LoginController loginController;
-    private ArrayList<LoginCommands> commands;
 
 
     private LoginController() {
@@ -26,27 +24,6 @@ public class LoginController extends Controller {
             return loginController;
         loginController = new LoginController();
         return loginController;
-    }
-
-
-    @Override
-    public void processRequest(ClientMessage request) {
-        for (LoginCommands command : commands) {
-            if (command.canDoIt(request.getRequest())) {
-                command.process(request);
-                return;
-            }
-        }
-    }
-
-
-    @Override
-    public boolean canProcess(String request) {
-        for (LoginCommands command : commands) {
-            if (command.canDoIt(request))
-                return true;
-        }
-        return false;
     }
 
 }//end LoginController class

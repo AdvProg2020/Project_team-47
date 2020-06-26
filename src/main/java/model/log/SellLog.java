@@ -8,8 +8,8 @@ import model.send.receive.UserInfo;
 import java.util.ArrayList;
 
 public class SellLog extends Log {
-    private UserInfo seller;
-    private ArrayList<ProductInLog> products;
+    private final UserInfo seller;
+    private final ArrayList<ProductInLog> products;
 
     public SellLog(UserInfo seller) {
         this.seller = seller;

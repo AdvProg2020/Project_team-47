@@ -5,18 +5,18 @@ import java.util.Date;
 
 public class LogInfo {
     private String customer;
-    private String logId;
-    private Date logDate;
+    private final String logId;
+    private final Date logDate;
     private double price;
     private String status;
-    private String logType;//can be "buy log" or "sell log"
+    private final String logType;//can be "buy log" or "sell log"
     private String address;//for buy log
     private String postalCode;//for buy log
     private String phoneNumber;//for buy log
     private String customerRequest;//for buy log
     private double appliedDiscount;//for buy log
     private String seller;//for sell log
-    private ArrayList<ProductInLog> productInLogs;
+    private final ArrayList<ProductInLog> productInLogs;
 
     public LogInfo(String logId, Date logDate, String logType) {
         this.logId = logId;
@@ -132,6 +132,15 @@ public class LogInfo {
 
     public ArrayList<ProductInLog> getProductInLogs() {
         return productInLogs;
+    }
+
+    public String getProduct(int index) {
+        ProductInLog temp = productInLogs.get(index);
+        return temp.productName + "(" + temp.productId + ")   " + temp.number;
+    }
+
+    public int productsNumber() {
+        return productInLogs.size();
     }
 
     private static class ProductInLog {

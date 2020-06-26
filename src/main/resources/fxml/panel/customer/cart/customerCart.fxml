@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Scene xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.customer.cart.CustomerCartController">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="900.0">
+        <Button layoutX="2.0" layoutY="2.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="45.0" prefWidth="98.0" text="back" />
+
+
+
+        <TableView fx:id="tableView" layoutY="61.0" prefHeight="460.0" prefWidth="684.0">
+            <columns>
+
+                <TableColumn fx:id="name" prefWidth="160.0" text="name" />
+                <TableColumn fx:id="price" prefWidth="182.0" text="price" />
+                <TableColumn fx:id="count" minWidth="6.0" prefWidth="171.0" text="count" />
+                <TableColumn fx:id="totalPrice" prefWidth="170.0" text="totalPrice" />
+            </columns>
+        </TableView>
+      <Button layoutX="131.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#showProduct" prefHeight="44.0" prefWidth="116.0" text="show product" />
+      <Button layoutX="266.0" layoutY="2.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="100.0" text="increase" onMouseClicked="#increase"/>
+      <Button layoutX="381.0" layoutY="3.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="94.0" text="decrease" onMouseClicked="#decrease"/>
+      <Button layoutX="491.0" layoutY="3.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="99.0" text="buy cart" onMouseClicked="#buyCart"/>
+        <TextField fx:id="totalPriceOfCart" layoutX="14.0" layoutY="533.0" prefHeight="25.0" prefWidth="210.0" />
+
+
+
+    </AnchorPane>
+</Scene>

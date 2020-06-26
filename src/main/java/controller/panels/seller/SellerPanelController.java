@@ -2,7 +2,12 @@ package controller.panels.seller;
 
 import controller.Command;
 import controller.panels.UserPanelController;
+import model.ecxeption.CommonException;
+import model.ecxeption.Exception;
+import model.ecxeption.user.UserTypeException;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
+import model.user.Seller;
 
 import java.util.ArrayList;
 
@@ -27,10 +32,11 @@ public class SellerPanelController extends UserPanelController {
     private void initializeCommonCommands() {
         commands.add(CommonCommands.getAddProductCommand());
         commands.add(CommonCommands.getRemoveProductCommand());
-        commands.add(CommonCommands.getShowCategoriesCommand());
+//        commands.add(CommonCommands.getShowCategoriesCommand());
         commands.add(CommonCommands.getViewBalanceCommand());
         commands.add(CommonCommands.getViewCompanyInfoCommand());
         commands.add(CommonCommands.getViewSalesHistoryCommand());
+        commands.add(CommonCommands.getAddSellerCommand());
     }
 
     private void initializeManageOffCommands() {
@@ -48,22 +54,23 @@ public class SellerPanelController extends UserPanelController {
     }
 
     @Override
-    public void processRequest(ClientMessage request) {
-        for (Command command : commands) {
-            if (canProcess(request.getRequest())) {
-                command.process(request);
-                return;
-            }
-        }
-    }
-
-
-    @Override
     public boolean canProcess(String request) {
         for (Command command : commands) {
             if (command.canDoIt(request))
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public ServerMessage processRequest(ClientMessage request) throws Exception {
+        if (!(loggedUser instanceof Seller))
+            throw new UserTypeException.NeedSellerException();
+
+        for (Command command : commands)
+            if (command.canDoIt(request.getType()))
+                return command.process(request);
+
+        throw new CommonException("Can't do this request!!");
     }
 }//end SellerPanelController class

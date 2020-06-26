@@ -8,7 +8,7 @@ import model.send.receive.CategoryInfo;
 import java.util.ArrayList;
 
 public class MainCategory extends Category {
-    private ArrayList<SubCategory> subCategories;
+    private final ArrayList<SubCategory> subCategories;
 
 
     public MainCategory() {

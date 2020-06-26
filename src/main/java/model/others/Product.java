@@ -3,9 +3,12 @@ package model.others;
 import controller.Controller;
 import database.Database;
 import database.ProductData;
+import model.category.Category;
 import model.category.MainCategory;
 import model.category.SubCategory;
 import model.discount.Off;
+import model.ecxeption.Exception;
+import model.ecxeption.product.ProductDoesntExistException;
 import model.others.request.AddCommentRequest;
 import model.others.request.Request;
 import model.send.receive.ProductInfo;
@@ -13,12 +16,11 @@ import model.user.Customer;
 import model.user.Seller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 import java.util.TreeSet;
 
 public class Product {
-    private static ArrayList<Product> allProducts;
+    private static final ArrayList<Product> allProducts;
     private static TreeSet<String> usedId;
 
     static {
@@ -26,20 +28,22 @@ public class Product {
         usedId = new TreeSet<>();
     }
 
+    private final ArrayList<Seller> sellers;
+    private final ArrayList<ProductSeller> productSellers;
     private int seenTime;
     private String id;
     private String name;
     private String company;
     private String status;
-    private ArrayList<Seller> sellers;
     private MainCategory mainCategory;
     private SubCategory subCategory;
-    private HashMap<String, String> specialProperties;
+    private ArrayList<SpecialProperty> specialProperties;
     private ArrayList<Comment> comments;
     private String description;
     private ArrayList<Score> scores;
+    private byte[] file;
+    private String fileExtension;
     private double scoreAverage;
-    private ArrayList<ProductSeller> productSellers;
 
     public Product() {
         this.sellers = new ArrayList<>();
@@ -53,8 +57,12 @@ public class Product {
     }
 
     public static void removeProduct(String id) {
-        Product product = getProductWithId(id);
-        removeProduct(product);
+        try {
+            Product product = getProductWithId(id);
+            product.removeProduct();
+        } catch (ProductDoesntExistException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void removeProduct(Product product) {
@@ -78,13 +86,13 @@ public class Product {
             return id;
     }
 
-    public static Product getProductWithId(String id) {
+    public static Product getProductWithId(String id) throws ProductDoesntExistException {
         for (Product product : allProducts) {
             if (id.equalsIgnoreCase(product.id)) {
                 return product;
             }
         }
-        return null;
+        throw new ProductDoesntExistException();
     }
 
     public static boolean isThereProduct(String id) {
@@ -124,99 +132,121 @@ public class Product {
 
     private static boolean inFilter(Product product, ArrayList<Filter> filters) {
         for (Filter filter : filters) {
-            if (filter.getType().toLowerCase().startsWith("equality")) {
-                if (!inEqualityFilter(product, filter))
-                    return false;
-            } else if (filter.getType().toLowerCase().startsWith("equation")) {
-                if (!inEquationFilter(product, filter))
-                    return false;
-            }
-        }
-        return false;
-    }
-
-    private static boolean inEquationFilter(Product product, Filter filter) {
-        if (filter.getFilterKey().equalsIgnoreCase("price")) {
-            for (ProductSeller productSeller : product.productSellers) {
-                if (productSeller.getPrice() <= filter.getSecondDouble() && productSeller.getPrice() >= filter.getFirstDouble())
-                    return true;
-            }
-        } else if (filter.getFilterKey().equalsIgnoreCase("score")) {
-            return filter.getFirstDouble() <= product.getScoreAverage() && filter.getSecondDouble() <= product.getScoreAverage();
-        } else if (filter.getType().toLowerCase().contains("special-properties")) {
-            try {
-                double temp = Double.parseDouble(product.getPropertyValue(filter.getFilterKey()));
-                return filter.getFirstInt() <= temp && filter.getSecondInt() <= temp;
-            } catch (Exception e) {
+            if (!inFilter(product, filter))
                 return false;
-            }
         }
-        return false;
+        return true;
     }
 
-    private static boolean inEqualityFilter(Product product, Filter filter) {
-        if (filter.getFilterKey().equalsIgnoreCase("category")) {
-            return isInCategoryFilter(product, filter);
-        } else if (filter.getFilterKey().equalsIgnoreCase("sub-category")) {
-            return isInSubCategoryFilter(product, filter);
-        } else if (filter.getFilterKey().equalsIgnoreCase("name")) {
-            return isInNameFilter(product, filter);
-        } else if (filter.getType().toLowerCase().contains("special-properties")) {
-            return isInEqualityPropertyFilter(product, filter);
-        } else if (filter.getFilterKey().toLowerCase().equalsIgnoreCase("brand")) {
-            return isInBrandFilter(product, filter);
-        } else if (filter.getFilterKey().toLowerCase().equalsIgnoreCase("availability")) {
-            return isInAvailabilityFilter(product, filter);
-        } else if (filter.getFilterKey().toLowerCase().equalsIgnoreCase("seller")) {
-            return isInSellerFilter(product, filter);
-        }
-        return false;
+    private static boolean inFilter(Product product, Filter filter) {
+        return switch (filter.getFilterKey()) {
+            case "price" -> product.inPriceFilter(filter);
+            case "score" -> product.inScoreFilter(filter);
+            case "brand" -> product.inBrandFilter(filter);
+            case "name" -> product.inNameFilter(filter);
+            case "seller" -> product.inSellerFilter(filter);
+            case "category" -> product.inCategoryFilter(filter);
+            case "sub-category" -> product.inSubcategoryFilter(filter);
+            case "availability" -> product.inAvailabilityFilter(filter);
+            default -> product.inPropertiesFilter(filter);
+        };
     }
 
-    private static boolean isInSellerFilter(Product product, Filter filter) {
-        return product.hasSeller(filter.getFirstFilterValue());
+    public static void setUsedId(TreeSet<String> usedId) {
+        if (usedId == null)
+            return;
+        Product.usedId = usedId;
     }
 
-    private static boolean isInNameFilter(Product product, Filter filter) {
-        return product.getName().toLowerCase().contains(filter.getFirstFilterValue().toLowerCase());
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 
-    private static boolean isInAvailabilityFilter(Product product, Filter filter) {
-        if (filter.getFirstFilterValue().equalsIgnoreCase("yes")) {
-            return product.isAvailable();
-        } else if (filter.getFirstFilterValue().equalsIgnoreCase("no")) {
-            return !product.isAvailable();
-        }
-        return false;
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
     }
 
-    private static boolean isInBrandFilter(Product product, Filter filter) {
-        return product.company.toLowerCase().contains(filter.getFirstFilterValue().toLowerCase());
-    }
-
-    private static boolean isInCategoryFilter(Product product, Filter filter) {
-        return product.getMainCategory().getName().equalsIgnoreCase(filter.getFirstFilterValue());
-    }
-
-    private static boolean isInEqualityPropertyFilter(Product product, Filter filter) {
+    private boolean inPropertiesFilter(Filter filter) {
         try {
-            return product.getPropertyValue(filter.getFilterKey()).toLowerCase()
-                    .contains(filter.getFirstFilterValue().toLowerCase());
+            SpecialProperty property = this.getProperty(filter.getFilterKey());
+            if (property.getType().equalsIgnoreCase("text")) {
+                return property.getValue().equalsIgnoreCase(filter.getFirstFilterValue());
+            } else {
+                return filter.getFirstDouble() <= property.getNumericValue() && filter.getSecondDouble() >= property.getNumericValue();
+            }
         } catch (Exception e) {
             return false;
         }
     }
 
-    private static boolean isInSubCategoryFilter(Product product, Filter filter) {
+    private SpecialProperty getProperty(String filterKey) throws Exception {
+        Category category = mainCategory;
+        if (subCategory != null) category = subCategory;
+        SpecialProperty temp = new SpecialProperty(filterKey);
+        for (SpecialProperty property : specialProperties) if (property.equals(filterKey)) return property;
+        throw new Exception("");
+    }
+
+    private boolean inScoreFilter(Filter filter) {
+        return filter.getFirstDouble() <= this.scoreAverage && filter.getSecondDouble() >= this.scoreAverage;
+    }
+
+    private boolean inPriceFilter(Filter filter) {
+        return filter.getFirstDouble() <= this.getMinimumPrice() && filter.getSecondDouble() >= this.getMinimumPrice();
+    }
+
+    private boolean inSellerFilter(Filter filter) {
+        return this.hasSeller(filter.getFirstFilterValue());
+    }
+
+    private boolean inNameFilter(Filter filter) {
+        return name.toLowerCase().contains(filter.getFirstFilterValue().toLowerCase());
+    }
+
+    private boolean inAvailabilityFilter(Filter filter) {
+        if (filter.getFirstFilterValue().equalsIgnoreCase("yes")) {
+            return this.isAvailable();
+        } else if (filter.getFirstFilterValue().equalsIgnoreCase("no")) {
+            return !this.isAvailable();
+        }
+        return false;
+    }
+
+    private boolean inBrandFilter(Filter filter) {
+        return this.company.toLowerCase().contains(filter.getFirstFilterValue().toLowerCase());
+    }
+
+    private boolean inCategoryFilter(Filter filter) {
+        return this.getMainCategory().getName().equalsIgnoreCase(filter.getFirstFilterValue());
+    }
+
+    private boolean inSubcategoryFilter(Filter filter) {
         try {
-            return product.getSubCategory().getName().equalsIgnoreCase(filter.getFirstFilterValue());
+            return this.getSubCategory().getName().equalsIgnoreCase(filter.getFirstFilterValue());
         } catch (NullPointerException e) {
             return false;
         }
     }
 
-    public static void setUsedId(TreeSet<String> usedId) {
-        Product.usedId = usedId;
+    public ArrayList<SpecialProperty> getSpecialProperties() {
+        return specialProperties;
+    }
+
+    public void setSpecialProperties(ArrayList<SpecialProperty> specialProperties) {
+        this.specialProperties = specialProperties;
+    }
+
+    public void removeProduct() {
+        allProducts.remove(this);
+        for (Seller seller : this.sellers) {
+            seller.removeProduct(this);
+        }
+        for (ProductSeller productSeller : this.productSellers) {
+            if (productSeller.getOff() != null) {
+                productSeller.off.removeProduct(this);
+            }
+        }
+        this.removeFromDatabase();
     }
 
     public void updateDatabase() {
@@ -229,9 +259,14 @@ public class Product {
 
     private void addSellersInfoToData(ProductData productData) {
         for (ProductSeller sellerInfo : this.productSellers) {
-            productData.addSeller(sellerInfo.seller.getUsername(),
-                    sellerInfo.off.getOffId(),
-                    sellerInfo.price, sellerInfo.numberInStock);
+            if (sellerInfo.off == null) {
+                productData.addSeller(sellerInfo.seller.getUsername(), null, sellerInfo.price,
+                        sellerInfo.numberInStock);
+            } else {
+                productData.addSeller(sellerInfo.seller.getUsername(),
+                        sellerInfo.off.getOffId(),
+                        sellerInfo.price, sellerInfo.numberInStock);
+            }
         }
     }
 
@@ -255,6 +290,8 @@ public class Product {
         productData.setSpecialProperties(this.specialProperties);
         productData.setStatus(this.status);
         productData.setName(this.name);
+        productData.setFile(this.file);
+        productData.setFileExtension(this.fileExtension);
     }
 
     private boolean hasSeller(String username) {
@@ -273,18 +310,9 @@ public class Product {
         return false;
     }
 
-    private String getPropertyValue(String key) throws Exception {
-        for (Map.Entry<String, String> entry : this.specialProperties.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase(key)) {
-                return entry.getValue();
-            }
-        }
-        throw new Exception();
-    }
-
     public void removeSellerFromProduct(Seller seller) {
         if (productSellers.size() == 1) {
-            removeProduct(this);
+            this.removeProduct();
             return;
         }
         this.sellers.remove(seller);
@@ -318,6 +346,8 @@ public class Product {
         productInfo.setScoreAverage(this.scoreAverage);
         productInfo.setSpecialProperties(specialProperties);
         productInfo.setDescription(this.description);
+        productInfo.setFile(this.file);
+        productInfo.setFileExtension(this.fileExtension);
         for (ProductSeller productSeller : productSellers) {
             productInfo.addProductSeller(productSeller.getSeller().getUsername(), productSeller.getPrice(),
                     productSeller.getPriceWithOff(), productSeller.getNumberInStock());
@@ -440,14 +470,6 @@ public class Product {
         return sellers;
     }
 
-    public HashMap<String, String> getSpecialProperties() {
-        return specialProperties;
-    }
-
-    public void setSpecialProperties(HashMap<String, String> specialProperties) {
-        this.specialProperties = specialProperties;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -568,6 +590,12 @@ public class Product {
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public Category getCategory() {
+        if (subCategory != null)
+            return subCategory;
+        return mainCategory;
     }
 
     static class ProductSeller {

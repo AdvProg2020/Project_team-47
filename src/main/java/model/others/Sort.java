@@ -11,6 +11,7 @@ import model.user.User;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unchecked")
 public class Sort {
     public static ArrayList<MainCategory> sortMainCategories(String field, String direction, ArrayList<MainCategory> categories) {
         ArrayList<MainCategory> categoriesClone = (ArrayList<MainCategory>) categories.clone();
@@ -48,18 +49,10 @@ public class Sort {
             return productsClone;
         }
         switch (field) {
-            case "name":
-                sortProductByName(productsClone, direction);
-                break;
-            case "score":
-                sortProductByScore(productsClone, direction);
-                break;
-            case "seen-time":
-                sortProductBySeenTime(productsClone, direction);
-                break;
-            case "price":
-                sortProductPrice(productsClone, direction);
-                break;
+            case "name" -> sortProductByName(productsClone, direction);
+            case "score" -> sortProductByScore(productsClone, direction);
+            case "seen-time" -> sortProductBySeenTime(productsClone, direction);
+            case "price" -> sortProductPrice(productsClone, direction);
         }
         return productsClone;
     }
@@ -115,15 +108,9 @@ public class Sort {
             return discountCodesClone;
         }
         switch (field) {
-            case "start-time":
-                sortDiscountWithStartTime(discountCodesClone, direction);
-                break;
-            case "finish-time":
-                sortDiscountWithFinishTime(discountCodesClone, direction);
-                break;
-            case "percent":
-                sortDiscountCodeByPercent(discountCodesClone, direction);
-                break;
+            case "start-time" -> sortDiscountWithStartTime(discountCodesClone, direction);
+            case "finish-time" -> sortDiscountWithFinishTime(discountCodesClone, direction);
+            case "percent" -> sortDiscountCodeByPercent(discountCodesClone, direction);
         }
         return discountCodesClone;
     }
@@ -169,15 +156,9 @@ public class Sort {
             return offsClone;
         }
         switch (field) {
-            case "start-time":
-                sortOffWithStartTime(offsClone, direction);
-                break;
-            case "finish-time":
-                sortOffWithFinishTime(offsClone, direction);
-                break;
-            case "percent":
-                sortOffByPercent(offsClone, direction);
-                break;
+            case "start-time" -> sortOffWithStartTime(offsClone, direction);
+            case "finish-time" -> sortOffWithFinishTime(offsClone, direction);
+            case "percent" -> sortOffByPercent(offsClone, direction);
         }
         return offsClone;
     }
@@ -224,15 +205,9 @@ public class Sort {
         }
 
         switch (field) {
-            case "first-name":
-                sortUserByFirstName(usersClone, direction);
-                break;
-            case "last-name":
-                sortUserByLastName(usersClone, direction);
-                break;
-            case "username":
-                sortUserByUserName(usersClone, direction);
-                break;
+            case "first-name" -> sortUserByFirstName(usersClone, direction);
+            case "last-name" -> sortUserByLastName(usersClone, direction);
+            case "username" -> sortUserByUserName(usersClone, direction);
         }
         return usersClone;
     }
@@ -277,12 +252,8 @@ public class Sort {
             return requestsClone;
         }
         switch (field) {
-            case "apply-date":
-                sortRequestByApplyDate(requestsClone, direction);
-                break;
-            case "sender-username":
-                sortRequestBySenderUsername(requestsClone, direction);
-                break;
+            case "apply-date" -> sortRequestByApplyDate(requestsClone, direction);
+            case "sender-username" -> sortRequestBySenderUsername(requestsClone, direction);
         }
         return requestsClone;
     }
@@ -315,16 +286,15 @@ public class Sort {
         if (direction == null || field == null) {
             return logsClone;
         }
-        switch (field) {
-            case "money":
-                logsClone.sort((o1, o2) -> {
-                    if (direction.startsWith("a")) {
-                        return Double.compare(o1.getPrice(), o2.getPrice());
-                    } else if (direction.startsWith("d")) {
-                        return Double.compare(o1.getPrice(), o2.getPrice());
-                    }
-                    return 1;
-                });
+        if ("money".equals(field)) {
+            logsClone.sort((o1, o2) -> {
+                if (direction.startsWith("a")) {
+                    return Double.compare(o1.getPrice(), o2.getPrice());
+                } else if (direction.startsWith("d")) {
+                    return Double.compare(o1.getPrice(), o2.getPrice());
+                }
+                return 1;
+            });
         }
         return logsClone;
     }

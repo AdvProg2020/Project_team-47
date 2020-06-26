@@ -2,14 +2,27 @@ package controller.off;
 
 import controller.Command;
 import controller.Controller;
+import model.ecxeption.Exception;
+import model.ecxeption.common.DateException;
+import model.ecxeption.common.InvalidPercentException;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.common.NumberException;
+import model.ecxeption.filter.FilterExistException;
+import model.ecxeption.filter.FilterNotExistException;
+import model.ecxeption.filter.WrongFilterException;
+import model.ecxeption.user.UserNotExistException;
+import model.others.ClientFilter;
 import model.others.Filter;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 import model.user.Seller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
-import static controller.Controller.*;
+import static controller.Controller.actionCompleted;
+import static controller.Controller.sendAnswer;
 
 public abstract class FilterCommands extends Command {
     public static FilterCommonCommands getFilterCommonCommands() {
@@ -54,33 +67,36 @@ class FilterCommonCommands extends FilterCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        switch (request.getRequest()) {
-            case "show available filters offs":
-                showAvailableFilters();
-                break;
-            case "current filters offs":
-                currentFilters();
-                break;
+    public ServerMessage process(ClientMessage request) {
+        if ("show available filters offs".equals(request.getType())) {
+            return showAvailableFilters();
+        } else {
+            return currentFilters();
         }
     }
 
-    private void showAvailableFilters() {
-        ArrayList<String> filters = new ArrayList<>();
-        filters.add("Percent");
-        filters.add("Start and Finish Time");
-        filters.add("Seller Username");
-        filters.add("Off status(IN_EDIT_QUEUE | EDIT_ACCEPTED | EDIT_DECLINED | CONFIRMED) ");
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
 
-        sendAnswer(filters, "filter");
     }
 
-    private void currentFilters() {
-        ArrayList<String> currentFilters = new ArrayList<>();
-        for (Filter filter : filters()) {
-            currentFilters.add(filter.toString());
-        }
-        sendAnswer(currentFilters, "filter");
+    private ServerMessage showAvailableFilters() {
+        ArrayList<ClientFilter> filters = new ArrayList<>();
+        filters.add(new ClientFilter("Percent", "numeric", "%", "Percent"));
+        filters.add(new ClientFilter("Time", "date", "", "Start Time", "Finish Time"));
+        filters.add(new ClientFilter("Seller", "text", "", "Seller Username"));
+        filters.add(new ClientFilter("Off Status", "check box", "",
+                "In Edit Queue", "Edit Accepted", "Edit Declined", "Confirmed"));
+        return sendAnswer(filters, "filter");
+    }
+
+    private ServerMessage currentFilters() {
+        return null;
+//        ArrayList<String> currentFilters = new ArrayList<>();
+//        for (Filter filter : filters()) {
+//            currentFilters.add(filter.toString());
+//        }
+//        return sendAnswer(currentFilters, "filter");
     }
 
 }
@@ -100,51 +116,47 @@ class AddFilterCommand extends FilterCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        ArrayList<String> reqInfo = getReqInfo(request);
-        if (containNullField(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2)))
-            return;
-        addFilter(reqInfo.get(0), reqInfo.get(1), reqInfo.get(2));
+    public ServerMessage process(ClientMessage request) throws Exception {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        containNullField(reqInfo.get("filter key"), reqInfo.get("first value"), reqInfo.get("second value"));
+        checkPrimaryErrors(request);
+        return addFilter(reqInfo.get("filter key"), reqInfo.get("first value"), reqInfo.get("second value"));
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        if (isFilterExist(reqInfo.get("filter key"))) {
+            throw new FilterExistException();
+        }
     }
 
 
-    private void addFilter(String filterKey, String firstFilterValue, String secondFilterValue) {
-        if (isFilterExist(filterKey)) {
-            sendError("You are already using this filter!!");
-            return;
-        }
-
+    private ServerMessage addFilter(String filterKey, String firstFilterValue, String secondFilterValue) throws Exception {
         switch (filterKey) {
-            case "time":
+            case "time" -> {
                 if (!Controller.isDateFormatValid(firstFilterValue) || !Controller.isDateFormatValid(secondFilterValue)) {
-                    sendError("Please enter valid date!!");
+                    throw new DateException();
                 } else
                     createFilterForTime(firstFilterValue, secondFilterValue);
-                break;
-
-            case "percent":
+            }
+            case "percent" -> {
                 try {
                     int min = Integer.parseInt(firstFilterValue);
                     int max = Integer.parseInt(secondFilterValue);
                     createFilterForPercent(min, max);
                 } catch (NumberFormatException e) {
-                    sendError("Please enter valid number!!");
+                    throw new NumberException();
                 }
-                break;
-
-            case "seller":
-                createFilterForSeller(firstFilterValue);
-                break;
-
-            case "off-status":
-                createFilterForOffStatus(firstFilterValue);
-                break;
-            default:
-                sendError("Wrong key for filtering!!");
+            }
+            case "seller" -> createFilterForSeller(firstFilterValue);
+            case "off-status" -> createFilterForOffStatus(firstFilterValue);
+            default -> throw new WrongFilterException();
         }
+        return actionCompleted();
     }
 
-    private void createFilterForOffStatus(String status) {
+    private void createFilterForOffStatus(String status) throws Exception {
         switch (status) {
             case "in-edit-queue":
             case "started":
@@ -152,20 +164,18 @@ class AddFilterCommand extends FilterCommands {
             case "accepted-by-manager":
                 break;
             default:
-                sendError("There is no such status!!");
-                return;
+                throw new Exception("Wrong value!");
         }
         Filter filter = new Filter();
         filter.setType("equality");
         filter.setFilterKey("status");
         filter.setFirstFilterValue(status);
         addFilter(filter);
-        actionCompleted();
     }
 
-    private void createFilterForSeller(String sellerUsername) {
+    private void createFilterForSeller(String sellerUsername) throws UserNotExistException {
         if (!Seller.isThereSeller(sellerUsername)) {
-            sendError("There isn't any seller with this username");
+            throw new UserNotExistException();
         } else {
             Filter filter = new Filter();
             filter.setType("equality");
@@ -175,9 +185,9 @@ class AddFilterCommand extends FilterCommands {
         }
     }
 
-    private void createFilterForPercent(int min, int max) {
+    private void createFilterForPercent(int min, int max) throws InvalidPercentException {
         if (min < 0 || max <= min || max > 100) {
-            sendError("Please enter valid percent!!");
+            throw new InvalidPercentException();
         } else {
             Filter filter = new Filter();
             filter.setType("equation");
@@ -185,41 +195,40 @@ class AddFilterCommand extends FilterCommands {
             filter.setFirstInt(min);
             filter.setSecondInt(max);
             addFilter(filter);
-            actionCompleted();
         }
     }
 
-    private void createFilterForTime(String startDate, String finishDate) {
+    private void createFilterForTime(String startDate, String finishDate) throws DateException {
         Date start = Controller.getDateWithString(startDate);
         Date finish = Controller.getDateWithString(finishDate);
-        if (start.after(finish)) {
-            sendError("Please enter valid date!!");
-            return;
-        }
+        if (start == null || finish == null)
+            throw new DateException();
+        if (start.after(finish))
+            throw new DateException();
+
         Filter filter = new Filter();
         filter.setType("equation");
         filter.setFilterKey("time");
         filter.setFirstFilterValue(startDate);
         filter.setSecondFilterValue(finishDate);
         addFilter(filter);
-        actionCompleted();
     }
 
     private boolean isFilterExist(String key) {
         //check that if there is a filter with given key
         switch (key) {
-            case "time":
-            case "percent":
-            case "seller":
-            case "off-status":
+            case "time", "percent", "seller", "off-status" -> {
                 for (Filter filter : filters()) {
                     if (filter.getFilterKey().equals(key)) {
                         return true;
                     }
                 }
                 return false;
-            default:
+            }
+
+            default -> {
                 return true;
+            }
         }
     }
 }
@@ -239,13 +248,17 @@ class DisableFilterCommand extends FilterCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getFirstString()))
-            return;
-        disableFilter(request.getFirstString().toLowerCase());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, FilterNotExistException {
+        containNullField(request.getHashMap(), request.getHashMap().get("filter key"));
+        disableFilter(request.getHashMap().get("filter key").toLowerCase());
+        return actionCompleted();
     }
 
-    private void disableFilter(String filterKey) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) {
+    }
+
+    private void disableFilter(String filterKey) throws FilterNotExistException {
         for (Filter filter : filters()) {
             if (filter.getFilterKey().equals(filterKey)) {
                 removeFilter(filter);
@@ -253,7 +266,7 @@ class DisableFilterCommand extends FilterCommands {
                 return;
             }
         }
-        sendError("There isn't any filter with this key!!");
+        throw new FilterNotExistException();
     }
 
 }

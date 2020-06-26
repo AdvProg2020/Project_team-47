@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="150.0" prefWidth="850.0"
+            xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.ProductPane">
+    <Label layoutX="180.0" layoutY="29.0" prefHeight="35.0" prefWidth="47.0" text="Id:" AnchorPane.leftAnchor="180.0">
+        <font>
+            <Font size="16.0"/>
+        </font>
+    </Label>
+    <ImageView fx:id="imageView" fitHeight="109.0" fitWidth="131.0" layoutX="14.0" layoutY="21.0" pickOnBounds="true">
+        <Image url="@../../Images/main-menu-background.jpg"/>
+    </ImageView>
+    <Label layoutX="180.0" layoutY="83.0" prefHeight="35.0" prefWidth="47.0" text="Name:" AnchorPane.leftAnchor="180.0">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Label>
+    <Label layoutX="337.0" layoutY="29.0" prefHeight="35.0" prefWidth="90.0" text="Price:">
+        <font>
+            <Font size="16.0"/>
+        </font>
+    </Label>
+    <Label fx:id="numberInStockLabel" layoutX="337.0" layoutY="83.0" prefHeight="35.0" prefWidth="131.0"
+           text="Number In Stock:">
+        <font>
+            <Font size="16.0"/>
+        </font>
+    </Label>
+    <Label layoutX="566.0" layoutY="34.0" prefHeight="18.0" prefWidth="90.0" text="Category:">
+        <font>
+            <Font size="16.0"/>
+        </font>
+    </Label>
+    <Label fx:id="subCategoryLabel" layoutX="566.0" layoutY="91.0" prefHeight="18.0" prefWidth="90.0"
+           text="Sub Category:">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Text fx:id="id" layoutX="227.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Text>
+    <Text fx:id="name" layoutX="227.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Text>
+    <Text fx:id="price" layoutX="403.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Text>
+    <Text fx:id="numberInStock" layoutX="468.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Text>
+    <Text fx:id="category" layoutX="663.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Text>
+    <Text fx:id="subCategory" layoutX="663.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Text>
+</AnchorPane>

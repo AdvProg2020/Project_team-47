@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Scene xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.manager.EditCategoryPage">
+    <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../Others/Stylesheet.css">
+        <TextField fx:id="category" layoutX="34.0" layoutY="29.0" prefHeight="32.0" prefWidth="170.0" promptText="Category">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </TextField>
+        <RadioButton fx:id="mainCategoryRadioButton" layoutX="223.0" layoutY="34.0" mnemonicParsing="false" text="Main Category">
+            <toggleGroup>
+                <ToggleGroup fx:id="type" />
+            </toggleGroup>
+            <font>
+                <Font size="15.0" />
+            </font>
+        </RadioButton>
+        <RadioButton layoutX="370.0" layoutY="36.0" mnemonicParsing="false" selected="true" text="Sub Category" toggleGroup="$type">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </RadioButton>
+        <TextField fx:id="name" layoutX="37.0" layoutY="110.0" prefHeight="46.0" prefWidth="134.0" promptText="New Name">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </TextField>
+        <Button layoutX="211.0" layoutY="110.0" mnemonicParsing="false" onAction="#changeName" prefHeight="52.0" prefWidth="299.0" text="Change Name">
+            <font>
+                <Font size="17.0" />
+            </font>
+        </Button>
+        <TextField fx:id="propertyKey" layoutX="54.0" layoutY="260.0" prefHeight="39.0" prefWidth="203.0" promptText="Porperty Key">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <TextField fx:id="propertyUnit" layoutX="53.0" layoutY="329.0" prefHeight="42.0" prefWidth="201.0" promptText="Property Unit">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <RadioButton fx:id="numericRadioButton" layoutX="59.0" layoutY="396.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="83.0" selected="true" text="Numeric">
+            <toggleGroup>
+                <ToggleGroup fx:id="propertyType" />
+            </toggleGroup>
+            <font>
+                <Font size="15.0" />
+            </font>
+        </RadioButton>
+        <RadioButton layoutX="185.0" layoutY="392.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="109.0" text="Text" toggleGroup="$propertyType">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </RadioButton>
+        <Button layoutX="59.0" layoutY="457.0" mnemonicParsing="false" onAction="#addProperty" prefHeight="44.0" prefWidth="179.0" text="Add Property">
+            <font>
+                <Font size="17.0" />
+            </font>
+        </Button>
+        <Button layoutX="59.0" layoutY="513.0" mnemonicParsing="false" onAction="#removeProperty" prefHeight="43.0" prefWidth="178.0" text="Remove Property">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Button>
+        <Button layoutX="710.0" layoutY="517.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="201.0" text="Back">
+            <font>
+                <Font name="Cambria" size="20.0" />
+            </font>
+        </Button>
+        <Text fx:id="error" fill="RED" layoutX="642.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="324.0032958984375">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Text>
+    </AnchorPane>
+</Scene>

@@ -1,16 +1,13 @@
 package controller.product;
 
-import controller.Command;
 import controller.Controller;
 import model.others.Product;
-import model.send.receive.ClientMessage;
 
 import java.util.ArrayList;
 
 public class ProductController extends Controller {
     private static ProductController productController;
     private Product product;
-    private ArrayList<Command> commands;
 
     private ProductController() {
         commands = new ArrayList<>();
@@ -44,26 +41,6 @@ public class ProductController extends Controller {
         } else {
             this.product = product;
         }
-    }
-
-
-    @Override
-    public void processRequest(ClientMessage request) {
-        for (Command command : commands) {
-            if (command.canDoIt(request.getRequest())) {
-                command.process(request);
-                return;
-            }
-        }
-    }
-
-    @Override
-    public boolean canProcess(String request) {
-        for (Command command : commands) {
-            if (command.canDoIt(request))
-                return true;
-        }
-        return false;
     }
 
 }//end ProductController class

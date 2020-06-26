@@ -2,6 +2,8 @@ package model.others.request;
 
 import controller.Controller;
 import database.Database;
+import database.RequestData;
+import model.ecxeption.request.RequestDoesntExistException;
 import model.others.Sort;
 import model.send.receive.RequestInfo;
 import model.user.User;
@@ -49,48 +51,66 @@ public class Request {
 
     public static boolean isThereRequestWithId(String id) {
         for (Request request : allNewRequests) {
-            if (request.requestId.equals(id)) {
+            if (request == null) continue;
+            if (id.equalsIgnoreCase(request.requestId)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static Request getRequestById(String requestId) {
+    public static Request getRequestById(String requestId) throws RequestDoesntExistException {
         for (Request request : allNewRequests) {
-            if (request.requestId.equals(requestId)) {
+            if (request.requestId.equalsIgnoreCase(requestId)) {
                 return request;
             }
         }
-        return null;
+        throw new RequestDoesntExistException();
     }
 
-    public static void acceptNewRequest(String id) {
-        Request request = getRequestById(id);
-        assert request != null;
-        request.mainRequest.accept(request.type);
-        allNewRequests.remove(request);
-        request.removeFromDatabase();
-    }
-
-    public static void declineNewRequest(String id) {
+    public static void declineNewRequest(String id) throws RequestDoesntExistException {
         Request request = getRequestById(id);
         request.mainRequest.decline();
         allNewRequests.remove(request);
         request.removeFromDatabase();
     }
 
-    public static boolean canDoRequest(String id) {
-        Request request = getRequestById(id);
-        return request.mainRequest.update(request.type);
-    }
-
     public static void setAllNewRequests(ArrayList<Request> allNewRequests) {
+        if (allNewRequests == null)
+            return;
         Request.allNewRequests = allNewRequests;
     }
 
+    private void mainRequest() {
+
+    }
+
+    public void accept() {
+        this.mainRequest.accept();
+        allNewRequests.remove(this);
+        this.removeFromDatabase();
+    }
+
+    public void decline() {
+        this.mainRequest.decline();
+        allNewRequests.remove(this);
+        this.removeFromDatabase();
+    }
+
+    public boolean canDoRequest() {
+        return this.mainRequest.update();
+    }
+
     public void addToDatabase() {
-        Database.addRequestToDatabase(this, requestId);
+        RequestData requestData = new RequestData(requestId, requestSenderUserName, type, applyDate, responseDate, status);
+        if (mainRequest instanceof AddCommentRequest) requestData.setAddCommentRequest((AddCommentRequest) mainRequest);
+        else if (mainRequest instanceof AddOffRequest) requestData.setAddOffRequest((AddOffRequest) mainRequest);
+        else if (mainRequest instanceof AddProductRequest)
+            requestData.setAddProductRequest((AddProductRequest) mainRequest);
+        else if (mainRequest instanceof EditOffRequest) requestData.setEditOffRequest((EditOffRequest) mainRequest);
+        else if (mainRequest instanceof EditProductRequest)
+            requestData.setEditProductRequest((EditProductRequest) mainRequest);
+        Database.addRequestToDatabase(requestData, requestId);
     }
 
     public RequestInfo getRequestInfo() {
@@ -99,6 +119,7 @@ public class Request {
         requestInfo.setType(type);
         requestInfo.setId(requestId);
         requestInfo.setRequestedSender(requestSenderUserName);
+        this.mainRequest.requestInfoSetter(requestInfo);
         return requestInfo;
     }
 
@@ -132,11 +153,31 @@ public class Request {
         return applyDate;
     }
 
+    public void setApplyDate(Date applyDate) {
+        this.applyDate = applyDate;
+    }
+
     public void setMainRequest(MainRequest mainRequest) {
         this.mainRequest = mainRequest;
     }
 
     public void removeFromDatabase() {
         Database.removeRequest(this.requestId);
+    }
+
+    public void setId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    public void setRequestSenderUserName(String requestSenderUserName) {
+        this.requestSenderUserName = requestSenderUserName;
+    }
+
+    public void setResponseDate(Date responseDate) {
+        this.responseDate = responseDate;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

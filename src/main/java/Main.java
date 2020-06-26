@@ -1,21 +1,16 @@
 import database.Database;
-import graphicView.GraphicView;
-import view.menu.UserMenu.customer.CustomerPanelMenu;
+import graphic.GraphicView;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-
-public class Main {
+public class Main extends Application {
     public static void main(String[] args) {
-        //loading database
-        //new Database().startDatabaseLoading();
+        new Database().startDatabaseLoading();
+        launch(args);
+    }
 
-        //with console
-        //new CustomerPanelMenu(null).autoExecute();
-
-        //with javaFX
-        new GraphicView().run(args);
-
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        GraphicView.getInstance().start(primaryStage);
     }
 }

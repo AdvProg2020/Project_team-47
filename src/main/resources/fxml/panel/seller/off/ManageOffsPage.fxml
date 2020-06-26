@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.text.*?>
+<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../../Others/Stylesheet.css"
+       xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.seller.offs.ManageOffsPage">
+    <AnchorPane>
+        <TableView fx:id="table" layoutX="19.0" layoutY="15.0" prefHeight="660.0" prefWidth="431.0">
+            <columns>
+                <TableColumn fx:id="id" prefWidth="106.13334083557129" text="Id"/>
+                <TableColumn fx:id="percent" editable="false" prefWidth="113.86666107177734" text="Percent"/>
+                <TableColumn fx:id="start" prefWidth="102.66668701171875" text="Start"/>
+                <TableColumn fx:id="finish" prefWidth="108.79998779296875" text="Finish"/>
+            </columns>
+        </TableView>
+        <Button layoutX="610.0" layoutY="204.0" mnemonicParsing="false" onAction="#showOff"
+                onMouseEntered="#showTextFields" prefHeight="63.0" prefWidth="260.0" text="Show Off"
+                AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="130.0">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </Button>
+        <Button layoutX="614.0" layoutY="300.0" mnemonicParsing="false" onAction="#addOff"
+                onMouseEntered="#hideTextFields" prefHeight="63.0" prefWidth="260.0" text="Add Off"
+                AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="130.0">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </Button>
+        <Button layoutX="608.0" layoutY="398.0" mnemonicParsing="false" onAction="#back"
+                onMouseEntered="#hideTextFields" prefHeight="63.0" prefWidth="279.0" text="Back"
+                AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="130.0">
+            <font>
+                <Font name="System Italic" size="20.0"/>
+            </font>
+        </Button>
+        <TextField fx:id="textField" layoutX="610.0" layoutY="136.0" prefHeight="40.0" prefWidth="285.0"
+                   promptText="Off Id" visible="false" AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="130.0">
+            <font>
+                <Font size="17.0"/>
+            </font>
+        </TextField>
+        <Text fx:id="error" fill="RED" layoutX="610.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              visible="false" wrappingWidth="287.2034912109375" AnchorPane.leftAnchor="610.0"
+              AnchorPane.topAnchor="104.0">
+            <font>
+                <Font size="13.0"/>
+            </font>
+        </Text>
+    </AnchorPane>
+</Scene>

@@ -3,14 +3,17 @@ package database;
 import model.category.Category;
 import model.category.MainCategory;
 import model.category.SubCategory;
+import model.ecxeption.product.CategoryDoesntExistException;
+import model.ecxeption.product.ProductDoesntExistException;
 import model.others.Product;
+import model.others.SpecialProperty;
 
 import java.util.ArrayList;
 
 public class CategoryData {
-    private String type;
+    private final String type;
     private String name;
-    private ArrayList<String> specialProperties;
+    private ArrayList<SpecialProperty> specialProperties;
     private ArrayList<String> productsId;
     private ArrayList<String> subCategoriesNames;
     private String mainCategoryName;
@@ -25,6 +28,8 @@ public class CategoryData {
     }
 
     static void addCategories(ArrayList<CategoryData> categories) {
+        if (categories == null)
+            return;
         for (CategoryData category : categories) {
             category.createCategory();
         }
@@ -37,26 +42,37 @@ public class CategoryData {
     }
 
     private void connectRelations() {
-        Category category;
-        if (this.type.equals("main-category")) {
-            category = Category.getMainCategoryByName(this.name);
-            this.connectSubCategories((MainCategory) category);
-        } else {
-            category = Category.getSubCategoryByName(this.name);
-            ((SubCategory) category).setMainCategory(Category.getMainCategoryByName(this.mainCategoryName));
+        try {
+            Category category;
+            if (this.type.equals("main-category")) {
+                category = Category.getMainCategoryByName(this.name);
+                this.connectSubCategories((MainCategory) category);
+            } else {
+                category = Category.getSubCategoryByName(this.name);
+                ((SubCategory) category).setMainCategory(Category.getMainCategoryByName(this.mainCategoryName));
+            }
+            this.connectProducts(category);
+        } catch (CategoryDoesntExistException e) {
+            e.printStackTrace();
         }
-        this.connectProducts(category);
     }
 
     private void connectProducts(Category category) {
         for (String productId : this.productsId) {
-            category.addProduct(Product.getProductWithId(productId));
+            try {
+                category.addProduct(Product.getProductWithId(productId));
+            } catch (ProductDoesntExistException ignored) {
+            }
         }
     }
 
     private void connectSubCategories(MainCategory category) {
         for (String subCategoryName : this.subCategoriesNames) {
-            category.addSubCategory(Category.getSubCategoryByName(subCategoryName));
+            try {
+                category.addSubCategory(Category.getSubCategoryByName(subCategoryName));
+            } catch (CategoryDoesntExistException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -83,7 +99,7 @@ public class CategoryData {
         this.name = name;
     }
 
-    public void setSpecialProperties(ArrayList<String> specialProperties) {
+    public void setSpecialProperties(ArrayList<SpecialProperty> specialProperties) {
         this.specialProperties = specialProperties;
     }
 

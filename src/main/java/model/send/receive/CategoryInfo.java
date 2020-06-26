@@ -1,19 +1,20 @@
 package model.send.receive;
 
 import model.others.Product;
+import model.others.SpecialProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CategoryInfo {
     private String type;
-    private String name;
-    private ArrayList<String> specialProperties;
-    private HashMap<String, String> productsNameId;
+    private final String name;
+    private final ArrayList<SpecialProperty> specialProperties;
+    private final HashMap<String, String> productsNameId;
     private ArrayList<String> subCategories;
     private String mainCategory;
 
-    public CategoryInfo(String name, ArrayList<String> properties) {
+    public CategoryInfo(String name, ArrayList<SpecialProperty> properties) {
         this.name = name;
         this.specialProperties = properties;
         this.productsNameId = new HashMap<>();
@@ -31,19 +32,11 @@ public class CategoryInfo {
         this.productsNameId.put(product.getName(), product.getId());
     }
 
-    public void setSubCategories(ArrayList<String> subCategories) {
-        this.subCategories = subCategories;
-    }
-
-    public void setMainCategory(String mainCategory) {
-        this.mainCategory = mainCategory;
-    }
-
     public String getName() {
         return name;
     }
 
-    public ArrayList<String> getSpecialProperties() {
+    public ArrayList<SpecialProperty> getSpecialProperties() {
         return specialProperties;
     }
 
@@ -55,7 +48,15 @@ public class CategoryInfo {
         return subCategories;
     }
 
+    public void setSubCategories(ArrayList<String> subCategories) {
+        this.subCategories = subCategories;
+    }
+
     public String getMainCategory() {
         return mainCategory;
+    }
+
+    public void setMainCategory(String mainCategory) {
+        this.mainCategory = mainCategory;
     }
 }

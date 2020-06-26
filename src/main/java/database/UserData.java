@@ -2,6 +2,10 @@ package database;
 
 import model.discount.DiscountCode;
 import model.discount.Off;
+import model.ecxeption.CommonException;
+import model.ecxeption.common.OffDoesntExistException;
+import model.ecxeption.product.ProductDoesntExistException;
+import model.ecxeption.user.UserNotExistException;
 import model.log.BuyLog;
 import model.log.SellLog;
 import model.others.Product;
@@ -52,12 +56,16 @@ public class UserData {
 
 
     static void addUsers(ArrayList<UserData> users) {
+        if (users == null)
+            return;
         for (UserData user : users) {
             user.createUser().addToUsersFromDatabase();
         }
     }
 
     static void addNotVerifiedUsers(ArrayList<UserData> notVerifiedUsers) {
+        if (notVerifiedUsers == null)
+            return;
         for (UserData notVerifiedUser : notVerifiedUsers) {
             notVerifiedUser.createUser().addToVerificationListFromDatabase();
         }
@@ -70,7 +78,13 @@ public class UserData {
     }
 
     private void connectRelations(ArrayList<SellLog> sellLogs, ArrayList<BuyLog> buyLogs) {
-        User user = User.getUserByUsername(this.username);
+        User user = null;
+        try {
+            user = User.getUserByUsername(this.username);
+        } catch (UserNotExistException e) {
+            e.printStackTrace();
+            return;
+        }
         if (user instanceof Seller) {
             this.connectProducts((Seller) user);
             this.connectOffs((Seller) user);
@@ -83,9 +97,14 @@ public class UserData {
 
     private void connectDiscountCodes(Customer customer) {
         for (String code : this.discountCodes) {
-            DiscountCode discountCode = DiscountCode.getDiscountById(code);
-            if (discountCode != null)
-                customer.addDiscountCode(discountCode);
+            DiscountCode discountCode = null;
+            try {
+                discountCode = DiscountCode.getDiscountById(code);
+            } catch (CommonException e) {
+                e.printStackTrace();
+                continue;
+            }
+            customer.addDiscountCode(discountCode);
         }
     }
 
@@ -123,36 +142,44 @@ public class UserData {
 
     private void connectOffs(Seller seller) {
         for (String offId : this.offsId) {
-            Off off = Off.getOffById(offId);
-            if (off != null)
-                seller.addOff(off);
+            Off off = null;
+            try {
+                off = Off.getOffById(offId);
+            } catch (OffDoesntExistException e) {
+                e.printStackTrace();
+                continue;
+            }
+            seller.addOff(off);
         }
     }
 
     private void connectProducts(Seller seller) {
         for (String productId : this.productsId) {
-            Product product = Product.getProductWithId(productId);
-            if (product != null)
-                seller.addProduct(product);
+            Product product = null;
+            try {
+                product = Product.getProductWithId(productId);
+            } catch (ProductDoesntExistException e) {
+                e.printStackTrace();
+                continue;
+            }
+            seller.addProduct(product);
         }
     }
 
     private User createUser() {
         User user;
         switch (this.type) {
-            case "seller":
+            case "seller" -> {
                 user = new Seller();
                 ((Seller) user).setCompanyName(this.companyName);
                 ((Seller) user).setCompanyInfo(this.companyInfo);
                 ((Seller) user).setMoney(this.money);
-                break;
-            case "customer":
+            }
+            case "customer" -> {
                 user = new Customer();
                 ((Customer) user).setMoney(this.money);
-                break;
-            default:
-                user = new Manager();
-                break;
+            }
+            default -> user = new Manager();
         }
         user.setType(this.type);
         user.setPassword(this.password);

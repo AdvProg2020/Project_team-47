@@ -3,10 +3,13 @@ package model.user;
 import controller.Controller;
 import database.UserData;
 import model.discount.Off;
+import model.ecxeption.common.DateException;
+import model.ecxeption.common.OffDoesntExistException;
 import model.log.Log;
 import model.others.Product;
 import model.others.Sort;
-import model.others.request.*;
+import model.others.request.AddOffRequest;
+import model.others.request.Request;
 import model.send.receive.LogInfo;
 import model.send.receive.OffInfo;
 import model.send.receive.ProductInfo;
@@ -18,9 +21,9 @@ import java.util.HashMap;
 public class Seller extends User {
     private String companyName;
     private String companyInfo;
-    private ArrayList<Log> sellLogs;
-    private ArrayList<Product> allProducts;
-    private ArrayList<Off> allOff;
+    private final ArrayList<Log> sellLogs;
+    private final ArrayList<Product> allProducts;
+    private final ArrayList<Off> allOff;
     private double money;
 
 
@@ -63,12 +66,12 @@ public class Seller extends User {
         return sellInfo;
     }
 
-    public Off getOffById(String id) {
+    public Off getOffById(String id) throws OffDoesntExistException {
         for (Off off : allOff) {
             if (id.equals(off.getOffId()))
                 return off;
         }
-        return null;
+        throw new OffDoesntExistException();
     }
 
     public Product getProductById(String id) {
@@ -135,82 +138,15 @@ public class Seller extends User {
         return null;
     }
 
-    public void editProduct(String type, String field, Object newValue, Product product) {
-        //this function will create a new request for this seller to editing product with data given to this function
-        Request request = new Request();
-        request.setRequestSender(this);
-        request.setType("edit-product " + type);
-
-
-        EditProductRequest editProductRequest = new EditProductRequest();
-        if (newValue instanceof HashMap) {
-            HashMap<String, String> specialProperties = (HashMap<String, String>) newValue;
-            editProductRequest.setNewValueHashMap(specialProperties);
-        } else if (newValue instanceof String)
-            editProductRequest.setNewValue((String) newValue);
-
-        editProductRequest.setField(field);
-        editProductRequest.setProductId(product.getId());
-        editProductRequest.setSeller(this.getUsername());
-
-        request.setMainRequest(editProductRequest);
-        request.addToDatabase();
-
-        product.setStatus("IN_EDITING_QUEUE");
-    }
-
     public void addProduct(Product product) {
         this.allProducts.add(product);
-    }
-
-    public void addProduct(HashMap<String, String> productInfo, HashMap<String, String> specialProperties) {
-        //this function will create a request to adding product to intended seller
-        Request request = new Request();
-        request.setRequestSender(this);
-        request.setType("add-product");
-
-        AddProductRequest addProductRequest = new AddProductRequest();
-        addProductRequest.setSellerUsername(this.getUsername());
-        addProductRequest.setCategoryName(productInfo.get("category"));
-        addProductRequest.setSubCategoryName(productInfo.get("sub-category"));
-        addProductRequest.setCompany(productInfo.get("company"));
-        addProductRequest.setDescription(productInfo.get("description"));
-        addProductRequest.setName(productInfo.get("name"));
-        addProductRequest.setNumberInStock(Integer.parseInt(productInfo.get("number-in-stock")));
-        addProductRequest.setPrice(Double.parseDouble(productInfo.get("price")));
-        addProductRequest.setSpecialProperties(specialProperties);
-
-        request.setMainRequest(addProductRequest);
-        request.addToDatabase();
-    }
-
-    public void editOff(Off off, String field, Object newValue, String type) {
-        //this function will create a request to edit intended off
-        EditOffRequest editOffRequest;
-        if (newValue instanceof ArrayList) {
-            ArrayList<String> productsId = (ArrayList<String>) newValue;
-            editOffRequest = new EditOffRequest(field, productsId);
-        } else if (newValue instanceof String) {
-            editOffRequest = new EditOffRequest(field, (String) newValue);
-        } else
-            return;
-
-        Request request = new Request();
-        request.setRequestSender(this);
-        request.setType("edit-off " + type);
-        editOffRequest.setOffId(off.getOffId());
-
-        request.setMainRequest(editOffRequest);
-        request.addToDatabase();
-
-        off.setOffStatus("IN_EDITING_QUEUE");
     }
 
     public void addOff(Off off) {
         this.allOff.add(off);
     }
 
-    public void addOff(HashMap<String, String> offInfo, ArrayList<String> productsId) {
+    public void addOff(HashMap<String, String> offInfo, ArrayList<String> productsId) throws DateException {
         //this function will create a request to adding a new off
         Request request = new Request();
         AddOffRequest addOffRequest = new AddOffRequest();

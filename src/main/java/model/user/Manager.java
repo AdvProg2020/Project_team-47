@@ -16,6 +16,7 @@ public class Manager extends User {
         super(userInfo);
     }
 
+    @SuppressWarnings("unchecked")
     public static ArrayList<Customer> getCustomersForGift(int numberOfUser) {
         ArrayList<Customer> randomCustomers = new ArrayList<>();
         ArrayList<User> allUsersClone = (ArrayList<User>) allUsers.clone();

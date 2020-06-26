@@ -1,12 +1,14 @@
 package model.send.receive;
 
 
+import model.others.ClientFilter;
 import model.others.Comment;
 
 import java.util.ArrayList;
 
 public class ServerMessage {
     private String type;
+    private String errorMessage;
     private String firstString;
     private String secondString;
     private double number;
@@ -27,6 +29,19 @@ public class ServerMessage {
     private ArrayList<RequestInfo> requestArrayList;
     private ArrayList<UserInfo> userInfoArrayList;
     private CartInfo cartInfo;
+    private ArrayList<ClientFilter> filters;
+
+    public ServerMessage() {
+    }
+
+    public ServerMessage(String error, String errorMessage) {
+        this.type = error;
+        this.errorMessage = errorMessage;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 
     public CartInfo getCartInfo() {
         return cartInfo;
@@ -194,5 +209,9 @@ public class ServerMessage {
 
     public void setUserInfoArrayList(ArrayList<UserInfo> userInfoArrayList) {
         this.userInfoArrayList = userInfoArrayList;
+    }
+
+    public void setFilters(ArrayList<ClientFilter> filters) {
+        this.filters = filters;
     }
 }

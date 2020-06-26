@@ -1,8 +1,8 @@
 package model.others.request;
 
-import com.google.gson.Gson;
 import controller.Controller;
 import model.discount.Off;
+import model.ecxeption.user.UserNotExistException;
 import model.others.Product;
 import model.send.receive.RequestInfo;
 import model.user.Seller;
@@ -10,7 +10,6 @@ import model.user.User;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class AddOffRequest extends MainRequest {
     private Date startTime;
@@ -19,23 +18,32 @@ public class AddOffRequest extends MainRequest {
     private ArrayList<String> productsId;
     private int percent;
 
-    @Override
-    public void requestInfoSetter(RequestInfo requestInfo) {
-        HashMap<String, String> addingInfo = new HashMap<>();
-        addingInfo.put("percent", Integer.toString(percent));
-        addingInfo.put("start-time", startTime.toString());
-        addingInfo.put("finish-time", finishTime.toString());
-        addingInfo.put("seller", sellerUsername);
-        addingInfo.put("products-id", (new Gson()).toJson(productsId));
-        requestInfo.setAddInfo("add-off", sellerUsername, addingInfo);
+    public AddOffRequest() {
     }
 
     @Override
-    void accept(String type) {
+    public void requestInfoSetter(RequestInfo requestInfo) {
+        ArrayList<String> requestArrayList = new ArrayList<>();
+        requestArrayList.add("Percent: " + percent);
+        requestArrayList.add("Start-time: " + startTime.toString());
+        requestArrayList.add("Finish-time: " + finishTime.toString());
+        requestArrayList.add("Seller: " + sellerUsername + "\n");
+        for (int i = 1; i < productsId.size() + 1; i++) {
+            requestArrayList.add("Product " + i + ": " + productsId.get(i - 1));
+        }
+        requestInfo.setAddInfo("add-off", sellerUsername, requestArrayList);
+    }
+
+    @Override
+    void accept() {
         Off off = new Off();
-        Seller seller = (Seller) User.getUserByUsername(sellerUsername);
-        if (seller == null)
+        Seller seller;
+        try {
+            seller = (Seller) User.getUserByUsername(sellerUsername);
+        } catch (UserNotExistException ignored) {
             return;
+        }
+
         off.setSeller(seller);
         if (startTime.before(Controller.getCurrentTime())) {
             off.setStartTime(Controller.getCurrentTime());
@@ -58,10 +66,14 @@ public class AddOffRequest extends MainRequest {
     }
 
     @Override
-    boolean update(String type) {
+    boolean update() {
         if (finishTime.before(Controller.getCurrentTime()))
             return false;
-        return (User.getUserByUsername(sellerUsername) instanceof Seller);
+        try {
+            return (User.getUserByUsername(sellerUsername) instanceof Seller);
+        } catch (UserNotExistException e) {
+            return false;
+        }
     }
 
     @Override

@@ -1,12 +1,18 @@
 package controller.off;
 
 import controller.Command;
+import model.ecxeption.Exception;
+import model.ecxeption.common.NullFieldException;
+import model.ecxeption.filter.InvalidSortException;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import static controller.Controller.*;
+import static controller.Controller.actionCompleted;
+import static controller.Controller.sendAnswer;
 
 public abstract class SortCommands extends Command {
     public static SortCommand getSortCommand() {
@@ -47,20 +53,25 @@ class SortCommand extends SortCommands {
 
 
     @Override
-    public void process(ClientMessage request) {
-        if (containNullField(request.getFirstString(), request.getSecondString()))
-            return;
-        sort(request.getFirstString().toLowerCase(), request.getSecondString().toLowerCase());
+    public ServerMessage process(ClientMessage request) throws NullFieldException, InvalidSortException {
+        HashMap<String, String> reqInfo = getReqInfo(request);
+        containNullField(reqInfo, reqInfo.get("sort field"), reqInfo.get("sort direction"));
+        sort(reqInfo.get("sort field"), reqInfo.get("sort direction"));
+        return actionCompleted();
     }
 
-    public void sort(String sortField, String sortDirection) {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+    }
+
+    public void sort(String sortField, String sortDirection) throws InvalidSortException {
         if (Pattern.matches("(percent|start-time|finish-time)", sortField) &&
                 Pattern.matches("(ascending|descending)", sortDirection)) {
 
             setSort(sortField, sortDirection);
             actionCompleted();
         } else
-            sendError("Can't sort with this field and direction!!");
+            throw new InvalidSortException();
     }
 
 }
@@ -80,39 +91,39 @@ class SortCommonCommand extends SortCommands {
     }
 
     @Override
-    public void process(ClientMessage request) {
-        switch (request.getRequest()) {
-            case "show available sorts offs":
-                showAvailableSorts();
-                break;
-            case "show current sort offs":
-                currentSort();
-                break;
-            case "disable sort offs":
-                disableSort();
-                break;
-        }
+    public ServerMessage process(ClientMessage request) throws Exception {
+        return switch (request.getType()) {
+            case "show available sorts offs" -> showAvailableSorts();
+            case "show current sort offs" -> currentSort();
+            case "disable sort offs" -> disableSort();
+            default -> throw new Exception("Error");
+        };
     }
 
-    private void disableSort() {
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+
+    private ServerMessage disableSort() {
         setSort(null, null);
-        actionCompleted();
+        return actionCompleted();
     }
 
-    private void showAvailableSorts() {
+    private ServerMessage showAvailableSorts() {
         ArrayList<String> sorts = new ArrayList<>();
         sorts.add("Percent");
         sorts.add("Starting Time");
         sorts.add("Finish Time");
 
-        sendAnswer(sorts, "sort");
+        return sendAnswer(sorts, "sort");
     }
 
-    private void currentSort() {
+    private ServerMessage currentSort() throws Exception {
         if (sortField() == null || sortDirection() == null) {
-            sendError("You didn't any field to sort offs!!");
+            throw new Exception("Error!!");
         } else
-            sendAnswer(sortField(), sortDirection());
+            return sendAnswer(sortField(), sortDirection());
     }
 
 }

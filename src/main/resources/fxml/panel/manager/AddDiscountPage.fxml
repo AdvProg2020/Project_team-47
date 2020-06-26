@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.text.*?>
+<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../Others/Stylesheet.css"
+       xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.manager.AddDiscountPage">
+    <AnchorPane prefHeight="400.0" prefWidth="600.0">
+        <TextField fx:id="percent" layoutX="76.0" layoutY="82.0" promptText="Percent" AnchorPane.leftAnchor="76.0"/>
+        <TextField fx:id="usableTime" layoutX="78.0" layoutY="126.0" promptText="Usable Time"
+                   AnchorPane.leftAnchor="76.0"/>
+        <TextField fx:id="startAt" layoutX="77.0" layoutY="175.0" promptText="Start At" AnchorPane.leftAnchor="76.0"/>
+        <TextField fx:id="finishAt" layoutX="80.0" layoutY="224.0" promptText="Finish At" AnchorPane.leftAnchor="76.0"/>
+        <TextField fx:id="maxAmount" layoutX="76.0" layoutY="272.0" promptText="Max Amount"
+                   AnchorPane.leftAnchor="76.0"/>
+        <ScrollPane layoutX="249.0" layoutY="43.0">
+            <VBox fx:id="vBox" prefHeight="438.0" prefWidth="275.0"/>
+        </ScrollPane>
+        <TextField fx:id="username" layoutX="578.0" layoutY="71.0" prefHeight="46.0" prefWidth="196.0"
+                   promptText="Username">
+            <font>
+                <Font size="16.0"/>
+            </font>
+        </TextField>
+        <Button layoutX="696.0" layoutY="136.0" mnemonicParsing="false" onAction="#addUser" prefHeight="32.0"
+                prefWidth="83.0" text="Add">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Button>
+        <Button layoutX="578.0" layoutY="136.0" mnemonicParsing="false" onAction="#removeUser" prefHeight="32.0"
+                prefWidth="83.0" text="Remove">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Button>
+        <Button layoutX="717.0" layoutY="547.0" mnemonicParsing="false" onAction="#addCode" prefHeight="50.0"
+                prefWidth="145.0" text="Add Code">
+            <font>
+                <Font name="Sakkal Majalla" size="25.0"/>
+            </font>
+        </Button>
+        <Button layoutX="717.0" layoutY="628.0" mnemonicParsing="false" onAction="#back" prefHeight="50.0"
+                prefWidth="145.0" text="Back">
+            <font>
+                <Font name="Sakkal Majalla" size="25.0"/>
+            </font>
+        </Button>
+        <Text fx:id="error" fill="RED" layoutX="313.0" layoutY="538.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Text" wrappingWidth="360.53668212890625"/>
+    </AnchorPane>
+</Scene>

@@ -23,6 +23,8 @@ abstract public class Log {
     }
 
     public static void setUsedId(TreeSet<String> usedId) {
+        if (usedId == null)
+            return;
         Log.usedId = usedId;
     }
 
