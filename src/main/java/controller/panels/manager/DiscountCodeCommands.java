@@ -8,6 +8,7 @@ import model.ecxeption.Exception;
 import model.ecxeption.common.*;
 import model.ecxeption.filter.InvalidSortException;
 import model.ecxeption.user.UserNotExistException;
+import model.send.receive.CartInfo;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import model.user.Customer;

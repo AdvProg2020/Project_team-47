@@ -48,12 +48,12 @@ public class ManagerPage extends PageController {
 
     @FXML
     private void manageDiscounts() {
-        // TODO: 6/25/2020  
+        GraphicView.getInstance().changeScene(ManageDiscountPage.getScene());
     }
 
     @FXML
     private void manageCategories() {
-        // TODO: 6/25/2020  
+        GraphicView.getInstance().changeScene(ManageCategoriesPage.getScene());
     }
 
     @FXML
@@ -75,5 +75,5 @@ public class ManagerPage extends PageController {
     private void manageRequests() {
         // TODO: 6/25/2020  
     }
-    
+
 }

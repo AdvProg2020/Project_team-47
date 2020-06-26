@@ -323,9 +323,8 @@ class EditSubCategoryCommand extends ManageCategoriesCommand {
 
     }
 
-    private void editSubCategory(String categoryName, String field, String changeValue, HashMap<String, String> reqInfo) throws CategoryDoesntExistException, CommonException, NotEnoughInformation {
-        if (!Category.isThereSubCategory(categoryName)) throw new CategoryDoesntExistException();
-
+    private void editSubCategory(String categoryName, String field, String changeValue, HashMap<String, String> reqInfo) throws
+            CategoryDoesntExistException, CommonException, NotEnoughInformation {
         SubCategory subCategory = Category.getSubCategoryByName(categoryName);
         switch (field) {
             case "name" -> {
@@ -383,9 +382,9 @@ class AddSubCategoryCommand extends ManageCategoriesCommand {
 
     @Override
     public ServerMessage process(ClientMessage request) throws NullFieldException, CategoryDoesntExistException, CommonException {
-        containNullField(request.getHashMap().get("sub category name"), request.getHashMap().get("main category name"),
+        containNullField(request.getHashMap().get("name"), request.getHashMap().get("main category name"),
                 request.getProperties());
-        addSubCategory(request.getHashMap().get("sub category name"), request.getHashMap().get("main category name"),
+        addSubCategory(request.getHashMap().get("name"), request.getHashMap().get("main category name"),
                 request.getProperties());
         return actionCompleted();
     }
