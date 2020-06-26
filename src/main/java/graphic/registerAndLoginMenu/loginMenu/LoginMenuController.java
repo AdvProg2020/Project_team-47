@@ -62,8 +62,8 @@ public class LoginMenuController extends PageController {
         if(answer.getType().equals("Successful")){
             GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForCustomer());
         } else {
-            //todo amir
-            GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForCustomer());
+            GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
         }
+        System.out.println("salam");
     }
 }
