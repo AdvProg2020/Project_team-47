@@ -4,6 +4,7 @@ import graphic.mainMenu.MainMenuPage;
 import graphic.panel.customer.CustomerPage;
 import graphic.panel.seller.SellerPage;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
@@ -102,11 +103,18 @@ public class GraphicView {
         this.myUsername = myUsername;
     }
 
-    public static Optional<String> showAlertPage(String header, String content) {
+    public Optional<String> showAlertPage(String header, String content) {
         TextInputDialog usernameDialog = new TextInputDialog();
 
         usernameDialog.setHeaderText(header);
         usernameDialog.setContentText(content + ":");
         return usernameDialog.showAndWait();
+    }
+
+    public void showErrorAlert(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("error");
+        alert.setHeaderText(error);
+        alert.showAndWait();
     }
 }

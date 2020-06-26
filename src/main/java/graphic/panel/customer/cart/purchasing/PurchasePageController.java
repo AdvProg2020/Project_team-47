@@ -56,7 +56,7 @@ public class PurchasePageController extends PageController {
     }
 
     private void showDiscountCodeAlert() {
-        Optional<String> inputUsername = GraphicView.showAlertPage("enter discountCode", "code");
+        Optional<String> inputUsername = GraphicView.getInstance().showAlertPage("enter discountCode", "code");
 
         if (inputUsername.get().equals("")) {
             // todo amir no discount code

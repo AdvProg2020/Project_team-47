@@ -110,4 +110,8 @@ public class ProductCommentsController extends PageController {
         GraphicView.getInstance().back();
     }
 
+    public void addComment(MouseEvent mouseEvent) {
+        //todo amir send message to controller
+        update();
+    }
 }
