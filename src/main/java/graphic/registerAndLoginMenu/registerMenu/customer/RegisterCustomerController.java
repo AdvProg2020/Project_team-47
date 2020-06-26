@@ -65,8 +65,7 @@ public class RegisterCustomerController extends PageController {
         if(answer.getType().equals("Successful")){
             GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForCustomer());
         } else {
-            //todo amir
-            GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForCustomer());
+            GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
         }
     }
 
