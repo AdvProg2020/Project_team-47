@@ -73,7 +73,7 @@ public class ManagerPage extends PageController {
 
     @FXML
     private void manageRequests() {
-        // TODO: 6/25/2020  
+        GraphicView.getInstance().changeScene(ManageRequestPage.getScene());
     }
 
 }

@@ -3,6 +3,7 @@ package graphic.panel.manager;
 import graphic.GraphicView;
 import graphic.PageController;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -61,11 +62,11 @@ public class AddCategoryPage extends PageController {
     }
 
     private void addNumericProperty() {
-        properties.add(new SpecialProperty("numeric", 0, propertyUnit.getText()));
+        properties.add(new SpecialProperty(propertyKey.getText(), -1, propertyUnit.getText()));
     }
 
     private void addTextProperty() {
-        properties.add(new SpecialProperty("text", ""));
+        properties.add(new SpecialProperty(propertyKey.getText(), ""));
     }
 
     @FXML
@@ -84,7 +85,7 @@ public class AddCategoryPage extends PageController {
         }
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("main category name", mainCategory.getText());
-        reqInfo.put("sub category name", name.getText());
+        reqInfo.put("name", name.getText());
         request.setHashMap(reqInfo);
         request.setProperties(properties);
         processAnswer(send(request));
@@ -121,7 +122,6 @@ public class AddCategoryPage extends PageController {
     }
 
     private void updateVBox() {
-        if (properties == null) return;
         vBox.getChildren().clear();
         for (SpecialProperty property : properties) {
             if (property.getType().equalsIgnoreCase("text")) {
@@ -130,6 +130,7 @@ public class AddCategoryPage extends PageController {
                 vBox.getChildren().add(label);
             } else {
                 HBox hBox = new HBox(10);
+                hBox.setAlignment(Pos.CENTER);
                 Label keyLabel = new Label(property.getKey());
                 keyLabel.setFont(new Font(15));
                 Label unitLabel = new Label(property.getUnit());

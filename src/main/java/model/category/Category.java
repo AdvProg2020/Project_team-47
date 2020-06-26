@@ -150,7 +150,7 @@ abstract public class Category {
     }
 
     public void addNumericProperty(String property, String unit) {
-        specialProperties.add(new SpecialProperty(property, 0, unit));
+        specialProperties.add(new SpecialProperty(property, -1, unit));
         this.updateDatabase();
     }
 

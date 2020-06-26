@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 
 public class AddProductPage extends PageController {
     private static PageController controller;
-    private Image image;
+    private File image;
     private ArrayList<SpecialProperty> specialProperties;
     @FXML
     private AnchorPane mainAnchorPane;
@@ -163,7 +163,7 @@ public class AddProductPage extends PageController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.jpg"));
         File imageFile = fileChooser.showOpenDialog(GraphicView.getInstance().getWindow());
         try {
-            image = new Image(imageFile.toURI().toString());
+            image = new File(imageFile.toURI().toString());
         } catch (Exception e) {
             image = null;
         }

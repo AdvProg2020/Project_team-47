@@ -21,21 +21,21 @@ import java.util.TreeSet;
 
 public class Database {
     private static OutputStream outputStream;
-    private static Gson gson;
+    private static final Gson gson;
 
     static {
         gson = Controller.getGson();
     }
 
-    private ArrayList<CategoryData> categories;
-    private ArrayList<DiscountCodeData> codes;
-    private ArrayList<BuyLog> buyLogs;
-    private ArrayList<SellLog> sellLogs;
-    private ArrayList<OffData> offs;
-    private ArrayList<ProductData> products;
-    private ArrayList<UserData> users;
-    private ArrayList<UserData> notVerifiedUsers;
-    private ArrayList<Request> requests;
+    private final ArrayList<CategoryData> categories;
+    private final ArrayList<DiscountCodeData> codes;
+    private final ArrayList<BuyLog> buyLogs;
+    private final ArrayList<SellLog> sellLogs;
+    private final ArrayList<OffData> offs;
+    private final ArrayList<ProductData> products;
+    private final ArrayList<UserData> users;
+    private final ArrayList<UserData> notVerifiedUsers;
+    private final ArrayList<Request> requests;
     private TreeSet<String> usedUsernames;
     private TreeSet<String> usedProductId;
 
@@ -417,7 +417,7 @@ public class Database {
         SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs");
 
 
-        private String path;
+        private final String path;
 
         Path(String path) {
             this.path = path;

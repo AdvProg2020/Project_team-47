@@ -20,10 +20,10 @@ public class DiscountCode extends Discount {
         allDiscountCodes = new ArrayList<>();
     }
 
-    private String discountCode;
+    private final String discountCode;
     private int maxUsableTime;
     private int maxDiscountAmount;
-    private HashMap<User, Integer> userUsedTimeHashMap;
+    private final HashMap<User, Integer> userUsedTimeHashMap;
     private ArrayList<Customer> usersAbleToUse;
 
     public DiscountCode(String code, int percent) {

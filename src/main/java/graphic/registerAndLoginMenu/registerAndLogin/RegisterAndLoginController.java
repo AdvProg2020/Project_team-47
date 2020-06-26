@@ -2,7 +2,6 @@ package graphic.registerAndLoginMenu.registerAndLogin;
 
 import graphic.GraphicView;
 import graphic.PageController;
-import graphic.registerAndLoginMenu.loginMenu.LoginMenuPage;
 import graphic.registerAndLoginMenu.registerMenu.RegisterMenuPage;
 import javafx.scene.input.MouseEvent;
 
@@ -39,7 +38,6 @@ public class RegisterAndLoginController extends PageController {
     }
 
     public void login(MouseEvent mouseEvent) {
-        GraphicView.getInstance().changeScene(LoginMenuPage.getInstance());
 
     }
 

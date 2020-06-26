@@ -243,7 +243,7 @@ class AddCategoryCommand extends ManageCategoriesCommand {
         if (Category.isThereCategory(request.getHashMap().get("name")))
             throw new CommonException("There is a category with this name!!");
         for (SpecialProperty property : request.getProperties()) {
-            if (property.isItValid())
+            if (!property.isItValid())
                 throw new CommonException("This property isn't valid: " + property.getKey() + "!!");
         }
     }

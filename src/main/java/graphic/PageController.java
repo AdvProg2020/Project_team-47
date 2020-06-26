@@ -8,6 +8,11 @@ import javafx.scene.image.Image;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 
@@ -15,6 +20,30 @@ public abstract class PageController implements Initializable {
 
     protected static Scene getScene(String path) {
         return FxmlLoaderClass.getScene(path);
+    }
+
+    public static Image byteToImage(byte[] imageBytes) {
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+            BufferedImage bImage = ImageIO.read(bis);
+            for (int i = 0; i < 1000; i++) {
+                File file = new File("src/main/resources/temp" + i + ".jpg");
+                if (file.exists()) continue;
+                ImageIO.write(bImage, "jpg", file);
+                return new Image(file.toURI().toString());
+            }
+        } catch (IOException ignored) {
+        }
+        return null;
+    }
+
+    public static byte[] imageToByte(File image) {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(image);
+            return new ByteArrayInputStream(fileInputStream.readAllBytes()).readAllBytes();
+        } catch (IOException ignored) {
+            return null;
+        }
     }
 
     public ServerMessage send(ClientMessage request) {
@@ -26,14 +55,6 @@ public abstract class PageController implements Initializable {
 
     //this function will update scene objects
     public abstract void update();
-
-    public static Image byteToImage(byte[] imageBytes) {
-        return null;
-    }
-
-    public static byte[] imageToByte(Image image) {
-        return null;
-    }
 
     private static class FxmlLoaderClass {
         private static final FxmlLoaderClass loader;

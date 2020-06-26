@@ -116,7 +116,7 @@ class RegisterCommand extends LoginCommands {
             default -> throw new RegisterException("Enter valid type!!");
         };
         newUser.emailVerification();
-        newUser.confirmEmail();
+        //newUser.confirmEmail();
         setLoggedUser(newUser);
     }
 
@@ -191,6 +191,7 @@ class ConfirmEmailCommand extends LoginCommands {
         HashMap<String, String> reqInfo = getReqInfo(request);
         containNullField(reqInfo);
         containNullField(reqInfo.get("username"), reqInfo.get("password"), reqInfo.get("verification code"));
+        checkPrimaryErrors(request);
         return confirmEmail();
     }
 

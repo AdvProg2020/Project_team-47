@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Scene xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.registerAndLoginMenu.RegisterPage">
+   <root>
+      <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../Others/Stylesheet.css">
+         <children>
+            <TextField fx:id="username" layoutX="97.0" layoutY="5.0" prefHeight="55.0" prefWidth="236.0" promptText="Username" AnchorPane.leftAnchor="97.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="password" layoutX="97.0" layoutY="63.0" prefHeight="55.0" prefWidth="236.0" promptText="Password" AnchorPane.leftAnchor="97.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="firstName" layoutX="97.0" layoutY="178.0" prefHeight="55.0" prefWidth="236.0" promptText="First Name" AnchorPane.leftAnchor="97.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="lastName" layoutX="97.0" layoutY="236.0" prefHeight="55.0" prefWidth="236.0" promptText="Last Name" AnchorPane.leftAnchor="97.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="email" layoutX="97.0" layoutY="293.0" prefHeight="55.0" prefWidth="236.0" promptText="Email" AnchorPane.leftAnchor="97.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="companyName" layoutX="97.0" layoutY="380.0" prefHeight="55.0" prefWidth="236.0" promptText="Company Name" AnchorPane.leftAnchor="97.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <TextArea fx:id="companyInfo" layoutX="97.0" layoutY="442.0" prefHeight="240.0" prefWidth="289.0" promptText="Company Info" AnchorPane.leftAnchor="97.0">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </TextArea>
+            <RadioButton fx:id="customerButton" layoutX="108.0" layoutY="351.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="85.0" selected="true" text="Customer">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="type" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="sellerButton" layoutX="212.0" layoutY="352.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="91.0" text="Seller" toggleGroup="$type">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="managerButton" layoutX="306.0" layoutY="352.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="91.0" text="Manager" toggleGroup="$type">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </RadioButton>
+            <Button layoutX="670.0" layoutY="71.0" mnemonicParsing="false" onAction="#register" prefHeight="64.0" prefWidth="231.0" text="Register" AnchorPane.leftAnchor="670.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Text fx:id="error" fill="RED" layoutX="479.0" layoutY="656.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" wrappingWidth="450.9368591308594">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <TextField fx:id="verificationCode" layoutX="669.0" layoutY="272.0" prefHeight="55.0" prefWidth="236.0" promptText="Verification Code">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Button fx:id="confirm" layoutX="677.0" layoutY="363.0" mnemonicParsing="false" onAction="#confirm" prefHeight="64.0" prefWidth="231.0" text="Confirm" AnchorPane.leftAnchor="670.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button layoutX="679.0" layoutY="571.0" mnemonicParsing="false" onAction="#back" prefHeight="64.0" prefWidth="231.0" text="Back" AnchorPane.leftAnchor="670.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <TextField fx:id="phoneNumber" layoutX="97.0" layoutY="121.0" prefHeight="55.0" prefWidth="236.0" promptText="Phone Number" AnchorPane.leftAnchor="97.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+         </children>
+      </AnchorPane>
+   </root>
+</Scene>

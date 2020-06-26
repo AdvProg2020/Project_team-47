@@ -69,8 +69,9 @@ class CreateCodeCommand extends DiscountCodeCommands {
     }
 
     @Override
-    public ServerMessage process(ClientMessage request) throws NullFieldException, UserNotExistException {
+    public ServerMessage process(ClientMessage request) throws Exception {
         containNullField(request.getHashMap(), request.getArrayList());
+        checkPrimaryErrors(request);
         return createDiscountCode(request.getHashMap(), request.getArrayList());
     }
 
@@ -261,10 +262,10 @@ class EditCodeCommand extends DiscountCodeCommands {
     }
 
     @Override
-    public ServerMessage process(ClientMessage request) throws NullFieldException, CommonException,
-            DateException, NumberException, InvalidPercentException {
+    public ServerMessage process(ClientMessage request) throws Exception {
         HashMap<String, String> reqInfo = getReqInfo(request);
         containNullField(reqInfo.get("code"), reqInfo.get("field"), reqInfo.get("new value"));
+        checkPrimaryErrors(request);
         editDiscountCode( reqInfo.get("field"), reqInfo.get("new value"));
         return actionCompleted();
     }

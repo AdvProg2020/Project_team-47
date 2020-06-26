@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class ManageDiscountPage extends PageController {
+    private static PageController controller;
     @FXML
     private VBox codesVBox;
     @FXML
@@ -34,6 +35,10 @@ public class ManageDiscountPage extends PageController {
 
     public static Scene getScene() {
         return getScene("/fxml/panel/manager/ManageDiscountPage.fxml");
+    }
+
+    public static PageController getController() {
+        return controller;
     }
 
     @Override
@@ -91,6 +96,7 @@ public class ManageDiscountPage extends PageController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        controller = this;
         update();
     }
 

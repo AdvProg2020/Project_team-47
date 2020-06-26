@@ -5,6 +5,7 @@ import model.others.SpecialProperty;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class RequestInfo {
     private String id;
@@ -14,6 +15,22 @@ public class RequestInfo {
     private EditInfo editInfo;
     private AddInfo addInfo;
 
+    @Override
+    public String toString() {
+        if(editInfo==null)
+            return "Id='" + id +
+                    "\nWho Send='" + requestedSenderUsername +
+                    "\nType='" + type +
+                    addInfo.toString();
+        if(addInfo==null)
+            return "Id='" + id +
+                    "\nWho Send='" + requestedSenderUsername +
+                    "\nType='" + type +
+                    editInfo.toString();
+        return "Id='" + id +
+                "\nWho Send='" + requestedSenderUsername +
+                "\nType='" + type;
+    }
 
     public String getId() {
         return id;
@@ -102,6 +119,17 @@ public class RequestInfo {
             this.id = id;
             this.property = property;
         }
+
+        @Override
+        public String toString() {
+            StringBuilder stringBuilder = new StringBuilder("Edit Info:");
+            if(editType!=null) stringBuilder.append("\nEdit Type: ").append(editType);
+            if(changeField!=null) stringBuilder.append("\nChange Field: ").append(changeField);
+            if(newValue!=null) stringBuilder.append("\nNew Value: ").append(newValue);
+            if(changeType!=null) stringBuilder.append("\nChange Type: ").append(changeType);
+            if(property!=null) stringBuilder.append("\nSpecial Property: ").append(property.toString());
+            return stringBuilder.toString();
+        }
     }
 
     private static class AddInfo {
@@ -120,6 +148,20 @@ public class RequestInfo {
             this.type = type;
         }
 
+        @Override
+        public String toString() {
+            if (comment != null) {
+                return "Add Info:\n" + comment.toString();
+            } else {
+                StringBuilder stringBuilder = new StringBuilder("AddInfo:\n" +
+                        "Seller Username: " + sellerUsername +
+                        "Type: " + type + "\n");
+                for (Map.Entry<String, String> entry : addingInformation.entrySet()) {
+                    stringBuilder.append(entry.getKey()).append(entry.getValue()).append("\n");
+                }
+                return stringBuilder.toString();
+            }
+        }
     }
 
 }

@@ -103,6 +103,7 @@ public class AddDiscountPage extends PageController {
 
     @FXML
     private void back() {
+        ManageDiscountPage.getController().update();
         GraphicView.getInstance().back();
     }
 
