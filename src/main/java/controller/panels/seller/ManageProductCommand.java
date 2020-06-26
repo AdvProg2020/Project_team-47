@@ -209,7 +209,7 @@ class EditProductCommand extends ManageProductCommand {
 
         //check that seller has product and seller can edit product with that field and new value
         if (!sellerHasProduct(product)) throw new CommonException("You don't have this product!!");
-        checkErrors(request.getHashMap().get("name"), request.getHashMap().get("field"));
+        checkErrors(request.getHashMap().get("new value"), request.getHashMap().get("field"));
         if (request.getHashMap().get("field").equals("property"))
             canEditProperty(request.getProperty(), request.getHashMap().get("change type"));
     }
@@ -218,7 +218,7 @@ class EditProductCommand extends ManageProductCommand {
         if (!property.isItValid()) throw new CommonException("Invalid property!!");
         if ("remove".equals(changeType)) {
             if (product.getCategory().getSpecialProperties().contains(property))
-                throw new CommonException("Invalid property!!");
+                throw new CommonException("Can't remove this property!!");
         } else {
             int i = product.getSpecialProperties().indexOf(property);
             if (!property.getType().equals(product.getSpecialProperties().get(i).getType()))

@@ -55,7 +55,7 @@ public class Off extends Discount {
 
     public static Off getOffById(String offId) throws OffDoesntExistException {
         for (Off off : allOffs) {
-            if (offId.equalsIgnoreCase(off.getOffId()))
+            if (off.getOffId().equalsIgnoreCase(offId))
                 return off;
         }
         throw new OffDoesntExistException();

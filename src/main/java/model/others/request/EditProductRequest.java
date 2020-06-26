@@ -36,14 +36,14 @@ public class EditProductRequest extends MainRequest {
 
     @Override
     void accept() {
-        Product product = null;
+        Product product;
         try {
             product = Product.getProductWithId(productId);
         } catch (ProductDoesntExistException e) {
             e.printStackTrace();
             return;
         }
-        Seller seller = null;
+        Seller seller;
         try {
             seller = (Seller) Seller.getUserByUsername(sellerUsername);
         } catch (UserNotExistException e) {
@@ -71,7 +71,7 @@ public class EditProductRequest extends MainRequest {
                     e.printStackTrace();
                 }
             }
-            case "special-properties" -> changeSpecialProperties(product);
+            case "property" -> changeSpecialProperties(product);
             case "description" -> product.setDescription(newValue);
         }
         product.setStatus("EDIT_ACCEPTED");
@@ -106,7 +106,7 @@ public class EditProductRequest extends MainRequest {
             case "name", "price", "number-of-product", "description" -> true;
             case "category" -> updateForCategory("main-category", product);
             case "sub-category" -> updateForCategory("sub-category", product);
-            case "specialProperties" -> updateProperties();
+            case "property" -> updateProperties();
             default -> false;
         };
     }
@@ -163,18 +163,8 @@ public class EditProductRequest extends MainRequest {
     }
 
     private void changeSpecialProperties(Product product) {
-        switch (changeType) {
-            case "remove" -> product.getSpecialProperties().remove(property);
-            case "add" -> {
-                if (product.getSpecialProperties().contains(property)) {
-                    SpecialProperty temp = product.getSpecialProperties().get(product.getSpecialProperties().indexOf(property));
-                    temp.setNumericValue(property.getNumericValue());
-                    temp.setValue(property.getValue());
-                } else {
-                    product.getSpecialProperties().add(property);
-                }
-            }
-        }
+        product.getSpecialProperties().remove(property);
+        product.getSpecialProperties().add(property);
     }
 
     public void setField(String field) {

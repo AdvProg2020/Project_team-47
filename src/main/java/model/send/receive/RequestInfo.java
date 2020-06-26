@@ -56,7 +56,7 @@ public class RequestInfo {
     }
 
     public void setEditInfo(String field, String newValue, String changeType, String id, SpecialProperty property) {
-        this.editInfo = new EditInfo("edit-off", field, newValue, changeType, id, property);
+        this.editInfo = new EditInfo("edit-product", field, newValue, changeType, id, property);
     }
 
     public void setAddInfo(String type, String username, ArrayList<String> addingInfo) {
@@ -126,7 +126,8 @@ public class RequestInfo {
             if (changeField != null) stringBuilder.append("\nChange Field: ").append(changeField);
             if (newValue != null) stringBuilder.append("\nNew Value: ").append(newValue);
             if (changeType != null) stringBuilder.append("\nChange Type: ").append(changeType);
-            if (property != null) stringBuilder.append("\nSpecial Property: ").append(property.toString());
+            if (property != null&&property.getType()!=null&&property.getKey()!=null)
+                stringBuilder.append("\nSpecial Property: ").append(property.toString());
             return stringBuilder.toString();
         }
     }

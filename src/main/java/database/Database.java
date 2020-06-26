@@ -164,7 +164,7 @@ public class Database {
     }
 
     public static void removeRequest(String id) {
-        removeFile(Path.RESOURCE.getPath() + id + ".json");
+        removeFile(Path.REQUESTS_FOLDER.getPath() + id + ".json");
     }
 
     public static void removeProduct(String productId) {
@@ -221,9 +221,7 @@ public class Database {
     private void loadEmail() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter email password!!");
-        //amir
-        //Email.setPassword(scanner.nextLine());
-        Email.setPassword("apshop1818901");
+        Email.setPassword(scanner.nextLine());
         Email.checkPassword();
         scanner.close();
         File htmlPage = new File(Path.RESOURCE.getPath() + "Others/HtmlPage.html");
@@ -418,7 +416,8 @@ public class Database {
         CODES_FOLDER("src/main/resources/Codes/"),
         OFFS_FOLDER("src/main/resources/Offs/"),
         BUY_LOGS_FOLDER("src/main/resources/Logs/BuyLogs/"),
-        SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs");
+        SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs/"),
+        TEMP_FOLDER("src/main/resources/Temp/");
 
 
         private final String path;

@@ -10,10 +10,7 @@ import model.send.receive.ServerMessage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 
 public abstract class PageController implements Initializable {
@@ -26,12 +23,9 @@ public abstract class PageController implements Initializable {
         try {
             ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
             BufferedImage bImage = ImageIO.read(bis);
-            for (int i = 0; i < 1000; i++) {
-                File file = new File("src/main/resources/temp" + i + ".jpg");
-                if (file.exists()) continue;
-                ImageIO.write(bImage, "jpg", file);
-                return new Image(file.toURI().toString());
-            }
+            File file = File.createTempFile("image", ".jpg");
+            ImageIO.write(bImage, "jpg", file);
+            return new Image(file.toURI().toString());
         } catch (IOException ignored) {
         }
         return null;

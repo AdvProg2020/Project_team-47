@@ -107,7 +107,7 @@ public class ShowOffPage extends PageController {
         productId.setCellValueFactory(new PropertyValueFactory<>("productId"));
     }
 
-    public void initializeOff(OffInfo offInfo) {
+    private void initializeOff(OffInfo offInfo) {
         this.offInfo = offInfo;
         this.percentLabel.setText("Percent: " + offInfo.getPercent());
         this.idLabel.setText("Off Id: " + offInfo.getOffId());
@@ -256,7 +256,7 @@ public class ShowOffPage extends PageController {
         }
         ClientMessage clientMessage = new ClientMessage("edit off");
         HashMap<String, String> reqInfo = new HashMap<>();
-        reqInfo.put("off info", offInfo.getOffId());
+        reqInfo.put("off id", offInfo.getOffId());
         reqInfo.put("field", "products");
         reqInfo.put("change type", type);
         reqInfo.put("new value", productIdTextField.getText());
@@ -310,10 +310,13 @@ public class ShowOffPage extends PageController {
     }
 
     public void initializePage(OffInfo offInfo) {
-
+        this.offInfo = offInfo;
+        initializeOff(offInfo);
+        table.getItems().clear();
+        table.getItems().addAll(getObservableList(offInfo.getProductsNameId()));
     }
 
-    private static class ProductId {
+    public static class ProductId {
         private final SimpleStringProperty productName;
         private final SimpleStringProperty productId;
 

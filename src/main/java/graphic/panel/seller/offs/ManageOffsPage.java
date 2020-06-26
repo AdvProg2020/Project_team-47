@@ -95,8 +95,8 @@ public class ManageOffsPage extends PageController {
             error.setVisible(true);
         } else {
             clearPage();
-            ShowOffPage.getInstance().initializePage(answer.getOffInfo());
             GraphicView.getInstance().changeScene(ShowOffPage.getScene());
+            ShowOffPage.getInstance().initializePage(answer.getOffInfo());
         }
     }
 
@@ -109,10 +109,11 @@ public class ManageOffsPage extends PageController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         controller = this;
-        update();
         percent.setCellValueFactory(new PropertyValueFactory<>("percent"));
         start.setCellValueFactory(new PropertyValueFactory<>("start"));
         finish.setCellValueFactory(new PropertyValueFactory<>("finish"));
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        update();
     }
 
     @Override
@@ -127,9 +128,8 @@ public class ManageOffsPage extends PageController {
     public void update() {
         ClientMessage request = new ClientMessage("view offs seller");
         offsInfo = send(request).getOffInfoArrayList();
-        id.setCellValueFactory(new PropertyValueFactory<>("id"));
-        table.setItems(null);
-        table.setItems(getObservableList());
+        table.getItems().clear();
+        table.getItems().addAll(getObservableList());
     }
 
     private FadeTransition[] getFadingAnimation() {
@@ -160,17 +160,15 @@ public class ManageOffsPage extends PageController {
     }
 
     private ObservableList<OffTable> getObservableList() {
-        ArrayList<OffTable> off = new ArrayList<>();
+        ArrayList<OffTable> offs = new ArrayList<>();
         for (OffInfo offInfo : offsInfo) {
-            off.add(new OffTable(offInfo.getOffId(), "" + offInfo.getPercent(),
-                    Controller.getDateString(offInfo.getStartTime()), Controller.getDateString(offInfo.getFinishTime())));
+            offs.add(new OffTable(offInfo.getOffId(), "" + offInfo.getPercent(),
+                    offInfo.getStartTime().toString(), offInfo.getFinishTime().toString()));
         }
-        ObservableList<OffTable> offTableObservableList = FXCollections.observableArrayList();
-        offTableObservableList.addAll(off);
-        return offTableObservableList;
+        return FXCollections.observableArrayList(offs);
     }
 
-    private static class OffTable {
+    public static class OffTable {
         private final SimpleStringProperty id;
         private final SimpleStringProperty percent;
         private final SimpleStringProperty start;
