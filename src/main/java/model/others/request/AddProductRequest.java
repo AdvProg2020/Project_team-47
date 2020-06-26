@@ -39,14 +39,16 @@ public class AddProductRequest extends MainRequest {
     public void requestInfoSetter(RequestInfo requestInfo) {
         String sellerUsername = this.sellerUsername;
         HashMap<String, String> addingInfo = new HashMap<>();
-        addingInfo.put("price", Double.toString(price));
-        addingInfo.put("name", name);
-        addingInfo.put("number-in-stock", Integer.toString(numberInStock));
-        addingInfo.put("main-category", categoryName);
-        addingInfo.put("sub-category", Objects.requireNonNullElse(subCategoryName, ""));
-        addingInfo.put("description", description);
-        addingInfo.put("company", company);
-        addingInfo.put("special-properties", (new Gson()).toJson(properties));
+        addingInfo.put("Price: ", Double.toString(price));
+        addingInfo.put("Name: ", name);
+        addingInfo.put("Number-in-stock: ", Integer.toString(numberInStock));
+        addingInfo.put("Main-category: ", categoryName);
+        addingInfo.put("Sub-category: ", Objects.requireNonNullElse(subCategoryName, ""));
+        addingInfo.put("Description: ", description);
+        addingInfo.put("Company: ", company);
+        for (int i = 1; i < properties.size()+1; i++) {
+            addingInfo.put("Property " + i + "\n", properties.get(i - 1).toString());
+        }
         requestInfo.setAddInfo("add-product", sellerUsername, addingInfo);
     }
 

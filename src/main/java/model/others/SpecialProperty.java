@@ -24,6 +24,10 @@ public class SpecialProperty {
         this.key = key;
     }
 
+    public SpecialProperty() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,6 +51,19 @@ public class SpecialProperty {
         this.type = type;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("Type: " + type);
+        stringBuilder.append("\nKey :").append(key);
+        if (type.equalsIgnoreCase("text")) {
+            if (value != null && !value.isEmpty()) stringBuilder.append("\nValue :").append(value);
+        } else if (type.equalsIgnoreCase("numeric")) {
+            if (numericValue != -1) stringBuilder.append("\nValue: ").append(numericValue);
+            stringBuilder.append("\nUnit: ").append(unit);
+        }
+        return stringBuilder.toString();
+    }
+
     public String getKey() {
         return key;
     }
@@ -56,9 +73,10 @@ public class SpecialProperty {
     }
 
     public boolean isItValid() {
-        if (type == null || !(type.equals("numeric") || type.equals("text"))) return false;
-        if (key == null || key.isEmpty()) return false;
-        return !type.equals("numeric") || (unit != null && !unit.isEmpty());
+        if (type == null) return false;
+        if (type.equals("text")) return key != null;
+        if (type.equals("numeric")) return key != null && unit != null && !unit.isEmpty();
+        return false;
     }
 
     public void confirmProperty(SpecialProperty property) {

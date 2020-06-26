@@ -2,9 +2,14 @@ package graphic.registerAndLoginMenu.loginMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
-import graphic.registerAndLoginMenu.registerAndLogin.RegisterAndLoginPage;
+import graphic.panel.customer.CustomerPage;
+import graphic.panel.manager.ManagerPage;
+import graphic.panel.seller.SellerPage;
+import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
@@ -13,16 +18,23 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class LoginMenuController extends PageController {
-    private static PageController controller;
-    public TextField username;
-    public TextField password;
-
-    public static PageController getInstance() {
-        if (controller == null) {
-            controller = new LoginMenuController();
-        }
-        return controller;
+    private static boolean shouldBack;
+    public static Scene getScene() {
+        shouldBack = false;
+        return getScene("/fxml/registerAndLoginMenu/loginMenu.fxml");
     }
+
+    public static Scene getSceneWithBack() {
+        shouldBack = true;
+        return getScene("/fxml/registerAndLoginMenu/loginMenu.fxml");
+    }
+
+    @FXML
+    private TextField username;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private Text error;
 
     @Override
     public void clearPage() {
@@ -31,25 +43,19 @@ public class LoginMenuController extends PageController {
 
     @Override
     public void update() {
-
+        error.setVisible(false);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        update();
     }
 
-    public void showTextFields(MouseEvent mouseEvent) {
-    }
-
-    public void hideTextFields(MouseEvent mouseEvent) {
-    }
-
-    public void back(MouseEvent mouseEvent) {
+    public void back() {
         GraphicView.getInstance().back();
     }
 
-    public void login(MouseEvent mouseEvent) {
+    public void login() {
         ClientMessage clientMessage = new ClientMessage("login");
 
         HashMap<String, String> hashMap = new HashMap<>();
@@ -59,11 +65,23 @@ public class LoginMenuController extends PageController {
 
         clientMessage.setHashMap(hashMap);
         ServerMessage answer = send(clientMessage);
-        if(answer.getType().equals("Successful")){
-            GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForCustomer());
+        if (answer.getType().equals("Successful")) {
+            successfulLogin(answer.getFirstString());
         } else {
-            GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
+            error.setText(answer.getErrorMessage());
+            error.setVisible(true);
         }
-        System.out.println("salam");
+    }
+
+    private void successfulLogin(String userType) {
+        if (shouldBack) {
+            GraphicView.getInstance().back();
+        } else {
+            switch (userType) {
+                case "manager" -> GraphicView.getInstance().changeScene(ManagerPage.getScene());
+                case "seller" -> GraphicView.getInstance().changeScene(SellerPage.getScene());
+                case "customer"-> GraphicView.getInstance().changeScene(CustomerPage.getInstance());
+            }
+        }
     }
 }

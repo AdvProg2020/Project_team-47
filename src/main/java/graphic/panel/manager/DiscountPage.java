@@ -1,5 +1,6 @@
 package graphic.panel.manager;
 
+import graphic.GraphicView;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -39,7 +40,7 @@ public class DiscountPage extends PageController {
 
     @FXML
     private void back() {
-
+        GraphicView.getInstance().back();
     }
 
     @Override

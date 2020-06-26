@@ -23,11 +23,13 @@ public class AddOffRequest extends MainRequest {
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
         HashMap<String, String> addingInfo = new HashMap<>();
-        addingInfo.put("percent", Integer.toString(percent));
-        addingInfo.put("start-time", startTime.toString());
-        addingInfo.put("finish-time", finishTime.toString());
-        addingInfo.put("seller", sellerUsername);
-        addingInfo.put("products-id", (new Gson()).toJson(productsId));
+        addingInfo.put("Percent: ", Integer.toString(percent));
+        addingInfo.put("Start-time: ", startTime.toString());
+        addingInfo.put("Finish-time: ", finishTime.toString());
+        addingInfo.put("Seller: ", sellerUsername);
+        for (int i = 1; i < productsId.size()+1; i++) {
+            addingInfo.put("Product " + i+": ", productsId.get(i - 1));
+        }
         requestInfo.setAddInfo("add-off", sellerUsername, addingInfo);
     }
 
