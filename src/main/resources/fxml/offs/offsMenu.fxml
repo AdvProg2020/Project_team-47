@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Scene xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.offsMenu.OffsMenuController">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="789.0">
+        <Button layoutX="2.0" layoutY="2.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="45.0" prefWidth="234.0" text="back" />
+
+
+
+        <TableView fx:id="tableView" layoutY="61.0" prefHeight="526.0" prefWidth="507.0">
+            <columns>
+
+                <TableColumn  prefWidth="99.99999237060547" text="id" />
+                <TableColumn prefWidth="176.0" text="date" />
+                <TableColumn  prefWidth="111.0" text="price" />
+                <TableColumn  prefWidth="119.0" text="seller" />
+                <TableColumn  prefWidth="119.0" text="seller" />
+
+
+            </columns>
+        </TableView>
+
+
+
+    </AnchorPane>
+</Scene>

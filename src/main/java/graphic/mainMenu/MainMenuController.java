@@ -2,6 +2,7 @@ package graphic.mainMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
+import graphic.offsMenu.OffsMenuController;
 import graphic.panel.customer.CustomerPage;
 import graphic.productsMenu.ProductsMenuPage;
 import graphic.registerAndLoginMenu.RegisterPage;
@@ -11,6 +12,8 @@ import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -44,7 +47,15 @@ public class MainMenuController extends PageController {
 
     @FXML
     private void offs() {
+        ClientMessage request = new ClientMessage("initialize all offs page");
+        ServerMessage answer = send(request);
 
+        if (answer.getType().equals("Successful")) {
+            OffsMenuController.offs = answer.getOffInfoArrayList();
+            GraphicView.getInstance().changeScene(OffsMenuController.getScene());
+        } else {
+            GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
+        }
     }
 
 
