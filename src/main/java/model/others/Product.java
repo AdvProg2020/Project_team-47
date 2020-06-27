@@ -16,6 +16,7 @@ import model.user.Customer;
 import model.user.Seller;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.TreeSet;
 
 public class Product {
@@ -179,11 +180,13 @@ public class Product {
     }
 
     private SpecialProperty getProperty(String filterKey) throws Exception {
-        Category category = mainCategory;
-        if (subCategory != null) category = subCategory;
         SpecialProperty temp = new SpecialProperty(filterKey);
-        for (SpecialProperty property : specialProperties) if (property.equals(filterKey)) return property;
-        throw new Exception("");
+        int index = specialProperties.indexOf(temp);
+        try {
+            return specialProperties.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            throw new Exception("");
+        }
     }
 
     private boolean inScoreFilter(Filter filter) {
@@ -258,9 +261,14 @@ public class Product {
 
     private void addSellersInfoToData(ProductData productData) {
         for (ProductSeller sellerInfo : this.productSellers) {
-            productData.addSeller(sellerInfo.seller.getUsername(),
-                    sellerInfo.off.getOffId(),
-                    sellerInfo.price, sellerInfo.numberInStock);
+            if (sellerInfo.off == null) {
+                productData.addSeller(sellerInfo.seller.getUsername(), null, sellerInfo.price,
+                        sellerInfo.numberInStock);
+            } else {
+                productData.addSeller(sellerInfo.seller.getUsername(),
+                        sellerInfo.off.getOffId(),
+                        sellerInfo.price, sellerInfo.numberInStock);
+            }
         }
     }
 

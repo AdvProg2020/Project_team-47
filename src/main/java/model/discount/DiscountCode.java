@@ -14,16 +14,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DiscountCode extends Discount {
-    private static ArrayList<DiscountCode> allDiscountCodes;
+    private static final ArrayList<DiscountCode> allDiscountCodes;
 
     static {
         allDiscountCodes = new ArrayList<>();
     }
 
     private final String discountCode;
+    private final HashMap<User, Integer> userUsedTimeHashMap;
     private int maxUsableTime;
     private int maxDiscountAmount;
-    private final HashMap<User, Integer> userUsedTimeHashMap;
     private ArrayList<Customer> usersAbleToUse;
 
     public DiscountCode(String code, int percent) {

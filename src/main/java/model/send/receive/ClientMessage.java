@@ -14,12 +14,9 @@ public class ClientMessage {
     private SpecialProperty property;
     private byte[] file;
     private String fileExtension;
+
     public ClientMessage() {
 
-    }
-
-    public void setProperties(ArrayList<SpecialProperty> properties) {
-        this.properties = properties;
     }
 
     public ClientMessage(String type) {
@@ -70,6 +67,9 @@ public class ClientMessage {
         return properties;
     }
 
+    public void setProperties(ArrayList<SpecialProperty> properties) {
+        this.properties = properties;
+    }
 
     public SpecialProperty getProperty() {
         return property;

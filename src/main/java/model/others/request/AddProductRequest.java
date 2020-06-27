@@ -1,7 +1,8 @@
 package model.others.request;
 
-import com.google.gson.Gson;
 import model.category.Category;
+import model.category.MainCategory;
+import model.category.SubCategory;
 import model.ecxeption.product.CategoryDoesntExistException;
 import model.ecxeption.user.UserNotExistException;
 import model.others.Product;
@@ -11,7 +12,6 @@ import model.user.Seller;
 import model.user.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class AddProductRequest extends MainRequest {
@@ -27,6 +27,9 @@ public class AddProductRequest extends MainRequest {
     private byte[] file;
     private String fileExtension;
 
+    public AddProductRequest() {
+    }
+
     public void setFile(byte[] file) {
         this.file = file;
     }
@@ -38,16 +41,16 @@ public class AddProductRequest extends MainRequest {
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
         String sellerUsername = this.sellerUsername;
-        HashMap<String, String> addingInfo = new HashMap<>();
-        addingInfo.put("Price: ", Double.toString(price));
-        addingInfo.put("Name: ", name);
-        addingInfo.put("Number-in-stock: ", Integer.toString(numberInStock));
-        addingInfo.put("Main-category: ", categoryName);
-        addingInfo.put("Sub-category: ", Objects.requireNonNullElse(subCategoryName, ""));
-        addingInfo.put("Description: ", description);
-        addingInfo.put("Company: ", company);
-        for (int i = 1; i < properties.size()+1; i++) {
-            addingInfo.put("Property " + i + "\n", properties.get(i - 1).toString());
+        ArrayList<String> addingInfo = new ArrayList<>();
+        addingInfo.add("Price: " + price);
+        addingInfo.add("Name: " + name);
+        addingInfo.add("Number-in-stock: " + numberInStock);
+        addingInfo.add("Main-category: " + categoryName);
+        addingInfo.add("Sub-category: " + Objects.requireNonNullElse(subCategoryName, ""));
+        addingInfo.add("Description: " + description);
+        addingInfo.add("Company: " + company);
+        for (int i = 1; i < properties.size() + 1; i++) {
+            addingInfo.add("\nProperty " + i + "\n" + properties.get(i - 1).toString());
         }
         requestInfo.setAddInfo("add-product", sellerUsername, addingInfo);
     }
@@ -62,10 +65,13 @@ public class AddProductRequest extends MainRequest {
             product.setFile(file);
             product.setFileExtension(fileExtension);
             product.addSeller(seller, numberInStock, price);
-            product.setMainCategory(Category.getMainCategoryByName(categoryName));
+            Category category = Category.getMainCategoryByName(categoryName);
+            product.setMainCategory((MainCategory) category);
             if (subCategoryName != null) {
-                product.setSubCategory(Category.getSubCategoryByName(subCategoryName));
+                category = Category.getSubCategoryByName(subCategoryName);
+                product.setSubCategory((SubCategory) category);
             }
+            category.addProduct(product);
             product.setName(name);
             product.setCompany(company);
             product.getSellers().add(seller);
@@ -73,6 +79,7 @@ public class AddProductRequest extends MainRequest {
             seller.addProduct(product);
             seller.updateDatabase().update();
             product.updateDatabase();
+            category.updateDatabase();
         } catch (CategoryDoesntExistException | UserNotExistException ignored) {
         }
     }

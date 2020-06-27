@@ -45,7 +45,7 @@ public class Sort {
     public static ArrayList<Product> sortProduct(String field, String direction, ArrayList<Product> products) {
         ArrayList<Product> productsClone = (ArrayList<Product>) products.clone();
         if (field == null || direction == null) {
-            sortProductBySeenTime(productsClone, direction);
+            sortProductBySeenTime(productsClone, "ascending");
             return productsClone;
         }
         switch (field) {

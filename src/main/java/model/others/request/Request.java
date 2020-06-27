@@ -2,6 +2,7 @@ package model.others.request;
 
 import controller.Controller;
 import database.Database;
+import database.RequestData;
 import model.ecxeption.request.RequestDoesntExistException;
 import model.others.Sort;
 import model.send.receive.RequestInfo;
@@ -50,7 +51,8 @@ public class Request {
 
     public static boolean isThereRequestWithId(String id) {
         for (Request request : allNewRequests) {
-            if (request.requestId.equals(id)) {
+            if (request == null) continue;
+            if (id.equalsIgnoreCase(request.requestId)) {
                 return true;
             }
         }
@@ -79,6 +81,10 @@ public class Request {
         Request.allNewRequests = allNewRequests;
     }
 
+    private void mainRequest() {
+
+    }
+
     public void accept() {
         this.mainRequest.accept();
         allNewRequests.remove(this);
@@ -96,7 +102,15 @@ public class Request {
     }
 
     public void addToDatabase() {
-        Database.addRequestToDatabase(this, requestId);
+        RequestData requestData = new RequestData(requestId, requestSenderUserName, type, applyDate, responseDate, status);
+        if (mainRequest instanceof AddCommentRequest) requestData.setAddCommentRequest((AddCommentRequest) mainRequest);
+        else if (mainRequest instanceof AddOffRequest) requestData.setAddOffRequest((AddOffRequest) mainRequest);
+        else if (mainRequest instanceof AddProductRequest)
+            requestData.setAddProductRequest((AddProductRequest) mainRequest);
+        else if (mainRequest instanceof EditOffRequest) requestData.setEditOffRequest((EditOffRequest) mainRequest);
+        else if (mainRequest instanceof EditProductRequest)
+            requestData.setEditProductRequest((EditProductRequest) mainRequest);
+        Database.addRequestToDatabase(requestData, requestId);
     }
 
     public RequestInfo getRequestInfo() {
@@ -105,6 +119,7 @@ public class Request {
         requestInfo.setType(type);
         requestInfo.setId(requestId);
         requestInfo.setRequestedSender(requestSenderUserName);
+        this.mainRequest.requestInfoSetter(requestInfo);
         return requestInfo;
     }
 
@@ -138,11 +153,31 @@ public class Request {
         return applyDate;
     }
 
+    public void setApplyDate(Date applyDate) {
+        this.applyDate = applyDate;
+    }
+
     public void setMainRequest(MainRequest mainRequest) {
         this.mainRequest = mainRequest;
     }
 
     public void removeFromDatabase() {
         Database.removeRequest(this.requestId);
+    }
+
+    public void setId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    public void setRequestSenderUserName(String requestSenderUserName) {
+        this.requestSenderUserName = requestSenderUserName;
+    }
+
+    public void setResponseDate(Date responseDate) {
+        this.responseDate = responseDate;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

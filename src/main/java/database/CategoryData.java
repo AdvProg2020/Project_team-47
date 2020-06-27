@@ -11,7 +11,7 @@ import model.others.SpecialProperty;
 import java.util.ArrayList;
 
 public class CategoryData {
-    private String type;
+    private final String type;
     private String name;
     private ArrayList<SpecialProperty> specialProperties;
     private ArrayList<String> productsId;

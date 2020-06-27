@@ -21,9 +21,9 @@ import java.util.HashMap;
 public class Seller extends User {
     private String companyName;
     private String companyInfo;
-    private ArrayList<Log> sellLogs;
-    private ArrayList<Product> allProducts;
-    private ArrayList<Off> allOff;
+    private final ArrayList<Log> sellLogs;
+    private final ArrayList<Product> allProducts;
+    private final ArrayList<Off> allOff;
     private double money;
 
 

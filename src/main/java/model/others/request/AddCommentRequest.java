@@ -6,10 +6,13 @@ import model.others.Product;
 import model.send.receive.RequestInfo;
 
 public class AddCommentRequest extends MainRequest {
-    private final Comment comment;
+    private Comment comment;
 
     public AddCommentRequest(Comment comment) {
         this.comment = comment;
+    }
+
+    public AddCommentRequest() {
     }
 
     @Override

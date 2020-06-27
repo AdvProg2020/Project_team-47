@@ -8,7 +8,7 @@ import java.util.Properties;
 public class Email {
     private static final Properties mailProperties;
     private static String htmlPage;
-    private static String email = "online.shop4787@gmail.com";
+    private static final String email = "online.shop4787@gmail.com";
     private static String password;
 
     static {
@@ -20,7 +20,7 @@ public class Email {
         mailProperties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
     }
 
-    private String recipients;
+    private final String recipients;
     private String subject;
     private String content;
     private String message;
@@ -136,7 +136,7 @@ public class Email {
     }
 
     private static class SendingThread extends Thread {
-        private Message message;
+        private final Message message;
 
         SendingThread(Message message) {
             this.message = message;

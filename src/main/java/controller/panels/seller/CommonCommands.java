@@ -2,6 +2,7 @@ package controller.panels.seller;
 
 import controller.Command;
 import model.category.Category;
+import model.ecxeption.CommonException;
 import model.ecxeption.Exception;
 import model.ecxeption.common.NotEnoughInformation;
 import model.ecxeption.common.NullFieldException;
@@ -351,8 +352,10 @@ class AddToSeller extends CommonCommands {
         return actionCompleted();
     }
 
-    private void addToSeller(String productId, String numberInStockString, String priceString) throws ProductDoesntExistException, NumberException {
+    private void addToSeller(String productId, String numberInStockString, String priceString) throws ProductDoesntExistException, NumberException, CommonException {
         Product product = Product.getProductWithId(productId);
+        if(product.isUserInSellerList((Seller) getLoggedUser()))
+            throw new CommonException("You already has this product!!");
         double price;
         int numberInStock;
         try {

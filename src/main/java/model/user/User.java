@@ -23,7 +23,7 @@ abstract public class User {
     static ArrayList<User> allUsers;
     private static TreeSet<String> usedUsernames;
     private static int managersNumber;
-    private static HashSet<User> verificationList;
+    private static final HashSet<User> verificationList;
 
     static {
         allUsers = new ArrayList<>();

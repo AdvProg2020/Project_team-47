@@ -1,6 +1,5 @@
 package model.others.request;
 
-import com.google.gson.Gson;
 import controller.Controller;
 import model.discount.Off;
 import model.ecxeption.user.UserNotExistException;
@@ -11,7 +10,6 @@ import model.user.User;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class AddOffRequest extends MainRequest {
     private Date startTime;
@@ -20,17 +18,20 @@ public class AddOffRequest extends MainRequest {
     private ArrayList<String> productsId;
     private int percent;
 
+    public AddOffRequest() {
+    }
+
     @Override
     public void requestInfoSetter(RequestInfo requestInfo) {
-        HashMap<String, String> addingInfo = new HashMap<>();
-        addingInfo.put("Percent: ", Integer.toString(percent));
-        addingInfo.put("Start-time: ", startTime.toString());
-        addingInfo.put("Finish-time: ", finishTime.toString());
-        addingInfo.put("Seller: ", sellerUsername);
-        for (int i = 1; i < productsId.size()+1; i++) {
-            addingInfo.put("Product " + i+": ", productsId.get(i - 1));
+        ArrayList<String> requestArrayList = new ArrayList<>();
+        requestArrayList.add("Percent: " + percent);
+        requestArrayList.add("Start-time: " + startTime.toString());
+        requestArrayList.add("Finish-time: " + finishTime.toString());
+        requestArrayList.add("Seller: " + sellerUsername + "\n");
+        for (int i = 1; i < productsId.size() + 1; i++) {
+            requestArrayList.add("Product " + i + ": " + productsId.get(i - 1));
         }
-        requestInfo.setAddInfo("add-off", sellerUsername, addingInfo);
+        requestInfo.setAddInfo("add-off", sellerUsername, requestArrayList);
     }
 
     @Override

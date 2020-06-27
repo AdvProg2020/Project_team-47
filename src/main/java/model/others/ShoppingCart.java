@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ShoppingCart {
     private static ShoppingCart localShoppingCart;
 
-    private ArrayList<ProductInCart> productsInCart;
+    private final ArrayList<ProductInCart> productsInCart;
 
     public ShoppingCart() {
         productsInCart = new ArrayList<>();

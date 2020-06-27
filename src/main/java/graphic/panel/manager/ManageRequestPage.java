@@ -16,12 +16,17 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ManageRequestPage extends PageController {
+    private static PageController controller;
     public static Scene getScene() {
         return getScene("/fxml/panel/manager/ManageRequestPage.fxml");
     }
 
     @FXML
     private VBox vBox;
+
+    public static PageController getInstance() {
+        return controller;
+    }
 
     @FXML
     private void back() {
@@ -56,5 +61,6 @@ public class ManageRequestPage extends PageController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         update();
+        controller = this;
     }
 }

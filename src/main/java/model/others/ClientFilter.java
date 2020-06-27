@@ -1,10 +1,10 @@
 package model.others;
 
 public class ClientFilter {
-    private String name;
-    private String type;
-    private String unit;
-    private String[] fields;
+    private final String name;
+    private final String type;
+    private final String unit;
+    private final String[] fields;
 
 
     public ClientFilter(String name, String type, String unit, String... fields) {
@@ -15,4 +15,15 @@ public class ClientFilter {
     }
 
 
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
 }

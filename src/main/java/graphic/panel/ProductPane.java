@@ -4,6 +4,8 @@ import graphic.GraphicView;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -11,9 +13,12 @@ import javafx.scene.text.Text;
 import model.send.receive.ProductInfo;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class ProductPane {
-    private static AnchorPane anchorPane;
+public class ProductPane implements Initializable {
+    private static ProductInfo productInfo;
+    private static ProductInfo productPage;
     @FXML
     private Text id;
     @FXML
@@ -34,28 +39,54 @@ public class ProductPane {
     private ImageView imageView;
 
     public ProductPane() {
-        try {
-            anchorPane = FXMLLoader.load(getClass().getResource("/fxml/panel/ProductPane.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
+    }
+
+
+    public static void setProduct(ProductInfo productInfo) {
+        ProductPane.productInfo = productInfo;
+    }
+
+    public static void setProductPage(ProductInfo productInfo) {
+        productPage = productInfo;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        if (productPage != null) {
+            initializeForProductPage(productPage);
+        } else if (productInfo != null) {
+            initializeForSellerProduct(productInfo);
         }
     }
 
-    public static AnchorPane getPane(ProductInfo productInfo) {
-        ProductPane pane = new ProductPane();
-        pane.category.setText(productInfo.getMainCategory());
-        pane.imageView.setImage(PageController.byteToImage(productInfo.getFile()));
-        pane.id.setText(productInfo.getId());
-        pane.name.setText(productInfo.getName());
-        pane.numberInStock.setText(""+productInfo.getNumberInStock(GraphicView.getInstance().getMyUsername()));
-        pane.price.setText(productInfo.getPrice(GraphicView.getInstance().getMyUsername())+"");
+    private void initializeForProductPage(ProductInfo productInfo) {
+        this.category.setText(productInfo.getMainCategory());
+        this.imageView.setImage(PageController.byteToImage(productInfo.getFile()));
+        this.id.setText(productInfo.getId());
+        this.name.setText(productInfo.getName());
+        this.numberInStock.setText("" + productInfo.getNumberInStock());
+        this.price.setText(""+productInfo.getMinPrice());
         if (productInfo.getSubCategory().isEmpty()) {
-            pane.subCategory.setVisible(false);
-            pane.subCategoryLabel.setVisible(false);
+            this.subCategory.setVisible(false);
+            this.subCategoryLabel.setVisible(false);
         } else {
-            pane.subCategory.setText(productInfo.getSubCategory());
+            this.subCategory.setText(productInfo.getSubCategory());
         }
-        return anchorPane;
+    }
+
+    private void initializeForSellerProduct(ProductInfo productInfo) {
+        this.category.setText(productInfo.getMainCategory());
+        this.imageView.setImage(PageController.byteToImage(productInfo.getFile()));
+        this.id.setText(productInfo.getId());
+        this.name.setText(productInfo.getName());
+        this.numberInStock.setText("" + productInfo.getNumberInStock(GraphicView.getInstance().getMyUsername()));
+        this.price.setText(productInfo.getPrice(GraphicView.getInstance().getMyUsername()) + "");
+        if (productInfo.getSubCategory().isEmpty()) {
+            this.subCategory.setVisible(false);
+            this.subCategoryLabel.setVisible(false);
+        } else {
+            this.subCategory.setText(productInfo.getSubCategory());
+        }
     }
 }
 

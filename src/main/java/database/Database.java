@@ -20,8 +20,8 @@ import java.util.Scanner;
 import java.util.TreeSet;
 
 public class Database {
-    private static OutputStream outputStream;
     private static final Gson gson;
+    private static OutputStream outputStream;
 
     static {
         gson = Controller.getGson();
@@ -108,7 +108,7 @@ public class Database {
         saveInFile(category, Path.CATEGORIES_FOLDER.getPath() + category.getId() + ".json");
     }
 
-    public static void addRequestToDatabase(Request request, String requestId) {
+    public static void addRequestToDatabase(RequestData request, String requestId) {
         saveInFile(request, Path.REQUESTS_FOLDER.getPath() + requestId + ".json");
     }
 
@@ -132,9 +132,9 @@ public class Database {
         try {
             File file = new File(path);
             outputStream = new FileOutputStream(file);
-            String usedUsernamesString = Controller.getGson().toJson(objectToSave);
+            String object = Controller.getGson().toJson(objectToSave);
             Formatter formatter = new Formatter(outputStream);
-            formatter.format(usedUsernamesString);
+            formatter.format(object);
             formatter.close();
         } catch (FileNotFoundException ignored) {
         } finally {
@@ -164,7 +164,7 @@ public class Database {
     }
 
     public static void removeRequest(String id) {
-        removeFile(Path.RESOURCE.getPath() + id + ".json");
+        removeFile(Path.REQUESTS_FOLDER.getPath() + id + ".json");
     }
 
     public static void removeProduct(String productId) {
@@ -221,9 +221,7 @@ public class Database {
     private void loadEmail() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter email password!!");
-        //amir
-        //Email.setPassword(scanner.nextLine());
-        Email.setPassword("apshop1818901");
+        Email.setPassword(scanner.nextLine());
         Email.checkPassword();
         scanner.close();
         File htmlPage = new File(Path.RESOURCE.getPath() + "Others/HtmlPage.html");
@@ -320,8 +318,10 @@ public class Database {
         Request.setAllNewRequests(requests);
     }
 
-    private void addRequest(String request) {
-        requests.add(gson.fromJson(request, Request.class));
+    private void addRequest(String requestString) {
+        RequestData requestData = gson.fromJson(requestString, RequestData.class);
+        requestData.addToRequests();
+        requests.add(requestData.getRequest());
     }
 
     private void loadBuyLogs() {
@@ -416,7 +416,8 @@ public class Database {
         CODES_FOLDER("src/main/resources/Codes/"),
         OFFS_FOLDER("src/main/resources/Offs/"),
         BUY_LOGS_FOLDER("src/main/resources/Logs/BuyLogs/"),
-        SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs");
+        SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs/"),
+        TEMP_FOLDER("src/main/resources/Temp/");
 
 
         private final String path;

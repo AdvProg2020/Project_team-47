@@ -117,4 +117,8 @@ public class GraphicView {
         alert.setHeaderText(error);
         alert.showAndWait();
     }
+
+    public boolean getLoginStatus() {
+        return loggedIn;
+    }
 }

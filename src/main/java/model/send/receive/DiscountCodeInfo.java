@@ -9,10 +9,10 @@ public class DiscountCodeInfo {
     private final Date startTime;
     private final Date finishTime;
     private final int percent;
+    private final ArrayList<String> usersAbleToUse;
     private String code;
     private int maxUsableTime;
     private int maxDiscountAmount;
-    private final ArrayList<String> usersAbleToUse;
 
     public DiscountCodeInfo(Date startTime, Date finishTime, int percent) {
         this.startTime = startTime;

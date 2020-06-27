@@ -15,13 +15,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Off extends Discount {
-    private static ArrayList<Off> allOffs;
+    private static final ArrayList<Off> allOffs;
 
     static {
         allOffs = new ArrayList<>();
     }
 
-    private String offId;
+    private final String offId;
     private String offStatus;
     private ArrayList<Product> products;
     private Seller seller;
@@ -55,7 +55,7 @@ public class Off extends Discount {
 
     public static Off getOffById(String offId) throws OffDoesntExistException {
         for (Off off : allOffs) {
-            if (offId.equalsIgnoreCase(off.getOffId()))
+            if (off.getOffId().equalsIgnoreCase(offId))
                 return off;
         }
         throw new OffDoesntExistException();

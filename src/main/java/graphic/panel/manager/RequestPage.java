@@ -56,6 +56,9 @@ public class RequestPage extends PageController {
         if (answer.getType().equalsIgnoreCase("Error")) {
             error.setText(answer.getErrorMessage());
             error.setVisible(true);
+        }else {
+            back();
+            ManageRequestPage.getInstance().update();
         }
     }
 

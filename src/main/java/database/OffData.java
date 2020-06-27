@@ -18,7 +18,7 @@ public class OffData {
     private String id;
     private String offStatus;
     private String sellerUsername;
-    private ArrayList<String> products;
+    private final ArrayList<String> products;
 
     public OffData() {
         products = new ArrayList<>();
