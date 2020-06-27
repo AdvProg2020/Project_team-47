@@ -197,7 +197,7 @@ public class Database {
 
     private void loadDatabase() {
         this.creatingFolders();
-        //this.loadEmail();
+        this.loadEmail();
         this.loadUsedUsernames();
         this.loadUsedProductId();
         this.loadUsedId();

@@ -99,16 +99,28 @@ public class RegisterPage extends PageController {
             update();
             GraphicView.getInstance().setMyUsername(usernameString);
             GraphicView.getInstance().setLoggedIn(true);
+            GraphicView.getInstance().setAccountType(getAccountType());
             if (shouldBack) {
                 back();
             } else {
                 switch (userType) {
                     case "manager" -> GraphicView.getInstance().changeScene(ManagerPage.getScene());
                     case "seller" -> GraphicView.getInstance().changeScene(SellerPage.getScene());
-                    case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getInstance());
+                    case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getScene());
                 }
             }
         }
+    }
+
+    private String getAccountType() {
+        if (managerButton.isSelected()) {
+            return "manager";
+        } else if (sellerButton.isSelected()) {
+            return "seller";
+        } else if (customerButton.isSelected()) {
+            return "customer";
+        }
+        return "shouldn't happen";
     }
 
     public void back() {

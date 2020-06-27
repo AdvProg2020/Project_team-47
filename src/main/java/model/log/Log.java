@@ -15,6 +15,9 @@ abstract public class Log {
     protected UserInfo customer;
     protected String purchaseStatus;
     protected double price;
+    static {
+        usedId = new TreeSet<>();
+    }
 
     public Log() {
         this.logId = logIdCreator();

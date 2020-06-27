@@ -1,27 +1,74 @@
 package graphic.panel.customer;
 
-import graphic.Page;
+import graphic.GraphicView;
 import graphic.PageController;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.Style;
+import graphic.TemplatePage;
+import graphic.panel.AccountPage;
+import graphic.panel.seller.log.LogsPage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import model.send.receive.ClientMessage;
 
-public class CustomerPage extends Page {
-    private static Page page;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-    protected CustomerPage(String scenePath) {
-        super(scenePath);
-        JMetro jMetro = new JMetro(Style.DARK);
-        jMetro.setScene(scene);
+public class CustomerPage extends PageController {
+    private static PageController controller;
+
+    public static PageController getInstance() {
+        if (controller == null) {
+            controller = new CustomerPage();
+        }
+        return controller;
     }
 
-    public static Page getInstance() {
-        if (page == null)
-            page = new CustomerPage("/fxml/panel/customer/customerPage.fxml");
-        return page;
+    public static Scene getScene() {
+        return getScene("/fxml/panel/customer/CustomerPage.fxml");
     }
 
     @Override
-    public PageController getController() {
-        return CustomerPageController.getInstance();
+    public void clearPage() {
+
     }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
+
+    public void logout() {
+        ClientMessage request = new ClientMessage("logout");
+        send(request);
+        GraphicView.getInstance().setLoggedIn(false);
+        GraphicView.getInstance().goToFirstPage();
+    }
+
+    public void personalInfo() {
+        GraphicView.getInstance().changeScene(AccountPage.getScene());
+    }
+
+    public void shoppingCart() throws IOException {
+        GraphicView.getInstance().changeScene(TemplatePage.getScene());
+        TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/panel/customer/CartPage.fxml")));
+    }
+
+    public void purchaseHistory() {
+        GraphicView.getInstance().changeScene(LogsPage.getScene());
+    }
+
+    public void discountCodes() {
+        GraphicView.getInstance().changeScene(DiscountPage.getScene());
+    }
+
+    public void showProducts() throws IOException {
+        GraphicView.getInstance().changeScene(TemplatePage.getScene());
+        TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
+    }
+
 }

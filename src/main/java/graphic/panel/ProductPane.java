@@ -21,6 +21,12 @@ import java.util.ResourceBundle;
 public class ProductPane implements Initializable {
     private static ProductInfo productInfo;
     private static ProductInfo productPage;
+    private static ProductInfo cartProduct;
+    private static String seller;
+    private static int numberInCart;
+
+
+    @FXML private Text finalPrice;
     @FXML
     private AnchorPane pane;
     @FXML
@@ -43,17 +49,27 @@ public class ProductPane implements Initializable {
     private Text score;
     @FXML
     private ImageView imageView;
-
     public ProductPane() {
     }
 
+    public static void setCart(ProductInfo cartProduct, String seller,int numberInCart) {
+        productInfo = null;
+        productPage = null;
+        ProductPane.cartProduct = cartProduct;
+        ProductPane.seller = seller;
+        ProductPane.numberInCart = numberInCart;
+    }
 
     public static void setProduct(ProductInfo productInfo) {
+        productPage = null;
+        cartProduct = null;
         ProductPane.productInfo = productInfo;
     }
 
-    public static void setProductPage(ProductInfo productInfo) {
-        productPage = productInfo;
+    public static void setProductPage(ProductInfo productPage) {
+        productInfo = null;
+        cartProduct = null;
+        ProductPane.productPage = productPage;
     }
 
     @Override
@@ -63,15 +79,39 @@ public class ProductPane implements Initializable {
             initializeForProductPage(productPage);
         } else if (productInfo != null) {
             initializeForSellerProduct(productInfo);
+        } else if (cartProduct != null) {
+            initializeForCartProduct(cartProduct);
+        }
+    }
+
+    private void initializeForCartProduct(ProductInfo productInfo) {
+        this.category.setText(productInfo.getMainCategory());
+        this.imageView.setImage(PageController.byteToImage(productInfo.getFile()));
+        this.score.setText(productInfo.getScoreAverage() + "");
+        this.name.setText(productInfo.getName());
+        this.id.setText(productInfo.getId());
+        this.price.setText(productInfo.getFinalPrice(seller)+"");
+        this.numberInStock.setText("" + numberInCart);
+        this.numberInStockLabel.setText("Number In Cart: ");
+        this.finalPrice.setText(finalPrice.getText() + productInfo.getFinalPrice(seller) * numberInCart);
+        this.finalPrice.setVisible(true);
+        if (productInfo.getSubCategory().isEmpty()) {
+            this.subCategory.setVisible(false);
+            this.subCategoryLabel.setVisible(false);
+        } else {
+            this.subCategory.setText(productInfo.getSubCategory());
         }
     }
 
     private void goToProductPage(MouseEvent event) {
         try {
-            if(productInfo!=null)
+            if (productInfo != null)
                 ProductPage.setProduct(productInfo);
-            else
+            else if(productPage!=null)
                 ProductPage.setProduct(productPage);
+            else
+                ProductPage.setProduct(cartProduct);
+
             GraphicView.getInstance().changeScene(TemplatePage.getScene());
             TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Product.fxml")));
         } catch (IOException e) {

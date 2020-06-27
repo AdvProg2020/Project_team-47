@@ -42,6 +42,8 @@ public class AccountPage extends PageController {
     private TextField editValue;
     @FXML
     private Text error;
+    @FXML
+    private Text money;
 
     public static Scene getScene() {
         return getScene("/fxml/panel/AccountPage.fxml");
@@ -78,6 +80,9 @@ public class AccountPage extends PageController {
         lastName.setText(user.getLastName());
         phoneNumber.setText(user.getPhoneNumber());
         email.setText(user.getEmail());
+        if (!user.getType().equalsIgnoreCase("manager")) {
+            money.setText("Money: "+user.getMoney());
+        }
         if (user.getType().equalsIgnoreCase("seller")) {
             companyInfo.setVisible(true);
             companyName.setVisible(true);

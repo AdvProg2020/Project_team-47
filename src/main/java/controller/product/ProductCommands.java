@@ -166,7 +166,7 @@ class AddToCartCommand extends ProductCommands {
     @Override
     public ServerMessage process(ClientMessage request) throws NullFieldException, UserTypeException.NeedCustomerException, UserNotExistException, DebugException {
         containNullField(request.getHashMap().get("seller username"));
-        canUserDo();
+
         addToCart(request.getHashMap().get("seller username"));
         return actionCompleted();
     }
@@ -237,7 +237,6 @@ class AddCommentCommand extends ProductCommands {
             throw new DebugException();
         } else {
             product().addComment(title, content, ((Customer) getLoggedUser()));
-            actionCompleted();
         }
     }
 

@@ -1,15 +1,20 @@
 package graphic;
 
 import graphic.panel.AccountPage;
+import graphic.panel.customer.CustomerPage;
+import graphic.panel.manager.ManagerPage;
+import graphic.panel.seller.SellerPage;
 import graphic.registerAndLoginMenu.RegisterPage;
 import graphic.registerAndLoginMenu.loginMenu.LoginMenuController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import model.send.receive.ClientMessage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -17,6 +22,10 @@ import java.util.ResourceBundle;
 public class TemplatePage extends PageController {
     private static TemplatePage controller;
     private final ArrayList<AnchorPane> panes = new ArrayList<>();
+    @FXML
+    private Button cartButton;
+    @FXML
+    private Button panelButton;
     @FXML
     private Scene scene;
     @FXML
@@ -53,14 +62,15 @@ public class TemplatePage extends PageController {
         this.pane.getChildren().add(pane);
     }
 
+
     @Override
     public void update() {
         changeVisibility(GraphicView.getInstance().getLoginStatus());
     }
 
     @FXML
-    private void back() {
-        if (panes.size() == 1||panes.size()==0) {
+    public void back() {
+        if (panes.size() == 1 || panes.size() == 0) {
             panes.clear();
             GraphicView.getInstance().back();
         } else {
@@ -95,8 +105,9 @@ public class TemplatePage extends PageController {
     }
 
     @FXML
-    private void cart() {
-        // TODO: 6/27/2020  
+    private void cart() throws IOException {
+        GraphicView.getInstance().changeScene(TemplatePage.getScene());
+        changePane(FXMLLoader.load(getClass().getResource("/fxml/panel/customer/CartPage.fxml")));
     }
 
     private void changeVisibility(boolean logged) {
@@ -104,11 +115,21 @@ public class TemplatePage extends PageController {
         login.setVisible(!logged);
         image.setVisible(logged);
         logout.setVisible(logged);
+        panelButton.setVisible(logged);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         controller = this;
         update();
+    }
+
+    @FXML
+    private void panel() {
+        switch (GraphicView.getInstance().getAccountType().toLowerCase()) {
+            case "manager" -> GraphicView.getInstance().changeScene(ManagerPage.getScene());
+            case "seller" -> GraphicView.getInstance().changeScene(SellerPage.getScene());
+            case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getScene());
+        }
     }
 }

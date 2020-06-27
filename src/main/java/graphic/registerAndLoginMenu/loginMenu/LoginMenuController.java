@@ -76,6 +76,7 @@ public class LoginMenuController extends PageController {
 
     private void successfulLogin(String userType) {
         GraphicView.getInstance().setMyUsername(username.getText());
+        GraphicView.getInstance().setAccountType(userType);
         GraphicView.getInstance().setLoggedIn(true);
         if (shouldBack) {
             TemplatePage.getInstance().update();
@@ -84,7 +85,7 @@ public class LoginMenuController extends PageController {
             switch (userType) {
                 case "manager" -> GraphicView.getInstance().changeScene(ManagerPage.getScene());
                 case "seller" -> GraphicView.getInstance().changeScene(SellerPage.getScene());
-                case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getInstance());
+                case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getScene());
             }
         }
     }
