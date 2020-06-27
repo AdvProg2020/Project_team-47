@@ -43,6 +43,10 @@ public class ClientMessage {
         return firstInt;
     }
 
+    public void setFirstInt(int firstInt) {
+        this.firstInt = firstInt;
+    }
+
     public String getType() {
         return type;
     }
@@ -81,9 +85,5 @@ public class ClientMessage {
 
     public void setProperty(SpecialProperty property) {
         this.property = property;
-    }
-
-    public void setFirstInt(int firstInt) {
-        this.firstInt = firstInt;
     }
 }

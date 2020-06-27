@@ -4,10 +4,8 @@ import graphic.GraphicView;
 import graphic.PageController;
 import graphic.TemplatePage;
 import graphic.panel.ProductPane;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -23,7 +21,8 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class CartPage extends PageController {
-    @FXML private
+    @FXML
+    private
     Label priceLabel;
     @FXML
     private VBox vBox;
@@ -63,7 +62,8 @@ public class CartPage extends PageController {
         update();
     }
 
-    @FXML private void increase() {
+    @FXML
+    private void increase() {
         sendChangeProduct("increase product in cart");
     }
 
@@ -81,20 +81,23 @@ public class CartPage extends PageController {
         }
     }
 
-    @FXML private void decrease() {
+    @FXML
+    private void decrease() {
         sendChangeProduct("decrease product in cart");
     }
 
-    @FXML private void purchase() throws IOException {
+    @FXML
+    private void purchase() throws IOException {
         if (!GraphicView.getInstance().isLoggedIn()) {
             showAlert("Please login or register first!!");
         } else {
-            if(sendAndProcess(new ClientMessage("purchase cart")))
+            if (sendAndProcess(new ClientMessage("purchase cart")))
                 TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/panel/customer/PurchasePage.fxml")));
         }
 
 
     }
+
     private boolean sendAndProcess(ClientMessage request) {
         ServerMessage answer = send(request);
         if (answer.getType().equals("Error")) {

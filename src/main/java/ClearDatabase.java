@@ -1,5 +1,4 @@
 import java.io.File;
-import java.util.Objects;
 
 public class ClearDatabase {
     public static void main(String[] args) {
@@ -25,6 +24,7 @@ public class ClearDatabase {
         } catch (NullPointerException ignored) {
         }
     }
+
     public enum Path {
         USERS_FOLDER("src/main/resources/Users/"),
         NOT_VERIFIED_USERS_FOLDER("src/main/resources/NotVerifiedUser/"),

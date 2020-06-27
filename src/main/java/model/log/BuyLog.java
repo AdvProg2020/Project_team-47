@@ -15,11 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BuyLog extends Log {
+    private final ArrayList<ProductInLog> products;
     private String address;
     private String postalCode;
     private String phoneNumber;
     private String customerRequests;
-    private final ArrayList<ProductInLog> products;
     private double appliedDiscount;
 
 

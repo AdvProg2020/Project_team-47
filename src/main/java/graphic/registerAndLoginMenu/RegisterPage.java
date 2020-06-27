@@ -25,7 +25,7 @@ public class RegisterPage extends PageController {
     @FXML
     private TextField username;
     @FXML
-    private TextField password;
+    private PasswordField password;
     @FXML
     private TextField firstName;
     @FXML

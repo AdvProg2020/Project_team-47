@@ -1,80 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
 <?import javafx.scene.text.*?>
-
-<Scene stylesheets="@../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.manager.DiscountPage">
+<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../Others/Stylesheet.css"
+       xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="graphic.panel.manager.DiscountPage">
     <AnchorPane prefHeight="400.0" prefWidth="600.0">
-        <Label layoutX="55.0" layoutY="88.0" prefHeight="56.0" prefWidth="163.0" text="Start Time" AnchorPane.leftAnchor="65.0">
+        <Label layoutX="55.0" layoutY="88.0" prefHeight="56.0" prefWidth="163.0" text="Start Time"
+               AnchorPane.leftAnchor="65.0">
             <font>
-                <Font size="17.0" />
+                <Font size="17.0"/>
             </font>
         </Label>
-        <Label layoutX="65.0" layoutY="151.0" prefHeight="56.0" prefWidth="163.0" text="Finish Time" AnchorPane.leftAnchor="65.0">
+        <Label layoutX="65.0" layoutY="151.0" prefHeight="56.0" prefWidth="163.0" text="Finish Time"
+               AnchorPane.leftAnchor="65.0">
             <font>
-                <Font size="17.0" />
+                <Font size="17.0"/>
             </font>
         </Label>
-        <Label layoutX="65.0" layoutY="220.0" prefHeight="56.0" prefWidth="163.0" text="Percent" AnchorPane.leftAnchor="65.0">
+        <Label layoutX="65.0" layoutY="220.0" prefHeight="56.0" prefWidth="163.0" text="Percent"
+               AnchorPane.leftAnchor="65.0">
             <font>
-                <Font size="17.0" />
+                <Font size="17.0"/>
             </font>
         </Label>
-        <Label layoutX="65.0" layoutY="276.0" prefHeight="56.0" prefWidth="163.0" text="Usable Time" AnchorPane.leftAnchor="65.0">
+        <Label layoutX="65.0" layoutY="276.0" prefHeight="56.0" prefWidth="163.0" text="Usable Time"
+               AnchorPane.leftAnchor="65.0">
             <font>
-                <Font size="17.0" />
+                <Font size="17.0"/>
             </font>
         </Label>
-        <Label layoutX="65.0" layoutY="334.0" prefHeight="56.0" prefWidth="163.0" text="Code" AnchorPane.leftAnchor="65.0">
+        <Label layoutX="65.0" layoutY="334.0" prefHeight="56.0" prefWidth="163.0" text="Code"
+               AnchorPane.leftAnchor="65.0">
             <font>
-                <Font size="17.0" />
+                <Font size="17.0"/>
             </font>
         </Label>
-        <Label layoutX="65.0" layoutY="383.0" prefHeight="56.0" prefWidth="163.0" text="Max Amount" AnchorPane.leftAnchor="65.0">
+        <Label layoutX="65.0" layoutY="383.0" prefHeight="56.0" prefWidth="163.0" text="Max Amount"
+               AnchorPane.leftAnchor="65.0">
             <font>
-                <Font size="17.0" />
+                <Font size="17.0"/>
             </font>
         </Label>
         <Label fx:id="startAt" layoutX="214.0" layoutY="97.0" prefHeight="30.0" prefWidth="286.0" text="Label">
             <font>
-                <Font size="20.0" />
+                <Font size="20.0"/>
             </font>
         </Label>
         <Label fx:id="finishAt" layoutX="214.0" layoutY="163.0" prefHeight="30.0" prefWidth="283.0" text="Label">
             <font>
-                <Font size="20.0" />
+                <Font size="20.0"/>
             </font>
         </Label>
         <Label fx:id="percent" layoutX="219.0" layoutY="231.0" prefHeight="28.0" prefWidth="159.0" text="Label">
             <font>
-                <Font size="20.0" />
+                <Font size="20.0"/>
             </font>
         </Label>
         <Label fx:id="usableTime" layoutX="222.0" layoutY="287.0" prefHeight="28.0" prefWidth="159.0" text="Label">
             <font>
-                <Font size="20.0" />
+                <Font size="20.0"/>
             </font>
         </Label>
         <Label fx:id="code" layoutX="223.0" layoutY="342.0" prefHeight="28.0" prefWidth="159.0" text="Label">
             <font>
-                <Font size="20.0" />
+                <Font size="20.0"/>
             </font>
         </Label>
         <Label fx:id="maxAmount" layoutX="227.0" layoutY="397.0" prefHeight="28.0" prefWidth="159.0" text="Label">
             <font>
-                <Font size="20.0" />
+                <Font size="20.0"/>
             </font>
         </Label>
         <ScrollPane layoutX="507.0" layoutY="44.0" prefHeight="412.0" prefWidth="195.0">
             <content>
-                <VBox fx:id="usersVBox" alignment="CENTER" prefHeight="408.0" prefWidth="193.0" />
+                <VBox fx:id="usersVBox" alignment="CENTER" prefHeight="408.0" prefWidth="193.0"/>
             </content>
         </ScrollPane>
-        <Button layoutX="63.0" layoutY="574.0" mnemonicParsing="false" onAction="#back" prefHeight="59.0" prefWidth="119.0" text="Back">
+        <Button layoutX="63.0" layoutY="574.0" mnemonicParsing="false" onAction="#back" prefHeight="59.0"
+                prefWidth="119.0" text="Back">
             <font>
-                <Font size="20.0" />
+                <Font size="20.0"/>
             </font>
         </Button>
     </AnchorPane>

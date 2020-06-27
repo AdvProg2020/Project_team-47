@@ -16,6 +16,8 @@ import model.user.User;
 import java.util.ArrayList;
 
 public class ProductData {
+    private final ArrayList<String> sellersUsernames;
+    private final ArrayList<ProductSeller> productSellers;
     private int seenTime;
     private String id;
     private String company;
@@ -27,8 +29,6 @@ public class ProductData {
     private double scoreAverage;
     private ArrayList<Score> scores;
     private ArrayList<Comment> comments;
-    private final ArrayList<String> sellersUsernames;
-    private final ArrayList<ProductSeller> productSellers;
     private ArrayList<SpecialProperty> specialProperties;
     private String fileExtension;
     private byte[] file;
@@ -71,7 +71,8 @@ public class ProductData {
                 Off off = null;
                 try {
                     off = Off.getOffById(productSeller.offId);
-                } catch (OffDoesntExistException ignored) {}
+                } catch (OffDoesntExistException ignored) {
+                }
                 Seller seller = (Seller) User.getUserByUsername(productSeller.sellerUsername);
                 product.addSellerFromDatabase(seller, off, productSeller.price, productSeller.numberInStock);
             }

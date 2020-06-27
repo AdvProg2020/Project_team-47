@@ -19,7 +19,8 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class AddDiscountPage extends PageController {
-    @FXML private TextField userNumber;
+    @FXML
+    private TextField userNumber;
     @FXML
     private TextField percent;
     @FXML

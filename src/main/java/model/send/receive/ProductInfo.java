@@ -158,7 +158,7 @@ public class ProductInfo {
     public double getMinPrice() {
         double price = Double.MAX_VALUE;
         for (ProductSeller productSeller : productSellers) {
-            if(productSeller.priceWithOff<price) price = productSeller.priceWithOff;
+            if (productSeller.priceWithOff < price) price = productSeller.priceWithOff;
         }
         return price;
     }
@@ -166,7 +166,7 @@ public class ProductInfo {
     public double getMinPriceWithoutOff() {
         double price = Double.MAX_VALUE;
         for (ProductSeller productSeller : productSellers) {
-            if(productSeller.price<price) price = productSeller.price;
+            if (productSeller.price < price) price = productSeller.price;
         }
         return price;
     }

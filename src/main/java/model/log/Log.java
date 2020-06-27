@@ -10,14 +10,16 @@ import java.util.TreeSet;
 
 abstract public class Log {
     private static TreeSet<String> usedId;
+
+    static {
+        usedId = new TreeSet<>();
+    }
+
     protected String logId;
     protected Date logDate;
     protected UserInfo customer;
     protected String purchaseStatus;
     protected double price;
-    static {
-        usedId = new TreeSet<>();
-    }
 
     public Log() {
         this.logId = logIdCreator();

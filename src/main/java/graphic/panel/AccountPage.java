@@ -81,7 +81,7 @@ public class AccountPage extends PageController {
         phoneNumber.setText(user.getPhoneNumber());
         email.setText(user.getEmail());
         if (!user.getType().equalsIgnoreCase("manager")) {
-            money.setText("Money: "+user.getMoney());
+            money.setText("Money: " + user.getMoney());
         }
         if (user.getType().equalsIgnoreCase("seller")) {
             companyInfo.setVisible(true);

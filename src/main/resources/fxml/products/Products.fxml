@@ -3,274 +3,310 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="592.0" prefWidth="998.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.productsMenu.ProductsPage">
-    <SplitPane dividerPositions="0.29797979797979796" layoutX="93.0" layoutY="92.0" prefHeight="284.0" prefWidth="506.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0"
+            prefHeight="592.0" prefWidth="998.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
+            fx:controller="graphic.productsMenu.ProductsPage">
+    <SplitPane dividerPositions="0.29797979797979796" layoutX="93.0" layoutY="92.0" prefHeight="284.0" prefWidth="506.0"
+               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="0.0">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-            <ScrollPane layoutX="-4.0" layoutY="63.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <ScrollPane layoutX="-4.0" layoutY="63.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+                        AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <AnchorPane>
                     <VBox fillWidth="false" prefHeight="590.0" prefWidth="431.0" spacing="10.0">
-                  <Text fx:id="error" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" wrappingWidth="329.33675384521484" />
+                        <Text fx:id="error" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Error"
+                              wrappingWidth="329.33675384521484"/>
                         <Label prefHeight="67.0" prefWidth="152.0" text="Sort">
                             <font>
-                                <Font size="19.0" />
+                                <Font size="19.0"/>
                             </font>
                         </Label>
                         <HBox prefHeight="37.0" prefWidth="292.0" spacing="8.0">
-                            <RadioButton fx:id="none" mnemonicParsing="false" onAction="#sort" selected="true" text="None">
+                            <RadioButton fx:id="none" mnemonicParsing="false" onAction="#sort" selected="true"
+                                         text="None">
                                 <font>
-                                    <Font size="16.0" />
+                                    <Font size="16.0"/>
                                 </font>
                                 <toggleGroup>
-                                    <ToggleGroup fx:id="sortField" />
+                                    <ToggleGroup fx:id="sortField"/>
                                 </toggleGroup>
                             </RadioButton>
-                            <RadioButton fx:id="score" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#sort" text="Score" toggleGroup="$sortField">
+                            <RadioButton fx:id="score" layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
+                                         onAction="#sort" text="Score" toggleGroup="$sortField">
                                 <font>
-                                    <Font size="16.0" />
+                                    <Font size="16.0"/>
                                 </font>
                             </RadioButton>
-                            <RadioButton fx:id="seenTime" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#sort" text="Seen Time" toggleGroup="$sortField">
+                            <RadioButton fx:id="seenTime" layoutX="89.0" layoutY="10.0" mnemonicParsing="false"
+                                         onAction="#sort" text="Seen Time" toggleGroup="$sortField">
                                 <font>
-                                    <Font size="16.0" />
+                                    <Font size="16.0"/>
                                 </font>
                             </RadioButton>
                         </HBox>
                         <HBox layoutX="10.0" layoutY="88.0" prefHeight="37.0" prefWidth="292.0" spacing="8.0">
-                            <RadioButton fx:id="name" mnemonicParsing="false" onAction="#sort" text="Name" toggleGroup="$sortField">
+                            <RadioButton fx:id="name" mnemonicParsing="false" onAction="#sort" text="Name"
+                                         toggleGroup="$sortField">
                                 <font>
-                                    <Font size="16.0" />
+                                    <Font size="16.0"/>
                                 </font>
                             </RadioButton>
-                            <RadioButton fx:id="price" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#sort" text="Price" toggleGroup="$sortField">
+                            <RadioButton fx:id="price" layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
+                                         onAction="#sort" text="Price" toggleGroup="$sortField">
                                 <font>
-                                    <Font size="16.0" />
+                                    <Font size="16.0"/>
                                 </font>
                             </RadioButton>
                         </HBox>
                         <HBox layoutX="10.0" layoutY="136.0" prefHeight="37.0" prefWidth="292.0" spacing="8.0">
                             <RadioButton fx:id="ascending" mnemonicParsing="false" selected="true" text="Ascending">
                                 <font>
-                                    <Font size="16.0" />
+                                    <Font size="16.0"/>
                                 </font>
                                 <toggleGroup>
-                                    <ToggleGroup fx:id="sortDirection" />
+                                    <ToggleGroup fx:id="sortDirection"/>
                                 </toggleGroup>
                             </RadioButton>
-                            <RadioButton fx:id="descending" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Descending" toggleGroup="$sortDirection">
+                            <RadioButton fx:id="descending" layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
+                                         text="Descending" toggleGroup="$sortDirection">
                                 <font>
-                                    <Font size="16.0" />
+                                    <Font size="16.0"/>
                                 </font>
                             </RadioButton>
                         </HBox>
                         <Label layoutX="10.0" layoutY="10.0" prefHeight="67.0" prefWidth="152.0" text="Filter">
                             <font>
-                                <Font size="19.0" />
+                                <Font size="19.0"/>
                             </font>
                         </Label>
                         <HBox alignment="CENTER_LEFT" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
                             <Label prefHeight="67.0" prefWidth="42.0" text="Price">
                                 <font>
-                                    <Font size="19.0" />
+                                    <Font size="19.0"/>
                                 </font>
                             </Label>
                             <TextField fx:id="minPrice" prefHeight="30.0" prefWidth="100.0" promptText="minPrice">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
-                            <TextField fx:id="maxPrice" layoutX="135.0" layoutY="45.0" prefHeight="30.0" prefWidth="107.0" promptText="maxPrice">
+                            <TextField fx:id="maxPrice" layoutX="135.0" layoutY="45.0" prefHeight="30.0"
+                                       prefWidth="107.0" promptText="maxPrice">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
                             <Label prefHeight="67.0" prefWidth="57.0" text="Score">
                                 <font>
-                                    <Font size="19.0" />
+                                    <Font size="19.0"/>
                                 </font>
                             </Label>
                             <TextField fx:id="minScore" prefHeight="30.0" prefWidth="91.0" promptText="minScore">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
-                            <TextField fx:id="maxScore" layoutX="135.0" layoutY="45.0" prefHeight="30.0" prefWidth="98.0" promptText="maxScore">
+                            <TextField fx:id="maxScore" layoutX="135.0" layoutY="45.0" prefHeight="30.0"
+                                       prefWidth="98.0" promptText="maxScore">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="391.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="391.0" prefHeight="71.0" prefWidth="292.0"
+                              spacing="6.0">
                             <Label prefHeight="67.0" prefWidth="57.0" text="Brand">
                                 <font>
-                                    <Font size="19.0" />
+                                    <Font size="19.0"/>
                                 </font>
                             </Label>
                             <TextField fx:id="brand" prefHeight="30.0" prefWidth="188.0" promptText="Brand">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="472.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="472.0" prefHeight="71.0" prefWidth="292.0"
+                              spacing="6.0">
                             <Label prefHeight="67.0" prefWidth="57.0" text="Name">
                                 <font>
-                                    <Font size="19.0" />
+                                    <Font size="19.0"/>
                                 </font>
                             </Label>
                             <TextField fx:id="nameFilter" prefHeight="30.0" prefWidth="188.0" promptText="Name">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="532.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="532.0" prefHeight="71.0" prefWidth="292.0"
+                              spacing="6.0">
                             <Label prefHeight="67.0" prefWidth="57.0" text="Seller">
                                 <font>
-                                    <Font size="19.0" />
+                                    <Font size="19.0"/>
                                 </font>
                             </Label>
                             <TextField fx:id="seller" prefHeight="30.0" prefWidth="188.0" promptText="Seller">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
                         </HBox>
                         <HBox layoutX="10.0" layoutY="92.0" prefHeight="37.0" prefWidth="292.0" spacing="8.0">
-                            <RadioButton fx:id="available" mnemonicParsing="false" onAction="#availableFilter" prefHeight="20.0" prefWidth="93.0" text="Available">
+                            <RadioButton fx:id="available" mnemonicParsing="false" onAction="#availableFilter"
+                                         prefHeight="20.0" prefWidth="93.0" text="Available">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                                 <toggleGroup>
-                                    <ToggleGroup fx:id="availableFilter" />
+                                    <ToggleGroup fx:id="availableFilter"/>
                                 </toggleGroup>
                             </RadioButton>
-                            <RadioButton fx:id="notAvailable" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#availableFilter" prefHeight="20.0" prefWidth="122.0" text="Not Available" toggleGroup="$availableFilter">
+                            <RadioButton fx:id="notAvailable" layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
+                                         onAction="#availableFilter" prefHeight="20.0" prefWidth="122.0"
+                                         text="Not Available" toggleGroup="$availableFilter">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </RadioButton>
-                            <RadioButton fx:id="disable" layoutX="113.0" layoutY="10.0" mnemonicParsing="false" onAction="#availableFilter" prefHeight="20.0" prefWidth="89.0" selected="true" text="Disable" toggleGroup="$availableFilter">
+                            <RadioButton fx:id="disable" layoutX="113.0" layoutY="10.0" mnemonicParsing="false"
+                                         onAction="#availableFilter" prefHeight="20.0" prefWidth="89.0" selected="true"
+                                         text="Disable" toggleGroup="$availableFilter">
                                 <font>
-                                    <Font size="13.0" />
+                                    <Font size="13.0"/>
                                 </font>
                             </RadioButton>
                         </HBox>
-                  <Label layoutX="10.0" layoutY="36.0" prefHeight="67.0" prefWidth="152.0" text="Off">
-                     <font>
-                        <Font size="19.0" />
-                     </font>
-                  </Label>
+                        <Label layoutX="10.0" layoutY="36.0" prefHeight="67.0" prefWidth="152.0" text="Off">
+                            <font>
+                                <Font size="19.0"/>
+                            </font>
+                        </Label>
                         <HBox layoutX="10.0" layoutY="75.0" prefHeight="37.0" prefWidth="292.0" spacing="8.0">
-                            <RadioButton fx:id="noneOff" mnemonicParsing="false" onAction="#beInOff" selected="true" text="None">
+                            <RadioButton fx:id="noneOff" mnemonicParsing="false" onAction="#beInOff" selected="true"
+                                         text="None">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                                 <toggleGroup>
-                                    <ToggleGroup fx:id="offGroup" />
+                                    <ToggleGroup fx:id="offGroup"/>
                                 </toggleGroup>
                             </RadioButton>
-                            <RadioButton fx:id="beInOff" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#beInOff" text="Be In Off" toggleGroup="$offGroup">
+                            <RadioButton fx:id="beInOff" layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
+                                         onAction="#beInOff" text="Be In Off" toggleGroup="$offGroup">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </RadioButton>
-                            <RadioButton fx:id="notFinishedOff" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#beInOff" text="Not Finished Off" toggleGroup="$offGroup">
+                            <RadioButton fx:id="notFinishedOff" layoutX="89.0" layoutY="10.0" mnemonicParsing="false"
+                                         onAction="#beInOff" text="Not Finished Off" toggleGroup="$offGroup">
                                 <font>
-                                    <Font size="13.0" />
+                                    <Font size="13.0"/>
                                 </font>
                             </RadioButton>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="223.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="223.0" prefHeight="71.0" prefWidth="292.0"
+                              spacing="6.0">
                             <Label prefHeight="30.0" prefWidth="55.0" text="OffTime">
                                 <font>
-                                    <Font size="13.0" />
+                                    <Font size="13.0"/>
                                 </font>
                             </Label>
                             <TextField fx:id="start" prefHeight="30.0" prefWidth="100.0" promptText="start">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
-                            <TextField fx:id="finish" layoutX="135.0" layoutY="45.0" prefHeight="30.0" prefWidth="107.0" promptText="finish">
+                            <TextField fx:id="finish" layoutX="135.0" layoutY="45.0" prefHeight="30.0" prefWidth="107.0"
+                                       promptText="finish">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="384.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="384.0" prefHeight="71.0" prefWidth="292.0"
+                              spacing="6.0">
                             <Label prefHeight="30.0" prefWidth="82.0" text="Off Seller">
                                 <font>
-                                    <Font size="19.0" />
+                                    <Font size="19.0"/>
                                 </font>
                             </Label>
                             <TextField fx:id="offSeller" prefHeight="30.0" prefWidth="142.0" promptText="Seller">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="221.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="221.0" prefHeight="71.0" prefWidth="292.0"
+                              spacing="6.0">
                             <Label prefHeight="30.0" prefWidth="69.0" text="Percent">
                                 <font>
-                                    <Font size="19.0" />
+                                    <Font size="19.0"/>
                                 </font>
                             </Label>
                             <TextField fx:id="minPercent" prefHeight="30.0" prefWidth="100.0" promptText="min percent">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
-                            <TextField fx:id="maxPercent" layoutX="135.0" layoutY="45.0" prefHeight="30.0" prefWidth="107.0" promptText="max percent">
+                            <TextField fx:id="maxPercent" layoutX="135.0" layoutY="45.0" prefHeight="30.0"
+                                       prefWidth="107.0" promptText="max percent">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="606.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="606.0" prefHeight="71.0" prefWidth="292.0"
+                              spacing="6.0">
                             <Label prefHeight="30.0" prefWidth="82.0" text="Be In Off">
                                 <font>
-                                    <Font size="19.0" />
+                                    <Font size="19.0"/>
                                 </font>
                             </Label>
                             <TextField fx:id="offId" prefHeight="30.0" prefWidth="142.0" promptText="Off Id">
                                 <font>
-                                    <Font size="14.0" />
+                                    <Font size="14.0"/>
                                 </font>
                             </TextField>
                         </HBox>
-                         <Label prefHeight="34.0" prefWidth="81.0" text="Category">
-                             <font>
-                                 <Font size="19.0" />
-                             </font>
-                         </Label>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="540.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
-                            <TextField fx:id="category" prefHeight="26.0" prefWidth="157.0" promptText="Category">
-                        <font>
-                           <Font size="14.0" />
-                        </font>
-                            </TextField>
-                     <RadioButton fx:id="mainCategory" mnemonicParsing="false" prefHeight="18.0" prefWidth="55.0" selected="true" text="Main">
-                        <toggleGroup>
-                           <ToggleGroup fx:id="categoryGroup" />
-                        </toggleGroup>
-                     </RadioButton>
-                     <RadioButton fx:id="subCategory" layoutX="200.0" layoutY="16.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="55.0" text="Sub" toggleGroup="$categoryGroup" />
-                        </HBox>
-                        <Label layoutX="10.0" layoutY="165.0" prefHeight="67.0" prefWidth="152.0" text="Category Filter">
+                        <Label prefHeight="34.0" prefWidth="81.0" text="Category">
                             <font>
-                                <Font size="19.0" />
+                                <Font size="19.0"/>
                             </font>
                         </Label>
-                  <VBox fx:id="vBox" prefHeight="92.0" prefWidth="414.0" spacing="5.0" />
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="540.0" prefHeight="71.0" prefWidth="292.0"
+                              spacing="6.0">
+                            <TextField fx:id="category" prefHeight="26.0" prefWidth="157.0" promptText="Category">
+                                <font>
+                                    <Font size="14.0"/>
+                                </font>
+                            </TextField>
+                            <RadioButton fx:id="mainCategory" mnemonicParsing="false" prefHeight="18.0" prefWidth="55.0"
+                                         selected="true" text="Main">
+                                <toggleGroup>
+                                    <ToggleGroup fx:id="categoryGroup"/>
+                                </toggleGroup>
+                            </RadioButton>
+                            <RadioButton fx:id="subCategory" layoutX="200.0" layoutY="16.0" mnemonicParsing="false"
+                                         prefHeight="18.0" prefWidth="55.0" text="Sub" toggleGroup="$categoryGroup"/>
+                        </HBox>
+                        <Label layoutX="10.0" layoutY="165.0" prefHeight="67.0" prefWidth="152.0"
+                               text="Category Filter">
+                            <font>
+                                <Font size="19.0"/>
+                            </font>
+                        </Label>
+                        <VBox fx:id="vBox" prefHeight="92.0" prefWidth="414.0" spacing="5.0"/>
                     </VBox>
                 </AnchorPane>
             </ScrollPane>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="590.0" prefWidth="762.0">
-            <Pagination fx:id="pagination" layoutX="115.0" layoutY="81.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Pagination fx:id="pagination" layoutX="115.0" layoutY="81.0" prefHeight="200.0" prefWidth="200.0"
+                        AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                        AnchorPane.topAnchor="0.0"/>
         </AnchorPane>
     </SplitPane>
 </AnchorPane>

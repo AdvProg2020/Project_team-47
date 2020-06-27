@@ -26,7 +26,8 @@ public class ProductPane implements Initializable {
     private static int numberInCart;
 
 
-    @FXML private Text finalPrice;
+    @FXML
+    private Text finalPrice;
     @FXML
     private AnchorPane pane;
     @FXML
@@ -49,10 +50,11 @@ public class ProductPane implements Initializable {
     private Text score;
     @FXML
     private ImageView imageView;
+
     public ProductPane() {
     }
 
-    public static void setCart(ProductInfo cartProduct, String seller,int numberInCart) {
+    public static void setCart(ProductInfo cartProduct, String seller, int numberInCart) {
         productInfo = null;
         productPage = null;
         ProductPane.cartProduct = cartProduct;
@@ -90,7 +92,7 @@ public class ProductPane implements Initializable {
         this.score.setText(productInfo.getScoreAverage() + "");
         this.name.setText(productInfo.getName());
         this.id.setText(productInfo.getId());
-        this.price.setText(productInfo.getFinalPrice(seller)+"");
+        this.price.setText(productInfo.getFinalPrice(seller) + "");
         this.numberInStock.setText("" + numberInCart);
         this.numberInStockLabel.setText("Number In Cart: ");
         this.finalPrice.setText(finalPrice.getText() + productInfo.getFinalPrice(seller) * numberInCart);
@@ -107,7 +109,7 @@ public class ProductPane implements Initializable {
         try {
             if (productInfo != null)
                 ProductPage.setProduct(productInfo);
-            else if(productPage!=null)
+            else if (productPage != null)
                 ProductPage.setProduct(productPage);
             else
                 ProductPage.setProduct(cartProduct);

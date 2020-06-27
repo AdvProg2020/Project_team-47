@@ -38,7 +38,7 @@ public class UserPanelController extends Controller {
 
     @Override
     public ServerMessage processRequest(ClientMessage request) throws Exception {
-        if (loggedUser == null&&!isCartCommand(request.getType()))
+        if (loggedUser == null && !isCartCommand(request.getType()))
             throw new NeedLoginException();
 
         for (Command command : commands)

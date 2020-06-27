@@ -15,6 +15,8 @@ import java.util.Optional;
 public class GraphicView {
     private static GraphicView graphicView;
     private final ArrayList<Scene> scenes;
+    MediaPlayer backGroundMediaPlayer;
+    MediaPlayer shortMediaPlayer;
     private Stage window;
     private boolean loggedIn;
     private String accountType;//can be seller,customer,manager
@@ -59,7 +61,6 @@ public class GraphicView {
         window.setScene(scene);
     }
 
-
     public void changeScene(Scene scene) {
         scenes.add(scene);
         window.setScene(scene);
@@ -102,7 +103,6 @@ public class GraphicView {
         this.accountType = accountType;
     }
 
-
     public String getMyUsername() {
         return myUsername;
     }
@@ -126,7 +126,6 @@ public class GraphicView {
         alert.showAndWait();
     }
 
-    MediaPlayer backGroundMediaPlayer;
     public void playBackGroundAudio(String audioPath) {
         Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
         backGroundMediaPlayer = new MediaPlayer(media);
@@ -135,7 +134,6 @@ public class GraphicView {
         backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio("src\\main\\resources\\Music\\" + audioPath));
     }
 
-    MediaPlayer shortMediaPlayer;
     public void playShortAudios(String audioPath) {
         Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
         shortMediaPlayer = new MediaPlayer(media);

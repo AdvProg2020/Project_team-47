@@ -12,14 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DiscountCodeData {
+    private final HashMap<String, Integer> userUsedHashMap;
+    private final ArrayList<String> userAbleToUse;
     private Date startTime;
     private Date finishTime;
     private int percent;
     private String code;
     private int maxUsableTime;
     private int maxDiscountAmount;
-    private final HashMap<String, Integer> userUsedHashMap;
-    private final ArrayList<String> userAbleToUse;
 
     public DiscountCodeData() {
         userUsedHashMap = new HashMap<>();

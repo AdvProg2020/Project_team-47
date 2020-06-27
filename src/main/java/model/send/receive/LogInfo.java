@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class LogInfo {
-    private String customer;
     private final String logId;
     private final Date logDate;
+    private final String logType;//can be "buy log" or "sell log"
+    private final ArrayList<ProductInLog> productInLogs;
+    private String customer;
     private double price;
     private String status;
-    private final String logType;//can be "buy log" or "sell log"
     private String address;//for buy log
     private String postalCode;//for buy log
     private String phoneNumber;//for buy log
     private String customerRequest;//for buy log
     private double appliedDiscount;//for buy log
     private String seller;//for sell log
-    private final ArrayList<ProductInLog> productInLogs;
 
     public LogInfo(String logId, Date logDate, String logType) {
         this.logId = logId;

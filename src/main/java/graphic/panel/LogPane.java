@@ -11,11 +11,6 @@ import java.util.ResourceBundle;
 
 public class LogPane extends PageController {
     private static LogInfo logInfo;
-
-    public static void setLogInfo(LogInfo logInfo) {
-        LogPane.logInfo = logInfo;
-    }
-
     @FXML
     private Label priceLabel;
     @FXML
@@ -26,6 +21,10 @@ public class LogPane extends PageController {
     private Label idLabel;
     @FXML
     private GridPane productPane;
+
+    public static void setLogInfo(LogInfo logInfo) {
+        LogPane.logInfo = logInfo;
+    }
 
     @Override
     public void clearPage() {
@@ -45,6 +44,7 @@ public class LogPane extends PageController {
         idLabel.setText("Id: " + logInfo.getLogId());
         initializeGridPane(logInfo);
     }
+
     private void initializeGridPane(LogInfo logInfo) {
         for (int i = 0; i < productPane.getChildren().size() && i < logInfo.productsNumber(); i++) {
             ((Label) productPane.getChildren().get(i)).setText(logInfo.getProduct(i));

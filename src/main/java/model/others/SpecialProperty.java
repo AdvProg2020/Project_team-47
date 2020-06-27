@@ -53,7 +53,7 @@ public class SpecialProperty {
 
     @Override
     public String toString() {
-        if(type==null) return null;
+        if (type == null) return null;
         StringBuilder stringBuilder = new StringBuilder("Type: " + type);
         stringBuilder.append("\nKey :").append(key);
         if (type.equalsIgnoreCase("text")) {

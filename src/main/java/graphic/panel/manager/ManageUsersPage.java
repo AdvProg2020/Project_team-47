@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import model.send.receive.CategoryInfo;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import model.send.receive.UserInfo;
@@ -21,7 +20,8 @@ import java.util.ResourceBundle;
 
 public class ManageUsersPage extends PageController {
 
-    public TextField username;
+    @FXML
+    private TextField username;
 
     @FXML
     private VBox vBox;
@@ -34,7 +34,6 @@ public class ManageUsersPage extends PageController {
     private void back() {
         GraphicView.getInstance().back();
     }
-
 
 
     @FXML

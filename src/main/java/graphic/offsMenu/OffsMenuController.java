@@ -2,24 +2,17 @@ package graphic.offsMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
-import graphic.panel.customer.CustomerPurchaseHistory.CustomerPurchaseHistoryController;
-import graphic.panel.customer.CustomerPurchaseHistory.PurchaseHistoryTable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
-import model.others.Comment;
-import model.send.receive.ClientMessage;
-import model.send.receive.LogInfo;
 import model.send.receive.OffInfo;
-import model.send.receive.ServerMessage;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,9 +21,8 @@ import java.util.ResourceBundle;
 
 public class OffsMenuController extends PageController {
 
-    private static PageController controller;
     public static ArrayList<OffInfo> offs;
-
+    private static PageController controller;
     @FXML
     TableView<OffTable> tableView;
 
@@ -56,8 +48,6 @@ public class OffsMenuController extends PageController {
     TableColumn<OffTable, Double> discount;
 
     ObservableList<OffTable> data = FXCollections.observableArrayList();
-
-
 
 
     public static PageController getInstance() {

@@ -2,7 +2,6 @@ package graphic.panel.customer;
 
 import graphic.PageController;
 import graphic.TemplatePage;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -15,15 +14,23 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class PurchasePage extends PageController {
-    @FXML private
+    @FXML
+    private
     Button useCodeButton;
-    @FXML private Button submitButton;
-    @FXML private Button purchaseButton;
-    @FXML private TextField postalCode;
-    @FXML private TextField otherRequests;
-    @FXML private TextField phone;
-    @FXML private TextField code;
-    @FXML private TextField address;
+    @FXML
+    private Button submitButton;
+    @FXML
+    private Button purchaseButton;
+    @FXML
+    private TextField postalCode;
+    @FXML
+    private TextField otherRequests;
+    @FXML
+    private TextField phone;
+    @FXML
+    private TextField code;
+    @FXML
+    private TextField address;
 
     @Override
     public void clearPage() {
