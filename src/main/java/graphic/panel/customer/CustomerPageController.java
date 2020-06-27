@@ -93,13 +93,10 @@ public class CustomerPageController extends PageController {
         ClientMessage request = new ClientMessage("logout");
         ServerMessage answer = send(request);
         if (answer.getType().equals("Successful")) {
+            GraphicView.getInstance().setLoggedIn(false);
             GraphicView.getInstance().changeScene(MainMenuPage.getInstance());
         } else {
             GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
         }
-    }
-
-    public void back(MouseEvent mouseEvent) {
-        GraphicView.getInstance().back();
     }
 }

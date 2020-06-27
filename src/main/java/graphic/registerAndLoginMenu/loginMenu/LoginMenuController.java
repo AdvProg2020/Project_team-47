@@ -2,6 +2,7 @@ package graphic.registerAndLoginMenu.loginMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
+import graphic.TemplatePage;
 import graphic.panel.customer.CustomerPage;
 import graphic.panel.manager.ManagerPage;
 import graphic.panel.seller.SellerPage;
@@ -75,7 +76,9 @@ public class LoginMenuController extends PageController {
 
     private void successfulLogin(String userType) {
         GraphicView.getInstance().setMyUsername(username.getText());
+        GraphicView.getInstance().setLoggedIn(true);
         if (shouldBack) {
+            TemplatePage.getInstance().update();
             GraphicView.getInstance().back();
         } else {
             switch (userType) {

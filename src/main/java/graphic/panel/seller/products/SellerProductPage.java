@@ -50,7 +50,7 @@ public class SellerProductPage extends PageController {
     }
 
     private void initializePagination(ArrayList<ProductInfo> productInfoArrayList) {
-        pagination.setPageCount(productInfoArrayList.size() / 3 + 1);
+        pagination.setPageCount((productInfoArrayList.size()-1) / 3 + 1);
         pagination.setPageFactory((Integer pageNum) -> pageInitialize(pageNum, productInfoArrayList));
     }
 

@@ -2,6 +2,7 @@ package graphic.registerAndLoginMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
+import graphic.TemplatePage;
 import graphic.panel.customer.CustomerPage;
 import graphic.panel.manager.ManagerPage;
 import graphic.panel.seller.SellerPage;
@@ -83,6 +84,7 @@ public class RegisterPage extends PageController {
         } else {
             update();
             GraphicView.getInstance().setMyUsername(usernameString);
+            GraphicView.getInstance().setLoggedIn(true);
             if (shouldBack) {
                 back();
             } else {
@@ -96,6 +98,7 @@ public class RegisterPage extends PageController {
     }
 
     public void back() {
+        TemplatePage.getInstance().update();
         GraphicView.getInstance().back();
     }
 

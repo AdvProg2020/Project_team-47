@@ -17,9 +17,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ProductPane implements Initializable {
-    private static AnchorPane anchorPane;
-    private static ProductPane pane;
     private static ProductInfo productInfo;
+    private static ProductInfo productPage;
     @FXML
     private Text id;
     @FXML
@@ -47,8 +46,35 @@ public class ProductPane implements Initializable {
         ProductPane.productInfo = productInfo;
     }
 
+    public static void setProductPage(ProductInfo productInfo) {
+        productPage = productInfo;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (productPage != null) {
+            initializeForProductPage(productPage);
+        } else if (productInfo != null) {
+            initializeForSellerProduct(productInfo);
+        }
+    }
+
+    private void initializeForProductPage(ProductInfo productInfo) {
+        this.category.setText(productInfo.getMainCategory());
+        this.imageView.setImage(PageController.byteToImage(productInfo.getFile()));
+        this.id.setText(productInfo.getId());
+        this.name.setText(productInfo.getName());
+        this.numberInStock.setText("" + productInfo.getNumberInStock());
+        this.price.setText(""+productInfo.getMinPrice());
+        if (productInfo.getSubCategory().isEmpty()) {
+            this.subCategory.setVisible(false);
+            this.subCategoryLabel.setVisible(false);
+        } else {
+            this.subCategory.setText(productInfo.getSubCategory());
+        }
+    }
+
+    private void initializeForSellerProduct(ProductInfo productInfo) {
         this.category.setText(productInfo.getMainCategory());
         this.imageView.setImage(PageController.byteToImage(productInfo.getFile()));
         this.id.setText(productInfo.getId());

@@ -15,4 +15,15 @@ public class ClientFilter {
     }
 
 
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
 }

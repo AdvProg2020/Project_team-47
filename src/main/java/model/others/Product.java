@@ -180,11 +180,13 @@ public class Product {
     }
 
     private SpecialProperty getProperty(String filterKey) throws Exception {
-        Category category = mainCategory;
-        if (subCategory != null) category = subCategory;
         SpecialProperty temp = new SpecialProperty(filterKey);
-        for (SpecialProperty property : specialProperties) if (property.equals(filterKey)) return property;
-        throw new Exception("");
+        int index = specialProperties.indexOf(temp);
+        try {
+            return specialProperties.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            throw new Exception("");
+        }
     }
 
     private boolean inScoreFilter(Filter filter) {

@@ -99,16 +99,10 @@ class FilterCommonCommand extends FilterCommands {
     private ServerMessage showAvailableFilter() {
         ArrayList<ClientFilter> availableFilters = new ArrayList<>();
         Category category = getCategoryInFilter();
-        availableFilters.add(new ClientFilter("Price", "numeric", "%", "Price"));
-        availableFilters.add(new ClientFilter("Score", "numeric", "", "Score"));
-        availableFilters.add(new ClientFilter("Category", "text", "", "Main Category"));
-        availableFilters.add(new ClientFilter("Category", "text", "", "Sub Category"));
-        availableFilters.add(new ClientFilter("Common", "text", "", "Name", "Brand", "Seller"));
-        availableFilters.add(new ClientFilter("availability", "check box", "", "Yes", "No"));
         if (category != null) {
             for (SpecialProperty property : category.getSpecialProperties()) {
-                availableFilters.add(new ClientFilter("Special Property", property.getType(),
-                        property.getUnit(), property.getKey()));
+                availableFilters.add(new ClientFilter(property.getKey(), property.getType(),
+                        property.getUnit()));
             }
         }
         return sendAnswer(availableFilters, "filter");
@@ -295,15 +289,14 @@ class AddFilterCommand extends FilterCommands {
     }
 
     private void deleteLastFilter(String filterKey) {
-        int flag = 1;
         if (Pattern.matches("(category|sub-category)", filterKey))
-            flag = 0;
-        for (Filter filter : filters())
-            if (flag == 0) {
-                if (filter.getFilterKey().contains(filterKey)) filters().remove(filter);
-            } else {
-                if (filter.getFilterKey().equals(filterKey)) filters().remove(filter);
-            }
+            disableCategoriesFilter();
+        else filters().removeIf(filter -> filter.getFilterKey().equals(filterKey));
+
+    }
+
+    private void disableCategoriesFilter() {
+        filters().removeIf(filter -> !Pattern.matches("(price|score|brand|name|seller|availability)", filter.getFilterKey()));
     }
 }
 
@@ -334,12 +327,6 @@ class DisableFilterCommand extends FilterCommands {
     }
 
     private void disableFilter(String filterKey) throws DebugException {
-        for (Filter filter : filters()) {
-            if (filter.getFilterKey().equalsIgnoreCase(filterKey)) {
-                removeFilter(filter);
-                return;
-            }
-        }
-        throw new DebugException();
+        filters().removeIf(filter -> filter.getFilterKey().equalsIgnoreCase(filterKey));
     }
 }

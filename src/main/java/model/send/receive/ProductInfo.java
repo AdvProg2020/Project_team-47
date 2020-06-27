@@ -143,6 +143,23 @@ public class ProductInfo {
         return 0;
     }
 
+    public int getNumberInStock() {
+        int number = 0;
+        for (ProductSeller productSeller : productSellers) {
+            number += productSeller.numberInStock;
+        }
+        return number;
+    }
+
+    public double getMinPrice() {
+        double price = Double.MAX_VALUE;
+        for (ProductSeller productSeller : productSellers) {
+            if(productSeller.priceWithOff<price) price = productSeller.priceWithOff;
+        }
+        return price;
+    }
+
+
     private static class ProductSeller {
         private String sellerName;
         private double price;
