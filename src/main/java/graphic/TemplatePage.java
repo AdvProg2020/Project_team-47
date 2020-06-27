@@ -16,13 +16,6 @@ import java.util.ResourceBundle;
 
 public class TemplatePage extends PageController {
     private static TemplatePage controller;
-    
-    public static Scene getScene() {
-        if(controller==null)
-            return getScene("/fxml/Template.fxml");
-        return controller.scene;
-    }
-
     private final ArrayList<AnchorPane> panes = new ArrayList<>();
     @FXML
     private Scene scene;
@@ -37,8 +30,14 @@ public class TemplatePage extends PageController {
     @FXML
     private AnchorPane pane;
 
+    public static Scene getScene() {
+        if (controller == null)
+            return getScene("/fxml/Template.fxml");
+        return controller.scene;
+    }
+
     public static TemplatePage getInstance() {
-        if(controller!=null) return controller;
+        if (controller != null) return controller;
         getScene();
         return controller;
     }
@@ -53,6 +52,7 @@ public class TemplatePage extends PageController {
         this.pane.getChildren().clear();
         this.pane.getChildren().add(pane);
     }
+
     @Override
     public void update() {
         changeVisibility(GraphicView.getInstance().getLoginStatus());
@@ -60,7 +60,8 @@ public class TemplatePage extends PageController {
 
     @FXML
     private void back() {
-        if (panes.size() == 1) {
+        if (panes.size() == 1||panes.size()==0) {
+            panes.clear();
             GraphicView.getInstance().back();
         } else {
             int scenesSize = panes.size();

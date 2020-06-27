@@ -17,10 +17,8 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 public class CustomerPurchaseHistoryController extends PageController {
-    private static PageController controller;
-
     public static ArrayList<LogInfo> purchaseHistoryArrayList;
-
+    private static PageController controller;
     @FXML
     TableView<PurchaseHistoryTable> tableView;
 
@@ -70,7 +68,7 @@ public class CustomerPurchaseHistoryController extends PageController {
 
     private void setData() {
         for (LogInfo sortedPlayer : CustomerPurchaseHistoryController.purchaseHistoryArrayList) {
-            data.add(new PurchaseHistoryTable(sortedPlayer.getLogId(), sortedPlayer.getLogDate(), sortedPlayer.getPrice(), sortedPlayer.getSeller()    ));
+            data.add(new PurchaseHistoryTable(sortedPlayer.getLogId(), sortedPlayer.getLogDate(), sortedPlayer.getPrice(), sortedPlayer.getSeller()));
         }
     }
 

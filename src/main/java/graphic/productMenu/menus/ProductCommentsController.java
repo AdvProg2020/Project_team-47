@@ -11,7 +11,6 @@ import jfxtras.styles.jmetro.Style;
 import model.others.Comment;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ProductCommentsController extends PageController {

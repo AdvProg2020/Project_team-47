@@ -6,7 +6,6 @@ import graphic.TemplatePage;
 import graphic.panel.customer.CustomerPage;
 import graphic.panel.manager.ManagerPage;
 import graphic.panel.seller.SellerPage;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -23,21 +22,36 @@ public class RegisterPage extends PageController {
     private String userType;
     private String usernameString;
     private String passwordString;
-    @FXML private TextField username;
-    @FXML private TextField password;
-    @FXML private TextField firstName;
-    @FXML private TextField lastName;
-    @FXML private TextField email;
-    @FXML private  TextField phoneNumber;
-    @FXML private TextField companyName;
-    @FXML private TextArea companyInfo;
-    @FXML private RadioButton customerButton;
-    @FXML private RadioButton sellerButton;
-    @FXML private ToggleGroup type;
-    @FXML private RadioButton managerButton;
-    @FXML private Text error;
-    @FXML private TextField verificationCode;
-    @FXML private Button confirm;
+    @FXML
+    private TextField username;
+    @FXML
+    private TextField password;
+    @FXML
+    private TextField firstName;
+    @FXML
+    private TextField lastName;
+    @FXML
+    private TextField email;
+    @FXML
+    private TextField phoneNumber;
+    @FXML
+    private TextField companyName;
+    @FXML
+    private TextArea companyInfo;
+    @FXML
+    private RadioButton customerButton;
+    @FXML
+    private RadioButton sellerButton;
+    @FXML
+    private ToggleGroup type;
+    @FXML
+    private RadioButton managerButton;
+    @FXML
+    private Text error;
+    @FXML
+    private TextField verificationCode;
+    @FXML
+    private Button confirm;
 
 
     public static Scene getScene() {
@@ -67,7 +81,7 @@ public class RegisterPage extends PageController {
         confirm.setVisible(false);
     }
 
-    public void confirm( ) {
+    public void confirm() {
         ClientMessage request = new ClientMessage("confirm email");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("username", usernameString);
@@ -91,7 +105,7 @@ public class RegisterPage extends PageController {
                 switch (userType) {
                     case "manager" -> GraphicView.getInstance().changeScene(ManagerPage.getScene());
                     case "seller" -> GraphicView.getInstance().changeScene(SellerPage.getScene());
-                    case "customer"-> GraphicView.getInstance().changeScene(CustomerPage.getInstance());
+                    case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getInstance());
                 }
             }
         }
@@ -102,7 +116,7 @@ public class RegisterPage extends PageController {
         GraphicView.getInstance().back();
     }
 
-    public void register( ) {
+    public void register() {
         ClientMessage request = new ClientMessage("register");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("password", password.getText());
@@ -112,7 +126,7 @@ public class RegisterPage extends PageController {
         reqInfo.put("last-name", lastName.getText());
         reqInfo.put("phone-number", phoneNumber.getText());
         reqInfo.put("company-name", companyName.getText());
-        reqInfo.put("company-info",companyInfo.getText());
+        reqInfo.put("company-info", companyInfo.getText());
         if (managerButton.isSelected()) {
             userType = "manager";
             reqInfo.put("type", "manager");
@@ -124,10 +138,10 @@ public class RegisterPage extends PageController {
             reqInfo.put("type", "customer");
         }
         request.setHashMap(reqInfo);
-        processRegisterAnswer(send(request),username.getText(),password.getText());
+        processRegisterAnswer(send(request), username.getText(), password.getText());
     }
 
-    private void processRegisterAnswer(ServerMessage answer,String usernameString,String passwordString) {
+    private void processRegisterAnswer(ServerMessage answer, String usernameString, String passwordString) {
         if (answer.getType().equalsIgnoreCase("Error")) {
             error.setText(answer.getErrorMessage());
             error.setVisible(true);

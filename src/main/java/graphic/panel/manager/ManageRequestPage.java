@@ -9,7 +9,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import model.send.receive.ClientMessage;
 import model.send.receive.RequestInfo;
-import model.send.receive.ServerMessage;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,12 +16,12 @@ import java.util.ResourceBundle;
 
 public class ManageRequestPage extends PageController {
     private static PageController controller;
+    @FXML
+    private VBox vBox;
+
     public static Scene getScene() {
         return getScene("/fxml/panel/manager/ManageRequestPage.fxml");
     }
-
-    @FXML
-    private VBox vBox;
 
     public static PageController getInstance() {
         return controller;

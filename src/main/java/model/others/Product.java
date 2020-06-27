@@ -1,5 +1,6 @@
 package model.others;
 
+import com.sun.jdi.Value;
 import controller.Controller;
 import database.Database;
 import database.ProductData;
@@ -8,6 +9,7 @@ import model.category.MainCategory;
 import model.category.SubCategory;
 import model.discount.Off;
 import model.ecxeption.Exception;
+import model.ecxeption.common.DateException;
 import model.ecxeption.product.ProductDoesntExistException;
 import model.others.request.AddCommentRequest;
 import model.others.request.Request;
@@ -16,6 +18,7 @@ import model.user.Customer;
 import model.user.Seller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 import java.util.TreeSet;
 
@@ -29,7 +32,7 @@ public class Product {
     }
 
     private final ArrayList<Seller> sellers;
-    private final ArrayList<ProductSeller> productSellers;
+    private final TreeSet<ProductSeller> productSellers;
     private int seenTime;
     private String id;
     private String name;
@@ -47,7 +50,7 @@ public class Product {
 
     public Product() {
         this.sellers = new ArrayList<>();
-        this.productSellers = new ArrayList<>();
+        this.productSellers = new TreeSet<>();
         this.comments = new ArrayList<>();
         this.scores = new ArrayList<>();
         this.id = productIdCreator();
@@ -131,11 +134,66 @@ public class Product {
     }
 
     private static boolean inFilter(Product product, ArrayList<Filter> filters) {
+        ArrayList<ProductSeller> productSellers = new ArrayList<>(product.productSellers);
         for (Filter filter : filters) {
-            if (!inFilter(product, filter))
-                return false;
+            if (filter.getType().equals("off")) {
+                if (!product.inOffFilter(productSellers,filter))
+                    return false;
+            } else {
+                if (!inFilter(product, filter))
+                    return false;
+            }
         }
         return true;
+    }
+
+    private boolean inOffFilter(ArrayList<ProductSeller> productSellers, Filter filter) {
+        return switch (filter.getFilterKey()) {
+            case "be in off"-> inOff();
+            case "not finished off"-> inNotFinishedOff(productSellers);
+            case "be in special off"->inOff(productSellers,filter.getFirstFilterValue());
+            case "off percent"-> inOffPercentFilter(productSellers,filter.getFirstInt(), filter.getSecondInt());
+            case "off seller"-> inSellerOff(productSellers,filter.getFirstFilterValue());
+            case "off time" -> inOffTimeFilter(productSellers,filter.getFirstFilterValue(), filter.getSecondFilterValue());
+            default -> false;
+        };
+    }
+
+    private boolean inNotFinishedOff(ArrayList<ProductSeller> productSellers) {
+        boolean returnValue = false;
+        Date now = Controller.getCurrentTime();
+        ArrayList<ProductSeller> temp = new ArrayList<>();
+        for (ProductSeller productSeller : productSellers) {
+            if (productSeller.off != null &&productSeller.off.getFinishTime().after(now)) {
+                temp.add(productSeller);
+                returnValue = true;
+            }
+        }
+        productSellers.clear();
+        productSellers.addAll(temp);
+        return returnValue;
+    }
+
+    private boolean inOffTimeFilter(ArrayList<ProductSeller> productSellers, String start, String finish) {
+        boolean returnValue = false;
+        try {
+            Date startDate = Controller.getDateWithString(start);
+            Date finishDate = Controller.getDateWithString(finish);
+            ArrayList<ProductSeller> temp = new ArrayList<>();
+            for (ProductSeller productSeller : productSellers) {
+                if (productSeller.off != null && productSeller.off.getStartTime().after(startDate) &&
+                        productSeller.off.getFinishTime().before(finishDate)) {
+                    temp.add(productSeller);
+                    returnValue = true;
+                }
+
+            }
+            productSellers.clear();
+            productSellers.addAll(temp);
+            return returnValue;
+        } catch (DateException e) {
+            return false;
+        }
     }
 
     private static boolean inFilter(Product product, Filter filter) {
@@ -150,6 +208,54 @@ public class Product {
             case "availability" -> product.inAvailabilityFilter(filter);
             default -> product.inPropertiesFilter(filter);
         };
+    }
+
+    private boolean inSellerOff(ArrayList<ProductSeller> productSellers, String username) {
+        for (ProductSeller productSeller : productSellers) {
+            if (productSeller.off != null) {
+                if (productSeller.seller.getUsername().equalsIgnoreCase(username)) {
+                    productSellers.clear();
+                    productSellers.add(productSeller);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean inOffPercentFilter(ArrayList<ProductSeller> productSellers, int min, int max) {
+        boolean returnValue = false;
+        ArrayList<ProductSeller> temp = new ArrayList<>();
+        for (ProductSeller productSeller : productSellers) {
+            if (productSeller.off != null) {
+                int percent = productSeller.off.getPercent();
+                if (min < percent && max > percent){
+                    temp.add(productSeller);
+                    returnValue = true;
+                }
+            }
+        }
+        productSellers.clear();
+        productSellers.addAll(temp);
+        return returnValue;
+    }
+
+    private boolean inOff(ArrayList<ProductSeller> productSellers, String offId) {
+        for (ProductSeller productSeller : productSellers) {
+            if (productSeller.off != null && productSeller.off.getOffId().equalsIgnoreCase(offId)) {
+                productSellers.clear();
+                productSellers.add(productSeller);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean inOff() {
+        for (ProductSeller productSeller : this.productSellers) {
+            if(productSeller.off!=null) return true;
+        }
+        return false;
     }
 
     public static void setUsedId(TreeSet<String> usedId) {
@@ -600,12 +706,26 @@ public class Product {
         return mainCategory;
     }
 
-    static class ProductSeller {
-        private Off off;
+    static class ProductSeller implements Comparable {
+        Off off;
         private Seller seller;
         private double price;
         private int numberInStock;
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ProductSeller that = (ProductSeller) o;
+
+            return seller.equals(that.seller);
+        }
+
+        @Override
+        public int hashCode() {
+            return seller.hashCode();
+        }
 
         public double getPriceWithOff() {
             if (off == null)
@@ -654,6 +774,11 @@ public class Product {
 
         public void setNumberInStock(int numberInStock) {
             this.numberInStock = numberInStock;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            return seller.getUsername().compareTo(((ProductSeller) o).seller.getUsername());
         }
     }//end ProductSeller class
 

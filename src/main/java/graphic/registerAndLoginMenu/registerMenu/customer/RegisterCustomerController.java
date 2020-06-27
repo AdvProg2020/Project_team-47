@@ -13,18 +13,14 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 
-
-
 public class RegisterCustomerController extends PageController {
 
+    private static PageController controller;
     public TextField inputUsername;
     public TextField inputPassword;
     public TextField inputFirstName;
     public TextField inputLastName;
     public TextField inputEmail;
-
-    private static PageController controller;
-
 
     public static PageController getInstance() {
         if (controller == null) {
@@ -62,7 +58,7 @@ public class RegisterCustomerController extends PageController {
         request.setHashMap(hashMap);
         ServerMessage answer = send(request);
 
-        if(answer.getType().equals("Successful")){
+        if (answer.getType().equals("Successful")) {
             GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForCustomer());
         } else {
             GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());

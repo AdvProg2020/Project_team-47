@@ -2,12 +2,12 @@ package graphic.panel.customer;
 
 import graphic.Page;
 import graphic.PageController;
-import graphic.mainMenu.MainMenuPage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
 public class CustomerPage extends Page {
     private static Page page;
+
     protected CustomerPage(String scenePath) {
         super(scenePath);
         JMetro jMetro = new JMetro(Style.DARK);
@@ -15,7 +15,7 @@ public class CustomerPage extends Page {
     }
 
     public static Page getInstance() {
-        if(page==null)
+        if (page == null)
             page = new CustomerPage("/fxml/panel/customer/customerPage.fxml");
         return page;
     }

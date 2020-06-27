@@ -4,7 +4,6 @@ import graphic.GraphicView;
 import graphic.PageController;
 import graphic.registerAndLoginMenu.registerMenu.customer.RegisterCustomerPage;
 import graphic.registerAndLoginMenu.registerMenu.seller.RegisterSellerPage;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
@@ -24,7 +23,7 @@ public class RegisterMenuController extends PageController {
 
     @Override
     public void clearPage() {
-        
+
     }
 
     @Override

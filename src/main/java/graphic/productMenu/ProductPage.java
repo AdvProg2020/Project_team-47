@@ -2,8 +2,6 @@ package graphic.productMenu;
 
 import graphic.Page;
 import graphic.PageController;
-import graphic.mainMenu.MainMenuController;
-import graphic.mainMenu.MainMenuPage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
@@ -17,7 +15,7 @@ public class ProductPage extends Page {
     }
 
     public static Page getInstance() {
-        if(page==null)
+        if (page == null)
             page = new ProductPage("/fxml/product/product.fxml");
         return page;
     }

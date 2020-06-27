@@ -2,15 +2,12 @@ package graphic.productMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
-import graphic.mainMenu.MainMenuController;
 import graphic.productMenu.menus.ProductCommentsController;
 import graphic.productMenu.menus.ProductProperties;
 import graphic.productMenu.menus.ProductSpecialProperties;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import model.send.receive.ClientMessage;
-import model.send.receive.ServerMessage;
 
 import java.net.URL;
 import java.util.Optional;
@@ -67,7 +64,7 @@ public class ProductPageController extends PageController {
         Optional<String> inputUsername = GraphicView.getInstance().showAlertPage("enter score", "score");
 
         if (!inputUsername.get().equals("")) {
-         //send message to controller
+            //send message to controller
         }
     }
 

@@ -20,6 +20,13 @@ import java.util.ResourceBundle;
 
 public class LoginMenuController extends PageController {
     private static boolean shouldBack;
+    @FXML
+    private TextField username;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private Text error;
+
     public static Scene getScene() {
         shouldBack = false;
         return getScene("/fxml/registerAndLoginMenu/loginMenu.fxml");
@@ -29,13 +36,6 @@ public class LoginMenuController extends PageController {
         shouldBack = true;
         return getScene("/fxml/registerAndLoginMenu/loginMenu.fxml");
     }
-
-    @FXML
-    private TextField username;
-    @FXML
-    private PasswordField password;
-    @FXML
-    private Text error;
 
     @Override
     public void clearPage() {
@@ -84,7 +84,7 @@ public class LoginMenuController extends PageController {
             switch (userType) {
                 case "manager" -> GraphicView.getInstance().changeScene(ManagerPage.getScene());
                 case "seller" -> GraphicView.getInstance().changeScene(SellerPage.getScene());
-                case "customer"-> GraphicView.getInstance().changeScene(CustomerPage.getInstance());
+                case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getInstance());
             }
         }
     }

@@ -3,12 +3,11 @@ package graphic.panel.customer.cart.purchasing;
 import graphic.GraphicView;
 import graphic.PageController;
 import graphic.mainMenu.MainMenuPage;
-import graphic.panel.customer.cart.CustomerCartController;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.Style;
-import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
 import java.net.URL;
@@ -73,7 +72,7 @@ public class PurchasePageController extends PageController {
         alert.setContentText("Are you sure?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
             // ... user chose OK
             //todo amir finishing purchase
 

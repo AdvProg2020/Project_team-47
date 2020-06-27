@@ -15,7 +15,7 @@ public class MainMenuPage extends Page {
     }
 
     public static Page getInstance() {
-        if(page==null)
+        if (page == null)
             page = new MainMenuPage("/fxml/mainMenu/mainMenu.fxml");
         return page;
     }

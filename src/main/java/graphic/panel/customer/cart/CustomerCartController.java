@@ -2,7 +2,6 @@ package graphic.panel.customer.cart;
 
 import graphic.GraphicView;
 import graphic.PageController;
-import graphic.panel.customer.CustomerPageController;
 import graphic.panel.customer.cart.purchasing.PurchasePage;
 import graphic.productMenu.ProductPage;
 import javafx.collections.FXCollections;
@@ -13,7 +12,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import model.send.receive.*;
+import model.send.receive.CartInfo;
+import model.send.receive.ClientMessage;
+import model.send.receive.ProductInfo;
+import model.send.receive.ServerMessage;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,11 +23,9 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class CustomerCartController extends PageController {
-    private static PageController controller;
-
     public static ArrayList<CartInfo.ProductInCart> productsInCart;
     public static CartInfo cartInfo;
-
+    private static PageController controller;
     @FXML
     public TextField totalPriceOfCart;
 
@@ -51,7 +51,6 @@ public class CustomerCartController extends PageController {
     ObservableList<CartTable> data = FXCollections.observableArrayList();
 
 
-
     public static PageController getInstance() {
         if (controller == null) {
             controller = new CustomerCartController();
@@ -69,7 +68,7 @@ public class CustomerCartController extends PageController {
         ClientMessage request = new ClientMessage("show products in cart");
         ServerMessage answer = send(request);
 
-        if(answer.getType().equals("Successful")){
+        if (answer.getType().equals("Successful")) {
             //CustomerCartController.cartInfo = answer.getCartInfo();
             setFields();
         } else {

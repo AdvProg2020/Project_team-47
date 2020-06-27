@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ManagerPanelController extends UserPanelController {
     private static ManagerPanelController managerPanelController;
-    private ArrayList<Command> commands;
+    private final ArrayList<Command> commands;
 
     private ManagerPanelController() {
         commands = new ArrayList<>();

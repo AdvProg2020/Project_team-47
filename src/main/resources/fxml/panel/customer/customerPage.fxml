@@ -60,10 +60,5 @@
                 <Font size="22.0" />
             </font>
         </Button>
-        <Button layoutX="373.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="48.0" prefWidth="274.0" text="back" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="10">
-            <font>
-                <Font size="22.0" />
-            </font>
-        </Button>
     </GridPane>
 </Scene>

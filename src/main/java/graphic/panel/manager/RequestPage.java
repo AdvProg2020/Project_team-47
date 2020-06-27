@@ -16,6 +16,11 @@ import java.util.ResourceBundle;
 
 public class RequestPage extends PageController {
     private static RequestInfo request;
+    @FXML
+    private TextArea textArea;
+    @FXML
+    private Text error;
+
     public static Scene getScene(RequestInfo request) {
         RequestPage.request = request;
         return getScene();
@@ -25,10 +30,6 @@ public class RequestPage extends PageController {
         return getScene("/fxml/panel/manager/RequestPage.fxml");
     }
 
-    @FXML
-    private TextArea textArea;
-    @FXML
-    private Text error;
     @FXML
     private void back() {
         GraphicView.getInstance().back();
@@ -56,7 +57,7 @@ public class RequestPage extends PageController {
         if (answer.getType().equalsIgnoreCase("Error")) {
             error.setText(answer.getErrorMessage());
             error.setVisible(true);
-        }else {
+        } else {
             back();
             ManageRequestPage.getInstance().update();
         }

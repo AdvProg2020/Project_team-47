@@ -1,11 +1,7 @@
 package graphic.panel.customer.CustomerDiscountCodes;
 
 import graphic.GraphicView;
-import graphic.Page;
 import graphic.PageController;
-import graphic.panel.customer.CustomerPurchaseHistory.CustomerPurchaseHistoryController;
-import graphic.panel.customer.CustomerPurchaseHistory.CustomerPurchaseHistoryPage;
-import graphic.panel.customer.CustomerPurchaseHistory.PurchaseHistoryTable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,7 +10,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import model.send.receive.DiscountCodeInfo;
-import model.send.receive.LogInfo;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,10 +18,8 @@ import java.util.ResourceBundle;
 
 public class CustomerDiscountCodesController extends PageController {
 
-    private static PageController controller;
-
     public static ArrayList<DiscountCodeInfo> discountCodes;
-
+    private static PageController controller;
     @FXML
     TableView<DiscountCodesTable> tableView;
 
@@ -87,7 +80,7 @@ public class CustomerDiscountCodesController extends PageController {
         for (DiscountCodeInfo discountCode : CustomerDiscountCodesController.discountCodes) {
             data.add(new DiscountCodesTable(discountCode.getStartTime(), discountCode.getFinishTime(),
                     discountCode.getPercent(), discountCode.getCode()
-            , discountCode.getMaxUsableTime(), discountCode.getMaxDiscountAmount()));
+                    , discountCode.getMaxUsableTime(), discountCode.getMaxDiscountAmount()));
         }
     }
 

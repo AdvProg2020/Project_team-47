@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Pagination?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="592.0" prefWidth="998.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.productsMenu.ProductsPage">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="592.0" prefWidth="998.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.productsMenu.ProductsPage">
     <SplitPane dividerPositions="0.29797979797979796" layoutX="93.0" layoutY="92.0" prefHeight="284.0" prefWidth="506.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
             <ScrollPane layoutX="-4.0" layoutY="63.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -167,6 +158,89 @@
                                 </font>
                             </RadioButton>
                         </HBox>
+                  <Label layoutX="10.0" layoutY="36.0" prefHeight="67.0" prefWidth="152.0" text="Off">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Label>
+                        <HBox layoutX="10.0" layoutY="75.0" prefHeight="37.0" prefWidth="292.0" spacing="8.0">
+                            <RadioButton fx:id="noneOff" mnemonicParsing="false" onAction="#beInOff" selected="true" text="None">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                                <toggleGroup>
+                                    <ToggleGroup fx:id="offGroup" />
+                                </toggleGroup>
+                            </RadioButton>
+                            <RadioButton fx:id="beInOff" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#beInOff" text="Be In Off" toggleGroup="$offGroup">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </RadioButton>
+                            <RadioButton fx:id="notFinishedOff" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#beInOff" text="Not Finished Off" toggleGroup="$offGroup">
+                                <font>
+                                    <Font size="13.0" />
+                                </font>
+                            </RadioButton>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="223.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                            <Label prefHeight="30.0" prefWidth="55.0" text="OffTime">
+                                <font>
+                                    <Font size="13.0" />
+                                </font>
+                            </Label>
+                            <TextField fx:id="start" prefHeight="30.0" prefWidth="100.0" promptText="start">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </TextField>
+                            <TextField fx:id="finish" layoutX="135.0" layoutY="45.0" prefHeight="30.0" prefWidth="107.0" promptText="finish">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </TextField>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="384.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                            <Label prefHeight="30.0" prefWidth="82.0" text="Off Seller">
+                                <font>
+                                    <Font size="19.0" />
+                                </font>
+                            </Label>
+                            <TextField fx:id="offSeller" prefHeight="30.0" prefWidth="142.0" promptText="Seller">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </TextField>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="221.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                            <Label prefHeight="30.0" prefWidth="69.0" text="Percent">
+                                <font>
+                                    <Font size="19.0" />
+                                </font>
+                            </Label>
+                            <TextField fx:id="minPercent" prefHeight="30.0" prefWidth="100.0" promptText="min percent">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </TextField>
+                            <TextField fx:id="maxPercent" layoutX="135.0" layoutY="45.0" prefHeight="30.0" prefWidth="107.0" promptText="max percent">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </TextField>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="606.0" prefHeight="71.0" prefWidth="292.0" spacing="6.0">
+                            <Label prefHeight="30.0" prefWidth="82.0" text="Be In Off">
+                                <font>
+                                    <Font size="19.0" />
+                                </font>
+                            </Label>
+                            <TextField fx:id="offId" prefHeight="30.0" prefWidth="142.0" promptText="Off Id">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </TextField>
+                        </HBox>
                          <Label prefHeight="34.0" prefWidth="81.0" text="Category">
                              <font>
                                  <Font size="19.0" />
@@ -178,15 +252,19 @@
                            <Font size="14.0" />
                         </font>
                             </TextField>
-                     <RadioButton fx:id="mainCategory" mnemonicParsing="false" prefHeight="18.0" prefWidth="55.0" selected="true" text="Main" />
-                     <RadioButton fx:id="subCategory" layoutX="200.0" layoutY="16.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="55.0" text="Sub" />
+                     <RadioButton fx:id="mainCategory" mnemonicParsing="false" prefHeight="18.0" prefWidth="55.0" selected="true" text="Main">
+                        <toggleGroup>
+                           <ToggleGroup fx:id="categoryGroup" />
+                        </toggleGroup>
+                     </RadioButton>
+                     <RadioButton fx:id="subCategory" layoutX="200.0" layoutY="16.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="55.0" text="Sub" toggleGroup="$categoryGroup" />
                         </HBox>
                         <Label layoutX="10.0" layoutY="165.0" prefHeight="67.0" prefWidth="152.0" text="Category Filter">
                             <font>
                                 <Font size="19.0" />
                             </font>
                         </Label>
-                  <VBox fx:id="vBox" prefHeight="92.0" prefWidth="413.0" spacing="5.0" />
+                  <VBox fx:id="vBox" prefHeight="92.0" prefWidth="414.0" spacing="5.0" />
                     </VBox>
                 </AnchorPane>
             </ScrollPane>

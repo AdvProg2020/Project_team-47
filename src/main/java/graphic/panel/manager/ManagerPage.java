@@ -2,12 +2,15 @@ package graphic.panel.manager;
 
 import graphic.GraphicView;
 import graphic.PageController;
+import graphic.TemplatePage;
 import graphic.panel.AccountPage;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -64,13 +67,9 @@ public class ManagerPage extends PageController {
     }
 
     @FXML
-    private void productsPage() {
-        // TODO: 6/25/2020  
-    }
-
-    @FXML
-    private void offsPage() {
-        // TODO: 6/25/2020  
+    private void productsPage() throws IOException {
+        GraphicView.getInstance().changeScene(TemplatePage.getScene());
+        TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
 
     @FXML
