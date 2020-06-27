@@ -7,14 +7,20 @@ import graphic.panel.AccountPage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextField;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class ManagerPage extends PageController {
+
+    @FXML private TextField productId;
 
     public static Scene getScene() {
         return getScene("/fxml/panel/manager/ManagerPage.fxml");
@@ -77,4 +83,19 @@ public class ManagerPage extends PageController {
         GraphicView.getInstance().changeScene(ManageRequestPage.getScene());
     }
 
+    public void removeProduct() {
+        ClientMessage request = new ClientMessage("remove product manager");
+        HashMap<String,String> reqInfo = new HashMap<>();
+        reqInfo.put("id", productId.getText());
+        request.setHashMap(reqInfo);
+        ServerMessage answer = send(request);
+        if (answer.getType().equals("Error")) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(answer.getErrorMessage());
+            alert.showAndWait();
+        } else {
+            productId.setText("");
+        }
+    }
 }
