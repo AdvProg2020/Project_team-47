@@ -17,10 +17,8 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 public class CustomerPurchaseHistoryController extends PageController {
-    private static PageController controller;
-
     public static ArrayList<LogInfo> purchaseHistoryArrayList;
-
+    private static PageController controller;
     @FXML
     TableView<PurchaseHistoryTable> tableView;
 

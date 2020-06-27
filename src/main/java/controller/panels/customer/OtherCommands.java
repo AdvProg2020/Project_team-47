@@ -152,7 +152,7 @@ class RateCommand extends OtherCommands {
     private static RateCommand command;
 
     private RateCommand() {
-        this.name = "show products in cart";
+        this.name = "score product";
     }
 
     public static RateCommand getInstance() {

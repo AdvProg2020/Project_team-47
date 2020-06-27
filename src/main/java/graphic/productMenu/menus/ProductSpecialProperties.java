@@ -4,9 +4,7 @@ import graphic.GraphicView;
 import graphic.PageController;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
@@ -31,6 +29,7 @@ public class ProductSpecialProperties extends PageController {
         jMetro.setScene(scene);
         return scene;
     }
+
     @Override
     public void clearPage() {
 

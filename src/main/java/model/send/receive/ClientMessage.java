@@ -47,6 +47,10 @@ public class ClientMessage {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public ArrayList<String> getArrayList() {
         return arrayList;
     }
@@ -77,5 +81,9 @@ public class ClientMessage {
 
     public void setProperty(SpecialProperty property) {
         this.property = property;
+    }
+
+    public void setFirstInt(int firstInt) {
+        this.firstInt = firstInt;
     }
 }

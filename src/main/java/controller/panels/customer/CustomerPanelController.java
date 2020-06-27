@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class CustomerPanelController extends UserPanelController {
     private static CustomerPanelController customerPanelController;
-    private ArrayList<Command> commands;
+    private final ArrayList<Command> commands;
 
     private CustomerPanelController() {
         commands = new ArrayList<>();

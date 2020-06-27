@@ -146,7 +146,7 @@ class AddProductCommand extends CommonCommands {
     @Override
     public ServerMessage process(ClientMessage request) throws NullFieldException, CategoryDoesntExistException,
             NumberException, NotEnoughInformation {
-        containNullField(request.getProperties(),request.getFile(),request.getFileExtension());
+        containNullField(request.getProperties(), request.getFile(), request.getFileExtension());
         addProduct(request.getHashMap(), request);
         return actionCompleted();
     }
@@ -338,7 +338,7 @@ class AddToSeller extends CommonCommands {
     }
 
     public static AddToSeller getInstance() {
-        if(command == null)
+        if (command == null)
             command = new AddToSeller();
         return command;
     }
@@ -354,7 +354,7 @@ class AddToSeller extends CommonCommands {
 
     private void addToSeller(String productId, String numberInStockString, String priceString) throws ProductDoesntExistException, NumberException, CommonException {
         Product product = Product.getProductWithId(productId);
-        if(product.isUserInSellerList((Seller) getLoggedUser()))
+        if (product.isUserInSellerList((Seller) getLoggedUser()))
             throw new CommonException("You already has this product!!");
         double price;
         int numberInStock;

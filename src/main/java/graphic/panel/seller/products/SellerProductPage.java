@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Pagination;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import model.send.receive.ClientMessage;
 import model.send.receive.ProductInfo;
@@ -50,7 +49,7 @@ public class SellerProductPage extends PageController {
     }
 
     private void initializePagination(ArrayList<ProductInfo> productInfoArrayList) {
-        pagination.setPageCount((productInfoArrayList.size()-1) / 3 + 1);
+        pagination.setPageCount((productInfoArrayList.size() - 1) / 3 + 1);
         pagination.setPageFactory((Integer pageNum) -> pageInitialize(pageNum, productInfoArrayList));
     }
 

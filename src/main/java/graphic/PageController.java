@@ -10,7 +10,10 @@ import model.send.receive.ServerMessage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 
 public abstract class PageController implements Initializable {

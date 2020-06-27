@@ -24,9 +24,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 abstract public class Controller {
-    protected static User loggedUser;
     private static final ArrayList<Controller> controllers;
     private static final Gson gson = new Gson();
+    protected static User loggedUser;
 
     static {
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
@@ -46,7 +46,7 @@ abstract public class Controller {
     }
 
     public static ServerMessage process(ClientMessage clientMessage) throws Exception {
-        if(clientMessage.getHashMap()==null) clientMessage.setHashMap(new HashMap<>());
+        if (clientMessage.getHashMap() == null) clientMessage.setHashMap(new HashMap<>());
         for (Controller controller : controllers)
             if (controller.canProcess(clientMessage.getType()))
                 return controller.processRequest(clientMessage);

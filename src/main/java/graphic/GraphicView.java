@@ -1,11 +1,8 @@
 package graphic;
 
 import graphic.mainMenu.MainMenuPage;
-import graphic.panel.customer.CustomerPage;
-import graphic.panel.seller.SellerPage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 

@@ -157,7 +157,7 @@ public class Off extends Discount {
     }
 
     public boolean isOffFinished() {
-        return finishTime.after(Controller.getCurrentTime());
+        return finishTime.before(Controller.getCurrentTime());
     }
 
     public void addProduct(Product product) {

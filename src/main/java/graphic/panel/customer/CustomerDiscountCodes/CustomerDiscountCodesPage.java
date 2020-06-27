@@ -2,8 +2,6 @@ package graphic.panel.customer.CustomerDiscountCodes;
 
 import graphic.Page;
 import graphic.PageController;
-import graphic.panel.customer.CustomerPersonalInfo.CustomerPersonalInfoController;
-import graphic.panel.customer.CustomerPersonalInfo.CustomerPersonalInfoPage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
@@ -17,7 +15,7 @@ public class CustomerDiscountCodesPage extends Page {
     }
 
     public static Page getInstance() {
-        if(page==null)
+        if (page == null)
             page = new CustomerDiscountCodesPage("/fxml/panel/customer/files/customerDiscountCodes.fxml");
         return page;
     }

@@ -1,15 +1,14 @@
 package graphic.panel.customer.CustomerDiscountCodes;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public class DiscountCodesTable {
-    private Date startTime;
-    private Date finishTime;
-    private int percent;
-    private String code;
-    private int maxUsableTime;
-    private int maxDiscountAmount;
+    private final Date startTime;
+    private final Date finishTime;
+    private final int percent;
+    private final String code;
+    private final int maxUsableTime;
+    private final int maxDiscountAmount;
 
     public DiscountCodesTable(Date startTime, Date finishTime, int percent,
                               String code, int maxUsableTime, int maxDiscountAmount) {

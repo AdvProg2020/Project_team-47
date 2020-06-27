@@ -1,6 +1,5 @@
 package graphic.panel.seller.offs;
 
-import controller.Controller;
 import graphic.GraphicView;
 import graphic.PageController;
 import javafx.animation.FadeTransition;

@@ -3,7 +3,6 @@ package graphic.panel;
 import graphic.GraphicView;
 import graphic.PageController;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -13,19 +12,12 @@ import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import model.send.receive.UserInfo;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-import static com.sun.javafx.scene.control.skin.Utils.getResource;
-
 public class AccountPage extends PageController {
     private static PageController controller;
-
-    public static Scene getScene() {
-        return getScene("/fxml/panel/AccountPage.fxml");
-    }
     @FXML
     private Label companyNameLabel;
     @FXML
@@ -50,6 +42,10 @@ public class AccountPage extends PageController {
     private TextField editValue;
     @FXML
     private Text error;
+
+    public static Scene getScene() {
+        return getScene("/fxml/panel/AccountPage.fxml");
+    }
 
     public static PageController getInstance() {
         return controller;

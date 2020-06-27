@@ -93,7 +93,11 @@ public class ProductInfo {
 
 
     public ArrayList<String> getSellersNames() {
-        return sellersNames;
+        ArrayList<String> sellerNames = new ArrayList<>();
+        for (ProductSeller productSeller : productSellers) {
+            sellerNames.add(productSeller.sellerName);
+        }
+        return sellerNames;
     }
 
     public String getMainCategory() {
@@ -155,6 +159,14 @@ public class ProductInfo {
         double price = Double.MAX_VALUE;
         for (ProductSeller productSeller : productSellers) {
             if(productSeller.priceWithOff<price) price = productSeller.priceWithOff;
+        }
+        return price;
+    }
+
+    public double getMinPriceWithoutOff() {
+        double price = Double.MAX_VALUE;
+        for (ProductSeller productSeller : productSellers) {
+            if(productSeller.price<price) price = productSeller.price;
         }
         return price;
     }

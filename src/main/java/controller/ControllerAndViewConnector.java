@@ -1,11 +1,8 @@
 package controller;
 
-import com.google.gson.Gson;
 import model.ecxeption.Exception;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
-
-import static controller.Controller.getGson;
 
 
 public class ControllerAndViewConnector {

@@ -1,6 +1,5 @@
 package controller.purchase;
 
-import controller.Command;
 import controller.Controller;
 import model.discount.DiscountCode;
 import model.ecxeption.Exception;

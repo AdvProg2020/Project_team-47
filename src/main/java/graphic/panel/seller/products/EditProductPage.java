@@ -4,7 +4,9 @@ import graphic.GraphicView;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -19,22 +21,32 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.function.DoubleToLongFunction;
 
 public class EditProductPage extends PageController {
     private static ProductInfo product;
     private String chosenField;
-    @FXML private ImageView image;
-    @FXML private Label name;
-    @FXML private TextArea description;
-    @FXML private Label numberInStock;
-    @FXML private Label category;
-    @FXML private Label price;
-    @FXML private Label subCategory;
-    @FXML private Label id;
-    @FXML private VBox vBox;
-    @FXML private Text error;
-    @FXML private TextField editValue;
+    @FXML
+    private ImageView image;
+    @FXML
+    private Label name;
+    @FXML
+    private TextArea description;
+    @FXML
+    private Label numberInStock;
+    @FXML
+    private Label category;
+    @FXML
+    private Label price;
+    @FXML
+    private Label subCategory;
+    @FXML
+    private Label id;
+    @FXML
+    private VBox vBox;
+    @FXML
+    private Text error;
+    @FXML
+    private TextField editValue;
     private boolean propertyChange;
 
 
@@ -85,7 +97,8 @@ public class EditProductPage extends PageController {
             }
             hBox.setOnMouseClicked(e -> {
                 chosenField = keyLabel.getText();
-                propertyChange = true;});
+                propertyChange = true;
+            });
             vBox.getChildren().add(hBox);
         }
     }
@@ -100,7 +113,7 @@ public class EditProductPage extends PageController {
 
     private void initializeInfos() {
         image.setImage(PageController.byteToImage(product.getFile()));
-        price.setText(""+product.getPrice(GraphicView.getInstance().getMyUsername()));
+        price.setText("" + product.getPrice(GraphicView.getInstance().getMyUsername()));
         numberInStock.setText("" + product.getPrice(GraphicView.getInstance().getMyUsername()));
         id.setText(product.getId());
         description.setText(product.getDescription());
@@ -143,7 +156,8 @@ public class EditProductPage extends PageController {
         GraphicView.getInstance().back();
     }
 
-    @FXML private void edit() {
+    @FXML
+    private void edit() {
         if (chosenField == null || chosenField.isEmpty()) {
             setError("Please chose a field first!!");
             return;
@@ -169,7 +183,7 @@ public class EditProductPage extends PageController {
         }
     }
 
-    private void edit(String field,SpecialProperty property) {
+    private void edit(String field, SpecialProperty property) {
         ClientMessage request = new ClientMessage("edit product");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("product id", product.getId());

@@ -11,13 +11,15 @@ import graphic.panel.customer.CustomerPurchaseHistory.CustomerPurchaseHistoryPag
 import graphic.panel.customer.cart.CustomerCartController;
 import graphic.panel.customer.cart.CustomerCartPage;
 import javafx.scene.input.MouseEvent;
-import model.send.receive.*;
+import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CustomerPageController extends PageController {
     private static PageController controller;
+    public boolean bol = false;
 
     public static PageController getInstance() {
         if (controller == null) {
@@ -45,13 +47,12 @@ public class CustomerPageController extends PageController {
         GraphicView.getInstance().changeScene(AccountPage.getScene());
     }
 
-    public boolean bol = false;
     public void goToShoppingCart() {
         //getting cart info
         ClientMessage request = new ClientMessage("show products in cart");
         ServerMessage answer = send(request);
 
-        if(answer.getType().equals("Successful")){
+        if (answer.getType().equals("Successful")) {
             CustomerCartController.cartInfo = answer.getCartInfo();
             GraphicView.getInstance().changeSceneWithoutUpdate(CustomerCartPage.getInstance());
         } else {
@@ -66,7 +67,7 @@ public class CustomerPageController extends PageController {
 
         ServerMessage answer = send(request);
 
-        if(answer.getType().equals("Successful")){
+        if (answer.getType().equals("Successful")) {
             CustomerPurchaseHistoryController.purchaseHistoryArrayList = answer.getLogInfoArrayList();
             GraphicView.getInstance().changeScene(CustomerPurchaseHistoryPage.getInstance());
         } else {
@@ -81,7 +82,7 @@ public class CustomerPageController extends PageController {
 
         ServerMessage answer = send(request);
 
-        if(answer.getType().equals("Successful")){
+        if (answer.getType().equals("Successful")) {
             CustomerDiscountCodesController.discountCodes = answer.getDiscountCodeInfoArrayList();
             GraphicView.getInstance().changeScene(CustomerDiscountCodesPage.getInstance());
         } else {

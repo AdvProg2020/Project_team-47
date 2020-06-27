@@ -5,8 +5,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="150.0" prefWidth="850.0"
-            xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.ProductPane">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="pane" prefHeight="150.0" prefWidth="850.0"
+            xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="graphic.panel.ProductPane">
     <Label layoutX="180.0" layoutY="29.0" prefHeight="35.0" prefWidth="47.0" text="Id:" AnchorPane.leftAnchor="180.0">
         <font>
             <Font size="16.0"/>
@@ -68,6 +68,11 @@
         </font>
     </Text>
     <Text fx:id="subCategory" layoutX="663.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Text>
+    <Text fx:id="score" layoutX="152.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
         <font>
             <Font size="15.0"/>
         </font>

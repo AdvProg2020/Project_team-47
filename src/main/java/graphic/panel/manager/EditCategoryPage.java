@@ -84,7 +84,7 @@ public class EditCategoryPage extends PageController {
         if (mainCategoryRadioButton.isSelected()) request = new ClientMessage("edit main category");
         else request = new ClientMessage("edit sub category");
         HashMap<String, String> reqInfo = new HashMap<>();
-        reqInfo.put("category name",category.getText());
+        reqInfo.put("category name", category.getText());
         reqInfo.put("new value", propertyKey.getText());
         reqInfo.put("unit", propertyUnit.getText());
         reqInfo.put("field", type);

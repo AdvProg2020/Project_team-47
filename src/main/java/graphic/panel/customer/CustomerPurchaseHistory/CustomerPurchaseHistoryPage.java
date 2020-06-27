@@ -7,6 +7,7 @@ import jfxtras.styles.jmetro.Style;
 
 public class CustomerPurchaseHistoryPage extends Page {
     private static Page page;
+
     protected CustomerPurchaseHistoryPage(String scenePath) {
         super(scenePath);
         JMetro jMetro = new JMetro(Style.DARK);
@@ -14,7 +15,7 @@ public class CustomerPurchaseHistoryPage extends Page {
     }
 
     public static Page getInstance() {
-        if(page==null)
+        if (page == null)
             page = new CustomerPurchaseHistoryPage("/fxml/panel/customer/files/customerPurchaseHistory.fxml");
         return page;
     }
