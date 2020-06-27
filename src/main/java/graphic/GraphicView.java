@@ -37,7 +37,7 @@ public class GraphicView {
         window.setOnCloseRequest((event) -> System.exit(0));
         window.setTitle("AP SHOP");
         window.setResizable(false);
-        //playBackGroundAudio("background1.mp3");
+        playBackGroundAudio("background1.mp3");
         goToFirstPage();
         window.show();
     }
