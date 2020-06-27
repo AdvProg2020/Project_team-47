@@ -56,17 +56,6 @@ public class CreateManagerPage extends PageController {
         error.setVisible(false);
     }
 
-    private void processConfirmAnswer(ServerMessage answer) {
-        update();
-        GraphicView.getInstance().setMyUsername(usernameString);
-        GraphicView.getInstance().setLoggedIn(true);
-        if (shouldBack) {
-            back();
-        } else {
-            GraphicView.getInstance().changeScene(ManagerPage.getScene());
-        }
-    }
-
     public void back() {
         TemplatePage.getInstance().update();
         GraphicView.getInstance().back();
@@ -93,7 +82,6 @@ public class CreateManagerPage extends PageController {
         } else {
             this.usernameString = usernameString;
             this.passwordString = passwordString;
-            //processConfirmAnswer(answer);
             GraphicView.getInstance().changeScene(ManageUsersPage.getScene());
         }
 
