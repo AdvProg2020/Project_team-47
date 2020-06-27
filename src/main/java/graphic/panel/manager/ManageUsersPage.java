@@ -35,37 +35,11 @@ public class ManageUsersPage extends PageController {
         GraphicView.getInstance().back();
     }
 
-    @FXML
-    private void viewUser() {
-        if (!username.getText().equals("")) {
-            ClientMessage request = new ClientMessage("view user");
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("username", username.getText());
-            request.setHashMap(hashMap);
-            ServerMessage answer = send(request);
-            if (answer.getType().equals("Successful")) {
 
-            } else {
-                GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
-            }
-        }
-    }
 
     @FXML
     private void CreateManager() {
         GraphicView.getInstance().changeScene(CreateManagerPage.getScene());
-        /*if (!username.getText().equals("")) {
-            ClientMessage request = new ClientMessage("create manager profile");
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("username", username.getText());
-            request.setHashMap(hashMap);
-            ServerMessage answer = send(request);
-            if (answer.getType().equals("Successful")) {
-                update();
-            } else {
-                GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
-            }
-        }*/
     }
 
     @Override

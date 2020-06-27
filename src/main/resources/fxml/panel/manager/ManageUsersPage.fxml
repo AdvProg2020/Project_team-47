@@ -16,11 +16,6 @@
             </font>
         </Button>
 
-        <Button layoutX="774.0" layoutY="348.0" mnemonicParsing="false" onAction="#viewUser" prefHeight="50.0" prefWidth="164.0" text="View User" AnchorPane.leftAnchor="774.0" AnchorPane.rightAnchor="62.0">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Button>
         <Button layoutX="799.0" layoutY="561.0" mnemonicParsing="false" onAction="#back" prefHeight="46.0" prefWidth="164.0" text="Back" AnchorPane.leftAnchor="774.0" AnchorPane.rightAnchor="62.0">
             <font>
                 <Font size="17.0" />
@@ -31,7 +26,7 @@
                 <Font size="17.0" />
             </font>
         </Button>
-        <TextField fx:id="username" layoutX="774.0" layoutY="265.0" prefHeight="50.0" prefWidth="164.0" promptText="username" AnchorPane.leftAnchor="774.0" AnchorPane.rightAnchor="62.0">
+        <TextField fx:id="username" layoutX="774.0" layoutY="341.0" prefHeight="50.0" prefWidth="164.0" promptText="username" AnchorPane.leftAnchor="774.0" AnchorPane.rightAnchor="62.0">
 
         </TextField>
     </AnchorPane>

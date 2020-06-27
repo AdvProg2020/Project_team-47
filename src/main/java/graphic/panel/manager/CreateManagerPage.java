@@ -56,23 +56,14 @@ public class CreateManagerPage extends PageController {
         error.setVisible(false);
     }
 
-    public void confirm(ServerMessage answer) {
-        processConfirmAnswer(answer);
-    }
-
     private void processConfirmAnswer(ServerMessage answer) {
-        if (answer.getType().equalsIgnoreCase("Error")) {
-            error.setText(answer.getErrorMessage());
-            error.setVisible(true);
+        update();
+        GraphicView.getInstance().setMyUsername(usernameString);
+        GraphicView.getInstance().setLoggedIn(true);
+        if (shouldBack) {
+            back();
         } else {
-            update();
-            GraphicView.getInstance().setMyUsername(usernameString);
-            GraphicView.getInstance().setLoggedIn(true);
-            if (shouldBack) {
-                back();
-            } else {
-                GraphicView.getInstance().changeScene(ManagerPage.getScene());
-            }
+            GraphicView.getInstance().changeScene(ManagerPage.getScene());
         }
     }
 
@@ -91,7 +82,6 @@ public class CreateManagerPage extends PageController {
         reqInfo.put("last-name", lastName.getText());
         reqInfo.put("phone-number", phoneNumber.getText());
         reqInfo.put("type", "manager");
-
         request.setHashMap(reqInfo);
         processRegisterAnswer(send(request),username.getText(),password.getText());
     }
@@ -103,7 +93,8 @@ public class CreateManagerPage extends PageController {
         } else {
             this.usernameString = usernameString;
             this.passwordString = passwordString;
-            confirm(answer);
+            //processConfirmAnswer(answer);
+            GraphicView.getInstance().changeScene(ManageUsersPage.getScene());
         }
 
     }
