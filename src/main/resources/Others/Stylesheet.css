@@ -1,4 +1,5 @@
 .root {
+    -fx-background-image: url("/Images/main-menu-background.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch;
     -fx-min-height: 700px;
