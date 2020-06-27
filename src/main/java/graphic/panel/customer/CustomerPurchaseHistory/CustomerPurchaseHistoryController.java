@@ -70,7 +70,7 @@ public class CustomerPurchaseHistoryController extends PageController {
 
     private void setData() {
         for (LogInfo sortedPlayer : CustomerPurchaseHistoryController.purchaseHistoryArrayList) {
-            data.add(new PurchaseHistoryTable(sortedPlayer.getLogId(), sortedPlayer.getLogDate(), sortedPlayer.getPrice(), sortedPlayer.getSeller()    ));
+            data.add(new PurchaseHistoryTable(sortedPlayer.getLogId(), sortedPlayer.getLogDate(), sortedPlayer.getPrice(), sortedPlayer.getSeller()));
         }
     }
 

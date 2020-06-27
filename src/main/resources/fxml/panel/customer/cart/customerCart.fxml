@@ -23,8 +23,8 @@
       <Button layoutX="266.0" layoutY="2.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="100.0" text="increase" onMouseClicked="#increase"/>
       <Button layoutX="381.0" layoutY="3.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="94.0" text="decrease" onMouseClicked="#decrease"/>
       <Button layoutX="491.0" layoutY="3.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="99.0" text="buy cart" onMouseClicked="#buyCart"/>
-        <TextField fx:id="totalPriceOfCart" layoutX="14.0" layoutY="533.0" prefHeight="25.0" prefWidth="210.0" />
-
+       <!-- <TextField fx:id="totalPriceOfCart" layoutX="14.0" layoutY="533.0" prefHeight="25.0" prefWidth="210.0" />
+        !-->
 
 
     </AnchorPane>

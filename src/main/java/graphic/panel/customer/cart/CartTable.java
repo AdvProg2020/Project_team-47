@@ -2,10 +2,10 @@ package graphic.panel.customer.cart;
 
 public class CartTable {
     private String name;
-    private String sellerId;
     private double price;
     private int count;
     private double totalPrice;
+    private String sellerId;
 
     public CartTable(String name, double price, int count, double totalPrice, String sellerId) {
         this.name = name;

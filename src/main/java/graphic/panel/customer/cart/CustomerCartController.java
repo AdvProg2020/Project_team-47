@@ -70,7 +70,7 @@ public class CustomerCartController extends PageController {
         ServerMessage answer = send(request);
 
         if(answer.getType().equals("Successful")){
-            //CustomerCartController.cartInfo = answer.getCartInfo();
+            CustomerCartController.cartInfo = answer.getCartInfo();
             setFields();
         } else {
             GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
@@ -101,7 +101,7 @@ public class CustomerCartController extends PageController {
             data.add(new CartTable(productInfo.getName(), productInCart.getPrice(), productInCart.getNumberInCart(), totalPrice, productInCart.getSeller()));
         }
 
-        totalPriceOfCart.setText("total price of cart   : " + cartInfo.getPrice());
+        //totalPriceOfCart.setText("total price of cart   : " + cartInfo.getPrice());
     }
 
     public void back(MouseEvent mouseEvent) {

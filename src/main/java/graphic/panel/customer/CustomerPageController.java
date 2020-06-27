@@ -47,13 +47,13 @@ public class CustomerPageController extends PageController {
 
     public boolean bol = false;
     public void goToShoppingCart() {
-        //getting purchase history
+        //getting cart info
         ClientMessage request = new ClientMessage("show products in cart");
         ServerMessage answer = send(request);
 
         if(answer.getType().equals("Successful")){
             CustomerCartController.cartInfo = answer.getCartInfo();
-            GraphicView.getInstance().changeScene(CustomerCartPage.getInstance());
+            GraphicView.getInstance().changeSceneWithoutUpdate(CustomerCartPage.getInstance());
         } else {
             GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
         }

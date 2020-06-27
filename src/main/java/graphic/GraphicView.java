@@ -51,6 +51,13 @@ public class GraphicView {
         window.setScene(scene);
     }
 
+    public void changeSceneWithoutUpdate(Page page) {
+        //this function will get a page and change window scene to page's scene
+        Scene scene = page.getScene();
+        scenes.add(page.getScene());
+        window.setScene(scene);
+    }
+
 
     public void changeScene(Scene scene) {
         scenes.add(scene);
