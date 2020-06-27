@@ -10,6 +10,14 @@ public class Filter {
     private String firstFilterValue;
     private String secondFilterValue;
 
+    public Filter() {
+    }
+
+    public Filter(String type, String filterKey) {
+        this.type = type;
+        this.filterKey = filterKey;
+    }
+
     public double getSecondDouble() {
         return secondDouble;
     }

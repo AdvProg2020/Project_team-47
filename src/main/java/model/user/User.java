@@ -20,10 +20,10 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 abstract public class User {
+    private static final HashSet<User> verificationList;
     static ArrayList<User> allUsers;
     private static TreeSet<String> usedUsernames;
     private static int managersNumber;
-    private static final HashSet<User> verificationList;
 
     static {
         allUsers = new ArrayList<>();

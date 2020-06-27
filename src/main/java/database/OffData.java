@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class OffData {
+    private final ArrayList<String> products;
     private Date startTime;
     private Date finishTime;
     private int percent;
     private String id;
     private String offStatus;
     private String sellerUsername;
-    private final ArrayList<String> products;
 
     public OffData() {
         products = new ArrayList<>();

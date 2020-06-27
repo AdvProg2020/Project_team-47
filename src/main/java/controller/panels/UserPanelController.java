@@ -38,7 +38,7 @@ public class UserPanelController extends Controller {
 
     @Override
     public ServerMessage processRequest(ClientMessage request) throws Exception {
-        if (loggedUser == null)
+        if (loggedUser == null && !isCartCommand(request.getType()))
             throw new NeedLoginException();
 
         for (Command command : commands)
@@ -50,6 +50,11 @@ public class UserPanelController extends Controller {
                 return controller.processRequest(request);
 
         throw new CommonException("Can't do this request!!");
+    }
+
+    private boolean isCartCommand(String type) {
+        return type.equals("decrease product in cart") || type.equals("increase product in cart") ||
+                type.equals("show products in cart");
     }
 
 

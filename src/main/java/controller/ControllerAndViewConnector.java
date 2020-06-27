@@ -1,6 +1,5 @@
 package controller;
 
-import com.google.gson.Gson;
 import model.ecxeption.Exception;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
@@ -15,7 +14,7 @@ public class ControllerAndViewConnector {
         } catch (Exception e) {
             answer = new ServerMessage("Error", e.getMessage());
         }
-        System.out.println(new Gson().toJson(answer));
+        //if(getGson().toJson(answer).length()<4000) System.out.println(getGson().toJson(answer));
         return answer;
     }
 

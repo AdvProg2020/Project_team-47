@@ -29,6 +29,7 @@ public class ShoppingCart {
         for (ProductInCart productInCart : productsInCart) {
             cartInfo.addProductInfo(productInCart.getProduct(), productInCart.getSeller(), productInCart.getNumberInCart());
         }
+        cartInfo.setPrice(this.getTotalPrice());
         return cartInfo;
     }
 
@@ -170,6 +171,7 @@ public class ShoppingCart {
         private int numberInCart;
 
         public ProductInCart(Product product, Seller seller) {
+            this.numberInCart = 1;
             this.product = product;
             this.seller = seller;
         }

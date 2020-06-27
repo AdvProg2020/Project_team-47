@@ -43,8 +43,16 @@ public class ClientMessage {
         return firstInt;
     }
 
+    public void setFirstInt(int firstInt) {
+        this.firstInt = firstInt;
+    }
+
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public ArrayList<String> getArrayList() {

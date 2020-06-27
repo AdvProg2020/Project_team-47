@@ -10,7 +10,7 @@
 <?import javafx.scene.Scene?>
 <?import javafx.scene.text.*?>
 <Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../Others/Stylesheet.css"
-       xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.manager.ManagerPage">
+       xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="graphic.panel.manager.ManagerPage">
     <AnchorPane minHeight="616.0" minWidth="918.0" prefHeight="616.0" prefWidth="918.0">
         <SplitPane dividerPositions="0.5" layoutX="-6.0" layoutY="-4.0" orientation="VERTICAL" prefHeight="700.0"
                    prefWidth="1000.0">
@@ -18,8 +18,8 @@
                         prefWidth="998.0">
                 <ImageView cache="true" fitHeight="70.0" fitWidth="108.0" layoutX="-32.0" layoutY="-23.0"
                            onMouseClicked="#accountInfo" pickOnBounds="true" x="25.0" y="25.0"
-                           AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="10.0"
-                           AnchorPane.rightAnchor="885.0" AnchorPane.topAnchor="15.0">
+                           AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="885.0"
+                           AnchorPane.topAnchor="15.0">
                     <cursor>
                         <Cursor fx:constant="HAND"/>
                     </cursor>
@@ -62,21 +62,21 @@
                         <Font name="Segoe UI Black" size="15.0"/>
                     </font>
                 </Button>
-                <Button layoutX="393.0" layoutY="306.0" mnemonicParsing="false" onAction="#offsPage"
-                        prefHeight="58.0" prefWidth="207.0" text="Offs Page" AnchorPane.leftAnchor="393.0"
-                        AnchorPane.topAnchor="306.0">
-                    <font>
-                        <Font name="Segoe UI Black" size="15.0"/>
-                    </font>
-                </Button>
                 <Button layoutX="393.0" layoutY="386.0" mnemonicParsing="false" onAction="#manageUsers"
                         prefHeight="54.0" prefWidth="207.0" text="Manage Users">
                     <font>
                         <Font name="Segoe UI Black" size="15.0"/>
                     </font>
                 </Button>
-                <Button layoutX="395.0" layoutY="456.0" mnemonicParsing="false" onAction="#manageRequests"
+                <Button layoutX="393.0" layoutY="299.0" mnemonicParsing="false" onAction="#manageRequests"
                         prefHeight="58.0" prefWidth="207.0" text="Manage Requests">
+                    <font>
+                        <Font name="Segoe UI Black" size="15.0"/>
+                    </font>
+                </Button>
+                <TextField fx:id="productId" layoutX="45.0" layoutY="70.0" promptText="product id"/>
+                <Button layoutX="45.0" layoutY="116.0" mnemonicParsing="false" onAction="#removeProduct"
+                        prefHeight="54.0" prefWidth="157.0" text="Remove Product">
                     <font>
                         <Font name="Segoe UI Black" size="15.0"/>
                     </font>

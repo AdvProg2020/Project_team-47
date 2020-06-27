@@ -62,7 +62,7 @@ public class RegisterSellerController extends PageController {
         request.setHashMap(hashMap);
 
         ServerMessage answer = send(request);
-        if(answer.getType().equals("Successful")){
+        if (answer.getType().equals("Successful")) {
             GraphicView.getInstance().changeScene(RegisterAndLoginPage.getNextPageForSeller());
         } else {
             GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());

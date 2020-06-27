@@ -8,7 +8,6 @@ import model.ecxeption.Exception;
 import model.ecxeption.common.*;
 import model.ecxeption.filter.InvalidSortException;
 import model.ecxeption.user.UserNotExistException;
-import model.send.receive.CartInfo;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import model.user.Customer;
@@ -266,7 +265,7 @@ class EditCodeCommand extends DiscountCodeCommands {
         HashMap<String, String> reqInfo = getReqInfo(request);
         containNullField(reqInfo.get("code"), reqInfo.get("field"), reqInfo.get("new value"));
         checkPrimaryErrors(request);
-        editDiscountCode( reqInfo.get("field"), reqInfo.get("new value"));
+        editDiscountCode(reqInfo.get("field"), reqInfo.get("new value"));
         return actionCompleted();
     }
 

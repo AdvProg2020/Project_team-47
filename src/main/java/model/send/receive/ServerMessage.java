@@ -39,6 +39,14 @@ public class ServerMessage {
         this.errorMessage = errorMessage;
     }
 
+    public ArrayList<ClientFilter> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(ArrayList<ClientFilter> filters) {
+        this.filters = filters;
+    }
+
     public String getErrorMessage() {
         return errorMessage;
     }
@@ -209,9 +217,5 @@ public class ServerMessage {
 
     public void setUserInfoArrayList(ArrayList<UserInfo> userInfoArrayList) {
         this.userInfoArrayList = userInfoArrayList;
-    }
-
-    public void setFilters(ArrayList<ClientFilter> filters) {
-        this.filters = filters;
     }
 }

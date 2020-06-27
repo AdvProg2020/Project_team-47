@@ -10,7 +10,7 @@
 <?import javafx.scene.Scene?>
 <?import javafx.scene.text.*?>
 <Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../Others/Stylesheet.css"
-       xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.seller.SellerPage">
+       xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="graphic.panel.seller.SellerPage">
     <AnchorPane minHeight="616.0" minWidth="918.0" prefHeight="616.0" prefWidth="918.0">
         <SplitPane dividerPositions="0.5" layoutX="-6.0" layoutY="-4.0" orientation="VERTICAL" prefHeight="700.0"
                    prefWidth="1000.0">
@@ -62,13 +62,7 @@
                         <Font name="Segoe UI Black" size="15.0"/>
                     </font>
                 </Button>
-                <Button layoutX="389.0" layoutY="349.0" mnemonicParsing="false" onAction="#offsPage" prefHeight="87.0"
-                        prefWidth="207.0" text="Offs Page" AnchorPane.leftAnchor="393.0" AnchorPane.topAnchor="360.0">
-                    <font>
-                        <Font name="Segoe UI Black" size="15.0"/>
-                    </font>
-                </Button>
-                <Button layoutX="393.0" layoutY="466.0" mnemonicParsing="false" onAction="#buyLogs" prefHeight="80.0"
+                <Button layoutX="393.0" layoutY="376.0" mnemonicParsing="false" onAction="#buyLogs" prefHeight="80.0"
                         prefWidth="207.0" text="Buy Logs">
                     <font>
                         <Font name="Segoe UI Black" size="15.0"/>

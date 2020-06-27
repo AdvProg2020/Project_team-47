@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Seller extends User {
-    private String companyName;
-    private String companyInfo;
     private final ArrayList<Log> sellLogs;
     private final ArrayList<Product> allProducts;
     private final ArrayList<Off> allOff;
+    private String companyName;
+    private String companyInfo;
     private double money;
 
 

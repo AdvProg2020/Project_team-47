@@ -9,6 +9,7 @@ public class RegisterAndLoginPage extends Page {
     private static Page page;
     private static Page nextPageForCustomer;
     private static Page nextPageForSeller;
+
     protected RegisterAndLoginPage(String scenePath, Page nextPageForCustomer, Page nextPageForSeller) {
         super(scenePath);
         RegisterAndLoginPage.nextPageForCustomer = nextPageForCustomer;
@@ -25,14 +26,14 @@ public class RegisterAndLoginPage extends Page {
         return nextPageForSeller;
     }
 
+    public static Page getInstance(Page nextPageForCustomer, Page nextPageForSeller) {
+        if (page == null)
+            page = new RegisterAndLoginPage("/fxml/registerAndLoginMenu/registerAndLogin.fxml", nextPageForCustomer, nextPageForSeller);
+        return page;
+    }
+
     @Override
     public PageController getController() {
         return RegisterAndLoginController.getInstance();
-    }
-
-    public static Page getInstance(Page nextPageForCustomer, Page nextPageForSeller) {
-        if(page==null)
-            page = new RegisterAndLoginPage("/fxml/registerAndLoginMenu/registerAndLogin.fxml", nextPageForCustomer, nextPageForSeller);
-        return page;
     }
 }

@@ -1,12 +1,16 @@
 package controller.product;
 
 import controller.Command;
+import controller.Controller;
 import model.category.Category;
 import model.category.MainCategory;
+import model.discount.Off;
 import model.ecxeption.DebugException;
 import model.ecxeption.Exception;
+import model.ecxeption.common.DateException;
 import model.ecxeption.common.NullFieldException;
 import model.ecxeption.common.NumberException;
+import model.ecxeption.common.OffDoesntExistException;
 import model.ecxeption.product.CategoryDoesntExistException;
 import model.ecxeption.user.UserNotExistException;
 import model.others.ClientFilter;
@@ -14,6 +18,7 @@ import model.others.Filter;
 import model.others.SpecialProperty;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
+import model.user.Seller;
 import model.user.User;
 
 import java.util.ArrayList;
@@ -99,16 +104,10 @@ class FilterCommonCommand extends FilterCommands {
     private ServerMessage showAvailableFilter() {
         ArrayList<ClientFilter> availableFilters = new ArrayList<>();
         Category category = getCategoryInFilter();
-        availableFilters.add(new ClientFilter("Price", "numeric", "%", "Price"));
-        availableFilters.add(new ClientFilter("Score", "numeric", "", "Score"));
-        availableFilters.add(new ClientFilter("Category", "text", "", "Main Category"));
-        availableFilters.add(new ClientFilter("Category", "text", "", "Sub Category"));
-        availableFilters.add(new ClientFilter("Common", "text", "", "Name", "Brand", "Seller"));
-        availableFilters.add(new ClientFilter("availability", "check box", "", "Yes", "No"));
         if (category != null) {
             for (SpecialProperty property : category.getSpecialProperties()) {
-                availableFilters.add(new ClientFilter("Special Property", property.getType(),
-                        property.getUnit(), property.getKey()));
+                availableFilters.add(new ClientFilter(property.getKey(), property.getType(),
+                        property.getUnit()));
             }
         }
         return sendAnswer(availableFilters, "filter");
@@ -140,7 +139,7 @@ class AddFilterCommand extends FilterCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws NullFieldException, CategoryDoesntExistException,
-            DebugException, UserNotExistException, NumberException {
+            DebugException, UserNotExistException, NumberException, OffDoesntExistException, DateException {
         HashMap<String, String> req = getReqInfo(request);
         containNullField(req.get("filter key"), req.get("first filter value"), req.get("second filter value"));
         filterBy(req.get("filter key"), req.get("first filter value"), req.get("second filter value"));
@@ -152,7 +151,7 @@ class AddFilterCommand extends FilterCommands {
 
     }
 
-    private void filterBy(String filterKey, String firstFilterValue, String secondFilterValue) throws NumberException, DebugException, CategoryDoesntExistException, UserNotExistException {
+    private void filterBy(String filterKey, String firstFilterValue, String secondFilterValue) throws NumberException, DebugException, CategoryDoesntExistException, UserNotExistException, OffDoesntExistException, DateException {
         deleteLastFilter(filterKey);
         int flag = 1;
         switch (filterKey) {
@@ -164,6 +163,12 @@ class AddFilterCommand extends FilterCommands {
             case "category" -> addCategoryFilter(firstFilterValue);
             case "sub-category" -> addSubCategoryFilter(firstFilterValue);
             case "availability" -> addAvailabilityFilter(firstFilterValue);
+            case "be in off" -> addOffFilter();
+            case "be in special off" -> addOffFilter(firstFilterValue);
+            case "off percent" -> addOffPercentFilter(firstFilterValue, secondFilterValue);
+            case "off seller" -> addOffSellerFilter(firstFilterValue);
+            case "off time" -> addOffTimeFilter(firstFilterValue, secondFilterValue);
+            case "not finished off" -> filters().add(new Filter("off", "not finished off"));
             default -> flag = 0;
         }
         if (flag == 1)
@@ -173,6 +178,57 @@ class AddFilterCommand extends FilterCommands {
             throw new DebugException();
 
         addPropertyFilter(category, filterKey, firstFilterValue, secondFilterValue);
+    }
+
+    private void addOffFilter(String offId) throws OffDoesntExistException {
+        Off.getOffById(offId);
+        Filter filter = new Filter();
+        filter.setType("off");
+        filter.setFilterKey("be in special off");
+        filter.setFirstFilterValue(offId);
+        filters().add(filter);
+    }
+
+    private void addOffPercentFilter(String firstFilterValue, String secondFilterValue) throws NumberException {
+        try {
+            int min = Integer.parseInt(firstFilterValue);
+            int max = Integer.parseInt(secondFilterValue);
+            if (min > max || min < 0 || max > 100) throw new NumberFormatException();
+            Filter filter = new Filter();
+            filter.setType("off");
+            filter.setFirstInt(min);
+            filter.setSecondInt(max);
+            filter.setFilterKey("off percent");
+            filters().add(filter);
+        } catch (NumberFormatException e) {
+            throw new NumberException("Please enter valid number!!");
+        }
+    }
+
+    private void addOffSellerFilter(String username) throws UserNotExistException {
+        if (!(User.getUserByUsername(username) instanceof Seller)) throw new UserNotExistException();
+        Filter filter = new Filter();
+        filter.setType("off");
+        filter.setFilterKey("off seller");
+        filter.setFirstFilterValue(username);
+        filters().add(filter);
+    }
+
+    private void addOffTimeFilter(String startDate, String finishDate) throws DateException {
+        Controller.getDateWithString(startDate);
+        Controller.getDateWithString(finishDate);
+        Filter filter = new Filter();
+        filter.setType("off");
+        filter.setFilterKey("off time");
+        filter.setFirstFilterValue(startDate);
+        filter.setSecondFilterValue(finishDate);
+    }
+
+    private void addOffFilter() {
+        Filter filter = new Filter();
+        filter.setType("off");
+        filter.setFilterKey("be in off");
+        filters().add(filter);
     }
 
     private void addPropertyFilter(Category category, String filterKey, String firstFilterValue, String secondFilterValue)
@@ -295,15 +351,14 @@ class AddFilterCommand extends FilterCommands {
     }
 
     private void deleteLastFilter(String filterKey) {
-        int flag = 1;
         if (Pattern.matches("(category|sub-category)", filterKey))
-            flag = 0;
-        for (Filter filter : filters())
-            if (flag == 0) {
-                if (filter.getFilterKey().contains(filterKey)) filters().remove(filter);
-            } else {
-                if (filter.getFilterKey().equals(filterKey)) filters().remove(filter);
-            }
+            disableCategoriesFilter();
+        else filters().removeIf(filter -> filter.getFilterKey().equals(filterKey));
+
+    }
+
+    private void disableCategoriesFilter() {
+        filters().removeIf(filter -> !Pattern.matches("(price|score|brand|name|seller|availability)", filter.getFilterKey()));
     }
 }
 
@@ -334,12 +389,6 @@ class DisableFilterCommand extends FilterCommands {
     }
 
     private void disableFilter(String filterKey) throws DebugException {
-        for (Filter filter : filters()) {
-            if (filter.getFilterKey().equalsIgnoreCase(filterKey)) {
-                removeFilter(filter);
-                return;
-            }
-        }
-        throw new DebugException();
+        filters().removeIf(filter -> filter.getFilterKey().equalsIgnoreCase(filterKey));
     }
 }

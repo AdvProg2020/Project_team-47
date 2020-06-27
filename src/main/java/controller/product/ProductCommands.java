@@ -152,7 +152,7 @@ class AddToCartCommand extends ProductCommands {
     private static AddToCartCommand command;
 
     private AddToCartCommand() {
-        this.name = "(view product in cart|show product)";
+        this.name = "add to cart";
     }
 
     public static AddToCartCommand getInstance() {
@@ -165,8 +165,8 @@ class AddToCartCommand extends ProductCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws NullFieldException, UserTypeException.NeedCustomerException, UserNotExistException, DebugException {
-        containNullField("seller username");
-        canUserDo();
+        containNullField(request.getHashMap().get("seller username"));
+
         addToCart(request.getHashMap().get("seller username"));
         return actionCompleted();
     }
@@ -237,7 +237,6 @@ class AddCommentCommand extends ProductCommands {
             throw new DebugException();
         } else {
             product().addComment(title, content, ((Customer) getLoggedUser()));
-            actionCompleted();
         }
     }
 

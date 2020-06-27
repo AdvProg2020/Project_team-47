@@ -2,6 +2,7 @@ package graphic.registerAndLoginMenu.loginMenu;
 
 import graphic.GraphicView;
 import graphic.PageController;
+import graphic.TemplatePage;
 import graphic.panel.customer.CustomerPage;
 import graphic.panel.manager.ManagerPage;
 import graphic.panel.seller.SellerPage;
@@ -19,6 +20,13 @@ import java.util.ResourceBundle;
 
 public class LoginMenuController extends PageController {
     private static boolean shouldBack;
+    @FXML
+    private TextField username;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private Text error;
+
     public static Scene getScene() {
         shouldBack = false;
         return getScene("/fxml/registerAndLoginMenu/loginMenu.fxml");
@@ -28,13 +36,6 @@ public class LoginMenuController extends PageController {
         shouldBack = true;
         return getScene("/fxml/registerAndLoginMenu/loginMenu.fxml");
     }
-
-    @FXML
-    private TextField username;
-    @FXML
-    private PasswordField password;
-    @FXML
-    private Text error;
 
     @Override
     public void clearPage() {
@@ -75,13 +76,16 @@ public class LoginMenuController extends PageController {
 
     private void successfulLogin(String userType) {
         GraphicView.getInstance().setMyUsername(username.getText());
+        GraphicView.getInstance().setAccountType(userType);
+        GraphicView.getInstance().setLoggedIn(true);
         if (shouldBack) {
+            TemplatePage.getInstance().update();
             GraphicView.getInstance().back();
         } else {
             switch (userType) {
                 case "manager" -> GraphicView.getInstance().changeScene(ManagerPage.getScene());
                 case "seller" -> GraphicView.getInstance().changeScene(SellerPage.getScene());
-                case "customer"-> GraphicView.getInstance().changeScene(CustomerPage.getInstance());
+                case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getScene());
             }
         }
     }

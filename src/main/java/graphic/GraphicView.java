@@ -1,20 +1,22 @@
 package graphic;
 
 import graphic.mainMenu.MainMenuPage;
-import graphic.panel.customer.CustomerPage;
-import graphic.panel.seller.SellerPage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
 
 public class GraphicView {
     private static GraphicView graphicView;
     private final ArrayList<Scene> scenes;
+    MediaPlayer backGroundMediaPlayer;
+    MediaPlayer shortMediaPlayer;
     private Stage window;
     private boolean loggedIn;
     private String accountType;//can be seller,customer,manager
@@ -35,6 +37,7 @@ public class GraphicView {
         window.setOnCloseRequest((event) -> System.exit(0));
         window.setTitle("AP SHOP");
         window.setResizable(false);
+        //playBackGroundAudio("background1.mp3");
         goToFirstPage();
         window.show();
     }
@@ -51,6 +54,12 @@ public class GraphicView {
         window.setScene(scene);
     }
 
+    public void changeSceneWithoutUpdate(Page page) {
+        //this function will get a page and change window scene to page's scene
+        Scene scene = page.getScene();
+        scenes.add(page.getScene());
+        window.setScene(scene);
+    }
 
     public void changeScene(Scene scene) {
         scenes.add(scene);
@@ -94,7 +103,6 @@ public class GraphicView {
         this.accountType = accountType;
     }
 
-
     public String getMyUsername() {
         return myUsername;
     }
@@ -116,5 +124,23 @@ public class GraphicView {
         alert.setTitle("error");
         alert.setHeaderText(error);
         alert.showAndWait();
+    }
+
+    public void playBackGroundAudio(String audioPath) {
+        Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
+        backGroundMediaPlayer = new MediaPlayer(media);
+        backGroundMediaPlayer.play();
+
+        backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio("src\\main\\resources\\Music\\" + audioPath));
+    }
+
+    public void playShortAudios(String audioPath) {
+        Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
+        shortMediaPlayer = new MediaPlayer(media);
+        shortMediaPlayer.play();
+    }
+
+    public boolean getLoginStatus() {
+        return loggedIn;
     }
 }

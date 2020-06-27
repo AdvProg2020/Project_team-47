@@ -126,7 +126,7 @@ public class RequestInfo {
             if (changeField != null) stringBuilder.append("\nChange Field: ").append(changeField);
             if (newValue != null) stringBuilder.append("\nNew Value: ").append(newValue);
             if (changeType != null) stringBuilder.append("\nChange Type: ").append(changeType);
-            if (property != null&&property.getType()!=null&&property.getKey()!=null)
+            if (property != null && property.getType() != null && property.getKey() != null)
                 stringBuilder.append("\nSpecial Property: ").append(property.toString());
             return stringBuilder.toString();
         }

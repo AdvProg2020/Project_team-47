@@ -20,6 +20,8 @@ import java.util.ResourceBundle;
 
 public class AddDiscountPage extends PageController {
     @FXML
+    private TextField userNumber;
+    @FXML
     private TextField percent;
     @FXML
     private TextField usableTime;
@@ -42,7 +44,22 @@ public class AddDiscountPage extends PageController {
 
     @FXML
     private void giveGift() {
-        // TODO: 6/25/2020
+        ClientMessage request = new ClientMessage("give gift");
+        HashMap<String, String> reqInfo = new HashMap<>();
+        reqInfo.put("start-time", startAt.getText());
+        reqInfo.put("finish-time", finishAt.getText());
+        reqInfo.put("number of user", userNumber.getText());
+        reqInfo.put("percent", percent.getText());
+        reqInfo.put("max-usable-time", usableTime.getText());
+        reqInfo.put("max-discount-amount", maxAmount.getText());
+        request.setHashMap(reqInfo);
+        ServerMessage answer = send(request);
+        if (answer.getType().equalsIgnoreCase("Error")) {
+            error.setText(answer.getErrorMessage());
+            error.setVisible(true);
+        } else {
+            update();
+        }
     }
 
     @FXML

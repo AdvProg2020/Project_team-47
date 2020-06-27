@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -135,7 +134,7 @@ public class AddProductPage extends PageController {
                 return;
             }
         }
-        addToSeller(id.getText(),priceAddingSeller.getText(),numberInStockAddingSeller.getText());
+        addToSeller(id.getText(), priceAddingSeller.getText(), numberInStockAddingSeller.getText());
     }
 
     private void setAddToSellerError(String error) {
@@ -154,7 +153,9 @@ public class AddProductPage extends PageController {
         if (answer.getType().equalsIgnoreCase("Error")) {
             addSellerError.setText(answer.getErrorMessage());
             addSellerError.setVisible(true);
-        } else{ update();}
+        } else {
+            update();
+        }
     }
 
     @FXML
@@ -173,10 +174,10 @@ public class AddProductPage extends PageController {
     private void setProperties() {
         if (image == null) setGoToPropertyError("Please choose an picture");
         else if (productName.getText().isEmpty()) setGoToPropertyError("Please enter a name!!");
-        else if(!doubleIsValid(price.getText())) setGoToPropertyError("Please enter valid price!!");
-        else if(!integerIsValid(numberInStock.getText())) setGoToPropertyError("Please enter valid number in stock!!");
-        else if(category.getText().isEmpty()) setGoToPropertyError("Please enter a category name!!");
-        else if(subCategory.getText().isEmpty()) setGoToPropertyError("Please enter a sub category name!!");
+        else if (!doubleIsValid(price.getText())) setGoToPropertyError("Please enter valid price!!");
+        else if (!integerIsValid(numberInStock.getText())) setGoToPropertyError("Please enter valid number in stock!!");
+        else if (category.getText().isEmpty()) setGoToPropertyError("Please enter a category name!!");
+        else if (subCategory.getText().isEmpty()) setGoToPropertyError("Please enter a sub category name!!");
         else if (company.getText().isEmpty()) setGoToPropertyError("Please enter a company name!!");
         else if (description.getText().isEmpty()) setGoToPropertyError("Please enter description!!");
         else if (categoryIsValid(subCategory.getText())) goToPropertiesPage();
@@ -260,31 +261,31 @@ public class AddProductPage extends PageController {
 
     private String getPropertyValue(HBox hBox) {
         for (Node child : hBox.getChildren()) {
-            if(child instanceof TextField) return ((TextField) child).getText();
+            if (child instanceof TextField) return ((TextField) child).getText();
         }
         return null;
     }
 
     private String getPropertyType(HBox hBox) {
         for (Node child : hBox.getChildren()) {
-            if(child instanceof TextField) return ((TextField)child).getPromptText();
+            if (child instanceof TextField) return ((TextField) child).getPromptText();
         }
         return null;
     }
 
     private boolean propertiesIsValid() {
         for (Node child : propertiesVBox.getChildren()) {
-            if(child instanceof HBox && !propertyIsValid((HBox)child)) return false;
+            if (child instanceof HBox && !propertyIsValid((HBox) child)) return false;
         }
         return true;
     }
 
     private boolean propertyIsValid(HBox node) {
-        for (Node  child: node.getChildren()) {
+        for (Node child : node.getChildren()) {
             if (child instanceof TextField) {
                 TextField temp = (TextField) child;
-                if(temp.getText().isEmpty()) return false;
-                if ( temp.getPromptText().equalsIgnoreCase("numeric") && !doubleIsValid(temp.getText()))
+                if (temp.getText().isEmpty()) return false;
+                if (temp.getPromptText().equalsIgnoreCase("numeric") && !doubleIsValid(temp.getText()))
                     return false;
             }
         }
@@ -310,7 +311,7 @@ public class AddProductPage extends PageController {
     }
 
     private boolean integerIsValid(String number) {
-        if(number.isEmpty()) return false;
+        if (number.isEmpty()) return false;
         try {
             Integer.parseInt(number);
             return true;
@@ -321,7 +322,7 @@ public class AddProductPage extends PageController {
 
 
     private boolean doubleIsValid(String number) {
-        if(number.isEmpty()) return false;
+        if (number.isEmpty()) return false;
         try {
             Double.parseDouble(number);
             return true;

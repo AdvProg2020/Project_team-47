@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.Scene?>
+<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../Others/Stylesheet.css"
+       xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.customer.DiscountPage">
+    <root>
+        <AnchorPane prefHeight="400.0" prefWidth="600.0">
+            <children>
+                <TableView fx:id="table" layoutX="18.0" layoutY="21.0" prefHeight="658.0" prefWidth="830.0">
+                    <columns>
+                        <TableColumn fx:id="code" prefWidth="86.13334083557129" text="Code"/>
+                        <TableColumn fx:id="percent" prefWidth="102.66667175292969" text="Percent"/>
+                        <TableColumn fx:id="start" prefWidth="175.4666290283203" text="Start At"/>
+                        <TableColumn fx:id="finish" prefWidth="172.53335571289062" text="Finish At"/>
+                        <TableColumn fx:id="maxUsableTime" prefWidth="121.60003662109375" text="Max Usable Time"/>
+                        <TableColumn fx:id="maxDiscountAmount" minWidth="8.000030517578125"
+                                     prefWidth="174.40008544921875" text="Max Discount Amount"/>
+                    </columns>
+                </TableView>
+                <Button layoutX="888.0" layoutY="576.0" mnemonicParsing="false" onAction="#back" prefHeight="48.0"
+                        prefWidth="85.0" text="Back"/>
+            </children>
+        </AnchorPane>
+    </root>
+</Scene>
