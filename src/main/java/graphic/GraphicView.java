@@ -4,8 +4,11 @@ import graphic.mainMenu.MainMenuPage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -32,6 +35,7 @@ public class GraphicView {
         window.setOnCloseRequest((event) -> System.exit(0));
         window.setTitle("AP SHOP");
         window.setResizable(false);
+        playBackGroundAudio("background1.mp3");
         goToFirstPage();
         window.show();
     }
@@ -120,6 +124,22 @@ public class GraphicView {
         alert.setTitle("error");
         alert.setHeaderText(error);
         alert.showAndWait();
+    }
+
+    MediaPlayer backGroundMediaPlayer;
+    public void playBackGroundAudio(String audioPath) {
+        Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
+        backGroundMediaPlayer = new MediaPlayer(media);
+        backGroundMediaPlayer.play();
+
+        backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio("src\\main\\resources\\Music\\" + audioPath));
+    }
+
+    MediaPlayer shortMediaPlayer;
+    public void playShortAudios(String audioPath) {
+        Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
+        shortMediaPlayer = new MediaPlayer(media);
+        shortMediaPlayer.play();
     }
 
     public boolean getLoginStatus() {
