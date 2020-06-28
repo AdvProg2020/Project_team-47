@@ -47,6 +47,10 @@ public abstract class PageController implements Initializable {
         return ControllerAndViewConnector.commandProcess(request);
     }
 
+    public static ServerMessage send1(ClientMessage request) {
+        return ControllerAndViewConnector.commandProcess(request);
+    }
+
     //this function will use to clear scenes
     public abstract void clearPage();
 
