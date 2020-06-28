@@ -131,7 +131,7 @@ public class GraphicView {
         backGroundMediaPlayer = new MediaPlayer(media);
         backGroundMediaPlayer.play();
 
-        backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio("src\\main\\resources\\Music\\" + audioPath));
+        backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio(audioPath));
     }
 
     public void playShortAudios(String audioPath) {
