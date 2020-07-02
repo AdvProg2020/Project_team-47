@@ -8,11 +8,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Lighting;
 import javafx.scene.effect.MotionBlur;
-import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import model.send.receive.ProductInfo;
@@ -96,7 +93,7 @@ public class ProductPane implements Initializable {
 
     private void initializeForCartProduct(ProductInfo productInfo) {
         this.category.setText(productInfo.getMainCategory());
-        this.imageView.setImage(PageController.byteToImage(productInfo.getFile()));
+        new Thread(() -> this.imageView.setImage(PageController.byteToImage(productInfo.getFile()))).start();
         this.score.setText(productInfo.getScoreAverage() + "");
         this.name.setText(productInfo.getName());
         this.id.setText(productInfo.getId());
@@ -126,13 +123,13 @@ public class ProductPane implements Initializable {
     private void initializeForProductPage(ProductInfo productInfo) {
         this.category.setText(productInfo.getMainCategory());
         this.score.setText(productInfo.getScoreAverage() + "");
-        this.imageView.setImage(PageController.byteToImage(productInfo.getFile()));
+        new Thread(() -> this.imageView.setImage(PageController.byteToImage(productInfo.getFile()))).start();
         this.id.setText(productInfo.getId());
         this.name.setText(productInfo.getName());
         this.numberInStock.setText("" + productInfo.getNumberInStock());
         this.price.setText(getPrice(productInfo));
         if (productInfo.getNumberInStock() <= 0) {
-            this.imageView.setEffect(new MotionBlur(0,10));
+            this.imageView.setEffect(new MotionBlur(0, 10));
         }
         if (productInfo.getSubCategory().isEmpty()) {
             this.subCategory.setVisible(false);
@@ -149,7 +146,7 @@ public class ProductPane implements Initializable {
     private void initializeForSellerProduct(ProductInfo productInfo) {
         this.category.setText(productInfo.getMainCategory());
         this.score.setText(productInfo.getScoreAverage() + "");
-        this.imageView.setImage(PageController.byteToImage(productInfo.getFile()));
+        new Thread(() -> this.imageView.setImage(PageController.byteToImage(productInfo.getFile()))).start();
         this.id.setText(productInfo.getId());
         this.name.setText(productInfo.getName());
         this.numberInStock.setText("" + productInfo.getNumberInStock(GraphicView.getInstance().getMyUsername()));

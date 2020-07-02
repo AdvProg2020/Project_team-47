@@ -11,10 +11,10 @@ public class OffInfo {
     private final Date finishTime;
     private final int percent;
     private final ArrayList<ProductInfo> products;
+    private final HashMap<String, String> productsNameId;
     private String offId;
     private String offStatus;
     private String sellerUsername;
-    private final HashMap<String, String> productsNameId;
 
     public OffInfo(Date startTime, Date finishTime, int percent) {
         this.startTime = startTime;

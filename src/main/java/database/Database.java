@@ -95,11 +95,6 @@ public class Database {
         folder.mkdirs();
     }
 
-    private static boolean isThereFolder(String path) {
-        File folder = new File(path);
-        return folder.exists();
-    }
-
     static void addNotVerifiedUser(UserData userData, String username) {
         saveInFile(userData, Path.NOT_VERIFIED_USERS_FOLDER.getPath() + username + ".json");
     }
@@ -213,8 +208,8 @@ public class Database {
     }
 
     private void creatingFolders() {
-        for (Path pa : Path.values()) {
-            createFolder(pa.getPath());
+        for (Path path : Path.values()) {
+            createFolder(path.getPath());
         }
     }
 

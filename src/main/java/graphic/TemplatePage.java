@@ -1,11 +1,11 @@
 package graphic;
 
+import graphic.login.LoginPage;
+import graphic.login.RegisterPage;
 import graphic.panel.AccountPage;
 import graphic.panel.customer.CustomerPage;
 import graphic.panel.manager.ManagerPage;
 import graphic.panel.seller.SellerPage;
-import graphic.login.RegisterPage;
-import graphic.login.LoginPage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

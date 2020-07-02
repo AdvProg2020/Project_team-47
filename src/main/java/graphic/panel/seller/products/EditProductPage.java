@@ -112,7 +112,7 @@ public class EditProductPage extends PageController {
     }
 
     private void initializeInfos() {
-        image.setImage(PageController.byteToImage(product.getFile()));
+        new Thread(() -> image.setImage(PageController.byteToImage(product.getFile()))).start();
         price.setText("" + product.getPrice(GraphicView.getInstance().getMyUsername()));
         numberInStock.setText("" + product.getNumberInStock(GraphicView.getInstance().getMyUsername()));
         id.setText(product.getId());

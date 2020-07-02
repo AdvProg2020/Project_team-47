@@ -47,6 +47,7 @@ abstract public class User {
     private Product productPage;
     private BuyLog purchaseLog;
     private DiscountCode purchaseCode;
+
     public User() {
         this.offFilters = new ArrayList<>();
         this.productFilters = new ArrayList<>();
@@ -199,6 +200,14 @@ abstract public class User {
         User.usedUsernames = usedUsernames;
     }
 
+    public static ArrayList<User> getAllUsers() {
+        return allUsers;
+    }
+
+    public static void setAllUsers(ArrayList<User> allUsers) {
+        User.allUsers = allUsers;
+    }
+
     public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
     }
@@ -265,14 +274,6 @@ abstract public class User {
 
     public void setProductPage(Product productPage) {
         this.productPage = productPage;
-    }
-
-    public static ArrayList<User> getAllUsers() {
-        return allUsers;
-    }
-
-    public static void setAllUsers(ArrayList<User> allUsers) {
-        User.allUsers = allUsers;
     }
 
     public ArrayList<Filter> getOffFilters() {
@@ -360,12 +361,12 @@ abstract public class User {
         this.username = username;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {

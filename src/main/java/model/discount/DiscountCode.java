@@ -137,7 +137,8 @@ public class DiscountCode extends Discount {
     }
 
     public boolean canThisPersonUseCode(User user) {
-        if(startTime.after(Controller.getCurrentTime())||finishTime.before(Controller.getCurrentTime())) return false;
+        if (startTime.after(Controller.getCurrentTime()) || finishTime.before(Controller.getCurrentTime()))
+            return false;
         int usedTime = userUsedTimeHashMap.get(user);
         return usedTime < maxUsableTime;
     }

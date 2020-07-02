@@ -64,7 +64,7 @@ class RegisterCommand extends LoginCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
-        containNullField(request.getHashMap(),request.getFile());
+        containNullField(request.getHashMap(), request.getFile());
         checkPrimaryErrors(request);
         avatar = request.getFile();
         register(request.getHashMap());
@@ -74,7 +74,7 @@ class RegisterCommand extends LoginCommands {
     @Override
     public void checkPrimaryErrors(ClientMessage request) throws Exception {
         HashMap<String, String> registerInformationHashMap = request.getHashMap();
-        if(request.getFile()==null) throw new CommonException("Please select a picture!!");
+        if (request.getFile() == null) throw new CommonException("Please select a picture!!");
         checkRegisterInfoKey(registerInformationHashMap);
         if (registerInformationHashMap.get("type").equals("manager") && User.isThereManager()) {
             throw new ManagerExistenceException.ManagerExist();
@@ -113,13 +113,13 @@ class RegisterCommand extends LoginCommands {
 
     private void registerUser(HashMap<String, String> userInformation, String userType) throws RegisterException {
         User newUser = switch (userType) {
-            case "customer" -> new Customer(userInformation,avatar);
-            case "seller" -> new Seller(userInformation,avatar);
-            case "manager" -> new Manager(userInformation,avatar);
+            case "customer" -> new Customer(userInformation, avatar);
+            case "seller" -> new Seller(userInformation, avatar);
+            case "manager" -> new Manager(userInformation, avatar);
             default -> throw new RegisterException("Enter valid type!!");
         };
         newUser.emailVerification();
-        //newUser.confirmEmail();
+        newUser.confirmEmail();
         setLoggedUser(newUser);
     }
 

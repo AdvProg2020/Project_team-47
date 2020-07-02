@@ -1,6 +1,7 @@
 package graphic.panel.seller.offs;
 
 import controller.Controller;
+import graphic.GraphicView;
 import graphic.PageController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -133,11 +134,11 @@ public class ShowOffPage extends PageController {
             checkMinute();
             ClientMessage clientMessage = new ClientMessage("edit off");
             HashMap<String, String> reqInfo = new HashMap<>();
-            reqInfo.put("off info", offInfo.getOffId());
+            reqInfo.put("off id", offInfo.getOffId());
             reqInfo.put("field", editType);
             reqInfo.put("change type", "");
             reqInfo.put("new value", dayTextField.getText() + "-" + monthTextField.getText() +
-                    "-" + yearTextField.getText() + " " + hourTextField + ":" + minuteTextFiled);
+                    "-" + yearTextField.getText() + " " + hourTextField.getText() + ":" + minuteTextFiled.getText());
             clientMessage.setHashMap(reqInfo);
             ServerMessage answer = send(clientMessage);
             if (answer.getType().equals("Error"))
@@ -214,7 +215,7 @@ public class ShowOffPage extends PageController {
 
                 ClientMessage clientMessage = new ClientMessage("edit off");
                 HashMap<String, String> reqInfo = new HashMap<>();
-                reqInfo.put("off info", offInfo.getOffId());
+                reqInfo.put("off id", offInfo.getOffId());
                 reqInfo.put("field", editType);
                 reqInfo.put("change type", "");
                 reqInfo.put("new value", percentTextField.getText());
@@ -314,6 +315,10 @@ public class ShowOffPage extends PageController {
         initializeOff(offInfo);
         table.getItems().clear();
         table.getItems().addAll(getObservableList(offInfo.getProductsNameId()));
+    }
+
+    public void back() {
+        GraphicView.getInstance().back();
     }
 
     public static class ProductId {

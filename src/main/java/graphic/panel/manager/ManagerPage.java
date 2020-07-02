@@ -21,8 +21,10 @@ import java.util.ResourceBundle;
 
 public class ManagerPage extends PageController {
 
-    @FXML private ImageView avatar;
-    @FXML private TextField productId;
+    @FXML
+    private ImageView avatar;
+    @FXML
+    private TextField productId;
 
     public static Scene getScene() {
         return getScene("/fxml/panel/manager/ManagerPage.fxml");
@@ -87,7 +89,7 @@ public class ManagerPage extends PageController {
 
     public void removeProduct() {
         ClientMessage request = new ClientMessage("remove product manager");
-        HashMap<String,String> reqInfo = new HashMap<>();
+        HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("id", productId.getText());
         request.setHashMap(reqInfo);
         ServerMessage answer = send(request);

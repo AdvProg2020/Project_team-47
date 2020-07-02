@@ -171,7 +171,7 @@ class CreateManagerCommand extends ManageUsersCommands {
     }
 
     private void registerManager(HashMap<String, String> userInformation) {
-        User newUser = new Manager(userInformation,avatar);
+        User newUser = new Manager(userInformation, avatar);
         newUser.emailVerification();
         newUser.confirmEmail();
     }

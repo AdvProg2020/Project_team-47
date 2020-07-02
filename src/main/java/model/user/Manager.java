@@ -12,8 +12,8 @@ public class Manager extends User {
         super();
     }
 
-    public Manager(HashMap<String, String> userInfo,byte[] avatar) {
-        super(userInfo,avatar);
+    public Manager(HashMap<String, String> userInfo, byte[] avatar) {
+        super(userInfo, avatar);
     }
 
     @SuppressWarnings("unchecked")

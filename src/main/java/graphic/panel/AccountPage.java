@@ -19,7 +19,8 @@ import java.util.ResourceBundle;
 
 public class AccountPage extends PageController {
     private static PageController controller;
-    @FXML private ImageView avatar;
+    @FXML
+    private ImageView avatar;
     @FXML
     private Label companyNameLabel;
     @FXML
@@ -82,10 +83,10 @@ public class AccountPage extends PageController {
         lastName.setText(user.getLastName());
         phoneNumber.setText(user.getPhoneNumber());
         email.setText(user.getEmail());
-        avatar.setImage(PageController.byteToImage(user.getAvatar()));
+        new Thread(() -> avatar.setImage(PageController.byteToImage(user.getAvatar()))).start();
         if (!user.getType().equalsIgnoreCase("manager")) {
             money.setText("Money: " + user.getMoney());
-        }else{
+        } else {
             money.setVisible(false);
         }
         if (user.getType().equalsIgnoreCase("seller")) {

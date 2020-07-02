@@ -69,7 +69,7 @@
                 <Font size="22.0"/>
             </font>
         </Button>
-        <Button layoutX="373.0" layoutY="84.0" mnemonicParsing="false" onAction="#personalInfo" prefHeight="47.0"
+        <Button layoutX="373.0" layoutY="84.0" mnemonicParsing="false" onAction="#showProducts" prefHeight="47.0"
                 prefWidth="274.0" text="Show Products" GridPane.columnIndex="4" GridPane.columnSpan="3">
             <font>
                 <Font size="22.0"/>

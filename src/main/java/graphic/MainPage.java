@@ -1,7 +1,7 @@
 package graphic;
 
-import graphic.login.RegisterPage;
 import graphic.login.LoginPage;
+import graphic.login.RegisterPage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

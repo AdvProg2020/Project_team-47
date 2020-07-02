@@ -38,10 +38,12 @@ public class Email {
     }
 
     public static void checkPassword() {
-        Email checkingEmailPassword = new Email(Email.email);
-        checkingEmailPassword.subject = "Checking Password";
-        checkingEmailPassword.content = "Successful";
-        checkingEmailPassword.sendWithoutThread();
+        new Thread(() -> {
+            Email checkingEmailPassword = new Email(Email.email);
+            checkingEmailPassword.subject = "Checking Password";
+            checkingEmailPassword.content = "Successful";
+            checkingEmailPassword.sendWithoutThread();
+        }).start();
     }
 
     private void sendWithoutThread() {

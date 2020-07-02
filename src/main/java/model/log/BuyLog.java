@@ -96,13 +96,16 @@ public class BuyLog extends Log {
             SellLog sellLog;
             if (sellerBuyLogHashMap.containsKey(username)) {
                 sellLog = sellerBuyLogHashMap.get(username);
-                sellLog.addProduct(productInLog.product);
+                sellLog.addProduct(productInLog.product, productInLog.number);
             } else {
                 sellLog = new SellLog(productInLog.seller);
                 sellLog.customer = this.customer;
-                sellLog.addProduct(productInLog.product);
+                sellLog.addProduct(productInLog.product, productInLog.number);
                 sellLog.purchaseStatus = this.purchaseStatus;
                 sellerBuyLogHashMap.put(username, sellLog);
+                sellLog.setAddress(this.address);
+                sellLog.setPhoneNumber(this.phoneNumber);
+                sellLog.setPostalCode(this.postalCode);
             }
         }
 

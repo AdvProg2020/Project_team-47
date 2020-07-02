@@ -20,7 +20,8 @@ import java.util.ResourceBundle;
 
 public class SellerPage extends PageController {
     private static PageController controller;
-    @FXML private ImageView avatar;
+    @FXML
+    private ImageView avatar;
 
     public static PageController getInstance() {
         return controller;

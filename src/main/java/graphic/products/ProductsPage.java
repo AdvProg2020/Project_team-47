@@ -246,16 +246,16 @@ public class ProductsPage extends PageController {
     }
 
     private void initializeProducts(ArrayList<ProductInfo> products) {
-        pagination.setPageCount((products.size() - 1) / 3 + 1);
+        pagination.setPageCount((products.size() - 1) / 5 + 1);
         pagination.setPageFactory((Integer pageNum) -> pageInitialize(pageNum, products));
     }
 
     private VBox pageInitialize(int pageNum, ArrayList<ProductInfo> products) {
         VBox vBox = new VBox();
         try {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 5; i++) {
                 try {
-                    ProductPane.setProductPage(products.get(pageNum * 3 + i));
+                    ProductPane.setProductPage(products.get(pageNum * 5 + i));
                     vBox.getChildren().add(FXMLLoader.load(getClass().getResource("/fxml/panel/ProductPane.fxml")));
                 } catch (IOException e) {
                     e.printStackTrace();

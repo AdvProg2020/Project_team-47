@@ -43,11 +43,11 @@ public abstract class PageController implements Initializable {
         }
     }
 
-    public ServerMessage send(ClientMessage request) {
+    public static ServerMessage send1(ClientMessage request) {
         return ControllerAndViewConnector.commandProcess(request);
     }
 
-    public static ServerMessage send1(ClientMessage request) {
+    public ServerMessage send(ClientMessage request) {
         return ControllerAndViewConnector.commandProcess(request);
     }
 

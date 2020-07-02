@@ -89,7 +89,7 @@
             </font>
         </Button>
         <Button layoutX="620.0" layoutY="28.0" mnemonicParsing="false" onAction="#showProduct" prefHeight="43.0"
-                prefWidth="111.0" text="Show Product">
+                prefWidth="111.0" text="Show Product" visible="false">
             <font>
                 <Font name="Segoe UI Black Italic" size="11.0"/>
             </font>
@@ -122,5 +122,11 @@
               text="Error" visible="false" wrappingWidth="254.67001342773438"/>
         <Text fx:id="editError" fill="RED" layoutX="18.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0"
               text="Error" visible="false" wrappingWidth="254.67001342773438"/>
+        <Button layoutX="15.0" layoutY="616.0" mnemonicParsing="false" onAction="#back" prefHeight="48.0"
+                prefWidth="98.0" text="Back">
+            <font>
+                <Font name="Segoe UI Black Italic" size="14.0"/>
+            </font>
+        </Button>
     </AnchorPane>
 </Scene>

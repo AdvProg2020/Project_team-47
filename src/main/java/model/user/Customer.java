@@ -30,8 +30,8 @@ public class Customer extends User {
         this.money = 10000000;
     }
 
-    public Customer(HashMap<String, String> userInfo,byte[] avatar) {
-        super(userInfo,avatar);
+    public Customer(HashMap<String, String> userInfo, byte[] avatar) {
+        super(userInfo, avatar);
         shoppingCart = new ShoppingCart();
         buyLogs = new ArrayList<>();
         discountCodes = new ArrayList<>();

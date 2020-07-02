@@ -2,7 +2,6 @@ package graphic.panel.manager;
 
 import graphic.GraphicView;
 import graphic.PageController;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;

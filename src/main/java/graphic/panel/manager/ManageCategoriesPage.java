@@ -55,7 +55,7 @@ public class ManageCategoriesPage extends PageController {
     private void updateVBox(ArrayList<CategoryInfo> categories) {
         for (CategoryInfo category : categories) {
             Label categoryLabel = new Label(category.getName());
-            categoryLabel.setOnMouseClicked(e->onCategoryClick(e,"main category",category.getName()));
+            categoryLabel.setOnMouseClicked(e -> onCategoryClick(e, "main category", category.getName()));
             categoryLabel.setFont(new Font(18));
             vBox.getChildren().add(categoryLabel);
             for (String subCategory : category.getSubCategories()) {
@@ -67,7 +67,7 @@ public class ManageCategoriesPage extends PageController {
         }
     }
 
-    private void onCategoryClick(MouseEvent event, String categoryType,String name) {
+    private void onCategoryClick(MouseEvent event, String categoryType, String name) {
         if (event.getButton() == MouseButton.SECONDARY) {
             ClientMessage request = new ClientMessage("remove " + categoryType);
             HashMap<String, String> reqInfo = new HashMap<>();

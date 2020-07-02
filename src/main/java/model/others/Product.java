@@ -735,7 +735,7 @@ public class Product {
             if (offPercent < 1) {
                 offPercent *= 100;
             }
-            return price * ((double) ((100 - offPercent) / 100));
+            return price * ((100 - offPercent) / 100.0);
         }
 
         public void decrease(int number) {

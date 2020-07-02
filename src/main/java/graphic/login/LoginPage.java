@@ -6,7 +6,6 @@ import graphic.TemplatePage;
 import graphic.panel.customer.CustomerPage;
 import graphic.panel.manager.ManagerPage;
 import graphic.panel.seller.SellerPage;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -106,7 +105,7 @@ public class LoginPage extends PageController {
     private void successfulLogin(UserInfo userInfo) {
         String userType = userInfo.getType();
 
-        GraphicView.getInstance().setAvatar(PageController.byteToImage(userInfo.getAvatar()));
+        new Thread(() -> GraphicView.getInstance().setAvatar(PageController.byteToImage(userInfo.getAvatar()))).start();
         GraphicView.getInstance().setMyUsername(username.getText());
         GraphicView.getInstance().setAccountType(userType);
         GraphicView.getInstance().setLoggedIn(true);

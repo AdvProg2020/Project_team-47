@@ -8,8 +8,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.Light;
-import javafx.scene.effect.Lighting;
 import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -84,8 +82,8 @@ public class ProductPage extends PageController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (product == null) return;
-        image.setImage(PageController.byteToImage(product.getFile()));
-        if(product.isItInOff()) image.setEffect(new SepiaTone());
+        new Thread(() -> image.setImage(PageController.byteToImage(product.getFile()))).start();
+        if (product.isItInOff()) image.setEffect(new SepiaTone());
         name.setText("Name: " + product.getName());
         id.setText("Id: " + product.getId());
         category.setText("Category: " + product.getMainCategory());

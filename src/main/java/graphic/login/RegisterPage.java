@@ -22,8 +22,10 @@ import java.util.ResourceBundle;
 
 public class RegisterPage extends PageController {
     private static boolean shouldBack;
-    @FXML private Button picButton;
-    @FXML private Button regButton;
+    @FXML
+    private Button picButton;
+    @FXML
+    private Button regButton;
     private String userType;
     private String usernameString;
     private String passwordString;
