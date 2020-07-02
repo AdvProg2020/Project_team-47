@@ -10,6 +10,7 @@ import graphic.panel.seller.products.ManageProductsPage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
@@ -19,6 +20,7 @@ import java.util.ResourceBundle;
 
 public class SellerPage extends PageController {
     private static PageController controller;
+    @FXML private ImageView avatar;
 
     public static PageController getInstance() {
         return controller;
@@ -31,6 +33,7 @@ public class SellerPage extends PageController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         controller = this;
+        avatar.setImage(GraphicView.getInstance().getAvatar());
         update();
     }
 

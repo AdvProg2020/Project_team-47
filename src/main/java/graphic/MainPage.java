@@ -1,28 +1,29 @@
-package graphic.mainMenu;
+package graphic;
 
-import graphic.GraphicView;
-import graphic.PageController;
-import graphic.TemplatePage;
-import graphic.registerAndLoginMenu.RegisterPage;
-import graphic.registerAndLoginMenu.loginMenu.LoginMenuController;
+import graphic.login.RegisterPage;
+import graphic.login.LoginPage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class MainMenuController extends PageController {
+public class MainPage extends PageController {
     private static PageController controller;
 
     public static PageController getInstance() {
         if (controller == null) {
-            controller = new MainMenuController();
+            controller = new MainPage();
         }
         return controller;
     }
 
+    public static Scene getScene() {
+        return getScene("/fxml/MainPage.fxml");
+    }
 
     @FXML
     private void exit() {
@@ -35,15 +36,8 @@ public class MainMenuController extends PageController {
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
 
-    @FXML
-    private void offs() {
-
-    }
-
-
     @Override
     public void clearPage() {
-
     }
 
     @Override
@@ -52,11 +46,10 @@ public class MainMenuController extends PageController {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
     }
 
     public void login() {
-        GraphicView.getInstance().changeScene(LoginMenuController.getScene());
+        GraphicView.getInstance().changeScene(LoginPage.getScene());
     }
 
     public void register() {

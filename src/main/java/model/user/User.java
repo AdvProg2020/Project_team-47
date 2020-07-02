@@ -31,8 +31,8 @@ abstract public class User {
         verificationList = new HashSet<>();
     }
 
+    private byte[] avatar;
     private String sendCode;
-
     private String username;
     private String password;
     private String firstName;
@@ -42,21 +42,17 @@ abstract public class User {
     private String type;
     private ArrayList<Filter> offFilters;
     private ArrayList<Filter> productFilters;
-
-
     private String sortField;
     private String sortDirection;
     private Product productPage;
     private BuyLog purchaseLog;
     private DiscountCode purchaseCode;
-
     public User() {
         this.offFilters = new ArrayList<>();
         this.productFilters = new ArrayList<>();
     }
 
-
-    public User(HashMap<String, String> userInfo) {
+    public User(HashMap<String, String> userInfo, byte[] avatar) {
         this.offFilters = new ArrayList<>();
         this.productFilters = new ArrayList<>();
         this.username = userInfo.get("username");
@@ -66,6 +62,7 @@ abstract public class User {
         this.firstName = userInfo.get("first-name");
         this.lastName = userInfo.get("last-name");
         this.type = userInfo.get("type");
+        this.avatar = avatar;
         usedUsernames.add(this.username);
         Database.updateUsedUsernames(usedUsernames);
     }
@@ -202,6 +199,10 @@ abstract public class User {
         User.usedUsernames = usedUsernames;
     }
 
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
+    }
+
     public void resetProductFilters() {
         this.productFilters = new ArrayList<>();
     }
@@ -328,6 +329,7 @@ abstract public class User {
     public abstract UserInfo userInfoForSending();
 
     public void userInfoSetter(UserInfo userInfo) {
+        userInfo.setFile(this.avatar);
         userInfo.setEmail(this.getEmail());
         userInfo.setFirstName(this.getFirstName());
         userInfo.setLastName(this.getLastName());
@@ -335,54 +337,11 @@ abstract public class User {
         userInfo.setUsername(this.getUsername());
     }
 
-    public void changeRole(String newRole) {
-
-        switch (newRole) {
-            case "manager" -> {
-                if (this instanceof Manager)
-                    return;
-                this.changeUserToManager();
-            }
-            case "customer" -> {
-                if (this instanceof Customer)
-                    return;
-                this.changeUserToCustomer();
-            }
-            case "seller" -> {
-                if (this instanceof Seller)
-                    return;
-                this.changeUserToSeller();
-            }
-        }
-        this.deleteUser();
-    }
-
     void addUser() {
         allUsers.add(this);
         if (this instanceof Manager)
             User.managerAdded();
         this.updateDatabase().update();
-    }
-
-    private void changeUserToManager() {
-        Manager manager = new Manager();
-        copyUserInfo(manager, this);
-        manager.setType("manager");
-        manager.addUser();
-    }
-
-    private void changeUserToSeller() {
-        Seller seller = new Seller();
-        copyUserInfo(seller, this);
-        seller.setType("seller");
-        seller.addUser();
-    }
-
-    private void changeUserToCustomer() {
-        Customer customer = new Customer();
-        copyUserInfo(customer, this);
-        customer.setType("customer");
-        customer.addUser();
     }
 
     public String getUsername() {
@@ -444,6 +403,7 @@ abstract public class User {
     public abstract UserData updateDatabase();
 
     public void updateDatabase(UserData userData) {
+        userData.setFile(this.avatar);
         userData.setUsername(this.username);
         userData.setPassword(this.password);
         userData.setFirstName(this.firstName);

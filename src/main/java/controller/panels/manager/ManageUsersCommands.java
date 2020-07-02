@@ -121,6 +121,7 @@ class DeleteUserCommand extends ManageUsersCommands {
 
 class CreateManagerCommand extends ManageUsersCommands {
     private static CreateManagerCommand command;
+    private byte[] avatar;
 
     private CreateManagerCommand() {
         this.name = "create manager profile";
@@ -137,6 +138,8 @@ class CreateManagerCommand extends ManageUsersCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
+        avatar = request.getFile();
+        containNullField(request);
         checkPrimaryErrors(request);
         createManager(request.getHashMap());
         return actionCompleted();
@@ -168,8 +171,7 @@ class CreateManagerCommand extends ManageUsersCommands {
     }
 
     private void registerManager(HashMap<String, String> userInformation) {
-        User newUser;
-        newUser = new Manager(userInformation);
+        User newUser = new Manager(userInformation,avatar);
         newUser.emailVerification();
         newUser.confirmEmail();
     }

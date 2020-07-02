@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
@@ -18,6 +19,7 @@ import java.util.ResourceBundle;
 
 public class AccountPage extends PageController {
     private static PageController controller;
+    @FXML private ImageView avatar;
     @FXML
     private Label companyNameLabel;
     @FXML
@@ -80,8 +82,11 @@ public class AccountPage extends PageController {
         lastName.setText(user.getLastName());
         phoneNumber.setText(user.getPhoneNumber());
         email.setText(user.getEmail());
+        avatar.setImage(PageController.byteToImage(user.getAvatar()));
         if (!user.getType().equalsIgnoreCase("manager")) {
             money.setText("Money: " + user.getMoney());
+        }else{
+            money.setVisible(false);
         }
         if (user.getType().equalsIgnoreCase("seller")) {
             companyInfo.setVisible(true);

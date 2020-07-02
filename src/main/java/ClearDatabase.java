@@ -1,26 +1,39 @@
 import java.io.File;
+import java.util.Objects;
 
 public class ClearDatabase {
     public static void main(String[] args) {
-        removeFolder();
+        cleanDatabase();
     }
 
-    private static void removeFolder() {
+    private static void cleanDatabase() {
         for (Path value : Path.values()) {
-            remove(value.getPath());
+            removeFolder(value.getPath());
         }
-        remove("src/main/resources/UsedUsernames.json");
-        remove("src/main/resources/UsedProductId.json");
-        remove("src/main/resources/UsedId.json");
+        removeFile("src/main/resources/UsedUsernames.json");
+        removeFile("src/main/resources/UsedProductId.json");
+        removeFile("src/main/resources/UsedId.json");
     }
 
-    private static void remove(String path) {
-        File folder = new File(path);
-        folder.deleteOnExit();
+    private static void removeFile(String path) {
+        File file = new File(path);
+        file.deleteOnExit();
+    }
+
+    private static void removeFolder(String path) {
+        removeFolder(new File(path));
+    }
+
+    private static void removeFolder(File folder) {
         try {
-            for (File file : folder.listFiles()) {
-                file.deleteOnExit();
+            for (File file : Objects.requireNonNull(folder.listFiles())) {
+                if (file.isDirectory()) {
+                    removeFolder(file);
+                } else if (file.isFile()) {
+                    file.deleteOnExit();
+                }
             }
+            folder.delete();
         } catch (NullPointerException ignored) {
         }
     }

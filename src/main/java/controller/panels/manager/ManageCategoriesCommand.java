@@ -396,7 +396,7 @@ class AddSubCategoryCommand extends ManageCategoriesCommand {
 
     public void addSubCategory(String subCategoryName, String mainCategoryName, ArrayList<SpecialProperty> specialProperties) throws CategoryDoesntExistException, CommonException {
         if (Category.isThereCategory(subCategoryName)) {
-            throw new CommonException("There isn't any category with this name!!");
+            throw new CommonException("There is category with this name!!");
         } else {
             MainCategory mainCategory = Category.getMainCategoryByName(mainCategoryName);
             for (SpecialProperty specialProperty : mainCategory.getSpecialProperties())
@@ -431,8 +431,8 @@ class RemoveSubCategoryCommand extends ManageCategoriesCommand {
 
     @Override
     public ServerMessage process(ClientMessage request) throws NullFieldException, CategoryDoesntExistException {
-        containNullField(request.getHashMap().get("sub category name"));
-        removeSubCategory(request.getHashMap().get("sub category name"));
+        containNullField(request.getHashMap().get("category name"));
+        removeSubCategory(request.getHashMap().get("category name"));
         return actionCompleted();
     }
 

@@ -1,6 +1,7 @@
 package controller.login;
 
 import controller.Command;
+import model.ecxeption.CommonException;
 import model.ecxeption.Exception;
 import model.ecxeption.user.*;
 import model.others.ShoppingCart;
@@ -47,6 +48,7 @@ public abstract class LoginCommands extends Command {
 
 class RegisterCommand extends LoginCommands {
     private static RegisterCommand command;
+    private byte[] avatar;
 
     private RegisterCommand() {
         this.name = "register";
@@ -62,8 +64,9 @@ class RegisterCommand extends LoginCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
-        containNullField(request.getHashMap());
+        containNullField(request.getHashMap(),request.getFile());
         checkPrimaryErrors(request);
+        avatar = request.getFile();
         register(request.getHashMap());
         return actionCompleted();
     }
@@ -71,7 +74,7 @@ class RegisterCommand extends LoginCommands {
     @Override
     public void checkPrimaryErrors(ClientMessage request) throws Exception {
         HashMap<String, String> registerInformationHashMap = request.getHashMap();
-
+        if(request.getFile()==null) throw new CommonException("Please select a picture!!");
         checkRegisterInfoKey(registerInformationHashMap);
         if (registerInformationHashMap.get("type").equals("manager") && User.isThereManager()) {
             throw new ManagerExistenceException.ManagerExist();
@@ -110,9 +113,9 @@ class RegisterCommand extends LoginCommands {
 
     private void registerUser(HashMap<String, String> userInformation, String userType) throws RegisterException {
         User newUser = switch (userType) {
-            case "customer" -> new Customer(userInformation);
-            case "seller" -> new Seller(userInformation);
-            case "manager" -> new Manager(userInformation);
+            case "customer" -> new Customer(userInformation,avatar);
+            case "seller" -> new Seller(userInformation,avatar);
+            case "manager" -> new Manager(userInformation,avatar);
             default -> throw new RegisterException("Enter valid type!!");
         };
         newUser.emailVerification();
@@ -144,7 +147,7 @@ class LoginCommand extends LoginCommands {
         HashMap<String, String> reqInfo = getReqInfo(request);
         containNullField(reqInfo, reqInfo.get("username"), reqInfo.get("password"));
         checkPrimaryErrors(request);
-        return login(reqInfo.get("username"));
+        return login();
     }
 
     @Override
@@ -157,13 +160,13 @@ class LoginCommand extends LoginCommands {
     }
 
 
-    public ServerMessage login(String username) {
+    public ServerMessage login() {
         assert user != null;
         setLoggedUser(user);
         if (user instanceof Customer) {
             ((Customer) user).getShoppingCart().mergingWithLocalCart(ShoppingCart.getLocalShoppingCart());
         }
-        return sendAnswer(getLoggedUser().getType());
+        return sendAnswer(getLoggedUser().userInfoForSending());
     }
 
 }//end Login command Class
@@ -247,7 +250,7 @@ class ForgotPasswordCommand extends LoginCommands {
     @Override
     public void checkPrimaryErrors(ClientMessage request) throws Exception {
         user = User.getUserByUsername(request.getHashMap().get("username"));
-        if (user == null || !user.checkEmail(request.getHashMap().get("email"))) {
+        if (!user.checkEmail(request.getHashMap().get("email"))) {
             throw new UserNotExistException();
         }
     }

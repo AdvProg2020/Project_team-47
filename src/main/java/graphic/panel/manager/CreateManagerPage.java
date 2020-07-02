@@ -7,10 +7,13 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -19,6 +22,7 @@ public class CreateManagerPage extends PageController {
     private static boolean shouldBack;
     private String usernameString;
     private String passwordString;
+    private File image;
     @FXML
     private TextField username;
     @FXML
@@ -76,6 +80,8 @@ public class CreateManagerPage extends PageController {
         reqInfo.put("phone-number", phoneNumber.getText());
         reqInfo.put("type", "manager");
         request.setHashMap(reqInfo);
+        request.setFile(PageController.imageToByte(image));
+        request.setFileExtension(".jpg");
         processRegisterAnswer(send(request), username.getText(), password.getText());
     }
 
@@ -88,6 +94,18 @@ public class CreateManagerPage extends PageController {
             this.passwordString = passwordString;
             GraphicView.getInstance().changeScene(ManageUsersPage.getScene());
         }
+    }
 
+    @FXML
+    private void choosePic() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.jpg"));
+        File imageFile = fileChooser.showOpenDialog(GraphicView.getInstance().getWindow());
+        try {
+            image = imageFile;
+            GraphicView.getInstance().setAvatar(new Image(image.toURI().toString()));
+        } catch (Exception e) {
+            image = null;
+        }
     }
 }

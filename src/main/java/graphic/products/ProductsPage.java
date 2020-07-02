@@ -1,4 +1,4 @@
-package graphic.productsMenu;
+package graphic.products;
 
 import graphic.PageController;
 import graphic.panel.ProductPane;

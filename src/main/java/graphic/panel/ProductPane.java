@@ -3,11 +3,14 @@ package graphic.panel;
 import graphic.GraphicView;
 import graphic.PageController;
 import graphic.TemplatePage;
-import graphic.productsMenu.ProductPage;
+import graphic.products.ProductPage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Lighting;
+import javafx.scene.effect.MotionBlur;
+import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +27,8 @@ public class ProductPane implements Initializable {
     private static ProductInfo cartProduct;
     private static String seller;
     private static int numberInCart;
+
+    private ProductInfo paneProduct;
 
 
     @FXML
@@ -76,14 +81,17 @@ public class ProductPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        pane.setOnMouseClicked(this::goToProductPage);
         if (productPage != null) {
             initializeForProductPage(productPage);
+            paneProduct = productPage;
         } else if (productInfo != null) {
+            paneProduct = productInfo;
             initializeForSellerProduct(productInfo);
         } else if (cartProduct != null) {
+            paneProduct = cartProduct;
             initializeForCartProduct(cartProduct);
         }
+        pane.setOnMouseClicked(e -> goToProductPage());
     }
 
     private void initializeForCartProduct(ProductInfo productInfo) {
@@ -105,15 +113,9 @@ public class ProductPane implements Initializable {
         }
     }
 
-    private void goToProductPage(MouseEvent event) {
+    private void goToProductPage() {
         try {
-            if (productInfo != null)
-                ProductPage.setProduct(productInfo);
-            else if (productPage != null)
-                ProductPage.setProduct(productPage);
-            else
-                ProductPage.setProduct(cartProduct);
-
+            ProductPage.setProduct(paneProduct);
             GraphicView.getInstance().changeScene(TemplatePage.getScene());
             TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Product.fxml")));
         } catch (IOException e) {
@@ -129,6 +131,9 @@ public class ProductPane implements Initializable {
         this.name.setText(productInfo.getName());
         this.numberInStock.setText("" + productInfo.getNumberInStock());
         this.price.setText(getPrice(productInfo));
+        if (productInfo.getNumberInStock() <= 0) {
+            this.imageView.setEffect(new MotionBlur(0,10));
+        }
         if (productInfo.getSubCategory().isEmpty()) {
             this.subCategory.setVisible(false);
             this.subCategoryLabel.setVisible(false);

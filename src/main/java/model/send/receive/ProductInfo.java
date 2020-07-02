@@ -171,6 +171,13 @@ public class ProductInfo {
         return price;
     }
 
+    public boolean isItInOff() {
+        for (ProductSeller productSeller : productSellers) {
+            if(productSeller.price!=productSeller.priceWithOff&&productSeller.priceWithOff!=0.0) return true;
+        }
+        return false;
+    }
+
 
     private static class ProductSeller {
         private String sellerName;

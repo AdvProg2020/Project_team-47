@@ -10,6 +10,7 @@ public class UserInfo {
     private double money;
     private String companyName;
     private String companyInfo;
+    private byte[] file;
 
     public UserInfo() {
     }
@@ -84,5 +85,13 @@ public class UserInfo {
 
     public void setCompanyInfo(String companyInfo) {
         this.companyInfo = companyInfo;
+    }
+
+    public void setFile(byte[] avatar) {
+        this.file = avatar;
+    }
+
+    public byte[] getAvatar() {
+        return file;
     }
 }

@@ -416,8 +416,7 @@ public class Database {
         CODES_FOLDER("src/main/resources/Codes/"),
         OFFS_FOLDER("src/main/resources/Offs/"),
         BUY_LOGS_FOLDER("src/main/resources/Logs/BuyLogs/"),
-        SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs/"),
-        TEMP_FOLDER("src/main/resources/Temp/");
+        SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs/");
 
 
         private final String path;

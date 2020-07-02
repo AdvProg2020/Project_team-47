@@ -35,8 +35,8 @@ public class Seller extends User {
     }
 
 
-    public Seller(HashMap<String, String> userInfo) {
-        super(userInfo);
+    public Seller(HashMap<String, String> userInfo,byte[] avatar) {
+        super(userInfo,avatar);
         this.companyInfo = userInfo.get("company-info");
         this.companyName = userInfo.get("company-name");
         sellLogs = new ArrayList<>();

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Scene stylesheets="@../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.login.LoginPage">
+    <AnchorPane>
+        <AnchorPane fx:id="forgotPane" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TextField fx:id="userForCode" layoutX="101.0" layoutY="127.0" prefHeight="55.0" prefWidth="318.0" promptText="Username">
+                <font>
+                    <Font size="15.0" />
+                </font>
+            </TextField>
+            <TextField fx:id="email" layoutX="100.0" layoutY="222.0" prefHeight="55.0" prefWidth="318.0" promptText="Email">
+                <font>
+                    <Font size="15.0" />
+                </font>
+            </TextField>
+            <Button layoutX="105.0" layoutY="315.0" mnemonicParsing="false" onAction="#sendCode" prefHeight="46.0" prefWidth="176.0" text="Send Code">
+                <font>
+                    <Font size="19.0" />
+                </font>
+            </Button>
+            <Button layoutX="709.0" layoutY="73.0" mnemonicParsing="false" onAction="#goToLoginPane" prefHeight="46.0" prefWidth="176.0" text="Back">
+                <font>
+                    <Font size="19.0" />
+                </font>
+            </Button>
+            <TextField fx:id="code" layoutX="99.0" layoutY="434.0" prefHeight="55.0" prefWidth="318.0" promptText="Code">
+                <font>
+                    <Font size="15.0" />
+                </font>
+            </TextField>
+            <TextField fx:id="userForPass" layoutX="99.0" layoutY="500.0" prefHeight="55.0" prefWidth="318.0" promptText="Username">
+                <font>
+                    <Font size="15.0" />
+                </font>
+            </TextField>
+            <TextField fx:id="newPass" layoutX="99.0" layoutY="567.0" prefHeight="55.0" prefWidth="318.0" promptText="New Password">
+                <font>
+                    <Font size="15.0" />
+                </font>
+            </TextField>
+            <Button layoutX="487.0" layoutY="573.0" mnemonicParsing="false" onAction="#changePass" prefHeight="46.0" prefWidth="176.0" text="Change Password">
+                <font>
+                    <Font size="19.0" />
+                </font>
+            </Button>
+        </AnchorPane>
+        <GridPane fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <Button layoutX="373.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="52.0" prefWidth="274.0" text="Login" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="6">
+                <font>
+                    <Font size="22.0" />
+                </font>
+            </Button>
+            <Button layoutX="373.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="48.0" prefWidth="274.0" text="Back" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="8">
+                <font>
+                    <Font size="22.0" />
+                </font>
+            </Button>
+            <TextField fx:id="username" prefHeight="48.0" prefWidth="200.0" promptText="Username" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="3">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </TextField>
+            <Text fx:id="error" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="483.4701027870178" GridPane.columnIndex="3" GridPane.rowIndex="9">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Text>
+            <PasswordField fx:id="password" prefHeight="43.0" prefWidth="274.0" promptText="Password" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="4">
+                <font>
+                    <Font size="17.0" />
+                </font>
+            </PasswordField>
+            <Button layoutX="373.0" layoutY="533.0" mnemonicParsing="false" onAction="#forgotPass" prefHeight="48.0" prefWidth="274.0" text="Forgot Password" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="7">
+                <font>
+                    <Font size="22.0" />
+                </font>
+            </Button>
+        </GridPane>
+    </AnchorPane>
+</Scene>

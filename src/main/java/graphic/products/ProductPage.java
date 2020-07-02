@@ -1,4 +1,4 @@
-package graphic.productsMenu;
+package graphic.products;
 
 import graphic.PageController;
 import javafx.event.ActionEvent;
@@ -8,6 +8,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
+import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -82,6 +85,7 @@ public class ProductPage extends PageController {
     public void initialize(URL location, ResourceBundle resources) {
         if (product == null) return;
         image.setImage(PageController.byteToImage(product.getFile()));
+        if(product.isItInOff()) image.setEffect(new SepiaTone());
         name.setText("Name: " + product.getName());
         id.setText("Id: " + product.getId());
         category.setText("Category: " + product.getMainCategory());

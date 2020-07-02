@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
@@ -20,6 +21,7 @@ import java.util.ResourceBundle;
 
 public class ManagerPage extends PageController {
 
+    @FXML private ImageView avatar;
     @FXML private TextField productId;
 
     public static Scene getScene() {
@@ -54,7 +56,7 @@ public class ManagerPage extends PageController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        avatar.setImage(GraphicView.getInstance().getAvatar());
     }
 
     @FXML

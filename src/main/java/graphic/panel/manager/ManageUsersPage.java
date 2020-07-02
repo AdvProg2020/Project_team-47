@@ -5,6 +5,7 @@ import graphic.PageController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -67,7 +68,7 @@ public class ManageUsersPage extends PageController {
         update();
     }
 
-    public void deleteUser(ActionEvent actionEvent) {
+    public void deleteUser() {
         if (!username.getText().equals("")) {
             ClientMessage request = new ClientMessage("delete user");
             HashMap<String, String> hashMap = new HashMap<>();
@@ -77,7 +78,10 @@ public class ManageUsersPage extends PageController {
             if (answer.getType().equals("Successful")) {
                 update();
             } else {
-                GraphicView.getInstance().showErrorAlert(answer.getErrorMessage());
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(answer.getErrorMessage());
+                alert.showAndWait();
             }
         }
     }

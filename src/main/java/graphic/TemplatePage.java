@@ -4,8 +4,8 @@ import graphic.panel.AccountPage;
 import graphic.panel.customer.CustomerPage;
 import graphic.panel.manager.ManagerPage;
 import graphic.panel.seller.SellerPage;
-import graphic.registerAndLoginMenu.RegisterPage;
-import graphic.registerAndLoginMenu.loginMenu.LoginMenuController;
+import graphic.login.RegisterPage;
+import graphic.login.LoginPage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -88,7 +88,7 @@ public class TemplatePage extends PageController {
 
     @FXML
     private void login() {
-        GraphicView.getInstance().changeScene(LoginMenuController.getSceneWithBack());
+        GraphicView.getInstance().changeScene(LoginPage.getSceneWithBack());
     }
 
     @FXML
@@ -96,7 +96,7 @@ public class TemplatePage extends PageController {
         ClientMessage request = new ClientMessage("logout");
         send(request);
         GraphicView.getInstance().setLoggedIn(false);
-        update();
+        GraphicView.getInstance().goToFirstPage();
     }
 
     @FXML
@@ -116,6 +116,10 @@ public class TemplatePage extends PageController {
         image.setVisible(logged);
         logout.setVisible(logged);
         panelButton.setVisible(logged);
+        if (logged) {
+            image.setImage(GraphicView.getInstance().getAvatar());
+            cartButton.setVisible(GraphicView.getInstance().getAccountType().equalsIgnoreCase("customer"));
+        }
     }
 
     @Override

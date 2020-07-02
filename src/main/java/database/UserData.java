@@ -34,6 +34,7 @@ public class UserData {
     private TreeSet<String> offsId;
     private TreeSet<String> logs;
     private TreeSet<String> discountCodes;
+    private byte[] file;
 
     public UserData(String type) {
         switch (type) {
@@ -189,6 +190,7 @@ public class UserData {
         user.setSendCode(this.sendCode);
         user.setUsername(this.username);
         user.setEmail(this.email);
+        user.setAvatar(this.file);
         return user;
     }
 
@@ -280,5 +282,9 @@ public class UserData {
 
     public String getType() {
         return type;
+    }
+
+    public void setFile(byte[] avatar) {
+        this.file = avatar;
     }
 }

@@ -1,35 +1,44 @@
 package graphic;
 
-import graphic.mainMenu.MainMenuPage;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.HashMap;
 
 public class GraphicView {
     private static GraphicView graphicView;
     private final ArrayList<Scene> scenes;
-    MediaPlayer backGroundMediaPlayer;
-    MediaPlayer shortMediaPlayer;
+    private final HashMap<String, Scene> scenesHashMap;
+    private MediaPlayer backGroundMediaPlayer;
+    private MediaPlayer shortMediaPlayer;
     private Stage window;
     private boolean loggedIn;
     private String accountType;//can be seller,customer,manager
     private String myUsername;
+    private Image avatar;
 
     private GraphicView() {
         scenes = new ArrayList<>();
+        scenesHashMap = new HashMap<>();
     }
 
     public static GraphicView getInstance() {
         if (graphicView == null)
             graphicView = new GraphicView();
         return graphicView;
+    }
+
+    public Image getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Image image) {
+        this.avatar = image;
     }
 
     public void start(Stage window) throws Exception {
@@ -40,25 +49,6 @@ public class GraphicView {
         playBackGroundAudio("background1.mp3");
         goToFirstPage();
         window.show();
-    }
-
-    public void changePage(Scene scene) {
-        this.window.setScene(scene);
-    }
-
-    public void changeScene(Page page) {
-        //this function will get a page and change window scene to page's scene
-        Scene scene = page.getScene();
-        scenes.add(page.getScene());
-        page.getController().update();
-        window.setScene(scene);
-    }
-
-    public void changeSceneWithoutUpdate(Page page) {
-        //this function will get a page and change window scene to page's scene
-        Scene scene = page.getScene();
-        scenes.add(page.getScene());
-        window.setScene(scene);
     }
 
     public void changeScene(Scene scene) {
@@ -76,10 +66,7 @@ public class GraphicView {
     public void goToFirstPage() {
         //this function will change window scene to first scene(login scene)
         scenes.clear();
-
-        scenes.add(MainMenuPage.getInstance().getScene());
-        //scenes.add(CustomerPage.getInstance().getScene());
-
+        scenes.add(MainPage.getScene());
         window.setScene(scenes.get(0));
     }
 
@@ -111,27 +98,12 @@ public class GraphicView {
         this.myUsername = myUsername;
     }
 
-    public Optional<String> showAlertPage(String header, String content) {
-        TextInputDialog usernameDialog = new TextInputDialog();
-
-        usernameDialog.setHeaderText(header);
-        usernameDialog.setContentText(content + ":");
-        return usernameDialog.showAndWait();
-    }
-
-    public void showErrorAlert(String error) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("error");
-        alert.setHeaderText(error);
-        alert.showAndWait();
-    }
-
     public void playBackGroundAudio(String audioPath) {
         Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
         backGroundMediaPlayer = new MediaPlayer(media);
         backGroundMediaPlayer.play();
 
-        backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio("src\\main\\resources\\Music\\" + audioPath));
+        backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio(audioPath));
     }
 
     public void playShortAudios(String audioPath) {

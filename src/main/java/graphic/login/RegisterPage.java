@@ -1,4 +1,4 @@
-package graphic.registerAndLoginMenu;
+package graphic.login;
 
 import graphic.GraphicView;
 import graphic.PageController;
@@ -9,19 +9,25 @@ import graphic.panel.seller.SellerPage;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class RegisterPage extends PageController {
     private static boolean shouldBack;
+    @FXML private Button picButton;
+    @FXML private Button regButton;
     private String userType;
     private String usernameString;
     private String passwordString;
+    private File image;
     @FXML
     private TextField username;
     @FXML
@@ -56,12 +62,12 @@ public class RegisterPage extends PageController {
 
     public static Scene getScene() {
         shouldBack = false;
-        return getScene("/fxml/registerAndLoginMenu/RegisterPage.fxml");
+        return getScene("/fxml/login/RegisterPage.fxml");
     }
 
     public static Scene getSceneWithBack() {
         shouldBack = true;
-        return getScene("/fxml/registerAndLoginMenu/RegisterPage.fxml");
+        return getScene("/fxml/login/RegisterPage.fxml");
     }
 
     @Override
@@ -129,6 +135,11 @@ public class RegisterPage extends PageController {
     }
 
     public void register() {
+        if (image == null) {
+            error.setText("Please choose an avatar!!");
+            error.setVisible(true);
+            return;
+        }
         ClientMessage request = new ClientMessage("register");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("password", password.getText());
@@ -150,6 +161,8 @@ public class RegisterPage extends PageController {
             reqInfo.put("type", "customer");
         }
         request.setHashMap(reqInfo);
+        request.setFile(PageController.imageToByte(image));
+        request.setFileExtension(".jpg");
         processRegisterAnswer(send(request), username.getText(), password.getText());
     }
 
@@ -162,8 +175,24 @@ public class RegisterPage extends PageController {
             this.passwordString = passwordString;
             confirm.setVisible(true);
             verificationCode.setVisible(true);
+            picButton.setDisable(true);
+            regButton.setDisable(true);
             update();
         }
 
     }
+
+    @FXML
+    private void choosePic() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.jpg"));
+        File imageFile = fileChooser.showOpenDialog(GraphicView.getInstance().getWindow());
+        try {
+            image = imageFile;
+            GraphicView.getInstance().setAvatar(new Image(image.toURI().toString()));
+        } catch (Exception e) {
+            image = null;
+        }
+    }
+
 }
