@@ -267,6 +267,14 @@ abstract public class User {
         this.productPage = productPage;
     }
 
+    public static ArrayList<User> getAllUsers() {
+        return allUsers;
+    }
+
+    public static void setAllUsers(ArrayList<User> allUsers) {
+        User.allUsers = allUsers;
+    }
+
     public ArrayList<Filter> getOffFilters() {
         return offFilters;
     }
@@ -354,6 +362,10 @@ abstract public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getFirstName() {
