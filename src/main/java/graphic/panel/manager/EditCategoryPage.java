@@ -1,6 +1,6 @@
 package graphic.panel.manager;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -41,7 +41,7 @@ public class EditCategoryPage extends PageController {
 
     @FXML
     private void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     @FXML

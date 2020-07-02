@@ -1,6 +1,6 @@
 package graphic.panel.seller.offs;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.animation.FadeTransition;
 import javafx.beans.property.SimpleStringProperty;
@@ -75,7 +75,7 @@ public class ManageOffsPage extends PageController {
     @FXML
     private void back() {
         clearPage();
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     @FXML
@@ -94,7 +94,7 @@ public class ManageOffsPage extends PageController {
             error.setVisible(true);
         } else {
             clearPage();
-            GraphicView.getInstance().changeScene(ShowOffPage.getScene());
+            MainFX.getInstance().changeScene(ShowOffPage.getScene());
             ShowOffPage.getInstance().initializePage(answer.getOffInfo());
         }
     }
@@ -102,7 +102,7 @@ public class ManageOffsPage extends PageController {
     @FXML
     private void addOff() {
         clearPage();
-        GraphicView.getInstance().changeScene(AddOffPage.getScene());
+        MainFX.getInstance().changeScene(AddOffPage.getScene());
     }
 
     @Override

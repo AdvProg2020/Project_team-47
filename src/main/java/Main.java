@@ -1,5 +1,5 @@
 import database.Database;
-import graphic.GraphicView;
+import graphic.MainFX;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -11,6 +11,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GraphicView.getInstance().start(primaryStage);
+        MainFX.getInstance().start(primaryStage);
     }
 }

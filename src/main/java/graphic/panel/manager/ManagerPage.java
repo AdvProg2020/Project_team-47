@@ -1,6 +1,6 @@
 package graphic.panel.manager;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
 import graphic.panel.AccountPage;
@@ -35,14 +35,14 @@ public class ManagerPage extends PageController {
         ClientMessage request = new ClientMessage("logout");
         ServerMessage answer = send(request);
         if (answer.getType().equals("Successful")) {
-            GraphicView.getInstance().setLoggedIn(false);
-            GraphicView.getInstance().goToFirstPage();
+            MainFX.getInstance().setLoggedIn(false);
+            MainFX.getInstance().goToFirstPage();
         }
     }
 
     @FXML
     private void accountInfo() {
-        GraphicView.getInstance().changeScene(AccountPage.getScene());
+        MainFX.getInstance().changeScene(AccountPage.getScene());
     }
 
 
@@ -58,33 +58,33 @@ public class ManagerPage extends PageController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        avatar.setImage(GraphicView.getInstance().getAvatar());
+        avatar.setImage(MainFX.getInstance().getAvatar());
     }
 
     @FXML
     private void manageDiscounts() {
-        GraphicView.getInstance().changeScene(ManageDiscountPage.getScene());
+        MainFX.getInstance().changeScene(ManageDiscountPage.getScene());
     }
 
     @FXML
     private void manageCategories() {
-        GraphicView.getInstance().changeScene(ManageCategoriesPage.getScene());
+        MainFX.getInstance().changeScene(ManageCategoriesPage.getScene());
     }
 
     @FXML
     private void manageUsers() {
-        GraphicView.getInstance().changeScene(ManageUsersPage.getScene());
+        MainFX.getInstance().changeScene(ManageUsersPage.getScene());
     }
 
     @FXML
     private void productsPage() throws IOException {
-        GraphicView.getInstance().changeScene(TemplatePage.getScene());
+        MainFX.getInstance().changeScene(TemplatePage.getScene());
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
 
     @FXML
     private void manageRequests() {
-        GraphicView.getInstance().changeScene(ManageRequestPage.getScene());
+        MainFX.getInstance().changeScene(ManageRequestPage.getScene());
     }
 
     public void removeProduct() {

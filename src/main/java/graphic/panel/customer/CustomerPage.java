@@ -1,6 +1,6 @@
 package graphic.panel.customer;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
 import graphic.panel.AccountPage;
@@ -45,29 +45,29 @@ public class CustomerPage extends PageController {
     public void logout() {
         ClientMessage request = new ClientMessage("logout");
         send(request);
-        GraphicView.getInstance().setLoggedIn(false);
-        GraphicView.getInstance().goToFirstPage();
+        MainFX.getInstance().setLoggedIn(false);
+        MainFX.getInstance().goToFirstPage();
     }
 
     public void personalInfo() {
-        GraphicView.getInstance().changeScene(AccountPage.getScene());
+        MainFX.getInstance().changeScene(AccountPage.getScene());
     }
 
     public void shoppingCart() throws IOException {
-        GraphicView.getInstance().changeScene(TemplatePage.getScene());
+        MainFX.getInstance().changeScene(TemplatePage.getScene());
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/panel/customer/CartPage.fxml")));
     }
 
     public void purchaseHistory() {
-        GraphicView.getInstance().changeScene(LogsPage.getScene());
+        MainFX.getInstance().changeScene(LogsPage.getScene());
     }
 
     public void discountCodes() {
-        GraphicView.getInstance().changeScene(DiscountPage.getScene());
+        MainFX.getInstance().changeScene(DiscountPage.getScene());
     }
 
     public void showProducts() throws IOException {
-        GraphicView.getInstance().changeScene(TemplatePage.getScene());
+        MainFX.getInstance().changeScene(TemplatePage.getScene());
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
 

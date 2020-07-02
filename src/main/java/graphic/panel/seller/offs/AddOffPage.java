@@ -1,6 +1,6 @@
 package graphic.panel.seller.offs;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -86,7 +86,7 @@ public class AddOffPage extends PageController {
 
     @FXML
     private void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     @FXML

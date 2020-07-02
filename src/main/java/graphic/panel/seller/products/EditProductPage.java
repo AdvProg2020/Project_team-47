@@ -1,6 +1,6 @@
 package graphic.panel.seller.products;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -113,8 +113,8 @@ public class EditProductPage extends PageController {
 
     private void initializeInfos() {
         new Thread(() -> image.setImage(PageController.byteToImage(product.getFile()))).start();
-        price.setText("" + product.getPrice(GraphicView.getInstance().getMyUsername()));
-        numberInStock.setText("" + product.getNumberInStock(GraphicView.getInstance().getMyUsername()));
+        price.setText("" + product.getPrice(MainFX.getInstance().getMyUsername()));
+        numberInStock.setText("" + product.getNumberInStock(MainFX.getInstance().getMyUsername()));
         id.setText(product.getId());
         description.setText(product.getDescription());
         subCategory.setText(product.getSubCategory());
@@ -153,7 +153,7 @@ public class EditProductPage extends PageController {
 
     @FXML
     private void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     @FXML

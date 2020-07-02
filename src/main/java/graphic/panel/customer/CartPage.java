@@ -1,6 +1,6 @@
 package graphic.panel.customer;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
 import graphic.panel.ProductPane;
@@ -88,7 +88,7 @@ public class CartPage extends PageController {
 
     @FXML
     private void purchase() throws IOException {
-        if (!GraphicView.getInstance().isLoggedIn()) {
+        if (!MainFX.getInstance().isLoggedIn()) {
             showAlert("Please login or register first!!");
         } else {
             if (sendAndProcess(new ClientMessage("purchase cart")))

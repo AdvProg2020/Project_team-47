@@ -8,12 +8,10 @@ import javafx.stage.Stage;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class GraphicView {
-    private static GraphicView graphicView;
+public class MainFX {
+    private static MainFX mainFX;
     private final ArrayList<Scene> scenes;
-    private final HashMap<String, Scene> scenesHashMap;
     private MediaPlayer backGroundMediaPlayer;
     private MediaPlayer shortMediaPlayer;
     private Stage window;
@@ -22,15 +20,14 @@ public class GraphicView {
     private String myUsername;
     private Image avatar;
 
-    private GraphicView() {
+    private MainFX() {
         scenes = new ArrayList<>();
-        scenesHashMap = new HashMap<>();
     }
 
-    public static GraphicView getInstance() {
-        if (graphicView == null)
-            graphicView = new GraphicView();
-        return graphicView;
+    public static MainFX getInstance() {
+        if (mainFX == null)
+            mainFX = new MainFX();
+        return mainFX;
     }
 
     public Image getAvatar() {
@@ -102,12 +99,11 @@ public class GraphicView {
         Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
         backGroundMediaPlayer = new MediaPlayer(media);
         backGroundMediaPlayer.play();
-
         backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio(audioPath));
     }
 
-    public void playShortAudios(String audioPath) {
-        Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
+    public void click() {
+        Media media = new Media(Paths.get("src\\main\\resources\\Music\\click.wav").toUri().toString());
         shortMediaPlayer = new MediaPlayer(media);
         shortMediaPlayer.play();
     }

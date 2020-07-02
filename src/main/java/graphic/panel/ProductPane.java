@@ -1,6 +1,6 @@
 package graphic.panel;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
 import graphic.products.ProductPage;
@@ -113,7 +113,7 @@ public class ProductPane implements Initializable {
     private void goToProductPage() {
         try {
             ProductPage.setProduct(paneProduct);
-            GraphicView.getInstance().changeScene(TemplatePage.getScene());
+            MainFX.getInstance().changeScene(TemplatePage.getScene());
             TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Product.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
@@ -149,8 +149,8 @@ public class ProductPane implements Initializable {
         new Thread(() -> this.imageView.setImage(PageController.byteToImage(productInfo.getFile()))).start();
         this.id.setText(productInfo.getId());
         this.name.setText(productInfo.getName());
-        this.numberInStock.setText("" + productInfo.getNumberInStock(GraphicView.getInstance().getMyUsername()));
-        this.price.setText(productInfo.getPrice(GraphicView.getInstance().getMyUsername()) + "");
+        this.numberInStock.setText("" + productInfo.getNumberInStock(MainFX.getInstance().getMyUsername()));
+        this.price.setText(productInfo.getPrice(MainFX.getInstance().getMyUsername()) + "");
         if (productInfo.getSubCategory().isEmpty()) {
             this.subCategory.setVisible(false);
             this.subCategoryLabel.setVisible(false);

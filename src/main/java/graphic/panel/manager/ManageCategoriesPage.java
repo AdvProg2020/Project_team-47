@@ -1,6 +1,6 @@
 package graphic.panel.manager;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -27,17 +27,17 @@ public class ManageCategoriesPage extends PageController {
 
     @FXML
     private void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     @FXML
     private void addCategory() {
-        GraphicView.getInstance().changeScene(AddCategoryPage.getScene());
+        MainFX.getInstance().changeScene(AddCategoryPage.getScene());
     }
 
     @FXML
     private void editCategory() {
-        GraphicView.getInstance().changeScene(EditCategoryPage.getScene());
+        MainFX.getInstance().changeScene(EditCategoryPage.getScene());
     }
 
     @Override

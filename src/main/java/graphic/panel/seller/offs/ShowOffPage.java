@@ -1,7 +1,7 @@
 package graphic.panel.seller.offs;
 
 import controller.Controller;
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -318,7 +318,7 @@ public class ShowOffPage extends PageController {
     }
 
     public void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     public static class ProductId {

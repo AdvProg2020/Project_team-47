@@ -1,6 +1,6 @@
 package graphic.login;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
 import graphic.panel.customer.CustomerPage;
@@ -81,7 +81,7 @@ public class LoginPage extends PageController {
     }
 
     public void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     public void login() {
@@ -105,18 +105,18 @@ public class LoginPage extends PageController {
     private void successfulLogin(UserInfo userInfo) {
         String userType = userInfo.getType();
 
-        new Thread(() -> GraphicView.getInstance().setAvatar(PageController.byteToImage(userInfo.getAvatar()))).start();
-        GraphicView.getInstance().setMyUsername(username.getText());
-        GraphicView.getInstance().setAccountType(userType);
-        GraphicView.getInstance().setLoggedIn(true);
+        new Thread(() -> MainFX.getInstance().setAvatar(PageController.byteToImage(userInfo.getAvatar()))).start();
+        MainFX.getInstance().setMyUsername(username.getText());
+        MainFX.getInstance().setAccountType(userType);
+        MainFX.getInstance().setLoggedIn(true);
         if (shouldBack) {
             TemplatePage.getInstance().update();
-            GraphicView.getInstance().back();
+            MainFX.getInstance().back();
         } else {
             switch (userType) {
-                case "manager" -> GraphicView.getInstance().changeScene(ManagerPage.getScene());
-                case "seller" -> GraphicView.getInstance().changeScene(SellerPage.getScene());
-                case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getScene());
+                case "manager" -> MainFX.getInstance().changeScene(ManagerPage.getScene());
+                case "seller" -> MainFX.getInstance().changeScene(SellerPage.getScene());
+                case "customer" -> MainFX.getInstance().changeScene(CustomerPage.getScene());
             }
         }
     }

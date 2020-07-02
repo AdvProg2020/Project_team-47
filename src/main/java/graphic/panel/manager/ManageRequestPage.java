@@ -1,6 +1,6 @@
 package graphic.panel.manager;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -29,7 +29,7 @@ public class ManageRequestPage extends PageController {
 
     @FXML
     private void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ManageRequestPage extends PageController {
     }
 
     private void onRequestClick(RequestInfo request) {
-        GraphicView.getInstance().changeScene(RequestPage.getScene(request));
+        MainFX.getInstance().changeScene(RequestPage.getScene(request));
     }
 
     @Override

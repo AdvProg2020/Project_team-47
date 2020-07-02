@@ -1,6 +1,6 @@
 package graphic.panel.manager;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -121,7 +121,7 @@ public class AddDiscountPage extends PageController {
     @FXML
     private void back() {
         ManageDiscountPage.getController().update();
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     @Override

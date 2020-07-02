@@ -1,6 +1,6 @@
 package graphic.panel.seller.log;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.panel.LogPane;
 import javafx.fxml.FXML;
@@ -34,7 +34,7 @@ public class LogsPage extends PageController {
 
     @FXML
     private void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class LogsPage extends PageController {
         controller = this;
         update();
         ClientMessage request;
-        if (GraphicView.getInstance().getAccountType().equalsIgnoreCase("seller")) {
+        if (MainFX.getInstance().getAccountType().equalsIgnoreCase("seller")) {
             request = new ClientMessage("view sales history");
         } else {
             request = new ClientMessage("view orders");

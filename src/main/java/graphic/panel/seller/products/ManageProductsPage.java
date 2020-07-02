@@ -1,6 +1,6 @@
 package graphic.panel.seller.products;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
@@ -48,7 +48,7 @@ public class ManageProductsPage extends PageController {
     }
 
     public void showAllProducts() {
-        GraphicView.getInstance().changeScene(SellerProductPage.getScene());
+        MainFX.getInstance().changeScene(SellerProductPage.getScene());
     }
 
     public void hideTextField() {
@@ -87,17 +87,17 @@ public class ManageProductsPage extends PageController {
             error.setText(answer.getErrorMessage());
         } else {
             EditProductPage.setProductInfo(answer.getProductInfo());
-            GraphicView.getInstance().changeScene(EditProductPage.getScene());
+            MainFX.getInstance().changeScene(EditProductPage.getScene());
         }
     }
 
     public void addProduct() {
         clearPage();
-        GraphicView.getInstance().changeScene(AddProductPage.getScene());
+        MainFX.getInstance().changeScene(AddProductPage.getScene());
     }
 
     public void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     private FadeTransition[] getFadingAnimation() {

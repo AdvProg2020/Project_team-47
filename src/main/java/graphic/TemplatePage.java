@@ -65,14 +65,14 @@ public class TemplatePage extends PageController {
 
     @Override
     public void update() {
-        changeVisibility(GraphicView.getInstance().getLoginStatus());
+        changeVisibility(MainFX.getInstance().getLoginStatus());
     }
 
     @FXML
     public void back() {
         if (panes.size() == 1 || panes.size() == 0) {
             panes.clear();
-            GraphicView.getInstance().back();
+            MainFX.getInstance().back();
         } else {
             int scenesSize = panes.size();
             panes.remove(--scenesSize);
@@ -83,30 +83,30 @@ public class TemplatePage extends PageController {
 
     @FXML
     private void register() {
-        GraphicView.getInstance().changeScene(RegisterPage.getSceneWithBack());
+        MainFX.getInstance().changeScene(RegisterPage.getSceneWithBack());
     }
 
     @FXML
     private void login() {
-        GraphicView.getInstance().changeScene(LoginPage.getSceneWithBack());
+        MainFX.getInstance().changeScene(LoginPage.getSceneWithBack());
     }
 
     @FXML
     private void logout() {
         ClientMessage request = new ClientMessage("logout");
         send(request);
-        GraphicView.getInstance().setLoggedIn(false);
-        GraphicView.getInstance().goToFirstPage();
+        MainFX.getInstance().setLoggedIn(false);
+        MainFX.getInstance().goToFirstPage();
     }
 
     @FXML
     private void accountInfo() {
-        GraphicView.getInstance().changeScene(AccountPage.getScene());
+        MainFX.getInstance().changeScene(AccountPage.getScene());
     }
 
     @FXML
     private void cart() throws IOException {
-        GraphicView.getInstance().changeScene(TemplatePage.getScene());
+        MainFX.getInstance().changeScene(TemplatePage.getScene());
         changePane(FXMLLoader.load(getClass().getResource("/fxml/panel/customer/CartPage.fxml")));
     }
 
@@ -117,8 +117,8 @@ public class TemplatePage extends PageController {
         logout.setVisible(logged);
         panelButton.setVisible(logged);
         if (logged) {
-            image.setImage(GraphicView.getInstance().getAvatar());
-            cartButton.setVisible(GraphicView.getInstance().getAccountType().equalsIgnoreCase("customer"));
+            image.setImage(MainFX.getInstance().getAvatar());
+            cartButton.setVisible(MainFX.getInstance().getAccountType().equalsIgnoreCase("customer"));
         }
     }
 
@@ -130,10 +130,10 @@ public class TemplatePage extends PageController {
 
     @FXML
     private void panel() {
-        switch (GraphicView.getInstance().getAccountType().toLowerCase()) {
-            case "manager" -> GraphicView.getInstance().changeScene(ManagerPage.getScene());
-            case "seller" -> GraphicView.getInstance().changeScene(SellerPage.getScene());
-            case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getScene());
+        switch (MainFX.getInstance().getAccountType().toLowerCase()) {
+            case "manager" -> MainFX.getInstance().changeScene(ManagerPage.getScene());
+            case "seller" -> MainFX.getInstance().changeScene(SellerPage.getScene());
+            case "customer" -> MainFX.getInstance().changeScene(CustomerPage.getScene());
         }
     }
 }

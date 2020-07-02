@@ -1,6 +1,6 @@
 package graphic.panel.seller.products;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -103,7 +103,7 @@ public class AddProductPage extends PageController {
 
     @FXML
     private void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     @FXML
@@ -162,7 +162,7 @@ public class AddProductPage extends PageController {
     private void choosePic() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.jpg"));
-        File imageFile = fileChooser.showOpenDialog(GraphicView.getInstance().getWindow());
+        File imageFile = fileChooser.showOpenDialog(MainFX.getInstance().getWindow());
         try {
             image = imageFile;
         } catch (Exception e) {

@@ -1,6 +1,6 @@
 package graphic.panel.manager;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
 import javafx.fxml.FXML;
@@ -66,7 +66,7 @@ public class CreateManagerPage extends PageController {
 
     public void back() {
         TemplatePage.getInstance().update();
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     public void register() {
@@ -92,7 +92,7 @@ public class CreateManagerPage extends PageController {
         } else {
             this.usernameString = usernameString;
             this.passwordString = passwordString;
-            GraphicView.getInstance().changeScene(ManageUsersPage.getScene());
+            MainFX.getInstance().changeScene(ManageUsersPage.getScene());
         }
     }
 
@@ -100,10 +100,10 @@ public class CreateManagerPage extends PageController {
     private void choosePic() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.jpg"));
-        File imageFile = fileChooser.showOpenDialog(GraphicView.getInstance().getWindow());
+        File imageFile = fileChooser.showOpenDialog(MainFX.getInstance().getWindow());
         try {
             image = imageFile;
-            GraphicView.getInstance().setAvatar(new Image(image.toURI().toString()));
+            MainFX.getInstance().setAvatar(new Image(image.toURI().toString()));
         } catch (Exception e) {
             image = null;
         }

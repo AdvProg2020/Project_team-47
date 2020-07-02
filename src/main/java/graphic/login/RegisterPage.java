@@ -1,6 +1,6 @@
 package graphic.login;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
 import graphic.panel.customer.CustomerPage;
@@ -105,16 +105,16 @@ public class RegisterPage extends PageController {
             error.setVisible(true);
         } else {
             update();
-            GraphicView.getInstance().setMyUsername(usernameString);
-            GraphicView.getInstance().setLoggedIn(true);
-            GraphicView.getInstance().setAccountType(getAccountType());
+            MainFX.getInstance().setMyUsername(usernameString);
+            MainFX.getInstance().setLoggedIn(true);
+            MainFX.getInstance().setAccountType(getAccountType());
             if (shouldBack) {
                 back();
             } else {
                 switch (userType) {
-                    case "manager" -> GraphicView.getInstance().changeScene(ManagerPage.getScene());
-                    case "seller" -> GraphicView.getInstance().changeScene(SellerPage.getScene());
-                    case "customer" -> GraphicView.getInstance().changeScene(CustomerPage.getScene());
+                    case "manager" -> MainFX.getInstance().changeScene(ManagerPage.getScene());
+                    case "seller" -> MainFX.getInstance().changeScene(SellerPage.getScene());
+                    case "customer" -> MainFX.getInstance().changeScene(CustomerPage.getScene());
                 }
             }
         }
@@ -133,7 +133,7 @@ public class RegisterPage extends PageController {
 
     public void back() {
         TemplatePage.getInstance().update();
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
     public void register() {
@@ -188,10 +188,10 @@ public class RegisterPage extends PageController {
     private void choosePic() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.jpg"));
-        File imageFile = fileChooser.showOpenDialog(GraphicView.getInstance().getWindow());
+        File imageFile = fileChooser.showOpenDialog(MainFX.getInstance().getWindow());
         try {
             image = imageFile;
-            GraphicView.getInstance().setAvatar(new Image(image.toURI().toString()));
+            MainFX.getInstance().setAvatar(new Image(image.toURI().toString()));
         } catch (Exception e) {
             image = null;
         }

@@ -1,6 +1,6 @@
 package graphic.panel.manager;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -32,13 +32,13 @@ public class ManageUsersPage extends PageController {
 
     @FXML
     private void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
 
     @FXML
     private void CreateManager() {
-        GraphicView.getInstance().changeScene(CreateManagerPage.getScene());
+        MainFX.getInstance().changeScene(CreateManagerPage.getScene());
     }
 
     @Override

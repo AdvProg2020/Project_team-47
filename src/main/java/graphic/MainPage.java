@@ -32,7 +32,7 @@ public class MainPage extends PageController {
 
     @FXML
     private void products() throws IOException {
-        GraphicView.getInstance().changeScene(TemplatePage.getScene());
+        MainFX.getInstance().changeScene(TemplatePage.getScene());
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
 
@@ -49,10 +49,10 @@ public class MainPage extends PageController {
     }
 
     public void login() {
-        GraphicView.getInstance().changeScene(LoginPage.getScene());
+        MainFX.getInstance().changeScene(LoginPage.getScene());
     }
 
     public void register() {
-        GraphicView.getInstance().changeScene(RegisterPage.getScene());
+        MainFX.getInstance().changeScene(RegisterPage.getScene());
     }
 }

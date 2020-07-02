@@ -1,6 +1,6 @@
 package graphic.panel.seller.products;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.panel.ProductPane;
 import javafx.fxml.FXML;
@@ -71,7 +71,7 @@ public class SellerProductPage extends PageController {
 
     @FXML
     private void back() {
-        GraphicView.getInstance().back();
+        MainFX.getInstance().back();
     }
 
 }

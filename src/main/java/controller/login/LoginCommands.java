@@ -285,7 +285,7 @@ class NewPasswordCommand extends LoginCommands {
     public ServerMessage process(ClientMessage request) throws Exception {
         HashMap<String, String> reqInfo = getReqInfo(request);
         containNullField(reqInfo.get("username"), reqInfo.get("code"), reqInfo.get("new password"));
-
+        checkPrimaryErrors(request);
         return newPassword(reqInfo.get("new password"));
     }
 

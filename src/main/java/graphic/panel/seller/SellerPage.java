@@ -1,6 +1,6 @@
 package graphic.panel.seller;
 
-import graphic.GraphicView;
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
 import graphic.panel.AccountPage;
@@ -34,7 +34,7 @@ public class SellerPage extends PageController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         controller = this;
-        avatar.setImage(GraphicView.getInstance().getAvatar());
+        avatar.setImage(MainFX.getInstance().getAvatar());
         update();
     }
 
@@ -43,35 +43,35 @@ public class SellerPage extends PageController {
         ClientMessage request = new ClientMessage("logout");
         ServerMessage answer = send(request);
         if (answer.getType().equals("Successful")) {
-            GraphicView.getInstance().setLoggedIn(false);
-            GraphicView.getInstance().goToFirstPage();
+            MainFX.getInstance().setLoggedIn(false);
+            MainFX.getInstance().goToFirstPage();
         }
     }
 
     @FXML
     private void accountInfo() {
-        GraphicView.getInstance().changeScene(AccountPage.getScene());
+        MainFX.getInstance().changeScene(AccountPage.getScene());
     }
 
     @FXML
     private void manageOffs() {
-        GraphicView.getInstance().changeScene(ManageOffsPage.getScene());
+        MainFX.getInstance().changeScene(ManageOffsPage.getScene());
     }
 
     @FXML
     private void manageProducts() {
-        GraphicView.getInstance().changeScene(ManageProductsPage.getScene());
+        MainFX.getInstance().changeScene(ManageProductsPage.getScene());
     }
 
     @FXML
     private void productsPage() throws IOException {
-        GraphicView.getInstance().changeScene(TemplatePage.getScene());
+        MainFX.getInstance().changeScene(TemplatePage.getScene());
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
 
     @FXML
     private void buyLogs() {
-        GraphicView.getInstance().changeScene(LogsPage.getScene());
+        MainFX.getInstance().changeScene(LogsPage.getScene());
     }
 
     @Override
