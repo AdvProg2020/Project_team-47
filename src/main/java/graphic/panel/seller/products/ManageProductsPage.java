@@ -48,6 +48,7 @@ public class ManageProductsPage extends PageController {
     }
 
     public void showAllProducts() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(SellerProductPage.getScene());
     }
 
@@ -74,6 +75,7 @@ public class ManageProductsPage extends PageController {
     }
 
     public void editProduct() {
+        MainFX.getInstance().click();
         if (productId.getText().isEmpty()) {
             error.setText("Product id can't be empty!!");
             return;
@@ -92,11 +94,13 @@ public class ManageProductsPage extends PageController {
     }
 
     public void addProduct() {
+        MainFX.getInstance().click();
         clearPage();
         MainFX.getInstance().changeScene(AddProductPage.getScene());
     }
 
     public void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 

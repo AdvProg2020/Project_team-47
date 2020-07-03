@@ -32,20 +32,24 @@ public class RequestPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 
     @FXML
     private void accept() {
+        MainFX.getInstance().click();
         sendRequest("accept request");
     }
 
     @FXML
     private void decline() {
+        MainFX.getInstance().click();
         sendRequest("decline request");
     }
 
     private void sendRequest(String type) {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage(type);
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("id", RequestPage.request.getId());

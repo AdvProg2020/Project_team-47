@@ -32,6 +32,7 @@ public class MainPage extends PageController {
 
     @FXML
     private void products() throws IOException {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(TemplatePage.getScene());
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
@@ -49,10 +50,12 @@ public class MainPage extends PageController {
     }
 
     public void login() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(LoginPage.getScene());
     }
 
     public void register() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(RegisterPage.getScene());
     }
 }

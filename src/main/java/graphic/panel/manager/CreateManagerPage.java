@@ -65,11 +65,13 @@ public class CreateManagerPage extends PageController {
     }
 
     public void back() {
+        MainFX.getInstance().click();
         TemplatePage.getInstance().update();
         MainFX.getInstance().back();
     }
 
     public void register() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("create manager profile");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("password", password.getText());
@@ -98,6 +100,7 @@ public class CreateManagerPage extends PageController {
 
     @FXML
     private void choosePic() {
+        MainFX.getInstance().click();
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.jpg"));
         File imageFile = fileChooser.showOpenDialog(MainFX.getInstance().getWindow());

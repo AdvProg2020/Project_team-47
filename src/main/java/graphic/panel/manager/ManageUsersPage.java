@@ -38,6 +38,7 @@ public class ManageUsersPage extends PageController {
 
     @FXML
     private void CreateManager() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(CreateManagerPage.getScene());
     }
 
@@ -68,6 +69,7 @@ public class ManageUsersPage extends PageController {
     }
 
     public void deleteUser() {
+        MainFX.getInstance().click();
         if (!username.getText().equals("")) {
             ClientMessage request = new ClientMessage("delete user");
             HashMap<String, String> hashMap = new HashMap<>();

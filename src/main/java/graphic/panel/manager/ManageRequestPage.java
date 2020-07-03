@@ -29,6 +29,7 @@ public class ManageRequestPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 
@@ -54,6 +55,7 @@ public class ManageRequestPage extends PageController {
     }
 
     private void onRequestClick(RequestInfo request) {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(RequestPage.getScene(request));
     }
 

@@ -1,5 +1,6 @@
 package graphic.panel.customer;
 
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
 import javafx.fxml.FXML;
@@ -60,6 +61,7 @@ public class PurchasePage extends PageController {
 
     @FXML
     private void purchase() {
+        MainFX.getInstance().click();
         if (sendAndProcess(new ClientMessage("pay"))) {
             TemplatePage.getInstance().back();
         }
@@ -67,6 +69,7 @@ public class PurchasePage extends PageController {
 
     @FXML
     private void submit() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("get receiver information");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("address", address.getText());
@@ -88,6 +91,7 @@ public class PurchasePage extends PageController {
 
     @FXML
     private void useCode() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("using discount code");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("code", code.getText());

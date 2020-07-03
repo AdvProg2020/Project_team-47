@@ -32,6 +32,7 @@ public class ManagerPage extends PageController {
 
     @FXML
     private void logOut() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("logout");
         ServerMessage answer = send(request);
         if (answer.getType().equals("Successful")) {
@@ -42,6 +43,7 @@ public class ManagerPage extends PageController {
 
     @FXML
     private void accountInfo() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(AccountPage.getScene());
     }
 
@@ -63,31 +65,37 @@ public class ManagerPage extends PageController {
 
     @FXML
     private void manageDiscounts() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(ManageDiscountPage.getScene());
     }
 
     @FXML
     private void manageCategories() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(ManageCategoriesPage.getScene());
     }
 
     @FXML
     private void manageUsers() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(ManageUsersPage.getScene());
     }
 
     @FXML
     private void productsPage() throws IOException {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(TemplatePage.getScene());
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
 
     @FXML
     private void manageRequests() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(ManageRequestPage.getScene());
     }
 
     public void removeProduct() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("remove product manager");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("id", productId.getText());

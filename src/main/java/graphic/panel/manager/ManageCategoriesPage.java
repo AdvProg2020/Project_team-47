@@ -27,16 +27,19 @@ public class ManageCategoriesPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 
     @FXML
     private void addCategory() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(AddCategoryPage.getScene());
     }
 
     @FXML
     private void editCategory() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(EditCategoryPage.getScene());
     }
 

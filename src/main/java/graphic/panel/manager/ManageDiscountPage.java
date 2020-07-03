@@ -74,6 +74,7 @@ public class ManageDiscountPage extends PageController {
     }
 
     private void handleCodeLabelClick(DiscountCodeInfo code, MouseEvent event) {
+        MainFX.getInstance().click();
         if (event.getButton() == MouseButton.PRIMARY) {
             codePage(code);
         } else if (event.getButton() == MouseButton.SECONDARY) {
@@ -82,6 +83,7 @@ public class ManageDiscountPage extends PageController {
     }
 
     private void deleteCode(String code) {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("remove discount code manager");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("code", code);
@@ -102,17 +104,20 @@ public class ManageDiscountPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 
     @FXML
     private void addDiscount() {
+        MainFX.getInstance().click();
         update();
         MainFX.getInstance().changeScene(AddDiscountPage.getScene());
     }
 
     @FXML
     private void editDiscount() {
+        MainFX.getInstance().click();
         if (discountId.getText().isEmpty()) {
             setEditError("Discount id shouldn't be empty!!");
         } else if (editField.getText().isEmpty()) {

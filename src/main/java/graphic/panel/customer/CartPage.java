@@ -83,11 +83,13 @@ public class CartPage extends PageController {
 
     @FXML
     private void decrease() {
+        MainFX.getInstance().click();
         sendChangeProduct("decrease product in cart");
     }
 
     @FXML
     private void purchase() throws IOException {
+        MainFX.getInstance().click();
         if (!MainFX.getInstance().isLoggedIn()) {
             showAlert("Please login or register first!!");
         } else {

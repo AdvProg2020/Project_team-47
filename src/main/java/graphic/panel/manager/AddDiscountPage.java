@@ -44,6 +44,7 @@ public class AddDiscountPage extends PageController {
 
     @FXML
     private void giveGift() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("give gift");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("start-time", startAt.getText());
@@ -64,6 +65,7 @@ public class AddDiscountPage extends PageController {
 
     @FXML
     private void removeUser() {
+        MainFX.getInstance().click();
         if (username.getText().isEmpty()) {
             error.setText("Username field shouldn't be empty!!");
             error.setVisible(true);
@@ -76,6 +78,7 @@ public class AddDiscountPage extends PageController {
 
     @FXML
     private void addUser() {
+        MainFX.getInstance().click();
         if (username.getText().isEmpty()) {
             error.setText("Username field shouldn't be empty!!");
             error.setVisible(true);
@@ -96,6 +99,7 @@ public class AddDiscountPage extends PageController {
 
     @FXML
     private void addCode() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("create discount code");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("start-time", startAt.getText());
@@ -120,6 +124,7 @@ public class AddDiscountPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         ManageDiscountPage.getController().update();
         MainFX.getInstance().back();
     }

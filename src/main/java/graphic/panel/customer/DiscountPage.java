@@ -42,6 +42,7 @@ public class DiscountPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 

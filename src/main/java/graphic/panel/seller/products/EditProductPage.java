@@ -153,11 +153,13 @@ public class EditProductPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 
     @FXML
     private void edit() {
+        MainFX.getInstance().click();
         if (chosenField == null || chosenField.isEmpty()) {
             setError("Please chose a field first!!");
             return;
@@ -184,6 +186,7 @@ public class EditProductPage extends PageController {
     }
 
     private void edit(String field, SpecialProperty property) {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("edit product");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("product id", product.getId());

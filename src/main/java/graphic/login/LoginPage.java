@@ -81,10 +81,12 @@ public class LoginPage extends PageController {
     }
 
     public void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 
     public void login() {
+        MainFX.getInstance().click();
         ClientMessage clientMessage = new ClientMessage("login");
 
         HashMap<String, String> hashMap = new HashMap<>();
@@ -122,11 +124,13 @@ public class LoginPage extends PageController {
     }
 
     public void forgotPass() {
+        MainFX.getInstance().click();
         loginPane.setVisible(false);
         forgotPane.setVisible(true);
     }
 
     public void sendCode() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("new password");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("code", code.getText());
@@ -137,6 +141,7 @@ public class LoginPage extends PageController {
     }
 
     public void changePass() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("forgot password");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("email", email.getText());

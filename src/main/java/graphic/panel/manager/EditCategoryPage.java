@@ -46,6 +46,7 @@ public class EditCategoryPage extends PageController {
 
     @FXML
     private void changeName() {
+        MainFX.getInstance().click();
         ClientMessage request;
         if (mainCategoryRadioButton.isSelected()) {
             request = new ClientMessage("edit main category");
@@ -71,11 +72,13 @@ public class EditCategoryPage extends PageController {
 
     @FXML
     private void addProperty() {
+        MainFX.getInstance().click();
         changeProperty("add property");
     }
 
     @FXML
     private void removeProperty() {
+        MainFX.getInstance().click();
         changeProperty("remove property");
     }
 

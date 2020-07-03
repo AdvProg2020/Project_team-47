@@ -43,6 +43,7 @@ public class CustomerPage extends PageController {
     }
 
     public void logout() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("logout");
         send(request);
         MainFX.getInstance().setLoggedIn(false);
@@ -50,23 +51,28 @@ public class CustomerPage extends PageController {
     }
 
     public void personalInfo() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(AccountPage.getScene());
     }
 
     public void shoppingCart() throws IOException {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(TemplatePage.getScene());
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/panel/customer/CartPage.fxml")));
     }
 
     public void purchaseHistory() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(LogsPage.getScene());
     }
 
     public void discountCodes() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(DiscountPage.getScene());
     }
 
     public void showProducts() throws IOException {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(TemplatePage.getScene());
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }

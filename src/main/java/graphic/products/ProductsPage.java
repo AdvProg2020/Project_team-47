@@ -1,5 +1,6 @@
 package graphic.products;
 
+import graphic.MainFX;
 import graphic.PageController;
 import graphic.panel.ProductPane;
 import javafx.fxml.FXML;
@@ -216,6 +217,7 @@ public class ProductsPage extends PageController {
     }
 
     private void addFilter(String key, String first, String second) {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("filter an available filter products");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("filter key", key);
@@ -226,6 +228,7 @@ public class ProductsPage extends PageController {
     }
 
     private void disableFilter(String key) {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("disable a selected filter products");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("filter key", key);
@@ -269,6 +272,7 @@ public class ProductsPage extends PageController {
 
     @FXML
     private void sort() {
+        MainFX.getInstance().click();
         if (none.isSelected()) {
             disableSort();
         } else if (score.isSelected()) {
@@ -302,6 +306,7 @@ public class ProductsPage extends PageController {
 
     @FXML
     private void availableFilter() {
+        MainFX.getInstance().click();
         if (disable.isSelected()) {
             disableFilter("availability");
         } else if (available.isSelected()) {

@@ -76,6 +76,7 @@ public class AccountPage extends PageController {
     }
 
     private void updateAccountInfo() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("view personal info");
         UserInfo user = send(request).getUserInfo();
         username.setText(user.getUsername());
@@ -106,11 +107,13 @@ public class AccountPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 
     @FXML
     private void edit() {
+        MainFX.getInstance().click();
         if (editValue.getText().isEmpty() || editField.getText().isEmpty()) {
             error.setText("Fields can't be empty!!");
             error.setVisible(true);

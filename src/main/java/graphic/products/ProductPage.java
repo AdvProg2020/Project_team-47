@@ -1,5 +1,6 @@
 package graphic.products;
 
+import graphic.MainFX;
 import graphic.PageController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -135,6 +136,7 @@ public class ProductPage extends PageController {
     }
 
     public void compare() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("compare products");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("id", productId.getText());
@@ -184,6 +186,7 @@ public class ProductPage extends PageController {
     }
 
     public void comment() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("add comment");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("title", "");
@@ -205,6 +208,7 @@ public class ProductPage extends PageController {
     }
 
     public void addToCart() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("add to cart");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("seller username", seller.getText());
@@ -213,6 +217,7 @@ public class ProductPage extends PageController {
     }
 
     public void score() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("score product");
         try {
             int score = Integer.parseInt(scoreTextField.getText());

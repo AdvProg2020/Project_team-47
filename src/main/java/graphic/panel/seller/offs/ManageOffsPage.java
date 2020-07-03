@@ -74,12 +74,14 @@ public class ManageOffsPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         clearPage();
         MainFX.getInstance().back();
     }
 
     @FXML
     private void showOff() {
+        MainFX.getInstance().click();
         if (textField.getText().isEmpty()) {
             error.setText("Please enter an id!!");
             return;
@@ -101,6 +103,7 @@ public class ManageOffsPage extends PageController {
 
     @FXML
     private void addOff() {
+        MainFX.getInstance().click();
         clearPage();
         MainFX.getInstance().changeScene(AddOffPage.getScene());
     }

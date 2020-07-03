@@ -70,6 +70,7 @@ public class TemplatePage extends PageController {
 
     @FXML
     public void back() {
+        MainFX.getInstance().click();
         if (panes.size() == 1 || panes.size() == 0) {
             panes.clear();
             MainFX.getInstance().back();
@@ -83,16 +84,19 @@ public class TemplatePage extends PageController {
 
     @FXML
     private void register() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(RegisterPage.getSceneWithBack());
     }
 
     @FXML
     private void login() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(LoginPage.getSceneWithBack());
     }
 
     @FXML
     private void logout() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("logout");
         send(request);
         MainFX.getInstance().setLoggedIn(false);
@@ -106,6 +110,7 @@ public class TemplatePage extends PageController {
 
     @FXML
     private void cart() throws IOException {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(TemplatePage.getScene());
         changePane(FXMLLoader.load(getClass().getResource("/fxml/panel/customer/CartPage.fxml")));
     }

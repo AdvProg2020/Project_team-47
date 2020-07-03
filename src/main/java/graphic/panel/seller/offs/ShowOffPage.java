@@ -118,6 +118,7 @@ public class ShowOffPage extends PageController {
 
     @FXML
     private void submit() {
+        MainFX.getInstance().click();
         if (editType.equals("percent")) {
             sendPercentEdit();
         } else {
@@ -205,6 +206,7 @@ public class ShowOffPage extends PageController {
     }
 
     private void sendPercentEdit() {
+        MainFX.getInstance().click();
         if (percentTextField.getText().isEmpty()) {
             editError.setText("Percent field shouldn't be empty!!");
             editError.setVisible(true);
@@ -241,11 +243,13 @@ public class ShowOffPage extends PageController {
 
     @FXML
     private void addToOff() {
+        MainFX.getInstance().click();
         changeOffProduct("add");
     }
 
     @FXML
     private void removeFromOff() {
+        MainFX.getInstance().click();
         changeOffProduct("remove");
     }
 
@@ -318,6 +322,7 @@ public class ShowOffPage extends PageController {
     }
 
     public void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 

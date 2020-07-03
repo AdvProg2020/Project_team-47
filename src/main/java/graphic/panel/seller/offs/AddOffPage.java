@@ -86,11 +86,13 @@ public class AddOffPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 
     @FXML
     private void addOff() {
+        MainFX.getInstance().click();
         if (timeHasError()) return;
         if (percentHasError()) return;
         if (vBox.getChildren().size() == 0) {
@@ -164,6 +166,7 @@ public class AddOffPage extends PageController {
 
     @FXML
     private void addProduct() {
+        MainFX.getInstance().click();
         if (productId.getText().isEmpty()) {
             error.setText("Product id shouldn't be empty!!");
             error.setVisible(true);
@@ -184,6 +187,7 @@ public class AddOffPage extends PageController {
 
     @FXML
     private void removeProduct() {
+        MainFX.getInstance().click();
         if (productId.getText().isEmpty()) {
             error.setText("Product id shouldn't be empty!!");
             error.setVisible(true);

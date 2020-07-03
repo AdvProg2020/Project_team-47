@@ -103,11 +103,13 @@ public class AddProductPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 
     @FXML
     private void addToSeller() {
+        MainFX.getInstance().click();
         if (id.getText().isEmpty()) {
             setAddToSellerError("Please enter an id!!");
             return;
@@ -160,6 +162,7 @@ public class AddProductPage extends PageController {
 
     @FXML
     private void choosePic() {
+        MainFX.getInstance().click();
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.jpg"));
         File imageFile = fileChooser.showOpenDialog(MainFX.getInstance().getWindow());
@@ -172,6 +175,7 @@ public class AddProductPage extends PageController {
 
     @FXML
     private void setProperties() {
+        MainFX.getInstance().click();
         if (image == null) setGoToPropertyError("Please choose an picture");
         else if (productName.getText().isEmpty()) setGoToPropertyError("Please enter a name!!");
         else if (!doubleIsValid(price.getText())) setGoToPropertyError("Please enter valid price!!");
@@ -214,6 +218,7 @@ public class AddProductPage extends PageController {
 
     @FXML
     private void addProduct() {
+        MainFX.getInstance().click();
         if (!propertiesIsValid()) {
             setAddProductError("Please enter valid properties value!!");
             return;

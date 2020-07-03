@@ -40,6 +40,7 @@ public class SellerPage extends PageController {
 
     @FXML
     private void logOut() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("logout");
         ServerMessage answer = send(request);
         if (answer.getType().equals("Successful")) {
@@ -50,27 +51,32 @@ public class SellerPage extends PageController {
 
     @FXML
     private void accountInfo() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(AccountPage.getScene());
     }
 
     @FXML
     private void manageOffs() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(ManageOffsPage.getScene());
     }
 
     @FXML
     private void manageProducts() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(ManageProductsPage.getScene());
     }
 
     @FXML
     private void productsPage() throws IOException {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(TemplatePage.getScene());
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
 
     @FXML
     private void buyLogs() {
+        MainFX.getInstance().click();
         MainFX.getInstance().changeScene(LogsPage.getScene());
     }
 

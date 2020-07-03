@@ -47,11 +47,13 @@ public class AddCategoryPage extends PageController {
 
     @FXML
     private void back() {
+        MainFX.getInstance().click();
         MainFX.getInstance().back();
     }
 
     @FXML
     private void addProperty() {
+        MainFX.getInstance().click();
         if (propertyKey.getText().isEmpty()) {
             setError("Property can't be empty!!");
         } else {
@@ -77,6 +79,7 @@ public class AddCategoryPage extends PageController {
 
     @FXML
     private void addCategory() {
+        MainFX.getInstance().click();
         ClientMessage request;
         if (mainCategory.getText().isEmpty()) {
             request = new ClientMessage("add main category");

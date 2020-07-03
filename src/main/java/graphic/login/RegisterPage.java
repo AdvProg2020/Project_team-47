@@ -90,6 +90,7 @@ public class RegisterPage extends PageController {
     }
 
     public void confirm() {
+        MainFX.getInstance().click();
         ClientMessage request = new ClientMessage("confirm email");
         HashMap<String, String> reqInfo = new HashMap<>();
         reqInfo.put("username", usernameString);
@@ -132,11 +133,13 @@ public class RegisterPage extends PageController {
     }
 
     public void back() {
+        MainFX.getInstance().click();
         TemplatePage.getInstance().update();
         MainFX.getInstance().back();
     }
 
     public void register() {
+        MainFX.getInstance().click();
         if (image == null) {
             error.setText("Please choose an avatar!!");
             error.setVisible(true);
@@ -186,6 +189,7 @@ public class RegisterPage extends PageController {
 
     @FXML
     private void choosePic() {
+        MainFX.getInstance().click();
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.jpg"));
         File imageFile = fileChooser.showOpenDialog(MainFX.getInstance().getWindow());
