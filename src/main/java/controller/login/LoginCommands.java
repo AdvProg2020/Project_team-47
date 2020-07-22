@@ -142,8 +142,6 @@ class RegisterCommand extends LoginCommands {
             default -> throw new RegisterException("Enter valid type!!");
         };
         newUser.emailVerification();
-        //newUser.confirmEmail();
-        setLoggedUser(newUser);
     }
 
 }//end RegisterCommand Class
