@@ -17,8 +17,8 @@ import java.util.HashMap;
 
 public class Customer extends User {
     private final ArrayList<BuyLog> buyLogs;
-    private final ShoppingCart shoppingCart;
     private final ArrayList<DiscountCode> discountCodes;
+    private ShoppingCart shoppingCart;
     private double money;
 
 
@@ -45,6 +45,10 @@ public class Customer extends User {
             discountCode.removeCustomer(this);
         }
         this.removeFromDatabase();
+    }
+
+    public void purchaseCompleted() {
+        this.shoppingCart = new ShoppingCart();
     }
 
     public DiscountCode getDiscountCode(String code) throws CodeException.DontHaveCode {

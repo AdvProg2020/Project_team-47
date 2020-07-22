@@ -27,6 +27,11 @@ public class MainPage extends PageController {
 
     @FXML
     private void exit() {
+        try {
+            Client.closeSocket();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.exit(0);
     }
 

@@ -1,6 +1,5 @@
 package graphic;
 
-import controller.ControllerAndViewConnector;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -44,11 +43,12 @@ public abstract class PageController implements Initializable {
     }
 
     public static ServerMessage send1(ClientMessage request) {
-        return ControllerAndViewConnector.commandProcess(request);
+        //return ControllerAndViewConnector.commandProcess(request);
+        return null;
     }
 
     public ServerMessage send(ClientMessage request) {
-        return ControllerAndViewConnector.commandProcess(request);
+        return Client.sendRequest(request);
     }
 
     //this function will use to clear scenes

@@ -40,8 +40,7 @@ public abstract class PurchaseCommands extends Command {
 
     protected ShoppingCart getShoppingCart() {
         //this function will return customer shopping cart who logged in
-        ShoppingCart shoppingCart = ((Customer) getLoggedUser()).getShoppingCart();
-        return shoppingCart;
+        return ((Customer) getLoggedUser()).getShoppingCart();
     }
 
     protected void resetPurchasePage() {
@@ -236,6 +235,7 @@ class PayCommand extends PurchaseCommands {
 
         customer.sendBuyingEmail(purchaseLog().getLogId());
 
+        customer.purchaseCompleted();
         finishingPurchasing();
     }
 

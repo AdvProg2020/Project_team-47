@@ -440,6 +440,21 @@ abstract public class User {
         Database.removeUser(this.username);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        return username.equalsIgnoreCase(user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return username.toLowerCase().hashCode();
+    }
+
     public void removeNotVerifiedFromDatabase() {
         Database.removeNotVerifiedUser(this.username);
     }

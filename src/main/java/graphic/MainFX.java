@@ -6,6 +6,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public class MainFX {
     private String accountType;//can be seller,customer,manager
     private String myUsername;
     private Image avatar;
+    private String token;
 
     private MainFX() {
         scenes = new ArrayList<>();
@@ -28,6 +30,14 @@ public class MainFX {
         if (mainFX == null)
             mainFX = new MainFX();
         return mainFX;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Image getAvatar() {
@@ -40,12 +50,21 @@ public class MainFX {
 
     public void start(Stage window) throws Exception {
         this.window = window;
-        window.setOnCloseRequest((event) -> System.exit(0));
+        window.setOnCloseRequest((event) -> exit());
         window.setTitle("AP SHOP");
         window.setResizable(false);
         playBackGroundAudio("background1.mp3");
         goToFirstPage();
         window.show();
+    }
+
+    private void exit() {
+        try {
+            Client.closeSocket();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
     }
 
     public void changeScene(Scene scene) {
@@ -98,7 +117,7 @@ public class MainFX {
     public void playBackGroundAudio(String audioPath) {
         Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
         backGroundMediaPlayer = new MediaPlayer(media);
-        backGroundMediaPlayer.play();
+//        backGroundMediaPlayer.play();
         backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio(audioPath));
     }
 

@@ -4,11 +4,8 @@ import graphic.MainFX;
 import graphic.PageController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,6 +26,8 @@ import java.util.ResourceBundle;
 public class ProductPage extends PageController {
     private static ProductInfo product;
 
+    @FXML
+    private ProgressBar scoreBar;
     @FXML
     private VBox secondVBox;
     @FXML
@@ -90,6 +89,7 @@ public class ProductPage extends PageController {
         category.setText("Category: " + product.getMainCategory());
         subcategory.setText("Subcategory: " + product.getSubCategory());
         score.setText("Score: " + product.getScoreAverage());
+        scoreBar.setProgress(product.getScoreAverage() / 5);
         description.setEditable(false);
         description.setText(product.getDescription());
         initializeProperties(product.getSpecialProperties());

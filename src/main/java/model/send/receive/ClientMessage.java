@@ -1,5 +1,6 @@
 package model.send.receive;
 
+import model.others.Filter;
 import model.others.SpecialProperty;
 
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ public class ClientMessage {
     private SpecialProperty property;
     private byte[] file;
     private String fileExtension;
+    private String authToken;
+    private ArrayList<Filter> filters;
+
 
     public ClientMessage() {
 
@@ -21,6 +25,14 @@ public class ClientMessage {
 
     public ClientMessage(String type) {
         this.type = type;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 
     public byte[] getFile() {
