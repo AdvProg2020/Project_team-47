@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.Scene?>
-<?import javafx.scene.text.Font?>
-<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../Others/Stylesheet.css"
-       xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="graphic.panel.manager.ManageUsersPage">
+<?import javafx.scene.text.*?>
+
+<Scene stylesheets="@../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.manager.ManageUsersPage">
     <AnchorPane prefHeight="400.0" prefWidth="600.0">
         <ScrollPane layoutX="58.0" layoutY="77.0" prefHeight="593.0" prefWidth="436.0">
-            <VBox fx:id="vBox" alignment="TOP_CENTER" prefHeight="591.0" prefWidth="431.0" spacing="10.0"/>
+            <VBox fx:id="vBox" alignment="TOP_CENTER" prefHeight="591.0" prefWidth="431.0" spacing="10.0" />
         </ScrollPane>
-        <Button layoutX="774.0" layoutY="417.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="50.0"
-                prefWidth="164.0" text="Delete User" AnchorPane.leftAnchor="774.0" AnchorPane.rightAnchor="62.0">
+        <Button layoutX="774.0" layoutY="163.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="55.0" prefWidth="164.0" text="Delete User" AnchorPane.leftAnchor="774.0" AnchorPane.rightAnchor="62.0">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Button>
 
-        <Button layoutX="799.0" layoutY="561.0" mnemonicParsing="false" onAction="#back" prefHeight="46.0"
-                prefWidth="164.0" text="Back" AnchorPane.leftAnchor="774.0" AnchorPane.rightAnchor="62.0">
+        <Button layoutX="774.0" layoutY="615.0" mnemonicParsing="false" onAction="#back" prefHeight="55.0" prefWidth="164.0" text="Back" AnchorPane.leftAnchor="774.0" AnchorPane.rightAnchor="62.0">
             <font>
-                <Font size="17.0"/>
+                <Font size="17.0" />
             </font>
         </Button>
-        <Button layoutX="774.0" layoutY="493.0" mnemonicParsing="false" onAction="#CreateManager" prefHeight="50.0"
-                prefWidth="164.0" text="Create Manager" AnchorPane.leftAnchor="774.0" AnchorPane.rightAnchor="62.0">
+        <Button layoutX="523.0" layoutY="163.0" mnemonicParsing="false" onAction="#CreateManager" prefHeight="55.0" prefWidth="227.0" text="Create Manager" AnchorPane.leftAnchor="523.0" AnchorPane.rightAnchor="250.0">
             <font>
-                <Font size="17.0"/>
+                <Font size="17.0" />
             </font>
         </Button>
-        <TextField fx:id="username" layoutX="774.0" layoutY="341.0" prefHeight="50.0" prefWidth="164.0"
-                   promptText="username" AnchorPane.leftAnchor="774.0" AnchorPane.rightAnchor="62.0">
+        <TextField fx:id="username" layoutX="523.0" layoutY="77.0" prefHeight="55.0" prefWidth="193.0" promptText="username" styleClass="textfield" AnchorPane.leftAnchor="523.0" AnchorPane.rightAnchor="284.0">
 
         </TextField>
     </AnchorPane>
