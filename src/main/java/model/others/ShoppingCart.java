@@ -57,6 +57,7 @@ public class ShoppingCart {
         for (ProductInCart temp : productsInCart) {
             if (temp.equals(productInCart)) {
                 decreaseProductInCart(temp);
+                return;
             }
         }
 

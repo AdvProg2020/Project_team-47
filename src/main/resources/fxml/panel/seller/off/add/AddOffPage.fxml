@@ -1,92 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.Scene?>
 <?import javafx.scene.text.*?>
-<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../../../Others/Stylesheet.css"
-       xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.seller.offs.AddOffPage">
+
+<Scene stylesheets="@../../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.offs.AddOffPage">
     <AnchorPane prefHeight="400.0" prefWidth="600.0">
-        <Label layoutX="58.0" layoutY="67.0" prefHeight="41.0" prefWidth="86.0" text="Percent:"
-               AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="40.0">
+        <Label layoutX="58.0" layoutY="67.0" prefHeight="28.0" prefWidth="72.0" style="-fx-alignment: center;" text="Percent" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="40.0">
             <font>
-                <Font size="20.0"/>
+                <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="61.0" layoutY="116.0" prefHeight="42.0" prefWidth="95.0" text="Start At:"
-               AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="100.0">
+        <Label layoutX="61.0" layoutY="116.0" prefHeight="28.0" prefWidth="72.0" style="-fx-alignment: center;" text="Start At" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="100.0">
             <font>
-                <Font size="20.0"/>
+                <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="62.0" layoutY="164.0" prefHeight="42.0" prefWidth="111.0" text="Finish At:"
-               AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="160.0">
+        <Label layoutX="62.0" layoutY="164.0" text="Finish At" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="160.0">
             <font>
-                <Font size="20.0"/>
+                <Font size="20.0" />
             </font>
         </Label>
-        <TextField fx:id="percent" layoutX="161.0" layoutY="43.0" prefHeight="36.0" prefWidth="165.0"
-                   promptText="Percent">
+        <TextField fx:id="percent" layoutX="142.0" layoutY="40.0" prefHeight="28.0" prefWidth="99.0" promptText="Percent" styleClass="textfield">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </TextField>
-        <TextField fx:id="startYear" layoutX="161.0" layoutY="109.0" prefHeight="31.0" prefWidth="54.0"
-                   promptText="Year" AnchorPane.leftAnchor="161.0" AnchorPane.topAnchor="109.0"/>
-        <TextField fx:id="startMonth" layoutX="238.0" layoutY="106.0" prefHeight="31.0" prefWidth="54.0"
-                   promptText="Month" AnchorPane.topAnchor="109.0"/>
-        <TextField fx:id="startDay" layoutX="314.0" layoutY="106.0" prefHeight="31.0" prefWidth="54.0" promptText="Day"
-                   AnchorPane.leftAnchor="314.0" AnchorPane.topAnchor="109.0"/>
-        <TextField fx:id="startHour" layoutX="411.0" layoutY="108.0" prefHeight="31.0" prefWidth="81.0"
-                   promptText="Hour" AnchorPane.leftAnchor="411.0" AnchorPane.topAnchor="109.0"/>
-        <TextField fx:id="startMinute" layoutX="511.0" layoutY="113.0" prefHeight="31.0" prefWidth="94.0"
-                   promptText="Minute" AnchorPane.leftAnchor="511.0" AnchorPane.rightAnchor="394.6"
-                   AnchorPane.topAnchor="109.0"/>
-        <TextField fx:id="finishYear" layoutX="161.0" layoutY="167.0" prefHeight="31.0" prefWidth="54.0"
-                   promptText="Year" AnchorPane.leftAnchor="161.0" AnchorPane.topAnchor="167.0"/>
-        <TextField fx:id="finishMonth" layoutX="238.0" layoutY="169.0" prefHeight="31.0" prefWidth="54.0"
-                   promptText="Month" AnchorPane.leftAnchor="238.0" AnchorPane.topAnchor="167.0"/>
-        <TextField fx:id="finishDay" layoutX="324.0" layoutY="119.0" prefHeight="31.0" prefWidth="54.0"
-                   promptText="Day" AnchorPane.leftAnchor="314.0" AnchorPane.topAnchor="167.0"/>
-        <TextField fx:id="finishHour" layoutX="421.0" layoutY="119.0" prefHeight="31.0" prefWidth="81.0"
-                   promptText="Hour" AnchorPane.leftAnchor="411.0" AnchorPane.topAnchor="167.0"/>
-        <TextField fx:id="finishMinute" layoutX="521.0" layoutY="119.0" prefHeight="31.0" prefWidth="94.0"
-                   promptText="Minute" AnchorPane.leftAnchor="511.0" AnchorPane.rightAnchor="394.6"
-                   AnchorPane.topAnchor="167.0"/>
+        <TextField fx:id="startYear" layoutX="142.0" layoutY="100.0" prefHeight="28.0" prefWidth="77.0" promptText="Year" styleClass="textfield" AnchorPane.leftAnchor="142.0" AnchorPane.topAnchor="100.0" />
+        <TextField fx:id="startMonth" layoutX="238.0" layoutY="99.0" prefHeight="28.0" prefWidth="91.0" promptText="Month" styleClass="textfield" AnchorPane.topAnchor="99.0" />
+        <TextField fx:id="startDay" layoutX="351.0" layoutY="100.0" prefHeight="28.0" prefWidth="73.0" promptText="Day" styleClass="textfield" AnchorPane.leftAnchor="351.0" AnchorPane.topAnchor="100.0" />
+        <TextField fx:id="startHour" layoutX="446.0" layoutY="100.0" prefHeight="28.0" prefWidth="75.0" promptText="Hour" styleClass="textfield" AnchorPane.leftAnchor="446.0" AnchorPane.topAnchor="100.0" />
+        <TextField fx:id="startMinute" layoutX="545.0" layoutY="100.0" prefHeight="28.0" prefWidth="89.0" promptText="Minute" styleClass="textfield" AnchorPane.leftAnchor="545.0" AnchorPane.rightAnchor="366.0" AnchorPane.topAnchor="100.0" />
+        <TextField fx:id="finishYear" layoutX="142.0" layoutY="160.0" prefHeight="28.0" prefWidth="77.0" promptText="Year" styleClass="textfield" AnchorPane.leftAnchor="142.0" AnchorPane.topAnchor="160.0" />
+        <TextField fx:id="finishMonth" layoutX="241.0" layoutY="160.0" prefHeight="28.0" prefWidth="89.0" promptText="Month" styleClass="textfield" AnchorPane.leftAnchor="241.0" AnchorPane.topAnchor="160.0" />
+        <TextField fx:id="finishDay" layoutX="351.0" layoutY="160.0" prefHeight="28.0" prefWidth="73.0" promptText="Day" styleClass="textfield" AnchorPane.leftAnchor="351.0" AnchorPane.topAnchor="160.0" />
+        <TextField fx:id="finishHour" layoutX="443.0" layoutY="160.0" prefHeight="28.0" prefWidth="79.0" promptText="Hour" styleClass="textfield" AnchorPane.leftAnchor="443.0" AnchorPane.topAnchor="160.0" />
+        <TextField fx:id="finishMinute" layoutX="545.0" layoutY="160.0" prefHeight="28.0" prefWidth="88.0" promptText="Minute" styleClass="textfield" AnchorPane.leftAnchor="545.0" AnchorPane.rightAnchor="367.0" AnchorPane.topAnchor="160.0" />
         <ScrollPane layoutX="45.0" layoutY="251.0">
-            <VBox fx:id="vBox" prefHeight="438.0" prefWidth="275.0"/>
+            <VBox fx:id="vBox" prefHeight="384.0" prefWidth="275.0" />
         </ScrollPane>
-        <TextField fx:id="productId" layoutX="341.0" layoutY="502.0" prefHeight="46.0" prefWidth="196.0"
-                   promptText="Product Id" AnchorPane.leftAnchor="340.0">
+        <TextField fx:id="productId" layoutX="372.0" layoutY="510.0" prefHeight="55.0" prefWidth="222.0" promptText="Product Id" styleClass="textfield" AnchorPane.leftAnchor="372.0">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </TextField>
-        <Button layoutX="348.0" layoutY="579.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="32.0"
-                prefWidth="83.0" text="Add" AnchorPane.leftAnchor="340.0">
+        <Button layoutX="372.0" layoutY="579.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="55.0" prefWidth="83.0" text="Add" AnchorPane.leftAnchor="372.0">
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </Button>
-        <Button layoutX="452.0" layoutY="579.0" mnemonicParsing="false" onAction="#removeProduct" prefHeight="32.0"
-                prefWidth="83.0" text="Remove">
+        <Button layoutX="470.0" layoutY="579.0" mnemonicParsing="false" onAction="#removeProduct" prefHeight="55.0" prefWidth="124.0" text="Remove">
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </Button>
-        <Button layoutX="752.0" layoutY="463.0" mnemonicParsing="false" onAction="#addOff" prefHeight="74.0"
-                prefWidth="158.0" text="Add Off">
+        <Button layoutX="733.0" layoutY="500.0" mnemonicParsing="false" onAction="#addOff" prefHeight="55.0" prefWidth="158.0" text="Add Off">
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </Button>
-        <Button layoutX="752.0" layoutY="557.0" mnemonicParsing="false" onAction="#back" prefHeight="74.0"
-                prefWidth="158.0" text="Back">
+        <Button layoutX="733.0" layoutY="579.0" mnemonicParsing="false" onAction="#back" prefHeight="55.0" prefWidth="158.0" text="Back">
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </Button>
-        <Text fx:id="error" fill="RED" layoutX="432.0" layoutY="662.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="Error" visible="false" wrappingWidth="325.0699462890625"/>
+        <Text fx:id="error" fill="#ff3030" layoutX="432.0" layoutY="662.0" style="-fx-font-family: 'Google Sans';" text="Error" textAlignment="CENTER" visible="false" />
     </AnchorPane>
 </Scene>

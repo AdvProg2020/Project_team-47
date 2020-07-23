@@ -47,7 +47,7 @@ public class AllProductsController extends Controller {
         if (loggedUser != null) {
             loggedUser.resetProductFilters();
         } else {
-            filters = new ArrayList<>();
+            filters.clear();
         }
     }
 
@@ -70,6 +70,26 @@ public class AllProductsController extends Controller {
         } else {
             return sortDirection;
         }
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
+    }
+
+    public String getSortDirection() {
+        return sortDirection;
+    }
+
+    public void setSortDirection(String sortDirection) {
+        this.sortDirection = sortDirection;
+    }
+
+    public void setFilters(ArrayList<Filter> filters) {
+        this.filters = filters;
     }
 
     ArrayList<Filter> filters() {
@@ -96,7 +116,7 @@ public class AllProductsController extends Controller {
         }
     }
 
-    void setSort(String field, String direction) {
+    public void setSort(String field, String direction) {
         if (loggedUser != null) {
             loggedUser.setSortField(field);
             loggedUser.setSortDirection(direction);

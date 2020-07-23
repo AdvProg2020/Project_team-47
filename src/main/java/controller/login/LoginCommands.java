@@ -1,6 +1,7 @@
 package controller.login;
 
 import controller.Command;
+import controller.Controller;
 import model.ecxeption.CommonException;
 import model.ecxeption.Exception;
 import model.ecxeption.user.*;
@@ -13,6 +14,7 @@ import model.user.Seller;
 import model.user.User;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import static controller.Controller.*;
 import static controller.panels.UserPanelCommands.checkRegisterInfoKey;
@@ -42,6 +44,27 @@ public abstract class LoginCommands extends Command {
     public static LogoutCommand getLogoutCommand() {
         return LogoutCommand.getInstance();
     }
+
+    public static String token() {
+        //this function will create a random string such as "AB1234"
+        StringBuilder stringBuilder = new StringBuilder();
+        Random randomNumber = new Random();
+        for (int i = 0; i < 100; i++) {
+            stringBuilder.append((char) randomNumber.nextInt(110));
+        }
+        if (Controller.containToken(stringBuilder.toString())) return token();
+        return stringBuilder.toString();
+    }
+
+    protected ServerMessage authToken(User user) {
+        ServerMessage answer = new ServerMessage();
+        answer.setType("Successful");
+        String token = token();
+        Controller.addToken(user, token);
+        answer.setFirstString(token);
+        return answer;
+    }
+
 
 }
 
@@ -119,8 +142,6 @@ class RegisterCommand extends LoginCommands {
             default -> throw new RegisterException("Enter valid type!!");
         };
         newUser.emailVerification();
-        newUser.confirmEmail();
-        setLoggedUser(newUser);
     }
 
 }//end RegisterCommand Class
@@ -162,11 +183,12 @@ class LoginCommand extends LoginCommands {
 
     public ServerMessage login() {
         assert user != null;
-        setLoggedUser(user);
         if (user instanceof Customer) {
             ((Customer) user).getShoppingCart().mergingWithLocalCart(ShoppingCart.getLocalShoppingCart());
         }
-        return sendAnswer(getLoggedUser().userInfoForSending());
+        ServerMessage answer = sendAnswer(user.userInfoForSending());
+        answer.setFirstString(authToken(user).getFirstString());
+        return answer;
     }
 
 }//end Login command Class
@@ -218,7 +240,7 @@ class ConfirmEmailCommand extends LoginCommands {
     private ServerMessage confirmEmail() {
         user.confirmEmail();
         setLoggedUser(user);
-        return actionCompleted();
+        return authToken(user);
     }
 
 }//end ConfirmEmailCommand Class
@@ -332,7 +354,7 @@ class LogoutCommand extends LoginCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) {
-        return logout();
+        return logout(request.getAuthToken());
     }
 
     @Override
@@ -342,8 +364,8 @@ class LogoutCommand extends LoginCommands {
     }
 
 
-    private ServerMessage logout() {
-        setLoggedUser(null);
+    private ServerMessage logout(String authToken) {
+        Controller.removeToken(authToken);
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
         return actionCompleted();
     }

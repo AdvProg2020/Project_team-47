@@ -54,7 +54,7 @@ public class Email {
             Transport.send(message);
         } catch (AuthenticationFailedException e) {
             System.out.println("\nYou entered wrong password for email!!");
-            System.exit(2);
+            //System.exit(2);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -149,7 +149,7 @@ public class Email {
                 Transport.send(message);
             } catch (AuthenticationFailedException e) {
                 System.out.println("\nYou entered wrong password for email!!");
-                System.exit(2);
+                //System.exit(2);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }

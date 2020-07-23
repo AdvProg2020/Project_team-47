@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 abstract public class Controller {
     private static final ArrayList<Controller> controllers;
     private static final Gson gson = new Gson();
+    private static final HashMap<String, User> USER_HASH_MAP = new HashMap<>();
     protected static User loggedUser;
 
     static {
@@ -62,6 +63,10 @@ abstract public class Controller {
 
     public static void setLoggedUser(User loggedUser) {
         Controller.loggedUser = loggedUser;
+    }
+
+    public static void setLoggedUser(String authToken) {
+        loggedUser = USER_HASH_MAP.get(authToken);
     }
 
     @SuppressWarnings("unchecked")
@@ -162,15 +167,15 @@ abstract public class Controller {
         return serverMessage;
     }
 
+/*    private static void send(String answer) {
+        ViewToController.setControllerAnswer(answer);
+    }*/
+
     public static ServerMessage actionCompleted() {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         return serverMessage;
     }
-
-/*    private static void send(String answer) {
-        ViewToController.setControllerAnswer(answer);
-    }*/
 
     public static String idCreator() {
         //this function will create a random string such as "AB1234"
@@ -225,6 +230,33 @@ abstract public class Controller {
 
     public static Gson getGson() {
         return gson;
+    }
+
+    public static String process(String message) {
+        synchronized (gson) {
+            ClientMessage request;
+            request = gson.fromJson(message, ClientMessage.class);
+            loggedUser = USER_HASH_MAP.get(request.getAuthToken());
+            ServerMessage answer;
+            try {
+                answer = Controller.process(request);
+            } catch (Exception e) {
+                answer = new ServerMessage("Error", e.getMessage());
+            }
+            return gson.toJson(answer);
+        }
+    }
+
+    public static boolean containToken(String token) {
+        return USER_HASH_MAP.containsKey(token);
+    }
+
+    public static void addToken(User user, String token) {
+        USER_HASH_MAP.put(token, user);
+    }
+
+    public static void removeToken(String authToken) {
+        USER_HASH_MAP.remove(authToken);
     }
 
     public ServerMessage processRequest(ClientMessage request) throws Exception {

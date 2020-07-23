@@ -105,6 +105,7 @@ public class RegisterPage extends PageController {
             error.setText(answer.getErrorMessage());
             error.setVisible(true);
         } else {
+            MainFX.getInstance().setToken(answer.getFirstString());
             update();
             MainFX.getInstance().setMyUsername(usernameString);
             MainFX.getInstance().setLoggedIn(true);

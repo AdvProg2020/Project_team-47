@@ -1,160 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.Scene?>
 <?import javafx.scene.text.*?>
-<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../../../Others/Stylesheet.css"
-       xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.seller.products.AddProductPage">
+
+<Scene stylesheets="@../../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.products.AddProductPage">
     <AnchorPane>
         <AnchorPane fx:id="mainAnchorPane" layoutX="2.0">
-            <AnchorPane layoutX="2.0" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0"
-                        AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <TextField fx:id="id" layoutX="38.0" layoutY="29.0" prefHeight="44.0" prefWidth="162.0"
-                           promptText="Product Id" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="45.0">
+            <AnchorPane layoutX="14.0" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="0.0">
+                <TextField fx:id="id" layoutX="38.0" layoutY="29.0" prefHeight="44.0" prefWidth="162.0" promptText="Product Id" styleClass="textfield" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="45.0">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="priceAddingSeller" layoutX="234.0" layoutY="30.0" prefHeight="44.0" prefWidth="162.0"
-                           promptText="Price" AnchorPane.leftAnchor="211.0" AnchorPane.topAnchor="45.0">
+                <TextField fx:id="priceAddingSeller" layoutX="234.0" layoutY="30.0" prefHeight="44.0" prefWidth="162.0" promptText="Price" styleClass="textfield" AnchorPane.leftAnchor="211.0" AnchorPane.topAnchor="45.0">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="numberInStockAddingSeller" layoutX="439.0" layoutY="29.0" prefHeight="44.0"
-                           prefWidth="162.0" promptText="Number In Stock" AnchorPane.leftAnchor="393.0"
-                           AnchorPane.topAnchor="45.0">
+                <TextField fx:id="numberInStockAddingSeller" layoutX="439.0" layoutY="29.0" prefHeight="44.0" prefWidth="162.0" promptText="Number In Stock" styleClass="textfield" AnchorPane.leftAnchor="393.0" AnchorPane.topAnchor="45.0">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </TextField>
-                <Button layoutX="681.0" layoutY="36.0" mnemonicParsing="false" onAction="#addToSeller" prefHeight="42.0"
-                        prefWidth="174.0" text="Add To Seller" AnchorPane.topAnchor="45.0">
+                <Button layoutX="681.0" layoutY="36.0" mnemonicParsing="false" onAction="#addToSeller" prefHeight="42.0" prefWidth="174.0" text="Add To Seller" AnchorPane.topAnchor="45.0">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </Button>
-                <Separator layoutX="-2.0" layoutY="83.0" prefHeight="84.0" prefWidth="1000.0"
-                           AnchorPane.bottomAnchor="576.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0"
-                           AnchorPane.topAnchor="106.0"/>
-                <Text fx:id="addSellerError" fill="RED" layoutX="30.0" layoutY="4.0" strokeType="OUTSIDE"
-                      strokeWidth="0.0" text="Error" wrappingWidth="454.13671493530273" AnchorPane.bottomAnchor="654.0"
-                      AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="13.0">
+                <Separator layoutX="-2.0" layoutY="83.0" prefHeight="84.0" prefWidth="1000.0" AnchorPane.bottomAnchor="576.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="106.0" />
+                <Text fx:id="addSellerError" fill="#ff3030" layoutX="38.0" layoutY="110.0" strokeWidth="0.0" style="-fx-font-family: 'Google Sans';" text="Error" textAlignment="CENTER" AnchorPane.bottomAnchor="586.2353515625" AnchorPane.leftAnchor="38.0" AnchorPane.topAnchor="93.8134765625">
                     <font>
-                        <Font size="15.0"/>
+                        <Font size="12.0" />
                     </font>
                 </Text>
-                <TextField fx:id="productName" layoutX="43.0" layoutY="154.0" prefHeight="44.0" prefWidth="162.0"
-                           promptText="Product Name" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="130.0">
+                <TextField fx:id="productName" layoutX="43.0" layoutY="154.0" prefHeight="44.0" prefWidth="162.0" promptText="Product Name" styleClass="textfield" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="130.0">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="price" layoutX="43.0" layoutY="225.0" prefHeight="44.0" prefWidth="162.0"
-                           promptText="Price" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="195.0">
+                <TextField fx:id="price" layoutX="43.0" layoutY="225.0" prefHeight="44.0" prefWidth="162.0" promptText="Price" styleClass="textfield" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="195.0">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="numberInStock" layoutX="46.0" layoutY="282.0" prefHeight="44.0" prefWidth="162.0"
-                           promptText="Number In Stock" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="259.0">
+                <TextField fx:id="numberInStock" layoutX="46.0" layoutY="282.0" prefHeight="44.0" prefWidth="162.0" promptText="Number In Stock" styleClass="textfield" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="259.0">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="category" layoutX="35.0" layoutY="336.0" prefHeight="44.0" prefWidth="162.0"
-                           promptText="Category" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="323.0">
+                <TextField fx:id="category" layoutX="35.0" layoutY="336.0" prefHeight="44.0" prefWidth="162.0" promptText="Category" styleClass="textfield" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="323.0">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="subCategory" layoutX="28.0" layoutY="413.0" prefHeight="44.0" prefWidth="162.0"
-                           promptText="Sub Category" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="388.0">
+                <TextField fx:id="subCategory" layoutX="28.0" layoutY="413.0" prefHeight="44.0" prefWidth="162.0" promptText="Sub Category" styleClass="textfield" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="388.0">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="company" layoutX="31.0" layoutY="487.0" prefHeight="44.0" prefWidth="162.0"
-                           promptText="Company" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="448.0">
+                <TextField fx:id="company" layoutX="31.0" layoutY="487.0" prefHeight="44.0" prefWidth="162.0" promptText="Company" styleClass="textfield" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="448.0">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="17.0" />
                     </font>
                 </TextField>
-                <TextArea fx:id="description" layoutX="243.0" layoutY="131.0" prefHeight="301.0" prefWidth="416.0"
-                          promptText="Description">
+                <TextArea fx:id="description" layoutX="243.0" layoutY="131.0" prefHeight="301.0" prefWidth="416.0" promptText="Description">
                     <font>
-                        <Font size="16.0"/>
+                        <Font size="16.0" />
                     </font>
                 </TextArea>
-                <Button layoutX="31.0" layoutY="507.0" mnemonicParsing="false" onAction="#choosePic" prefHeight="47.0"
-                        prefWidth="155.0" text="Choose Picture">
+                <Button layoutX="31.0" layoutY="507.0" mnemonicParsing="false" onAction="#choosePic" prefHeight="47.0" prefWidth="197.0" text="Choose Picture">
                     <font>
-                        <Font size="17.0"/>
+                        <Font size="20.0" />
                     </font>
                 </Button>
-                <Button layoutX="699.0" layoutY="501.0" mnemonicParsing="false" onAction="#setProperties"
-                        prefHeight="52.0" prefWidth="155.0" text="Set Properties" AnchorPane.leftAnchor="700.0"
-                        AnchorPane.rightAnchor="140.0">
+                <Button layoutX="699.0" layoutY="501.0" mnemonicParsing="false" onAction="#setProperties" prefHeight="52.0" prefWidth="195.0" text="Set Properties" AnchorPane.leftAnchor="700.0" AnchorPane.rightAnchor="105.0">
                     <font>
-                        <Font size="15.0"/>
+                        <Font size="20.0" />
                     </font>
                 </Button>
-                <Text fx:id="goToPropertyError" fill="RED" layoutX="39.0" layoutY="598.0" strokeType="OUTSIDE"
-                      strokeWidth="0.0" text="Error" wrappingWidth="249.33673095703125">
+                <Text fx:id="goToPropertyError" fill="#ff3030" layoutX="42.0" layoutY="576.0" style="-fx-font-family: 'Google Sans';" text="Error" textAlignment="CENTER">
                     <font>
-                        <Font size="14.0"/>
+                        <Font size="12.0" />
                     </font>
                 </Text>
-                <Button layoutX="699.0" layoutY="580.0" mnemonicParsing="false" onAction="#back" prefHeight="48.0"
-                        prefWidth="160.0" text="Back" AnchorPane.leftAnchor="700.0" AnchorPane.rightAnchor="140.0">
+                <Button layoutX="699.0" layoutY="580.0" mnemonicParsing="false" onAction="#back" prefHeight="48.0" prefWidth="160.0" text="Back" AnchorPane.leftAnchor="700.0" AnchorPane.rightAnchor="140.0">
                     <font>
-                        <Font size="15.0"/>
+                        <Font size="20.0" />
                     </font>
                 </Button>
             </AnchorPane>
-            <AnchorPane prefHeight="700.0" prefWidth="1000.0" visible="false" AnchorPane.bottomAnchor="0.0"
-                        AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane prefHeight="700.0" prefWidth="1000.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <ScrollPane layoutX="23.0" layoutY="30.0" prefHeight="656.0" prefWidth="568.0">
-                    <VBox prefHeight="642.0" prefWidth="566.0" spacing="20.0"/>
+                    <VBox prefHeight="642.0" prefWidth="566.0" spacing="20.0" />
                 </ScrollPane>
-                <Button layoutX="731.0" layoutY="562.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="195.0"
-                        text="Back" AnchorPane.rightAnchor="60.0">
+                <Button layoutX="731.0" layoutY="562.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="195.0" text="Back" AnchorPane.rightAnchor="60.0">
                     <font>
-                        <Font size="22.0"/>
+                        <Font size="20.0" />
                     </font>
                 </Button>
-                <Button layoutX="737.0" layoutY="463.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="195.0"
-                        text="Add Product" AnchorPane.rightAnchor="60.0">
+                <Button layoutX="737.0" layoutY="463.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="195.0" text="Add Product" AnchorPane.rightAnchor="60.0">
                     <font>
-                        <Font size="22.0"/>
+                        <Font size="20.0" />
                     </font>
                 </Button>
             </AnchorPane>
         </AnchorPane>
-        <AnchorPane fx:id="propertiesAnchorPane" prefHeight="700.0" prefWidth="1002.0" visible="false"
-                    AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                    AnchorPane.topAnchor="0.0">
-            <Button layoutX="583.0" layoutY="607.0" mnemonicParsing="false" onAction="#backFromProperties"
-                    prefHeight="44.0" prefWidth="90.0" text="Back">
+        <AnchorPane fx:id="propertiesAnchorPane" prefHeight="700.0" prefWidth="1002.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Button layoutX="583.0" layoutY="607.0" mnemonicParsing="false" onAction="#backFromProperties" prefHeight="44.0" prefWidth="90.0" text="Back">
                 <font>
-                    <Font size="17.0"/>
+                    <Font size="17.0" />
                 </font>
             </Button>
-            <Button layoutX="717.0" layoutY="606.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="45.0"
-                    prefWidth="198.0" text="Add Product">
+            <Button layoutX="717.0" layoutY="606.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="45.0" prefWidth="198.0" text="Add Product">
                 <font>
-                    <Font size="17.0"/>
+                    <Font size="17.0" />
                 </font>
             </Button>
-            <Text fx:id="addProductError" fill="RED" layoutX="588.0" layoutY="665.0" strokeType="OUTSIDE"
-                  strokeWidth="0.0" text="Error" wrappingWidth="384.80328369140625">
+            <Text fx:id="addProductError" fill="#ff3030" layoutX="588.0" layoutY="665.0" style="-fx-font-family: 'Google Sans';" text="Error" textAlignment="CENTER">
                 <font>
-                    <Font size="14.0"/>
+                    <Font size="12.0" />
                 </font>
             </Text>
             <ScrollPane layoutX="28.0" layoutY="28.0" prefHeight="637.0" prefWidth="499.0">
-                <VBox fx:id="propertiesVBox" prefHeight="635.0" prefWidth="495.0" spacing="15.0"/>
+                <VBox fx:id="propertiesVBox" prefHeight="635.0" prefWidth="495.0" spacing="15.0" />
             </ScrollPane>
         </AnchorPane>
     </AnchorPane>

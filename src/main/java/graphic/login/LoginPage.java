@@ -97,6 +97,7 @@ public class LoginPage extends PageController {
         clientMessage.setHashMap(hashMap);
         ServerMessage answer = send(clientMessage);
         if (answer.getType().equals("Successful")) {
+            MainFX.getInstance().setToken(answer.getFirstString());
             successfulLogin(answer.getUserInfo());
         } else {
             error.setText(answer.getErrorMessage());

@@ -3,6 +3,7 @@ package graphic.products;
 import graphic.MainFX;
 import graphic.PageController;
 import graphic.panel.ProductPane;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -240,7 +241,7 @@ public class ProductsPage extends PageController {
     @Override
     public void update() {
         error.setVisible(false);
-        initializePagination();
+        Platform.runLater(this::initializePagination);
     }
 
     private void initializePagination() {

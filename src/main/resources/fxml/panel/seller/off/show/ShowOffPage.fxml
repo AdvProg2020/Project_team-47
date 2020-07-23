@@ -1,131 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.Scene?>
 <?import javafx.scene.text.*?>
-<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../../../Others/Stylesheet.css"
-       xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="graphic.panel.seller.offs.ShowOffPage">
+
+<Scene stylesheets="@../../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.offs.ShowOffPage">
     <AnchorPane prefHeight="400.0" prefWidth="600.0">
-        <Label fx:id="idLabel" layoutX="16.0" layoutY="17.0" prefHeight="70.0" prefWidth="200.0" text="Off Id:"
-               AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <Label fx:id="idLabel" layoutX="33.0" layoutY="90.0" prefHeight="28.0" prefWidth="80.0" style="-fx-alignment: center;" text="Off Id" AnchorPane.leftAnchor="33.0" AnchorPane.topAnchor="90.0">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Label>
-        <Label fx:id="percentLabel" layoutX="67.0" layoutY="135.0" prefHeight="70.0" prefWidth="200.0" text="Percent:"
-               AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="80.0">
+        <Label fx:id="percentLabel" layoutX="32.0" layoutY="137.0" prefHeight="28.0" prefWidth="82.0" style="-fx-alignment: center;" text="Percent" AnchorPane.leftAnchor="32.0" AnchorPane.topAnchor="137.0">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Label>
-        <Label fx:id="startAtLabel" layoutX="10.0" layoutY="150.0" prefHeight="70.0" prefWidth="200.0" text="Start At:"
-               AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="150.0">
+        <Label fx:id="startAtLabel" layoutX="31.0" layoutY="186.0" prefHeight="28.0" prefWidth="83.0" style="-fx-alignment: center;" text="Start At" AnchorPane.leftAnchor="31.0" AnchorPane.topAnchor="186.0">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Label>
-        <Label fx:id="finishAtLabel" layoutX="78.0" layoutY="220.0" prefHeight="70.0" prefWidth="200.0"
-               text="Finish At:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="230.0">
+        <Label fx:id="finishAtLabel" layoutX="30.0" layoutY="238.0" prefHeight="28.0" prefWidth="84.0" style="-fx-alignment: center;" text="Finish At" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="238.0">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Label>
-        <Separator layoutX="372.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="700.0" prefWidth="12.0"
-                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="0.0"/>
-        <ImageView fitHeight="28.0" fitWidth="90.0" layoutX="213.0" layoutY="100.0" onMouseClicked="#editPercent"
-                   pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="210.0">
-            <Image url="@../../../../../Images/edit-icon.png"/>
+        <Separator layoutX="372.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="700.0" prefWidth="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="0.0" />
+        <ImageView fitHeight="28.0" fitWidth="90.0" layoutX="167.0" layoutY="137.0" onMouseClicked="#editPercent" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="167.0">
+            <Image url="@../../../../../Images/edit-icon.png" />
         </ImageView>
-        <ImageView fitHeight="28.0" fitWidth="90.0" layoutX="197.0" layoutY="172.0" onMouseClicked="#editStartTime"
-                   pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="210.0">
-            <Image url="@../../../../../Images/edit-icon.png"/>
+        <ImageView fitHeight="28.0" fitWidth="90.0" layoutX="167.0" layoutY="186.0" onMouseClicked="#editStartTime" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="167.0">
+            <Image url="@../../../../../Images/edit-icon.png" />
         </ImageView>
-        <ImageView fitHeight="28.0" fitWidth="90.0" layoutX="195.0" layoutY="252.0" onMouseClicked="#editFinishTime"
-                   pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="210.0">
-            <Image url="@../../../../../Images/edit-icon.png"/>
+        <ImageView fitHeight="28.0" fitWidth="90.0" layoutX="167.0" layoutY="238.0" onMouseClicked="#editFinishTime" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="167.0">
+            <Image url="@../../../../../Images/edit-icon.png" />
         </ImageView>
-        <TextField fx:id="percentTextField" layoutX="15.0" layoutY="306.0" prefHeight="32.0" prefWidth="166.0"
-                   promptText="Enter new percent" AnchorPane.leftAnchor="15.0">
+        <TextField fx:id="percentTextField" layoutX="28.0" layoutY="353.0" prefHeight="55.0" prefWidth="212.0" promptText="Enter new percent" styleClass="textfield" AnchorPane.leftAnchor="28.0">
             <font>
-                <Font name="Segoe UI Black Italic" size="13.0"/>
+                <Font name="Segoe UI Black Italic" size="13.0" />
             </font>
         </TextField>
-        <TextField fx:id="yearTextField" layoutX="16.0" layoutY="305.0" prefHeight="30.0" prefWidth="40.0"
-                   promptText="Year" visible="false" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="305.0">
+        <TextField fx:id="yearTextField" layoutX="16.0" layoutY="305.0" prefHeight="30.0" prefWidth="40.0" promptText="Year" styleClass="textfield" visible="false" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="305.0">
             <font>
-                <Font name="Segoe UI Black Italic" size="11.0"/>
+                <Font name="Segoe UI Black Italic" size="11.0" />
             </font>
         </TextField>
-        <TextField fx:id="hourTextField" layoutX="199.0" layoutY="306.0" prefHeight="30.0" prefWidth="45.0"
-                   promptText="Hour" visible="false" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="305.0">
+        <TextField fx:id="hourTextField" layoutX="199.0" layoutY="306.0" prefHeight="30.0" prefWidth="45.0" promptText="Hour" styleClass="textfield" visible="false" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="305.0">
             <font>
-                <Font name="Segoe UI Black Italic" size="11.0"/>
+                <Font name="Segoe UI Black Italic" size="11.0" />
             </font>
         </TextField>
-        <TextField fx:id="minuteTextFiled" layoutX="266.0" layoutY="307.0" prefHeight="30.0" prefWidth="55.0"
-                   promptText="Minute" visible="false" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="305.0">
+        <TextField fx:id="minuteTextFiled" layoutX="266.0" layoutY="307.0" prefHeight="30.0" prefWidth="55.0" promptText="Minute" styleClass="textfield" visible="false" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="305.0">
             <font>
-                <Font name="Segoe UI Black Italic" size="11.0"/>
+                <Font name="Segoe UI Black Italic" size="11.0" />
             </font>
         </TextField>
-        <TextField fx:id="monthTextField" layoutX="56.0" layoutY="305.0" prefHeight="30.0" prefWidth="40.0"
-                   promptText="Month" visible="false" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="305.0">
+        <TextField fx:id="monthTextField" layoutX="56.0" layoutY="305.0" prefHeight="30.0" prefWidth="40.0" promptText="Month" styleClass="textfield" visible="false" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="305.0">
             <font>
-                <Font name="Segoe UI Black Italic" size="11.0"/>
+                <Font name="Segoe UI Black Italic" size="11.0" />
             </font>
         </TextField>
-        <TextField fx:id="dayTextField" layoutX="92.0" layoutY="306.0" prefHeight="30.0" prefWidth="40.0"
-                   promptText="Day" visible="false" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="305.0">
+        <TextField fx:id="dayTextField" layoutX="92.0" layoutY="306.0" prefHeight="30.0" prefWidth="40.0" promptText="Day" styleClass="textfield" visible="false" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="305.0">
             <font>
-                <Font name="Segoe UI Black Italic" size="11.0"/>
+                <Font name="Segoe UI Black Italic" size="11.0" />
             </font>
         </TextField>
-        <Button fx:id="submitButton" layoutX="20.0" layoutY="354.0" mnemonicParsing="false" onAction="#submit"
-                prefHeight="48.0" prefWidth="98.0" text="Submit" AnchorPane.leftAnchor="15.0">
+        <Button fx:id="submitButton" layoutX="255.0" layoutY="353.0" mnemonicParsing="false" onAction="#submit" prefHeight="55.0" prefWidth="98.0" text="Submit" AnchorPane.leftAnchor="255.0">
             <font>
-                <Font name="Segoe UI Black Italic" size="14.0"/>
+                <Font name="Segoe UI Black Italic" size="14.0" />
             </font>
         </Button>
-        <Button layoutX="620.0" layoutY="28.0" mnemonicParsing="false" onAction="#showProduct" prefHeight="43.0"
-                prefWidth="111.0" text="Show Product" visible="false">
+        <Button layoutX="620.0" layoutY="28.0" mnemonicParsing="false" onAction="#showProduct" prefHeight="55.0" prefWidth="111.0" text="Show Product" visible="false">
             <font>
-                <Font name="Segoe UI Black Italic" size="11.0"/>
+                <Font name="Segoe UI Black Italic" size="11.0" />
             </font>
         </Button>
-        <TextField fx:id="productIdTextField" layoutX="416.0" layoutY="29.0" prefHeight="41.0" prefWidth="180.0"
-                   promptText="Product Id">
+        <TextField fx:id="productIdTextField" layoutX="410.0" layoutY="28.0" prefHeight="55.0" prefWidth="180.0" promptText="Product Id" styleClass="textfield">
             <font>
-                <Font name="Segoe UI Black Italic" size="13.0"/>
+                <Font name="Segoe UI Black Italic" size="13.0" />
             </font>
         </TextField>
-        <Button layoutX="755.0" layoutY="27.0" mnemonicParsing="false" onAction="#addToOff" prefHeight="43.0"
-                prefWidth="111.0" text="Add To Off">
+        <Button layoutX="608.0" layoutY="25.0" mnemonicParsing="false" onAction="#addToOff" prefHeight="55.0" prefWidth="147.0" text="Add To Off">
             <font>
-                <Font name="Segoe UI Black Italic" size="11.0"/>
+                <Font name="Segoe UI Black Italic" size="11.0" />
             </font>
         </Button>
-        <Button layoutX="880.0" layoutY="25.0" mnemonicParsing="false" onAction="#removeFromOff" prefHeight="43.0"
-                prefWidth="111.0" text="Remove From Off">
+        <Button layoutX="772.0" layoutY="25.0" mnemonicParsing="false" onAction="#removeFromOff" prefHeight="55.0" prefWidth="219.0" text="Remove From Off">
             <font>
-                <Font name="Segoe UI Black Italic" size="11.0"/>
+                <Font name="Segoe UI Black Italic" size="11.0" />
             </font>
         </Button>
         <TableView fx:id="table" layoutX="476.0" layoutY="116.0" prefHeight="562.0" prefWidth="392.0">
             <columns>
-                <TableColumn fx:id="productName" prefWidth="196.26657104492188" text="Product Name"/>
-                <TableColumn fx:id="productId" prefWidth="196.533447265625" text="Product Id"/>
+                <TableColumn fx:id="productName" prefWidth="196.26657104492188" text="Product Name" />
+                <TableColumn fx:id="productId" prefWidth="196.533447265625" text="Product Id" />
             </columns>
         </TableView>
-        <Text fx:id="productError" fill="RED" layoutX="416.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="Error" visible="false" wrappingWidth="254.67001342773438"/>
-        <Text fx:id="editError" fill="RED" layoutX="18.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="Error" visible="false" wrappingWidth="254.67001342773438"/>
-        <Button layoutX="15.0" layoutY="616.0" mnemonicParsing="false" onAction="#back" prefHeight="48.0"
-                prefWidth="98.0" text="Back">
+        <Text fx:id="productError" fill="#ff3030" layoutX="416.0" layoutY="92.0" text="Error" visible="false" />
+        <Text fx:id="editError" fill="#ff3030" layoutX="18.0" layoutY="430.0" text="Error" visible="false" />
+        <Button layoutX="31.0" layoutY="608.0" mnemonicParsing="false" onAction="#back" prefHeight="55.0" prefWidth="98.0" text="Back">
             <font>
-                <Font name="Segoe UI Black Italic" size="14.0"/>
+                <Font name="Segoe UI Black Italic" size="14.0" />
             </font>
         </Button>
     </AnchorPane>

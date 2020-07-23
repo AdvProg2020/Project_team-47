@@ -1,7 +1,73 @@
+@font-face {
+    src: url("../fxml/fonts/google-sans-bold.ttf");
+}
+
+@font-face {
+    src: url("../fxml/fonts/google-sans-regular.ttf");
+}
+
+@font-face {
+    src: url("../fxml/fonts/Questrial-Regular.ttf");
+}
+
 .root {
     -fx-background-color: beige;
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch;
     -fx-min-height: 700px;
     -fx-min-width: 1000px;
+    -fx-font-family: Questrial;
+}
+
+Button {
+    -fx-background-color: #292E31;
+    -fx-text-fill: #28DB67;
+    -fx-font-family: "Google Sans Medium";
+    -fx-background-radius: 100px;
+    -fx-font-size: 20px;
+}
+
+Button:hover {
+    -fx-background-color: #292E31;
+    -fx-text-fill: #28db67;
+    -fx-font-family: "Google Sans Medium";
+    -fx-background-radius: 100px;
+    -fx-font-size: 20px;
+    -fx-cursor: hand;
+}
+
+.textfield {
+    -fx-background-color: #f5fff7;
+    -fx-text-fill: #292E31;
+    -fx-background-radius: 30px;
+    -fx-border-radius: 30px;
+    -fx-font-family: 'Google Sans';
+    -fx-font-size: 17px;
+    -fx-padding: 0 0 0 20px;
+}
+
+.textfield:focused {
+    -fx-background-color: #f5fff7;
+    -fx-text-fill: #292E31;
+    -fx-background-radius: 30px;
+    -fx-border-radius: 30px;
+    -fx-font-family: 'Google Sans';
+    -fx-font-size: 17px;
+    -fx-border-width: 2px;
+    -fx-border-color: #28db67;
+    -fx-padding: 0 0 0 20px;
+}
+
+Label {
+    -fx-background-color: #28db67;
+    -fx-text-fill: #292E31;
+    -fx-font-size: 13px;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-font-family: 'Google Sans';
+    -fx-padding: 5px 10px;
+}
+
+.radio {
+    -fx-font-family: Questrial;
 }
