@@ -3,6 +3,7 @@ package graphic.panel.customer;
 import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -11,6 +12,7 @@ import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -21,7 +23,9 @@ public class PurchasePage extends PageController {
     @FXML
     private Button submitButton;
     @FXML
-    private Button purchaseButton;
+    private Button purchaseWithWalletButton;
+    @FXML
+    private Button purchaseWithBankButton;
     @FXML
     private TextField postalCode;
     @FXML
@@ -60,9 +64,25 @@ public class PurchasePage extends PageController {
     }
 
     @FXML
-    private void purchase() {
+    private void purchaseWithWallet() {
         MainFX.getInstance().click();
-        if (sendAndProcess(new ClientMessage("pay"))) {
+        ClientMessage clientMessage = new ClientMessage("pay with wallet");
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("wallet");
+        clientMessage.setArrayList(arrayList);
+        if (sendAndProcess(clientMessage)) {
+            TemplatePage.getInstance().back();
+        }
+    }
+
+    @FXML
+    private void purchaseWithBank() {
+        MainFX.getInstance().click();
+        ClientMessage clientMessage = new ClientMessage("pay with bank");
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("bank");
+        clientMessage.setArrayList(arrayList);
+        if (sendAndProcess(clientMessage)) {
             TemplatePage.getInstance().back();
         }
     }
@@ -85,7 +105,8 @@ public class PurchasePage extends PageController {
             otherRequests.setVisible(false);
             useCodeButton.setVisible(true);
             code.setVisible(true);
-            purchaseButton.setVisible(true);
+            purchaseWithWalletButton.setVisible(true);
+            purchaseWithBankButton.setVisible(true);
         }
     }
 

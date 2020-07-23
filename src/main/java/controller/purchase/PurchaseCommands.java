@@ -191,7 +191,7 @@ class PayCommand extends PurchaseCommands {
     private static PayCommand command;
 
     private PayCommand() {
-        this.name = "pay";
+        this.name = "pay with wallet|bank";
     }
 
     public static PayCommand getInstance() {
@@ -203,7 +203,7 @@ class PayCommand extends PurchaseCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException, NotEnoughMoneyException {
-        pay();
+        pay(request.getArrayList().get(0));
         return actionCompleted();
     }
 
@@ -212,16 +212,16 @@ class PayCommand extends PurchaseCommands {
 
     }
 
-    private void pay() throws NotEnoughMoneyException {
+    private void pay(String source) throws NotEnoughMoneyException {
         //this function is the last step for buying
-
+        //source can be wallet or bank
         Customer customer = (Customer) getLoggedUser();
         ShoppingCart shoppingCart = getShoppingCart();
         shoppingCart.update();
 
         double finalPrice = getFinalPrice(shoppingCart.getTotalPrice());
         //check if customer has enough money
-        if (!customer.canUserBuy(finalPrice)) {
+        if (!customer.canUserBuy(finalPrice, source)) {
             throw new NotEnoughMoneyException();
         } else if (finalPrice > 1000000) {
             giveGift(customer, finalPrice);
@@ -231,13 +231,23 @@ class PayCommand extends PurchaseCommands {
 
         shoppingCart.buy();
         purchaseLog().setPrice(finalPrice);
-        customer.decreaseMoney(finalPrice);
+        decreaseMoneyFromCustomer(source, finalPrice, customer);
+
         setPurchaseLogInfo(shoppingCart);
 
         customer.sendBuyingEmail(purchaseLog().getLogId());
 
         finishingPurchasing();
     }
+
+    private void decreaseMoneyFromCustomer(String source, double finalPrice, Customer customer) {
+        if (source.equals("wallet")) {
+            customer.decreaseMoney(finalPrice);
+        } else {
+            //todo amir bank
+        }
+    }
+
 
     private void useDiscountCode(ShoppingCart shoppingCart) {
         //this function will use discount and if there was no code it will set purchase log info
