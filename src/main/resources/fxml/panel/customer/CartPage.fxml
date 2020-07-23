@@ -2,38 +2,30 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity"
-            prefHeight="592.0" prefWidth="998.0" xmlns="http://javafx.com/javafx/11.0.1"
-            fx:controller="graphic.panel.customer.CartPage">
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="998.0" stylesheets="@../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.customer.CartPage">
     <ScrollPane layoutX="5.0" layoutY="6.0" prefHeight="575.0" prefWidth="686.0">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="573.0" prefWidth="682.0">
-            <VBox fx:id="vBox" layoutX="43.0" layoutY="19.0" prefHeight="573.6" prefWidth="682.4"
-                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                  AnchorPane.topAnchor="0.0"/>
+            <VBox fx:id="vBox" layoutX="43.0" layoutY="19.0" prefHeight="573.6" prefWidth="682.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
         </AnchorPane>
     </ScrollPane>
-    <TextField fx:id="productId" layoutX="730.0" layoutY="42.0" prefHeight="34.0" prefWidth="190.0" promptText="Id">
+    <TextField fx:id="productId" layoutX="720.0" layoutY="31.0" prefHeight="55.0" prefWidth="190.0" promptText="Id" styleClass="textfield">
         <font>
-            <Font size="17.0"/>
+            <Font size="17.0" />
         </font>
     </TextField>
-    <Button layoutX="734.0" layoutY="135.0" mnemonicParsing="false" onAction="#increase" prefHeight="38.0"
-            prefWidth="81.0" text="Increase"/>
-    <Button layoutX="839.0" layoutY="136.0" mnemonicParsing="false" onAction="#decrease" prefHeight="38.0"
-            prefWidth="81.0" text="Decrease"/>
-    <Button layoutX="845.0" layoutY="464.0" mnemonicParsing="false" onAction="#purchase" prefHeight="61.0"
-            prefWidth="78.0" text="Purchase"/>
-    <Label fx:id="priceLabel" layoutX="701.0" layoutY="412.0" prefHeight="46.0" prefWidth="204.0" text="Price">
+    <Button layoutX="726.0" layoutY="177.0" mnemonicParsing="false" onAction="#increase" prefHeight="55.0" prefWidth="129.0" text="Increase" />
+    <Button layoutX="726.0" layoutY="239.0" mnemonicParsing="false" onAction="#decrease" prefHeight="55.0" prefWidth="129.0" text="Decrease" />
+    <Button layoutX="794.0" layoutY="464.0" mnemonicParsing="false" onAction="#purchase" prefHeight="55.0" prefWidth="129.0" text="Purchase" />
+    <Label fx:id="priceLabel" layoutX="726.0" layoutY="322.0" prefHeight="28.0" prefWidth="190.0" style="-fx-alignment: center;" text="Price">
         <font>
-            <Font size="17.0"/>
+            <Font size="17.0" />
         </font>
     </Label>
-    <TextField fx:id="seller" layoutX="731.0" layoutY="86.0" prefHeight="34.0" prefWidth="190.0"
-               promptText="Seller">
+    <TextField fx:id="seller" layoutX="720.0" layoutY="104.0" prefHeight="55.0" prefWidth="190.0" promptText="Seller" styleClass="textfield">
         <font>
-            <Font size="17.0"/>
+            <Font size="17.0" />
         </font>
     </TextField>
 </AnchorPane>
