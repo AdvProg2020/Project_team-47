@@ -6,12 +6,17 @@
     src: url("../fxml/fonts/google-sans-regular.ttf");
 }
 
+@font-face {
+    src: url("../fxml/fonts/Questrial-Regular.ttf");
+}
+
 .root {
     -fx-background-color: beige;
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch;
     -fx-min-height: 700px;
     -fx-min-width: 1000px;
+    -fx-font-family: Questrial;
 }
 
 Button {
@@ -61,4 +66,8 @@ Label {
     -fx-border-radius: 20px;
     -fx-font-family: 'Google Sans';
     -fx-padding: 5px 10px;
+}
+
+.radio {
+    -fx-font-family: Questrial;
 }
