@@ -101,7 +101,6 @@ class CreateAccountCommand extends BankCommand {
 
 class CreateReceiptCommand extends BankCommand {
     private static CreateReceiptCommand command;
-    private User user;
 
     private CreateReceiptCommand() {
         this.name = "create_receipt \\d+ \\S+ \\d+ \\d+ \\d+.*";
@@ -125,29 +124,9 @@ class CreateReceiptCommand extends BankCommand {
         String[] parameters = request.split("\\s");
         Receipt receipt = new Receipt(parameters[2], parameters[1], parameters[3],
                 parameters[4], parameters[5], getDescription(request));
-        switch (parameters[2]) {
-            case "deposit" -> deposit(receipt);
-            case "withdraw" -> withdraw(receipt);
-            case "move" -> move(receipt);
-        }
     }
 
-    private void move(Receipt receipt) {
-        Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
-        Account destAccount = Bank.getInstance().findAccountWithId(receipt.getDestId());
-        sourceAccount.addMoney(-1 * receipt.getMoney());
-        destAccount.addMoney(receipt.getMoney());
-    }
 
-    private void withdraw(Receipt receipt) {
-        Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
-        sourceAccount.addMoney(-1 * receipt.getMoney());
-    }
-
-    private void deposit(Receipt receipt) {
-        Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
-        sourceAccount.addMoney(receipt.getMoney());
-    }
 
     private String getDescription(String request) {
         String[] parameters = request.split("\\s");
@@ -447,41 +426,68 @@ class PayCommand extends BankCommand {
     }
 
     private void pay(String request) {
-        //todo amir
+        Receipt receipt = Bank.getInstance().findReceiptWithId(Integer.parseInt(request));
+        switch (receipt.getType()) {
+            case "deposit" -> deposit(receipt);
+            case "withdraw" -> withdraw(receipt);
+            case "move" -> move(receipt);
+        }
+    }
+
+    private void move(Receipt receipt) {
+        Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
+        Account destAccount = Bank.getInstance().findAccountWithId(receipt.getDestId());
+        sourceAccount.addMoney(-1 * receipt.getMoney());
+        destAccount.addMoney(receipt.getMoney());
+    }
+
+    private void withdraw(Receipt receipt) {
+        Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
+        sourceAccount.addMoney(-1 * receipt.getMoney());
+    }
+
+    private void deposit(Receipt receipt) {
+        Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
+        sourceAccount.addMoney(receipt.getMoney());
     }
 
     @Override
     public void checkPrimaryErrors(String request) throws BankException {
-        if (!isReceiptIdValid()) {
+        if (!isReceiptIdValid(request)) {
             throw new BankException.InvalidReceiptIdException();
         }
-        if (isReceiptPaid()) {
+        if (isReceiptPaid(request)) {
             throw new BankException.PaidReceiptException();
         }
-        if (!isMoneyEnough()) {
+        if (!isMoneyEnough(request)) {
             throw new BankException.InsufficientMoneyException();
         }
-        if (isAccountIdValid()) {
+        if (isAccountIdValid(request)) {
             throw new BankException.InvalidAccountIdException();
         }
     }
 
-    private boolean isReceiptIdValid() {
-        //todo amir
-        return true;
+    private boolean isReceiptIdValid(String request) {
+        int id = Integer.parseInt(request.split("\\s")[1]);
+        return Bank.getInstance().isReceiptIdValid(id);
     }
 
-    private boolean isReceiptPaid() {
-        //todo amir
-        return true;
+    private boolean isReceiptPaid(String request) {
+        int id = Integer.parseInt(request.split("\\s")[1]);
+        return Bank.getInstance().findReceiptWithId(id).isPaid();
     }
 
-    private boolean isMoneyEnough() {
-        //todo amir
-        return true;
+    private boolean isMoneyEnough(String request) {
+        int id = Integer.parseInt(request.split("\\s")[1]);
+        Receipt receipt = Bank.getInstance().findReceiptWithId(id);
+        Account source = Bank.getInstance().findAccountWithId(receipt.getSourceId());
+        return switch (receipt.getType()) {
+            case "withdraw", "move" -> source.getMoney() >= receipt.getMoney();
+            default -> true;
+        };
     }
 
-    private boolean isAccountIdValid() {
+    private boolean isAccountIdValid(String request) {
         //todo amir
         return true;
     }

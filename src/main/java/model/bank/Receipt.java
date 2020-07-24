@@ -8,6 +8,7 @@ public class Receipt {
     private final int sourceId;
     private final int destId;
     private final String description;
+    private boolean paid;
 
     public Receipt(String type, String tokenId, String money, String sourceId, String destId, String description) {
         this.type = type;
@@ -18,10 +19,19 @@ public class Receipt {
         this.description = description;
         Bank.getInstance().getReceipts().add(this);
         receiptId = Bank.getInstance().getReceipts().size();
+        paid = false;
     }
 
     public String getType() {
         return type;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 
     public int getReceiptId() {

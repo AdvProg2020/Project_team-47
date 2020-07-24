@@ -100,5 +100,21 @@ public class Bank {
         return null;
     }
 
+    public Receipt findReceiptWithId(int id) {
+        for (Receipt receipt : receipts) {
+            if (receipt.getReceiptId() == id) {
+                return receipt;
+            }
+        }
+        return null;
+    }
 
+    public boolean isReceiptIdValid(int id) {
+        for (Receipt receipt : receipts) {
+            if (receipt.getReceiptId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
