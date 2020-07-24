@@ -264,8 +264,7 @@ class ExitCommand extends BankCommand {
 
     @Override
     public String process(String request) throws Exception {
-        //todo amir
-        return actionCompleted();
+        return "exit";
     }
 
     @Override
@@ -293,12 +292,12 @@ class GetBalanceCommand extends BankCommand {
     @Override
     public String process(String request) throws Exception {
         checkPrimaryErrors(request);
-        getBalance(request.split("\\s")[1]);
-        return actionCompleted();
+        return "" + "getBalance " + getBalance(request.split("\\s")[1]);
     }
 
-    private void getBalance(String tokenId) {
-        //todo amir
+    private double getBalance(String tokenId) {
+        int intTokenId = Integer.parseInt(tokenId);
+        return Bank.getInstance().findTokenWithId(intTokenId).getAccount().getMoney();
     }
 
     @Override
@@ -312,14 +311,13 @@ class GetBalanceCommand extends BankCommand {
         }
     }
 
-    private boolean isTokenExpired(String token) {
-        //todo amir
-        return true;
+    private boolean isTokenValid(String tokenId) {
+        return Bank.getInstance().isTokenValid(Integer.parseInt(tokenId));
     }
 
-    private boolean isTokenValid(String token) {
-        //todo amir
-        return true;
+    private boolean isTokenExpired(String tokenId) {
+        Token token = Bank.getInstance().findTokenWithId(Integer.parseInt(tokenId));
+        return token.getFinishTime().before(Controller.getCurrentTime());
     }
 
 
@@ -328,7 +326,6 @@ class GetBalanceCommand extends BankCommand {
 
 class GetTokenCommand extends BankCommand {
     private static GetTokenCommand command;
-    private User user;
 
     private GetTokenCommand() {
         this.name = "get token \\S+ \\S+";
@@ -347,12 +344,12 @@ class GetTokenCommand extends BankCommand {
     public String process(String request) throws Exception {
         checkPrimaryErrors(request);
         getToken(request);
-        return actionCompleted();
+        return "" + "getToken " + getToken(request);
     }
 
-    private void getToken(String request) {
+    private int getToken(String request) {
         String[] parameters = request.split("\\s");
-        new Token(parameters[1], parameters[2]);
+        return new Token(parameters[1], parameters[2]).getTokenId();
     }
 
     @Override

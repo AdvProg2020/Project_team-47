@@ -28,6 +28,10 @@ public class Token {
         this.finishTime = cal.getTime();
     }
 
+    public Account getAccount() {
+        return Bank.getInstance().findAccountWithUsername(this.username);
+    }
+
     public Date getStartTime() {
         return startTime;
     }

@@ -139,4 +139,13 @@ public class Bank {
         }
         return null;
     }
+
+    public Account findAccountWithUsername(String username) {
+        for (Account account : accounts) {
+            if (account.getUsername().equals(username)) {
+                return account;
+            }
+        }
+        return null;
+    }
 }

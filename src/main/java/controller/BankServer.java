@@ -64,9 +64,22 @@ public class BankServer {
             if (command == null) {
                 throw new BankException.InvalidInputException();
             }
-            dataOutputStream.writeUTF(command.process(input));
+            String answer = command.process(input);
+            if (answer.equals("exit")) {
+                waitForClient();
+            } else {
+                dataOutputStream.writeUTF(answer);
+            }
         }
+    }
 
+    private void waitForClient() {
+        try {
+            storeSocket = new Socket();
+            run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private BankCommand findCommand(String input) {
