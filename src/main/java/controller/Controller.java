@@ -45,7 +45,6 @@ abstract public class Controller {
         controllers.add(OffController.getInstance());
         controllers.add(ProductController.getInstance());
         controllers.add(PurchaseController.getInstance());
-        controllers.add(BankController.getInstance());
     }
 
     public static ServerMessage process(ClientMessage clientMessage) throws Exception {

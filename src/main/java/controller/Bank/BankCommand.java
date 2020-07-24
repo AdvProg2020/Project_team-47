@@ -1,6 +1,5 @@
 package controller.Bank;
 
-import controller.Command;
 import controller.Controller;
 import model.bank.Account;
 import model.bank.Bank;
@@ -9,13 +8,14 @@ import model.bank.Token;
 import model.ecxeption.Bank.BankException;
 import model.ecxeption.Exception;
 import model.ecxeption.user.*;
-import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import model.user.User;
 
 import static controller.Controller.*;
 
-public abstract class BankCommands extends Command {
+public abstract class BankCommand {
+    protected String name;
+
     public static CreateAccountCommand getCreateAccountCommand() {
         return CreateAccountCommand.getInstance();
     }
@@ -43,9 +43,21 @@ public abstract class BankCommands extends Command {
     public static PayCommand getPayCommand() {
         return PayCommand.getInstance();
     }
+
+    public abstract String process(String request) throws Exception;
+
+    public abstract void checkPrimaryErrors(String request) throws Exception;
+
+    public String getName() {
+        return name;
+    }
+
+    String actionCompleted() {
+        return "successful";
+    }
 }
 
-class CreateAccountCommand extends BankCommands {
+class CreateAccountCommand extends BankCommand {
     private static CreateAccountCommand command;
 
     private CreateAccountCommand() {
@@ -61,15 +73,15 @@ class CreateAccountCommand extends BankCommands {
 
 
     @Override
-    public ServerMessage process(ClientMessage request) throws Exception {
+    public String process(String request) throws Exception {
         checkPrimaryErrors(request);
-        createAccount(request.getType().split("\\s"));
+        createAccount(request.split("\\s"));
         return actionCompleted();
     }
 
     @Override
-    public void checkPrimaryErrors(ClientMessage request) throws Exception {
-        String[] parameters = request.getType().split("\\s");
+    public void checkPrimaryErrors(String request) throws Exception {
+        String[] parameters = request.split("\\s");
         // parameters = create_account firstName lastName username password repeat-password
         if (!parameters[4].equals(parameters[5])) {
             throw new BankException.IncorrectPasswordException();
@@ -90,7 +102,7 @@ class CreateAccountCommand extends BankCommands {
 }//end CreateAccountCommand Class
 
 
-class CreateReceiptCommand extends BankCommands {
+class CreateReceiptCommand extends BankCommand {
     private static CreateReceiptCommand command;
     private User user;
 
@@ -106,14 +118,14 @@ class CreateReceiptCommand extends BankCommands {
     }
 
     @Override
-    public ServerMessage process(ClientMessage request) throws Exception {
+    public String process(String request) throws Exception {
         checkPrimaryErrors(request);
         createReceipt(request);
         return actionCompleted();
     }
 
-    private void createReceipt(ClientMessage request) {
-        String[] parameters = request.getType().split("\\s");
+    private void createReceipt(String request) {
+        String[] parameters = request.split("\\s");
         Receipt receipt = new Receipt(parameters[2], parameters[1], parameters[3],
                 parameters[4], parameters[5], getDescription(request));
         switch (parameters[2]) {
@@ -135,16 +147,16 @@ class CreateReceiptCommand extends BankCommands {
         //todo amir
     }
 
-    private String getDescription(ClientMessage request) {
-        String[] parameters = request.getType().split("\\s");
+    private String getDescription(String request) {
+        String[] parameters = request.split("\\s");
         String s = parameters[0] + " " + parameters[1] +
                 " " + parameters[2] + " " + parameters[3] +
                 " " +parameters[4] + " " + parameters[5] + " ";
-        return request.getType().substring(s.length());
+        return request.substring(s.length());
     }
 
     @Override
-    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+    public void checkPrimaryErrors(String request) throws Exception {
         String[] parameters = name.split("\\s");
         if (!isReceiptTypeValid(parameters[2])) {
             throw new BankException.InvalidReceiptTypeException();
@@ -232,7 +244,7 @@ class CreateReceiptCommand extends BankCommands {
 }//end CreateReceiptCommand Class
 
 
-class ExitCommand extends BankCommands {
+class ExitCommand extends BankCommand {
     private static ExitCommand command;
 
     private ExitCommand() {
@@ -249,20 +261,20 @@ class ExitCommand extends BankCommands {
 
 
     @Override
-    public ServerMessage process(ClientMessage request) throws Exception {
+    public String process(String request) throws Exception {
         //todo amir
         return actionCompleted();
     }
 
     @Override
-    public void checkPrimaryErrors(ClientMessage request) throws ConfirmException, UserNotExistException, WrongPasswordException {
+    public void checkPrimaryErrors(String request) throws ConfirmException, UserNotExistException, WrongPasswordException {
 
     }
 
 }//end ExitCommand Class
 
 
-class GetBalanceCommand extends BankCommands {
+class GetBalanceCommand extends BankCommand {
     private static GetBalanceCommand command;
 
     private GetBalanceCommand() {
@@ -277,9 +289,9 @@ class GetBalanceCommand extends BankCommands {
     }
 
     @Override
-    public ServerMessage process(ClientMessage request) throws Exception {
+    public String process(String request) throws Exception {
         checkPrimaryErrors(request);
-        getBalance(request.getType().split("\\s")[1]);
+        getBalance(request.split("\\s")[1]);
         return actionCompleted();
     }
 
@@ -288,7 +300,7 @@ class GetBalanceCommand extends BankCommands {
     }
 
     @Override
-    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+    public void checkPrimaryErrors(String request) throws Exception {
         String token = name.split("\\s")[1];
         if (!isTokenValid(token)) {
             throw new BankException.InvalidTokenException();
@@ -312,7 +324,7 @@ class GetBalanceCommand extends BankCommands {
 }//end GetBalanceCommand Class
 
 
-class GetTokenCommand extends BankCommands {
+class GetTokenCommand extends BankCommand {
     private static GetTokenCommand command;
     private User user;
 
@@ -330,20 +342,20 @@ class GetTokenCommand extends BankCommands {
 
 
     @Override
-    public ServerMessage process(ClientMessage request) throws Exception {
+    public String process(String request) throws Exception {
         checkPrimaryErrors(request);
         getToken(request);
         return actionCompleted();
     }
 
-    private void getToken(ClientMessage request) {
-        String[] parameters = request.getType().split("\\s");
+    private void getToken(String request) {
+        String[] parameters = request.split("\\s");
         new Token(parameters[1], parameters[2]);
     }
 
     @Override
-    public void checkPrimaryErrors(ClientMessage request) throws Exception {
-        String[] parameters = request.getType().split("\\s");
+    public void checkPrimaryErrors(String request) throws Exception {
+        String[] parameters = request.split("\\s");
         if (Bank.getInstance().isUsernameAvailable(parameters[1])) {
             throw new BankException.InvalidUsernameOrPasswordException();
         }
@@ -355,7 +367,7 @@ class GetTokenCommand extends BankCommands {
 }//end GetTokenCommand Class
 
 
-class GetTransactionsCommand extends BankCommands {
+class GetTransactionsCommand extends BankCommand {
     private static GetTransactionsCommand command;
 
     private GetTransactionsCommand() {
@@ -372,19 +384,19 @@ class GetTransactionsCommand extends BankCommands {
 
 
     @Override
-    public ServerMessage process(ClientMessage request) throws BankException {
+    public String process(String request) throws BankException {
         checkPrimaryErrors(request);
         getTransactions(request);
         return actionCompleted();
     }
 
-    private void getTransactions(ClientMessage request) {
+    private void getTransactions(String request) {
         //todo amir
     }
 
     @Override
-    public void checkPrimaryErrors(ClientMessage request) throws BankException {
-        String[] parameters = request.getType().split("\\s");
+    public void checkPrimaryErrors(String request) throws BankException {
+        String[] parameters = request.split("\\s");
         if (!isTokenValid(parameters[1])) {
             throw new BankException.InvalidTokenException();
         }
@@ -414,7 +426,7 @@ class GetTransactionsCommand extends BankCommands {
 
 }//end GetTransactionsCommand Class
 
-class PayCommand extends BankCommands {
+class PayCommand extends BankCommand {
     private static PayCommand command;
 
     private PayCommand() {
@@ -430,18 +442,18 @@ class PayCommand extends BankCommands {
     }
 
     @Override
-    public ServerMessage process(ClientMessage request) throws BankException {
+    public String process(String request) throws BankException {
         checkPrimaryErrors(request);
         pay(request);
         return actionCompleted();
     }
 
-    private void pay(ClientMessage request) {
+    private void pay(String request) {
         //todo amir
     }
 
     @Override
-    public void checkPrimaryErrors(ClientMessage request) throws BankException {
+    public void checkPrimaryErrors(String request) throws BankException {
         if (!isReceiptIdValid()) {
             throw new BankException.InvalidReceiptIdException();
         }

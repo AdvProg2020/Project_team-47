@@ -1,8 +1,6 @@
 package controller.Bank;
 
 import controller.Controller;
-import controller.login.LoginCommands;
-import controller.login.LoginController;
 
 import java.util.ArrayList;
 
@@ -11,14 +9,14 @@ public class BankController extends Controller {
 
 
     private BankController() {
-        commands = new ArrayList<>();
-        commands.add(BankCommands.getCreateAccountCommand());
-        commands.add(BankCommands.getCreateReceiptCommand());
-        commands.add(BankCommands.getExitCommand());
-        commands.add(BankCommands.getBalanceCommand());
-        commands.add(BankCommands.getTokenCommand());
-        commands.add(BankCommands.getTransactionsCommand());
-        commands.add(BankCommands.getPayCommand());
+        /*commands = new ArrayList<>();
+        commands.add(BankCommand.getCreateAccountCommand());
+        commands.add(BankCommand.getCreateReceiptCommand());
+        commands.add(BankCommand.getExitCommand());
+        commands.add(BankCommand.getBalanceCommand());
+        commands.add(BankCommand.getTokenCommand());
+        commands.add(BankCommand.getTransactionsCommand());
+        commands.add(BankCommand.getPayCommand());*/
     }
 
 
