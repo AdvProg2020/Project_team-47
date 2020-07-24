@@ -6,6 +6,7 @@ public class Account {
     private final String firstName;
     private final String lastName;
     private double money;
+    private final int id;
 
     public Account(String username, String password, String firstName, String lastName) {
         this.username = username;
@@ -13,6 +14,11 @@ public class Account {
         this.firstName = firstName;
         this.lastName = lastName;
         money = 0;
+        id = Bank.getInstance().getAccounts().size();
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -35,7 +41,7 @@ public class Account {
         return money;
     }
 
-    public void setMoney(double money) {
-        this.money = money;
+    public void addMoney(double money) {
+        this.money = this.money + money;
     }
 }

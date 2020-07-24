@@ -8,10 +8,7 @@ import model.bank.Token;
 import model.ecxeption.Bank.BankException;
 import model.ecxeption.Exception;
 import model.ecxeption.user.*;
-import model.send.receive.ServerMessage;
 import model.user.User;
-
-import static controller.Controller.*;
 
 public abstract class BankCommand {
     protected String name;
@@ -136,15 +133,20 @@ class CreateReceiptCommand extends BankCommand {
     }
 
     private void move(Receipt receipt) {
-        //todo amir
+        Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
+        Account destAccount = Bank.getInstance().findAccountWithId(receipt.getDestId());
+        sourceAccount.addMoney(-1 * receipt.getMoney());
+        destAccount.addMoney(receipt.getMoney());
     }
 
     private void withdraw(Receipt receipt) {
-        //todo amir
+        Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
+        sourceAccount.addMoney(-1 * receipt.getMoney());
     }
 
     private void deposit(Receipt receipt) {
-        //todo amir
+        Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
+        sourceAccount.addMoney(receipt.getMoney());
     }
 
     private String getDescription(String request) {
@@ -173,16 +175,16 @@ class CreateReceiptCommand extends BankCommand {
         if (isTokenExpired(parameters[0])) {
             throw new BankException.ExpiredTokenException();
         }
-        if (!isAccountIdValid(parameters[4])) {
+        if (!isSourceOrDestAccountIdValid(parameters[4])) {
             throw new BankException.InvalidSourceAccountIdException();
         }
-        if (!isAccountIdValid(parameters[5])) {
+        if (!isSourceOrDestAccountIdValid(parameters[5])) {
             throw new BankException.InvalidDestAccountIdException();
         }
         if (!isSourceAndDestIdSame(parameters[4], parameters[5])) {
             throw new BankException.SourceAndDestIdSameException();
         }
-        if (!isAccountIdValid(parameters[4], parameters[5])) {
+        if (!isAccountsIdsValid(parameters[4], parameters[5])) {
             throw new BankException.InvalidAccountIdException();
         }
         if (!inputContainsInvalidCharacter()) {
@@ -223,16 +225,16 @@ class CreateReceiptCommand extends BankCommand {
         return token.getFinishTime().before(Controller.getCurrentTime());
     }
 
-    private boolean isAccountIdValid(String id) {
+    private boolean isSourceOrDestAccountIdValid(String id) {
         int intId = Integer.parseInt(id);
-        return !Bank.getInstance().isUsernameAvailable(id);
+        return Bank.getInstance().isIdValid(intId);
     }
 
     private boolean isSourceAndDestIdSame(String source, String dest) {
         return source.equals(dest);
     }
 
-    private boolean isAccountIdValid(String source, String dest) {
+    private boolean isAccountsIdsValid(String source, String dest) {
         return !source.equals("-1") && !dest.equals("-1");
     }
 

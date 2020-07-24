@@ -102,6 +102,15 @@ public class Bank {
         return true;
     }
 
+    public boolean isIdValid(int id) {
+        for (Account account : accounts) {
+            if (account.getId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isPasswordCorrect(String username, String password) {
         for (Account account : accounts) {
             if (account.getUsername().equals(username)) {
@@ -120,5 +129,14 @@ public class Bank {
             }
         }
         return false;
+    }
+
+    public Account findAccountWithId(int id) {
+        for (Account account : accounts) {
+            if (account.getId() == id) {
+                return account;
+            }
+        }
+        return null;
     }
 }
