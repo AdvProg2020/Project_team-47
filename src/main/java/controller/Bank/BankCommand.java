@@ -407,14 +407,13 @@ class GetTransactionsCommand extends BankCommand {
         }
     }
 
-    private boolean isTokenValid(String parameter) {
-        //todo amir
-        return true;
+    private boolean isTokenValid(String tokenId) {
+        return Bank.getInstance().isTokenValid(Integer.parseInt(tokenId));
     }
 
-    private boolean isTokenExpired(String parameter) {
-        //todo amir
-        return true;
+    private boolean isTokenExpired(String tokenId) {
+        Token token = Bank.getInstance().findTokenWithId(Integer.parseInt(tokenId));
+        return token.getFinishTime().before(Controller.getCurrentTime());
     }
 
     private boolean isReceiptIdValid() {
