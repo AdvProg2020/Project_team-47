@@ -1,8 +1,11 @@
 package controller;
 
+import com.google.gson.Gson;
 import controller.Bank.BankCommand;
 import model.ecxeption.Bank.BankException;
 import model.ecxeption.Exception;
+import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -16,6 +19,10 @@ public class BankServer {
     private final ServerSocket bankSocket;
     private Socket storeSocket;
     private ArrayList<BankCommand> bankCommands;
+    private ClientMessage request;
+    private ServerMessage answer;
+    private DataOutputStream dataOutputStream;
+    private DataInputStream dataInputStream;
 
     public BankServer() throws IOException {
         bankSocket = new ServerSocket(port);
@@ -50,27 +57,45 @@ public class BankServer {
         try {
             storeSocket = bankSocket.accept();
             handleRequests();
-        } catch (IOException | BankException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void handleRequests() throws IOException, Exception {
-        DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(storeSocket.getOutputStream()));
-        DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(storeSocket.getInputStream()));
+    private void handleRequests() throws IOException {
+         dataOutputStream = new DataOutputStream(new BufferedOutputStream(storeSocket.getOutputStream()));
+         dataInputStream = new DataInputStream(new BufferedInputStream(storeSocket.getInputStream()));
+         answer = new ServerMessage();
         while (true) {
             String input = dataInputStream.readUTF();
-            BankCommand command = findCommand(input);
-            if (command == null) {
-                throw new BankException.InvalidInputException();
-            }
-            String answer = command.process(input);
-            if (answer.equals("exit")) {
-                waitForClient();
-            } else {
-                dataOutputStream.writeUTF(answer);
+            request = new Gson().fromJson(input, ClientMessage.class);
+
+            BankCommand command = findCommand(request.getType());
+            try {
+                if (command == null) {
+                    throw new BankException.InvalidInputException();
+                }
+                answer = command.process(request);
+                if (answer.getFirstString().equals("exit")) {
+                    waitForClient();
+                } else {
+                    sendAnswer(answer);
+                }
+            } catch (BankException e) {
+                sendError(e);
             }
         }
+    }
+
+    private void sendError(BankException e) throws IOException {
+        answer.setType("error");
+        answer.setErrorMessage(e.getMessage());
+        dataOutputStream.writeUTF(new Gson().toJson(answer, ServerMessage.class));
+    }
+
+    private void sendAnswer(ServerMessage answer) throws IOException {
+        answer.setType("successful");
+        dataOutputStream.writeUTF(new Gson().toJson(answer, ServerMessage.class));
     }
 
     private void waitForClient() {
