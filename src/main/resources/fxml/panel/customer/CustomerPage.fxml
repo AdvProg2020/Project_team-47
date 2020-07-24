@@ -7,35 +7,40 @@
 
 <Scene stylesheets="@../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.customer.CustomerPage">
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="789.0">
-        <Button layoutX="363.0" layoutY="110.0" mnemonicParsing="false" onAction="#personalInfo" prefHeight="55.0" prefWidth="274.0" text="Personal Info" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="2">
+        <Button layoutX="363.0" layoutY="68.0" mnemonicParsing="false" onAction="#personalInfo" prefHeight="55.0" prefWidth="274.0" text="Personal Info" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="2">
             <font>
                 <Font size="22.0" />
             </font>
         </Button>
-        <Button layoutX="363.0" layoutY="369.0" mnemonicParsing="false" onAction="#shoppingCart" prefHeight="55.0" prefWidth="274.0" text="Shopping Cart" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="4">
+        <Button layoutX="363.0" layoutY="327.0" mnemonicParsing="false" onAction="#shoppingCart" prefHeight="55.0" prefWidth="274.0" text="Shopping Cart" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="4">
             <font>
                 <Font size="22.0" />
             </font>
         </Button>
-        <Button layoutX="363.0" layoutY="284.0" mnemonicParsing="false" onAction="#purchaseHistory" prefHeight="55.0" prefWidth="274.0" text="Purchase History" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="6">
+        <Button layoutX="363.0" layoutY="242.0" mnemonicParsing="false" onAction="#purchaseHistory" prefHeight="55.0" prefWidth="274.0" text="Purchase History" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="6">
             <font>
                 <Font size="22.0" />
             </font>
         </Button>
-        <Button layoutX="363.0" layoutY="453.0" mnemonicParsing="false" onAction="#discountCodes" prefHeight="55.0" prefWidth="274.0" text="Discount Codes" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="8">
+        <Button layoutX="363.0" layoutY="411.0" mnemonicParsing="false" onAction="#discountCodes" prefHeight="55.0" prefWidth="274.0" text="Discount Codes" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="8">
             <font>
                 <Font size="22.0" />
             </font>
         </Button>
-        <Button layoutX="363.0" layoutY="537.0" mnemonicParsing="false" onMouseClicked="#logout" prefHeight="55.0" prefWidth="274.0" text="Logout" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="10">
+        <Button layoutX="363.0" layoutY="578.0" mnemonicParsing="false" onMouseClicked="#logout" prefHeight="55.0" prefWidth="274.0" text="Logout" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="10">
             <font>
                 <Font size="22.0" />
             </font>
         </Button>
-        <Button layoutX="363.0" layoutY="198.0" mnemonicParsing="false" onAction="#showProducts" prefHeight="55.0" prefWidth="274.0" text="Show Products" GridPane.columnIndex="4" GridPane.columnSpan="3">
+        <Button layoutX="363.0" layoutY="156.0" mnemonicParsing="false" onAction="#showProducts" prefHeight="55.0" prefWidth="274.0" text="Show Products" GridPane.columnIndex="4" GridPane.columnSpan="3">
             <font>
                 <Font size="22.0" />
             </font>
         </Button>
+      <Button layoutX="363.0" layoutY="494.0" mnemonicParsing="false" onAction="#Auctions" prefHeight="55.0" prefWidth="274.0" text="Auctions">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Button>
     </AnchorPane>
 </Scene>

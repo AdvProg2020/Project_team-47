@@ -103,7 +103,7 @@ public class CartPage extends PageController {
     private boolean sendAndProcess(ClientMessage request) {
         ServerMessage answer = send(request);
         if (answer.getType().equals("Error")) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText(answer.getErrorMessage());
             alert.showAndWait();

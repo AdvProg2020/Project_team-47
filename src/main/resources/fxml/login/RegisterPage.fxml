@@ -37,24 +37,13 @@
                 <Font size="17.0" />
             </font>
         </TextArea>
-        <RadioButton fx:id="customerButton" layoutX="355.0" layoutY="238.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="85.0" selected="true" styleClass="radio" text="Customer">
-            <font>
-                <Font size="14.0" />
-            </font>
+        <RadioButton fx:id="customerButton" layoutX="355.0" layoutY="235.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="91.0" selected="true" styleClass="radio" text="Customer">
             <toggleGroup>
                 <ToggleGroup fx:id="type" />
             </toggleGroup>
         </RadioButton>
-        <RadioButton fx:id="sellerButton" layoutX="352.0" layoutY="262.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="91.0" styleClass="radio" text="Seller" toggleGroup="$type">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </RadioButton>
-        <RadioButton fx:id="managerButton" layoutX="352.0" layoutY="290.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="91.0" styleClass="radio" text="Manager" toggleGroup="$type">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </RadioButton>
+        <RadioButton fx:id="sellerButton" layoutX="355.0" layoutY="263.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="91.0" styleClass="radio" text="Seller" toggleGroup="$type" />
+        <RadioButton fx:id="managerButton" layoutX="355.0" layoutY="290.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="91.0" styleClass="radio" text="Manager" toggleGroup="$type" />
         <Button fx:id="regButton" layoutX="711.0" layoutY="37.0" mnemonicParsing="false" onAction="#register" prefHeight="55.0" prefWidth="231.0" text="Register" AnchorPane.leftAnchor="711.0">
             <font>
                 <Font size="16.0" />

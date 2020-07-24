@@ -312,6 +312,5 @@ class ShowCategoriesCommand extends ProductCommands {
             throw new InvalidSortException();
         return sendAnswer(Category.getAllCategoriesInfo(sortField, sortDirection), "category");
     }
-
 }
 

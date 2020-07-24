@@ -1,8 +1,11 @@
 package graphic.panel.seller.products;
 
+import com.sun.tools.javac.Main;
 import graphic.MainFX;
 import graphic.PageController;
+import graphic.panel.seller.auction.AddAuctionPage;
 import javafx.animation.FadeTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
@@ -17,6 +20,7 @@ import java.util.ResourceBundle;
 
 public class ManageProductsPage extends PageController {
     private static PageController controller;
+
     @FXML
     private TextField productId;
     @FXML
@@ -93,6 +97,11 @@ public class ManageProductsPage extends PageController {
         }
     }
 
+    public void addAuction() {
+        MainFX.getInstance().click();
+        MainFX.getInstance().changeScene(AddAuctionPage.getScene());
+    }
+
     public void addProduct() {
         MainFX.getInstance().click();
         clearPage();
@@ -130,5 +139,4 @@ public class ManageProductsPage extends PageController {
             fadeTransition.play();
         }
     }
-
 }

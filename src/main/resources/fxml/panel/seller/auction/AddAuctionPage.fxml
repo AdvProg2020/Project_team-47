@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Scene stylesheets="@../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.auction.AddAuctionPage">
+    <AnchorPane prefHeight="400.0" prefWidth="600.0">
+        <Label layoutX="162.0" layoutY="283.0" prefHeight="28.0" prefWidth="72.0" style="-fx-alignment: center;" text="Start At" AnchorPane.leftAnchor="162.0" AnchorPane.topAnchor="283.0">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <Label layoutX="162.0" layoutY="343.0" text="Finish At" AnchorPane.leftAnchor="162.0" AnchorPane.topAnchor="343.0">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <TextField fx:id="startYear" layoutX="264.0" layoutY="283.0" prefHeight="28.0" prefWidth="77.0" promptText="Year" styleClass="textfield" AnchorPane.leftAnchor="264.0" AnchorPane.topAnchor="283.0" />
+        <TextField fx:id="startMonth" layoutX="360.0" layoutY="282.0" prefHeight="28.0" prefWidth="91.0" promptText="Month" styleClass="textfield" AnchorPane.topAnchor="282.0" />
+        <TextField fx:id="startDay" layoutX="473.0" layoutY="283.0" prefHeight="28.0" prefWidth="73.0" promptText="Day" styleClass="textfield" AnchorPane.leftAnchor="473.0" AnchorPane.topAnchor="283.0" />
+        <TextField fx:id="startHour" layoutX="568.0" layoutY="283.0" prefHeight="28.0" prefWidth="75.0" promptText="Hour" styleClass="textfield" AnchorPane.leftAnchor="568.0" AnchorPane.topAnchor="283.0" />
+        <TextField fx:id="startMinute" layoutX="667.0" layoutY="283.0" prefHeight="28.0" prefWidth="89.0" promptText="Minute" styleClass="textfield" AnchorPane.leftAnchor="667.0" AnchorPane.rightAnchor="244.0" AnchorPane.topAnchor="283.0" />
+        <TextField fx:id="finishYear" layoutX="264.0" layoutY="343.0" prefHeight="28.0" prefWidth="77.0" promptText="Year" styleClass="textfield" AnchorPane.leftAnchor="264.0" AnchorPane.topAnchor="343.0" />
+        <TextField fx:id="finishMonth" layoutX="363.0" layoutY="343.0" prefHeight="28.0" prefWidth="89.0" promptText="Month" styleClass="textfield" AnchorPane.leftAnchor="363.0" AnchorPane.topAnchor="343.0" />
+        <TextField fx:id="finishDay" layoutX="473.0" layoutY="343.0" prefHeight="28.0" prefWidth="73.0" promptText="Day" styleClass="textfield" AnchorPane.leftAnchor="473.0" AnchorPane.topAnchor="343.0" />
+        <TextField fx:id="finishHour" layoutX="565.0" layoutY="343.0" prefHeight="28.0" prefWidth="79.0" promptText="Hour" styleClass="textfield" AnchorPane.leftAnchor="565.0" AnchorPane.topAnchor="343.0" />
+        <TextField fx:id="finishMinute" layoutX="667.0" layoutY="343.0" prefHeight="28.0" prefWidth="88.0" promptText="Minute" styleClass="textfield" AnchorPane.leftAnchor="667.0" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="343.0" />
+        <Button layoutX="394.0" layoutY="436.0" mnemonicParsing="false" onAction="#addAuction" prefHeight="55.0" prefWidth="158.0" text="Add Auction">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Button>
+        <Button layoutX="733.0" layoutY="579.0" mnemonicParsing="false" onAction="#back" prefHeight="55.0" prefWidth="158.0" text="Back">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Button>
+        <Text fx:id="error" fill="#ff3030" layoutX="408.0" layoutY="509.0" style="-fx-font-family: 'Google Sans';" text="Error" textAlignment="CENTER" visible="true" />
+      <TextField fx:id="productId" layoutX="394.0" layoutY="195.0" prefHeight="55.0" prefWidth="158.0" promptText="Product ID" styleClass="textfield" />
+    </AnchorPane>
+</Scene>

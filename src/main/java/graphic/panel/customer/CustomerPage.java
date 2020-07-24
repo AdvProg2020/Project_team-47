@@ -5,6 +5,7 @@ import graphic.PageController;
 import graphic.TemplatePage;
 import graphic.panel.AccountPage;
 import graphic.panel.seller.log.LogsPage;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import model.send.receive.ClientMessage;
@@ -77,4 +78,9 @@ public class CustomerPage extends PageController {
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
 
+    public void Auctions() {
+        MainFX.getInstance().click();
+        MainFX.getInstance().changeScene(AuctionsPage.getScene());
+        ((AuctionsPage) AuctionsPage.getInstance()).fresh();
+    }
 }

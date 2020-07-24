@@ -2,6 +2,7 @@ package model.user;
 
 import controller.Controller;
 import database.UserData;
+import model.auction.Auction;
 import model.discount.Off;
 import model.ecxeption.common.DateException;
 import model.ecxeption.common.OffDoesntExistException;
@@ -10,10 +11,7 @@ import model.others.Product;
 import model.others.Sort;
 import model.others.request.AddOffRequest;
 import model.others.request.Request;
-import model.send.receive.LogInfo;
-import model.send.receive.OffInfo;
-import model.send.receive.ProductInfo;
-import model.send.receive.UserInfo;
+import model.send.receive.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -250,4 +248,6 @@ public class Seller extends User {
     public void setMoney(double money) {
         this.money = money;
     }
+
+
 }

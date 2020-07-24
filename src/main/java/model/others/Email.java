@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class Email {
     private static final Properties mailProperties;
-    private static final String email = "online.shop4787@gmail.com";
+    private static final String email = "mahdihadiam@gmail.com";
     private static String htmlPage;
     private static String password;
 

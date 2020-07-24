@@ -45,6 +45,7 @@ abstract public class Controller {
         controllers.add(OffController.getInstance());
         controllers.add(ProductController.getInstance());
         controllers.add(PurchaseController.getInstance());
+        controllers.add(BankController.getInstance());
     }
 
     public static ServerMessage process(ClientMessage clientMessage) throws Exception {
@@ -138,6 +139,13 @@ abstract public class Controller {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("Successful");
         serverMessage.setOffInfo(offInfo);
+        return serverMessage;
+    }
+
+    public static ServerMessage sendAnswer(ArrayList<AuctionInfo> auctionInfo) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setAuctionInfoArrayList(auctionInfo);
         return serverMessage;
     }
 

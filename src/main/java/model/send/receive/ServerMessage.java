@@ -1,8 +1,6 @@
 package model.send.receive;
 
 
-import model.bank.Token;
-import model.bank.Transaction;
 import model.others.ClientFilter;
 import model.others.Comment;
 
@@ -27,14 +25,13 @@ public class ServerMessage {
     private ArrayList<DiscountCodeInfo> discountCodeInfoArrayList;
     private ArrayList<LogInfo> logInfoArrayList;
     private ArrayList<OffInfo> offInfoArrayList;
+    private ArrayList<AuctionInfo> auctionInfoArrayList;
     private ArrayList<ProductInfo> productInfoArrayList;
     private ArrayList<RequestInfo> requestArrayList;
     private ArrayList<UserInfo> userInfoArrayList;
     private CartInfo cartInfo;
     private ArrayList<ClientFilter> filters;
     private String id;
-    private Token token;
-    private ArrayList<Transaction> transactions;
 
     public ServerMessage() {
     }
@@ -60,6 +57,14 @@ public class ServerMessage {
         this.filters = filters;
     }
 
+    public void setAuctionInfoArrayList(ArrayList<AuctionInfo> auctionInfoArrayList) {
+        this.auctionInfoArrayList = auctionInfoArrayList;
+    }
+
+    public ArrayList<AuctionInfo> getAuctionInfoArrayList() {
+        return auctionInfoArrayList;
+    }
+
     public String getErrorMessage() {
         return errorMessage;
     }
@@ -78,10 +83,6 @@ public class ServerMessage {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
     }
 
     public String getFirstString() {
@@ -234,21 +235,5 @@ public class ServerMessage {
 
     public void setUserInfoArrayList(ArrayList<UserInfo> userInfoArrayList) {
         this.userInfoArrayList = userInfoArrayList;
-    }
-
-    public Token getToken() {
-        return token;
-    }
-
-    public void setToken(Token token) {
-        this.token = token;
-    }
-
-    public ArrayList<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(ArrayList<Transaction> transactions) {
-        this.transactions = transactions;
     }
 }
