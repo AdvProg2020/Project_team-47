@@ -82,8 +82,12 @@ public class Customer extends User {
     }
 
 
-    public boolean canUserBuy(double cartPrice) {
-        return !(this.money < cartPrice);
+    public boolean canUserBuy(double cartPrice, String source) {
+        if (source.equals("wallet")) {
+            return !(this.money < cartPrice);
+        }
+        //todo amir
+        return true;
     }
 
     public void addBuyLog(BuyLog buyLog) {

@@ -1,94 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.Scene?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<Scene xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal"
-       fx:controller="graphic.panel.manager.EditCategoryPage">
+
+<Scene xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.manager.EditCategoryPage">
     <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../Others/Stylesheet.css">
-        <TextField fx:id="category" layoutX="34.0" layoutY="29.0" prefHeight="32.0" prefWidth="170.0"
-                   promptText="Category">
+        <TextField fx:id="category" layoutX="34.0" layoutY="29.0" prefHeight="55.0" prefWidth="182.0" promptText="Category" styleClass="textfield">
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </TextField>
-        <RadioButton fx:id="mainCategoryRadioButton" layoutX="223.0" layoutY="34.0" mnemonicParsing="false"
-                     text="Main Category">
+        <RadioButton fx:id="mainCategoryRadioButton" layoutX="232.0" layoutY="31.0" mnemonicParsing="false" styleClass="radio" text="Main Category">
             <toggleGroup>
-                <ToggleGroup fx:id="type"/>
+                <ToggleGroup fx:id="type" />
             </toggleGroup>
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </RadioButton>
-        <RadioButton layoutX="370.0" layoutY="36.0" mnemonicParsing="false" selected="true" text="Sub Category"
-                     toggleGroup="$type">
+        <RadioButton layoutX="232.0" layoutY="63.0" mnemonicParsing="false" selected="true" styleClass="radio" text="Sub Category" toggleGroup="$type">
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </RadioButton>
-        <TextField fx:id="name" layoutX="37.0" layoutY="110.0" prefHeight="46.0" prefWidth="134.0"
-                   promptText="New Name">
+        <TextField fx:id="name" layoutX="34.0" layoutY="100.0" prefHeight="55.0" prefWidth="134.0" promptText="New Name" styleClass="textfield">
             <font>
-                <Font size="14.0"/>
+                <Font size="14.0" />
             </font>
         </TextField>
-        <Button layoutX="211.0" layoutY="110.0" mnemonicParsing="false" onAction="#changeName" prefHeight="52.0"
-                prefWidth="299.0" text="Change Name">
+        <Button layoutX="176.0" layoutY="100.0" mnemonicParsing="false" onAction="#changeName" prefHeight="55.0" prefWidth="228.0" text="Change Name">
             <font>
-                <Font size="17.0"/>
+                <Font size="17.0" />
             </font>
         </Button>
-        <TextField fx:id="propertyKey" layoutX="54.0" layoutY="260.0" prefHeight="39.0" prefWidth="203.0"
-                   promptText="Porperty Key">
+        <TextField fx:id="propertyKey" layoutX="34.0" layoutY="260.0" prefHeight="55.0" prefWidth="173.0" promptText="Porperty Key" styleClass="textfield">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </TextField>
-        <TextField fx:id="propertyUnit" layoutX="53.0" layoutY="329.0" prefHeight="42.0" prefWidth="201.0"
-                   promptText="Property Unit">
+        <TextField fx:id="propertyUnit" layoutX="216.0" layoutY="260.0" prefHeight="55.0" prefWidth="160.0" promptText="Property Unit" styleClass="textfield">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </TextField>
-        <RadioButton fx:id="numericRadioButton" layoutX="59.0" layoutY="396.0" mnemonicParsing="false" prefHeight="23.0"
-                     prefWidth="83.0" selected="true" text="Numeric">
+        <RadioButton fx:id="numericRadioButton" layoutX="47.0" layoutY="339.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="123.0" selected="true" styleClass="radio" text="Numeric">
             <toggleGroup>
-                <ToggleGroup fx:id="propertyType"/>
+                <ToggleGroup fx:id="propertyType" />
             </toggleGroup>
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </RadioButton>
-        <RadioButton layoutX="185.0" layoutY="392.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="109.0"
-                     text="Text" toggleGroup="$propertyType">
+        <RadioButton layoutX="47.0" layoutY="375.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="109.0" styleClass="radio" text="Text" toggleGroup="$propertyType">
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </RadioButton>
-        <Button layoutX="59.0" layoutY="457.0" mnemonicParsing="false" onAction="#addProperty" prefHeight="44.0"
-                prefWidth="179.0" text="Add Property">
+        <Button layoutX="197.0" layoutY="334.0" mnemonicParsing="false" onAction="#addProperty" prefHeight="55.0" prefWidth="179.0" text="Add Property">
             <font>
-                <Font size="17.0"/>
+                <Font size="17.0" />
             </font>
         </Button>
-        <Button layoutX="59.0" layoutY="513.0" mnemonicParsing="false" onAction="#removeProperty" prefHeight="43.0"
-                prefWidth="178.0" text="Remove Property">
+        <Button layoutX="198.0" layoutY="404.0" mnemonicParsing="false" onAction="#removeProperty" prefHeight="55.0" prefWidth="178.0" text="Remove Property">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </Button>
-        <Button layoutX="710.0" layoutY="517.0" mnemonicParsing="false" onAction="#back" prefHeight="51.0"
-                prefWidth="201.0" text="Back">
+        <Button layoutX="703.0" layoutY="590.0" mnemonicParsing="false" onAction="#back" prefHeight="55.0" prefWidth="201.0" text="Back">
             <font>
-                <Font name="Cambria" size="20.0"/>
+                <Font name="Cambria" size="20.0" />
             </font>
         </Button>
-        <Text fx:id="error" fill="RED" layoutX="642.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"
-              wrappingWidth="324.0032958984375">
+        <Text fx:id="error" fill="#ff3030" layoutX="204.0" layoutY="173.0" style="-fx-font-family: 'Google Sans';" text="Text" textAlignment="CENTER">
             <font>
-                <Font size="15.0"/>
+                <Font size="12.0" />
             </font>
         </Text>
     </AnchorPane>

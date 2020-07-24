@@ -1,116 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.Scene?>
 <?import javafx.scene.text.*?>
-<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../../../Others/Stylesheet.css"
-       xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.seller.products.EditProductPage">
+
+<Scene stylesheets="@../../../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.seller.products.EditProductPage">
     <AnchorPane prefHeight="400.0" prefWidth="600.0">
         <ImageView fx:id="image" fitHeight="165.0" fitWidth="169.0" layoutX="32.0" layoutY="29.0" pickOnBounds="true">
             <effect>
-                <DropShadow height="128.1" radius="57.0325" spread="0.25" width="102.03"/>
+                <DropShadow height="128.1" radius="57.0325" spread="0.25" width="102.03" />
             </effect>
-            <Image url="@../../../../../Images/main-menu-background.jpg"/>
+            <Image url="@../../../../../Images/main-menu-background.jpg" />
         </ImageView>
-        <Label layoutX="37.0" layoutY="259.0" prefHeight="52.0" prefWidth="189.0" text="Price:    "
-               AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="220.0">
+        <Label layoutX="37.0" layoutY="259.0" text="Price" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="220.0">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
-        <Label layoutX="61.0" layoutY="321.0" prefHeight="52.0" prefWidth="192.0" text="Number In Stock:"
-               AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="271.0">
+        <Label layoutX="61.0" layoutY="321.0" text="Number In Stock" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="271.0">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
-        <Label layoutX="42.0" layoutY="397.0" prefHeight="52.0" prefWidth="192.0" text="Category: "
-               AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="320.0">
+        <Label layoutX="42.0" layoutY="397.0" text="Category" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="320.0">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
-        <Label layoutX="28.0" layoutY="306.0" prefHeight="52.0" prefWidth="192.0" text="Sub Category:"
-               AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="369.0">
+        <Label layoutX="28.0" layoutY="306.0" text="Sub Category" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="369.0">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
-        <Label layoutX="28.0" layoutY="436.0" prefHeight="52.0" prefWidth="192.0" text="Description:"
-               AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="415.0">
+        <Label layoutX="28.0" layoutY="436.0" text="Description" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="415.0">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
-        <TextArea fx:id="description" editable="false" layoutX="227.0" layoutY="436.0" prefHeight="159.0"
-                  prefWidth="262.0" promptText="Description" AnchorPane.leftAnchor="220.0">
+        <TextArea fx:id="description" editable="false" layoutX="227.0" layoutY="436.0" prefHeight="159.0" prefWidth="262.0" promptText="Description" AnchorPane.leftAnchor="220.0">
             <font>
-                <Font size="14.0"/>
+                <Font size="14.0" />
             </font>
         </TextArea>
-        <Label fx:id="price" layoutX="40.0" layoutY="230.0" prefHeight="52.0" prefWidth="189.0" text="Price"
-               AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="219.0">
+        <Label fx:id="price" layoutX="40.0" layoutY="230.0" text="Price" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="219.0">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
-        <Label fx:id="numberInStock" layoutX="40.0" layoutY="281.0" prefHeight="52.0" prefWidth="192.0"
-               text="Number In Stock" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="271.0">
+        <Label fx:id="numberInStock" layoutX="40.0" layoutY="281.0" text="Number In Stock" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="271.0">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
-        <Label fx:id="category" layoutX="40.0" layoutY="330.0" prefHeight="52.0" prefWidth="192.0" text="Category"
-               AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="320.0">
+        <Label fx:id="category" layoutX="40.0" layoutY="330.0" text="Category" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="320.0">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
-        <Label fx:id="subCategory" layoutX="40.0" layoutY="379.0" prefHeight="52.0" prefWidth="192.0"
-               text="Sub Category" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="369.0">
+        <Label fx:id="subCategory" layoutX="40.0" layoutY="379.0" text="Sub Category" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="369.0">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
-        <Label fx:id="id" layoutX="260.0" layoutY="37.0" prefHeight="52.0" prefWidth="189.0" text="Id">
+        <Label fx:id="id" layoutX="254.0" layoutY="37.0" text="Id">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
         <ScrollPane layoutX="548.0" layoutY="65.0" prefHeight="277.0" prefWidth="326.0">
-            <VBox fx:id="vBox" prefHeight="274.0" prefWidth="323.0"/>
+            <VBox fx:id="vBox" prefHeight="274.0" prefWidth="323.0" />
         </ScrollPane>
-        <TextField fx:id="editValue" layoutX="576.0" layoutY="516.0" prefHeight="42.0" prefWidth="134.0"
-                   promptText="Edit Value">
+        <TextField fx:id="editValue" layoutX="576.0" layoutY="516.0" prefHeight="42.0" prefWidth="134.0" promptText="Edit Value" styleClass="textfield">
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </TextField>
-        <Button layoutX="775.0" layoutY="518.0" mnemonicParsing="false" onAction="#edit" prefHeight="38.0"
-                prefWidth="168.0" text="Edit">
+        <Button layoutX="775.0" layoutY="518.0" mnemonicParsing="false" onAction="#edit" prefHeight="38.0" prefWidth="168.0" text="Edit">
             <font>
-                <Font size="17.0"/>
+                <Font size="17.0" />
             </font>
         </Button>
-        <Button layoutX="775.0" layoutY="596.0" mnemonicParsing="false" onAction="#back" prefHeight="38.0"
-                prefWidth="166.0" text="Back">
+        <Button layoutX="775.0" layoutY="596.0" mnemonicParsing="false" onAction="#back" prefHeight="38.0" prefWidth="166.0" text="Back">
             <font>
-                <Font size="17.0"/>
+                <Font size="17.0" />
             </font>
         </Button>
-        <Text fx:id="error" fill="RED" layoutX="580.0" layoutY="499.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="Error" wrappingWidth="347.4700393676758">
+        <Text fx:id="error" fill="#ff3030" layoutX="582.0" layoutY="504.0" text="Error">
             <font>
-                <Font size="14.0"/>
+                <Font size="14.0" />
             </font>
         </Text>
-        <Label fx:id="name" layoutX="257.0" layoutY="87.0" prefHeight="52.0" prefWidth="189.0" text="Name">
+        <Label fx:id="name" layoutX="255.0" layoutY="81.0" text="Name">
             <font>
-                <Font size="23.0"/>
+                <Font size="23.0" />
             </font>
         </Label>
     </AnchorPane>

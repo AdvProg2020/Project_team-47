@@ -1,89 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.Scene?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<Scene xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../Others/Stylesheet.css"
-       xmlns="http://javafx.com/javafx/11.0.1" fx:controller="graphic.panel.manager.AddCategoryPage">
+
+<Scene stylesheets="@../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.manager.AddCategoryPage">
     <AnchorPane prefHeight="400.0" prefWidth="600.0">
-        <TextField fx:id="mainCategory" layoutX="72.0" layoutY="44.0" prefHeight="39.0" prefWidth="215.0"
-                   promptText="Main Category">
+        <TextField fx:id="mainCategory" layoutX="65.0" layoutY="27.0" prefHeight="55.0" prefWidth="215.0" promptText="Main Category" styleClass="textfield">
             <font>
-                <Font size="19.0"/>
+                <Font size="19.0" />
             </font>
         </TextField>
-        <Text layoutX="69.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="Just fill it when you want to add sub category." wrappingWidth="262.1366195678711">
+        <Text layoutX="83.0" layoutY="100.0" style="-fx-font-family: Questrial;" text="Just fill it when you want to add sub category.">
             <font>
-                <Font size="15.0"/>
+                <Font size="13.0" />
             </font>
         </Text>
-        <TextField fx:id="name" layoutX="70.0" layoutY="149.0" promptText="Name">
+        <TextField fx:id="name" layoutX="66.0" layoutY="141.0" prefHeight="55.0" promptText="Name" styleClass="textfield">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </TextField>
         <ScrollPane layoutX="527.0" layoutY="35.0" prefHeight="591.0" prefWidth="319.0">
-            <VBox fx:id="vBox" alignment="TOP_CENTER" prefHeight="588.0" prefWidth="310.0" spacing="10.0"/>
+            <VBox fx:id="vBox" alignment="TOP_CENTER" prefHeight="588.0" prefWidth="310.0" spacing="10.0" />
         </ScrollPane>
-        <Button layoutX="77.0" layoutY="384.0" mnemonicParsing="false" onAction="#addProperty" prefHeight="38.0"
-                prefWidth="148.0" text="Add Property">
+        <Button layoutX="69.0" layoutY="383.0" mnemonicParsing="false" onAction="#addProperty" prefHeight="55.0" prefWidth="182.0" text="Add Property">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </Button>
-        <Button layoutX="242.0" layoutY="383.0" mnemonicParsing="false" onAction="#removeProperty" prefHeight="39.0"
-                prefWidth="166.0" text="Remove Property">
+        <Button layoutX="271.0" layoutY="383.0" mnemonicParsing="false" onAction="#removeProperty" prefHeight="55.0" prefWidth="203.0" text="Remove Property">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </Button>
-        <TextField fx:id="propertyKey" layoutX="70.0" layoutY="236.0" prefHeight="38.0" prefWidth="171.0"
-                   promptText="Property Key">
+        <TextField fx:id="propertyKey" layoutX="66.0" layoutY="228.0" prefHeight="55.0" prefWidth="171.0" promptText="Property Key" styleClass="textfield">
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </TextField>
-        <TextField fx:id="propertyUnit" layoutX="70.0" layoutY="283.0" prefHeight="43.0" prefWidth="170.0"
-                   promptText="Property Unit">
+        <TextField fx:id="propertyUnit" layoutX="66.0" layoutY="294.0" prefHeight="55.0" prefWidth="170.0" promptText="Property Unit" styleClass="textfield">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </TextField>
-        <RadioButton fx:id="textPropertyRadioButton" layoutX="251.0" layoutY="245.0" mnemonicParsing="false"
-                     prefHeight="20.0" prefWidth="129.0" selected="true" text="Text Property">
+        <RadioButton fx:id="textPropertyRadioButton" layoutX="251.0" layoutY="245.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="129.0" selected="true" styleClass="radio" text="Text Property">
             <toggleGroup>
-                <ToggleGroup fx:id="type"/>
+                <ToggleGroup fx:id="type" />
             </toggleGroup>
             <font>
-                <Font size="14.0"/>
+                <Font size="14.0" />
             </font>
         </RadioButton>
-        <RadioButton layoutX="250.0" layoutY="294.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="152.0"
-                     text="Numeric Property" toggleGroup="$type">
+        <RadioButton layoutX="249.0" layoutY="312.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="152.0" styleClass="radio" text="Numeric Property" toggleGroup="$type">
             <font>
-                <Font size="14.0"/>
+                <Font size="14.0" />
             </font>
         </RadioButton>
-        <Button layoutX="70.0" layoutY="537.0" mnemonicParsing="false" onAction="#addCategory" prefHeight="52.0"
-                prefWidth="162.0" text="Add Category" AnchorPane.topAnchor="531.0">
+        <Button layoutX="70.0" layoutY="537.0" mnemonicParsing="false" onAction="#addCategory" prefHeight="55.0" prefWidth="175.0" text="Add Category" AnchorPane.topAnchor="531.0">
             <font>
-                <Font size="17.0"/>
+                <Font size="17.0" />
             </font>
         </Button>
-        <Button layoutX="269.0" layoutY="531.0" mnemonicParsing="false" onAction="#back" prefHeight="52.0"
-                prefWidth="162.0" text="Back" AnchorPane.topAnchor="531.0">
+        <Button layoutX="269.0" layoutY="531.0" mnemonicParsing="false" onAction="#back" prefHeight="55.0" prefWidth="132.0" text="Back" AnchorPane.topAnchor="531.0">
             <font>
-                <Font size="17.0"/>
+                <Font size="17.0" />
             </font>
         </Button>
-        <Text fx:id="error" fill="RED" layoutX="69.0" layoutY="607.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="Error" wrappingWidth="329.3367042541504">
+        <Text fx:id="error" fill="#ff3030" layoutX="83.0" layoutY="610.0" style="-fx-font-family: 'Google Sans';" text="Error" textAlignment="CENTER">
             <font>
-                <Font size="14.0"/>
+                <Font size="12.0" />
             </font>
         </Text>
     </AnchorPane>

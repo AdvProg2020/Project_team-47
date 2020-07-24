@@ -1,70 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.Scene?>
 <?import javafx.scene.text.*?>
-<Scene xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal"
-       fx:controller="graphic.panel.manager.CreateManagerPage">
+
+<Scene xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.manager.CreateManagerPage">
     <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../Others/Stylesheet.css">
-        <TextField fx:id="username" layoutX="97.0" layoutY="5.0" prefHeight="55.0" prefWidth="236.0"
-                   promptText="Username" AnchorPane.leftAnchor="97.0">
+        <TextField fx:id="username" layoutX="96.0" layoutY="40.0" prefHeight="55.0" prefWidth="236.0" promptText="Username" styleClass="textfield" AnchorPane.leftAnchor="96.0">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </TextField>
-        <TextField fx:id="firstName" layoutX="97.0" layoutY="178.0" prefHeight="55.0" prefWidth="236.0"
-                   promptText="First Name" AnchorPane.leftAnchor="97.0">
+        <TextField fx:id="firstName" layoutX="96.0" layoutY="243.0" prefHeight="55.0" prefWidth="236.0" promptText="First Name" styleClass="textfield" AnchorPane.leftAnchor="96.0">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </TextField>
-        <TextField fx:id="lastName" layoutX="97.0" layoutY="236.0" prefHeight="55.0" prefWidth="236.0"
-                   promptText="Last Name" AnchorPane.leftAnchor="97.0">
+        <TextField fx:id="lastName" layoutX="96.0" layoutY="311.0" prefHeight="55.0" prefWidth="236.0" promptText="Last Name" styleClass="textfield" AnchorPane.leftAnchor="96.0">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </TextField>
-        <TextField fx:id="email" layoutX="97.0" layoutY="293.0" prefHeight="55.0" prefWidth="236.0"
-                   promptText="Email" AnchorPane.leftAnchor="97.0">
+        <TextField fx:id="email" layoutX="96.0" layoutY="378.0" prefHeight="55.0" prefWidth="236.0" promptText="Email" styleClass="textfield" AnchorPane.leftAnchor="96.0">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </TextField>
-        <Button layoutX="670.0" layoutY="71.0" mnemonicParsing="false" onAction="#choosePic" prefHeight="64.0"
-                prefWidth="231.0" text="Choose Pic" AnchorPane.leftAnchor="670.0">
+        <Button layoutX="455.0" layoutY="75.0" mnemonicParsing="false" onAction="#choosePic" prefHeight="55.0" prefWidth="231.0" text="Choose Pic" AnchorPane.leftAnchor="455.0">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </Button>
-        <Text fx:id="error" fill="RED" layoutX="479.0" layoutY="656.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="Error" wrappingWidth="450.9368591308594">
+        <Text fx:id="error" fill="#ff3030" layoutX="478.0" layoutY="63.0" style="-fx-font-family: 'Google Sans';" text="Error" textAlignment="CENTER">
             <font>
-                <Font size="18.0"/>
+                <Font size="12.0" />
             </font>
         </Text>
-        <Button layoutX="679.0" layoutY="571.0" mnemonicParsing="false" onAction="#back" prefHeight="64.0"
-                prefWidth="231.0" text="Back" AnchorPane.leftAnchor="670.0">
+        <Button layoutX="679.0" layoutY="571.0" mnemonicParsing="false" onAction="#back" prefHeight="55.0" prefWidth="231.0" text="Back" AnchorPane.leftAnchor="670.0">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </Button>
-        <TextField fx:id="phoneNumber" layoutX="97.0" layoutY="121.0" prefHeight="55.0" prefWidth="236.0"
-                   promptText="Phone Number" AnchorPane.leftAnchor="97.0">
+        <TextField fx:id="phoneNumber" layoutX="96.0" layoutY="176.0" prefHeight="55.0" prefWidth="236.0" promptText="Phone Number" styleClass="textfield" AnchorPane.leftAnchor="96.0">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </TextField>
-        <PasswordField fx:id="password" layoutX="97.0" layoutY="62.0" prefHeight="58.0" prefWidth="235.0"
-                       promptText="Password">
+        <PasswordField fx:id="password" layoutX="96.0" layoutY="107.0" prefHeight="58.0" prefWidth="235.0" promptText="Password" styleClass="textfield">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </PasswordField>
-        <Button layoutX="670.0" layoutY="156.0" mnemonicParsing="false" onAction="#register" prefHeight="64.0"
-                prefWidth="231.0" text="Register">
+        <Button layoutX="455.0" layoutY="158.0" mnemonicParsing="false" onAction="#register" prefHeight="55.0" prefWidth="231.0" text="Register">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </Button>
     </AnchorPane>
