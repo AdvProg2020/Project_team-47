@@ -45,6 +45,7 @@ public class Product {
     private byte[] file;
     private String fileExtension;
     private double scoreAverage;
+    private String filePath;
 
     public Product() {
         this.sellers = new ArrayList<>();
@@ -397,6 +398,7 @@ public class Product {
         productData.setStatus(this.status);
         productData.setName(this.name);
         productData.setFile(this.file);
+        productData.setFilePath(this.filePath);
         productData.setFileExtension(this.fileExtension);
     }
 
@@ -449,6 +451,7 @@ public class Product {
         }
         productInfo.setId(this.id);
         productInfo.setName(this.name);
+        productInfo.setItFile(filePath != null);
         productInfo.setScoreAverage(this.scoreAverage);
         productInfo.setSpecialProperties(specialProperties);
         productInfo.setDescription(this.description);
@@ -702,6 +705,14 @@ public class Product {
         if (subCategory != null)
             return subCategory;
         return mainCategory;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     static class ProductSeller implements Comparable {

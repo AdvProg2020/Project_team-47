@@ -156,6 +156,16 @@
             <ScrollPane layoutX="28.0" layoutY="28.0" prefHeight="637.0" prefWidth="499.0">
                 <VBox fx:id="propertiesVBox" prefHeight="635.0" prefWidth="495.0" spacing="15.0"/>
             </ScrollPane>
+            <RadioButton fx:id="fileRadioBox" layoutX="687.0" layoutY="132.0" mnemonicParsing="false" prefHeight="18.0"
+                         prefWidth="78.0" text="File">
+                <toggleGroup>
+                    <ToggleGroup fx:id="type"/>
+                </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="productRadioBox" layoutX="560.0" layoutY="132.0" mnemonicParsing="false"
+                         prefHeight="18.0" prefWidth="78.0" selected="true" text="Product" toggleGroup="$type"/>
+            <Button layoutX="673.0" layoutY="181.0" mnemonicParsing="false" onAction="#chooseFile" prefHeight="26.0"
+                    prefWidth="118.0" text="Choose File"/>
         </AnchorPane>
     </AnchorPane>
 </Scene>

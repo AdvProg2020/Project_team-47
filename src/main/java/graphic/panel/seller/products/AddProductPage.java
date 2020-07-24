@@ -6,9 +6,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -28,7 +26,14 @@ import java.util.ResourceBundle;
 
 public class AddProductPage extends PageController {
     private static PageController controller;
+    @FXML
+    private RadioButton fileRadioBox;
+    @FXML
+    private RadioButton productRadioBox;
+    @FXML
+    private ToggleGroup type;
     private File image;
+    private File file;
     private ArrayList<SpecialProperty> specialProperties;
     @FXML
     private AnchorPane mainAnchorPane;
@@ -168,6 +173,12 @@ public class AddProductPage extends PageController {
         File imageFile = fileChooser.showOpenDialog(MainFX.getInstance().getWindow());
         try {
             image = imageFile;
+            System.out.println(imageFile.getAbsolutePath());
+            System.out.println(imageFile.getName());
+            System.out.println(imageFile.getPath());
+            File file1 = new File(imageFile.getAbsolutePath());
+            System.out.println(file1.getName());
+
         } catch (Exception e) {
             image = null;
         }
@@ -223,8 +234,15 @@ public class AddProductPage extends PageController {
             setAddProductError("Please enter valid properties value!!");
             return;
         }
+        if (!productRadioBox.isSelected()) {
+            if (file == null) {
+                this.setAddProductError("Please choose a file!!");
+                return;
+            }
+        }
         ClientMessage request = new ClientMessage("add product");
         HashMap<String, String> reqInfo = new HashMap<>();
+        if (file != null) reqInfo.put("file-path", file.getAbsolutePath());
         reqInfo.put("name", productName.getText());
         reqInfo.put("company", company.getText());
         reqInfo.put("category", category.getText());
@@ -237,6 +255,19 @@ public class AddProductPage extends PageController {
         request.setFileExtension(".jpg");
         request.setProperties(getProperties());
         sendReq(request);
+    }
+
+    @FXML
+    private void chooseFile() {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(MainFX.getInstance().getWindow());
+        try {
+            this.file = file;
+        } catch (Exception e) {
+            this.file = null;
+        }
+        file.getName();
+
     }
 
     private void sendReq(ClientMessage request) {

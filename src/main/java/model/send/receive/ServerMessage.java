@@ -30,6 +30,7 @@ public class ServerMessage {
     private ArrayList<UserInfo> userInfoArrayList;
     private CartInfo cartInfo;
     private ArrayList<ClientFilter> filters;
+    private String id;
 
     public ServerMessage() {
     }
@@ -37,6 +38,14 @@ public class ServerMessage {
     public ServerMessage(String error, String errorMessage) {
         this.type = error;
         this.errorMessage = errorMessage;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public ArrayList<ClientFilter> getFilters() {

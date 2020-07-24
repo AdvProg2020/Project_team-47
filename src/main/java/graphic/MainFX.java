@@ -2,12 +2,10 @@ package graphic;
 
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class MainFX {
@@ -115,16 +113,16 @@ public class MainFX {
     }
 
     public void playBackGroundAudio(String audioPath) {
-        Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
-        backGroundMediaPlayer = new MediaPlayer(media);
+//        Media media = new Media(Paths.get("src\\main\\resources\\Music\\" + audioPath).toUri().toString());
+//        backGroundMediaPlayer = new MediaPlayer(media);
 //        backGroundMediaPlayer.play();
-        backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio(audioPath));
+//        backGroundMediaPlayer.setOnEndOfMedia(() -> playBackGroundAudio(audioPath));
     }
 
     public void click() {
-        Media media = new Media(Paths.get("src\\main\\resources\\Music\\click.wav").toUri().toString());
-        shortMediaPlayer = new MediaPlayer(media);
-        shortMediaPlayer.play();
+//        Media media = new Media(Paths.get("src\\main\\resources\\Music\\click.wav").toUri().toString());
+//        shortMediaPlayer = new MediaPlayer(media);
+//        shortMediaPlayer.play();
     }
 
     public boolean getLoginStatus() {

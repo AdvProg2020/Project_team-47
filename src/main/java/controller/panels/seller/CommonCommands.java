@@ -1,6 +1,7 @@
 package controller.panels.seller;
 
 import controller.Command;
+import controller.Server;
 import model.category.Category;
 import model.ecxeption.CommonException;
 import model.ecxeption.Exception;
@@ -17,6 +18,7 @@ import model.others.request.Request;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import model.user.Seller;
+import model.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +41,10 @@ public abstract class CommonCommands extends Command {
 
     public static RemoveProductCommand getRemoveProductCommand() {
         return RemoveProductCommand.getInstance();
+    }
+
+    public static SendFileCommand getSendFileCommand() {
+        return SendFileCommand.getInstance();
     }
 
 /*
@@ -87,6 +93,38 @@ class ViewCompanyInfoCommand extends CommonCommands {
     }
 
 }//end ViewCompanyInfoCommand class
+
+class SendFileCommand extends CommonCommands {
+    private static SendFileCommand command;
+
+    private SendFileCommand() {
+        this.name = "port opened";
+    }
+
+    public static SendFileCommand getInstance() {
+        if (command != null)
+            return command;
+        command = new SendFileCommand();
+        return command;
+    }
+
+    @Override
+    public ServerMessage process(ClientMessage request) throws Exception {
+        User user = User.getUserByUsername(request.getHashMap().get("customer"));
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("download");
+        serverMessage.setId("-1");
+        serverMessage.setFirstString(String.valueOf(request.getFirstInt()));
+        serverMessage.setSecondString("127.0.0.1");
+        Server.getServer().addMessage(user, serverMessage);
+        return actionCompleted();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+}
 
 class ViewSalesHistoryCommand extends CommonCommands {
     private static ViewSalesHistoryCommand command;
@@ -173,6 +211,7 @@ class AddProductCommand extends CommonCommands {
 
         AddProductRequest addProductRequest = new AddProductRequest();
         addProductRequest.setSellerUsername(getLoggedUser().getUsername());
+        addProductRequest.setFilePath(productInfo.get("file-path"));
         addProductRequest.setCategoryName(productInfo.get("category"));
         addProductRequest.setSubCategoryName(productInfo.get("sub-category"));
         addProductRequest.setCompany(productInfo.get("company"));

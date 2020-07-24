@@ -32,6 +32,7 @@ public class ProductData {
     private ArrayList<SpecialProperty> specialProperties;
     private String fileExtension;
     private byte[] file;
+    private String filePath;
 
     public ProductData() {
         this.sellersUsernames = new ArrayList<>();
@@ -95,6 +96,7 @@ public class ProductData {
         product.setStatus(this.status);
         product.setFileExtension(this.fileExtension);
         product.setFile(this.file);
+        product.setFilePath(this.filePath);
     }
 
     public void addToDatabase() {
@@ -168,6 +170,14 @@ public class ProductData {
 
     public void setFile(byte[] file) {
         this.file = file;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     private static class ProductSeller {

@@ -16,6 +16,7 @@ public class ProductInfo {
     private ArrayList<SpecialProperty> specialProperties;
     private String description;
     private double scoreAverage;
+    private boolean isItFile;
     private byte[] file;
     private String fileExtension;
 
@@ -23,6 +24,14 @@ public class ProductInfo {
         sellersNames = new ArrayList<>();
         specialProperties = new ArrayList<>();
         productSellers = new ArrayList<>();
+    }
+
+    public boolean isItFile() {
+        return isItFile;
+    }
+
+    public void setItFile(boolean itFile) {
+        isItFile = itFile;
     }
 
     public byte[] getFile() {

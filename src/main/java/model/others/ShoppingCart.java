@@ -1,7 +1,10 @@
 package model.others;
 
+import controller.Controller;
+import controller.Server;
 import model.log.BuyLog;
 import model.send.receive.CartInfo;
+import model.send.receive.ServerMessage;
 import model.user.Seller;
 import model.user.User;
 
@@ -133,6 +136,8 @@ public class ShoppingCart {
         for (ProductInCart productInCart : productsInCart) {
             Seller seller = productInCart.getSeller();
             Product product = productInCart.getProduct();
+            if (product.getFilePath() != null)
+                new Thread(() -> startDownload(Controller.getLoggedUser(), seller, product.getFilePath())).start();
             int productNumber = productInCart.getNumberInCart();
             double price = product.getFinalPrice(seller) * (double) productNumber;
             seller.increaseMoney(price);
@@ -140,6 +145,14 @@ public class ShoppingCart {
             product.updateDatabase();
             seller.updateDatabase().update();
         }
+    }
+
+    private void startDownload(User customer, User seller, String path) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("give me port");
+        serverMessage.setFirstString(customer.getUsername());
+        serverMessage.setSecondString(path);
+        Server.getServer().addMessage(seller, serverMessage);
     }
 
     public void update() {

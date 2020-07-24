@@ -17,7 +17,7 @@ public class ClientMessage {
     private String fileExtension;
     private String authToken;
     private ArrayList<Filter> filters;
-
+    private String id;
 
     public ClientMessage() {
 
@@ -25,6 +25,14 @@ public class ClientMessage {
 
     public ClientMessage(String type) {
         this.type = type;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getAuthToken() {

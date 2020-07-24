@@ -32,6 +32,7 @@ public class SellerPanelController extends UserPanelController {
     private void initializeCommonCommands() {
         commands.add(CommonCommands.getAddProductCommand());
         commands.add(CommonCommands.getRemoveProductCommand());
+        commands.add(CommonCommands.getSendFileCommand());
 //        commands.add(CommonCommands.getShowCategoriesCommand());
         commands.add(CommonCommands.getViewBalanceCommand());
         commands.add(CommonCommands.getViewCompanyInfoCommand());

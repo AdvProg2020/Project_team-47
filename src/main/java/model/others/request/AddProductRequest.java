@@ -26,6 +26,7 @@ public class AddProductRequest extends MainRequest {
     private ArrayList<SpecialProperty> properties;
     private byte[] file;
     private String fileExtension;
+    private String filePath;
 
     public AddProductRequest() {
     }
@@ -71,6 +72,7 @@ public class AddProductRequest extends MainRequest {
                 category = Category.getSubCategoryByName(subCategoryName);
                 product.setSubCategory((SubCategory) category);
             }
+            product.setFilePath(this.filePath);
             category.addProduct(product);
             product.setName(name);
             product.setCompany(company);
@@ -159,5 +161,13 @@ public class AddProductRequest extends MainRequest {
 
     public void setSubCategoryName(String subCategoryName) {
         this.subCategoryName = subCategoryName;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }

@@ -67,6 +67,10 @@ abstract public class Controller {
         loggedUser = USER_HASH_MAP.get(authToken);
     }
 
+    public static User getLoggedUser(String authToken) {
+        return USER_HASH_MAP.get(authToken);
+    }
+
     @SuppressWarnings("unchecked")
     public static ServerMessage sendAnswer(ArrayList arrayList, String type) {
         ServerMessage serverMessage = new ServerMessage();
