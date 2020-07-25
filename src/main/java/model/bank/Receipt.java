@@ -5,8 +5,8 @@ public class Receipt {
     private final int receiptId;
     private final Token token;
     private final double money;
-    private final int sourceId;
-    private final int destId;
+    private final String sourceId;
+    private final String destId;
     private final String description;
     private boolean paid;
 
@@ -14,8 +14,8 @@ public class Receipt {
         this.type = type;
         this.token = Bank.getInstance().findTokenWithId(Integer.parseInt(tokenId));
         this.money = Double.parseDouble(money);
-        this.sourceId = Integer.parseInt(sourceId);
-        this.destId = Integer.parseInt(destId);
+        this.sourceId = sourceId;
+        this.destId = destId;
         this.description = description;
         Bank.getInstance().getReceipts().add(this);
         receiptId = Bank.getInstance().getReceipts().size();
@@ -46,11 +46,11 @@ public class Receipt {
         return money;
     }
 
-    public int getSourceId() {
+    public String getSourceId() {
         return sourceId;
     }
 
-    public int getDestId() {
+    public String getDestId() {
         return destId;
     }
 

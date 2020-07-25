@@ -15,6 +15,7 @@ import model.others.ShoppingCart;
 import model.send.receive.*;
 import model.user.User;
 
+import javax.sound.sampled.Port;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ abstract public class Controller {
     private static final Gson gson = new Gson();
     private static final HashMap<String, User> USER_HASH_MAP = new HashMap<>();
     protected static User loggedUser;
+    private static final int BankPort = 12223;
 
     static {
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
@@ -275,5 +277,9 @@ abstract public class Controller {
                 return true;
 
         return false;
+    }
+
+    public static int getBankPort() {
+        return BankPort;
     }
 }//end Controller Class

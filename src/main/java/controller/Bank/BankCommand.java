@@ -1,7 +1,6 @@
 package controller.Bank;
 
 import controller.Controller;
-import graphic.Client;
 import model.bank.*;
 import model.ecxeption.Bank.BankException;
 import model.ecxeption.Exception;
@@ -92,7 +91,7 @@ class CreateAccountCommand extends BankCommand {
     }
 
     private boolean usernameAvailable(String username) {
-        return Bank.getInstance().getAccounts().stream().noneMatch(x -> x.getUsername().equals(username));
+        return Bank.getInstance().getAccounts().stream().noneMatch(x -> x.getId().equals(username));
     }
     private void createAccount(String[] parameters) {
         Bank.getInstance().getAccounts().add(new Account(parameters[3],
@@ -208,8 +207,7 @@ class CreateReceiptCommand extends BankCommand {
     }
 
     private boolean isSourceOrDestAccountIdValid(String id) {
-        int intId = Integer.parseInt(id);
-        return Bank.getInstance().isIdValid(intId);
+        return Bank.getInstance().isIdValid(id);
     }
 
     private boolean isSourceAndDestIdSame(String source, String dest) {
