@@ -3,6 +3,10 @@ package database;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import controller.Controller;
+import model.bank.Account;
+import model.bank.Receipt;
+import model.bank.Token;
+import model.bank.Transaction;
 import model.log.BuyLog;
 import model.log.Log;
 import model.log.SellLog;
@@ -80,6 +84,23 @@ public class Database {
     public static void updateUsedId(TreeSet<String> usedId) {
         saveInFile(usedId, Path.RESOURCE.getPath() + "UsedId.json");
     }
+
+    public static void updateBankAccounts(ArrayList<Account> accounts) {
+        saveInFile(accounts, Path.BANK_FOLDER + "Accounts.json");
+    }
+
+    public static void updateBankReceipts(ArrayList<Receipt> receipts) {
+        saveInFile(receipts, Path.BANK_FOLDER + "Receipts.json");
+    }
+
+    public static void updateBankTokens(ArrayList<Token> tokens) {
+        saveInFile(tokens, Path.BANK_FOLDER + "Tokens.json");
+    }
+
+    public static void updateBankTransactions(ArrayList<Transaction> transactions) {
+        saveInFile(transactions, Path.BANK_FOLDER + "Transactions.json");
+    }
+
 
     static void addProduct(ProductData productData, String productId) {
         saveInFile(productData, Path.PRODUCT_FOLDER.getPath() + productId + ".json");
@@ -411,8 +432,8 @@ public class Database {
         CODES_FOLDER("src/main/resources/Codes/"),
         OFFS_FOLDER("src/main/resources/Offs/"),
         BUY_LOGS_FOLDER("src/main/resources/Logs/BuyLogs/"),
+        BANK_FOLDER("src/main/resources/Bank/"),
         SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs/");
-
 
         private final String path;
 

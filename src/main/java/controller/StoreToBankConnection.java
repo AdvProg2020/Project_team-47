@@ -8,7 +8,14 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 
+
 public class StoreToBankConnection {
+
+    public static void main(String[]args){
+
+    }
+
+
     private static StoreToBankConnection storeToBankConnection;
     private Socket socket;
     private DataInputStream dataInputStream;

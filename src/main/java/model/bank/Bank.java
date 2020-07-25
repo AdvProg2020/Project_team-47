@@ -7,10 +7,12 @@ public class Bank {
     private final ArrayList<Account> accounts;
     private final ArrayList<Token> tokens;
     private final ArrayList<Receipt> receipts;
+    private final ArrayList<Transaction> transactions;
     public Bank() {
         accounts = new ArrayList<>();
         tokens = new ArrayList<>();
         receipts = new ArrayList<>();
+        transactions = new ArrayList<>();
     }
 
     public static Bank getInstance() {
@@ -18,6 +20,10 @@ public class Bank {
             bank = new Bank();
         }
         return bank;
+    }
+
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
     }
 
     public ArrayList<Account> getAccounts() {
