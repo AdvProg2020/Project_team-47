@@ -203,7 +203,7 @@ class CreateReceiptCommand extends BankCommand {
 
     private boolean isTokenExpired(String tokenId) {
         Token token = Bank.getInstance().findTokenWithId(Integer.parseInt(tokenId));
-        return token.getFinishTime().before(Controller.getCurrentTime());
+        return token.isExpired();
     }
 
     private boolean isSourceOrDestAccountIdValid(String id) {
@@ -312,7 +312,7 @@ class GetTokenCommand extends BankCommand {
     private static GetTokenCommand command;
 
     private GetTokenCommand() {
-        this.name = "get token \\S+ \\S+";
+        this.name = "get_token \\S+ \\S+";
     }
 
 
@@ -326,6 +326,7 @@ class GetTokenCommand extends BankCommand {
 
     @Override
     public ServerMessage process(ClientMessage request) throws BankException {
+
         checkPrimaryErrors(request.getType());
         getToken(request.getType());
         ServerMessage answer = new ServerMessage();

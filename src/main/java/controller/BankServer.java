@@ -2,6 +2,8 @@ package controller;
 
 import com.google.gson.Gson;
 import controller.Bank.BankCommand;
+import database.Database;
+import model.bank.Bank;
 import model.ecxeption.Bank.BankException;
 import model.ecxeption.Exception;
 import model.send.receive.ClientMessage;
@@ -15,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class BankServer {
     private static BankServer bankServer;
-    private final int port = 12223;
+    private final int port = 12228;
     private final ServerSocket bankSocket;
     private Socket storeSocket;
     private ArrayList<BankCommand> bankCommands;
@@ -29,6 +31,7 @@ public class BankServer {
         bankServer = this;
         bankCommands = new ArrayList<>();
         addCommands();
+        loadBankDataBase();
     }
 
     private void addCommands() {
@@ -73,15 +76,19 @@ public class BankServer {
             BankCommand command = findCommand(request.getType());
             try {
                 if (command == null) {
+                    System.out.println("invalid input");
                     throw new BankException.InvalidInputException();
                 }
                 answer = command.process(request);
-                if (answer.getFirstString().equals("exit")) {
+                if (answer.getFirstString() != null && answer.getFirstString().equals("exit")) {
                     waitForClient();
                 } else {
+                    System.out.println("successful");
+                    updateBankDataBase();
                     sendAnswer(answer);
                 }
             } catch (BankException e) {
+                System.out.println("error occurred");
                 sendError(e);
             }
         }
@@ -114,6 +121,20 @@ public class BankServer {
             }
         }
         return null;
+    }
+
+    private static void updateBankDataBase() {
+        Database.updateBankAccounts(Bank.getInstance().getAccounts());
+        Database.updateBankTokens(Bank.getInstance().getTokens());
+        Database.updateBankReceipts(Bank.getInstance().getReceipts());
+        Database.updateBankTransactions(Bank.getInstance().getTransactions());
+    }
+
+    private static void loadBankDataBase() {
+        Database.loadBankAccounts();
+        Database.loadBankReceipts();
+        Database.loadBankTokens();
+        Database.loadBankTransactions();
     }
 
 }

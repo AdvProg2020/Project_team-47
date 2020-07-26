@@ -3,10 +3,7 @@ package database;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import controller.Controller;
-import model.bank.Account;
-import model.bank.Receipt;
-import model.bank.Token;
-import model.bank.Transaction;
+import model.bank.*;
 import model.log.BuyLog;
 import model.log.Log;
 import model.log.SellLog;
@@ -86,19 +83,19 @@ public class Database {
     }
 
     public static void updateBankAccounts(ArrayList<Account> accounts) {
-        saveInFile(accounts, Path.BANK_FOLDER + "Accounts.json");
+        saveInFile(accounts, Path.BANK_FOLDER.getPath() + "Accounts.json");
     }
 
     public static void updateBankReceipts(ArrayList<Receipt> receipts) {
-        saveInFile(receipts, Path.BANK_FOLDER + "Receipts.json");
+        saveInFile(receipts, Path.BANK_FOLDER.getPath() + "Receipts.json");
     }
 
     public static void updateBankTokens(ArrayList<Token> tokens) {
-        saveInFile(tokens, Path.BANK_FOLDER + "Tokens.json");
+        saveInFile(tokens, Path.BANK_FOLDER.getPath() + "Tokens.json");
     }
 
     public static void updateBankTransactions(ArrayList<Transaction> transactions) {
-        saveInFile(transactions, Path.BANK_FOLDER + "Transactions.json");
+        saveInFile(transactions, Path.BANK_FOLDER.getPath() + "Transactions.json");
     }
 
 
@@ -264,6 +261,50 @@ public class Database {
         Log.setUsedId(usedIdTreeSet);
     }
 
+    public static void loadBankAccounts() {
+        File file = getFileStatic(Path.BANK_FOLDER.getPath() + "Accounts.json");
+        String savedAccounts = readFile(file);
+        ArrayList<Account> accounts;
+        accounts = gson.fromJson(savedAccounts, new TypeToken<ArrayList<Account>>() {
+        }.getType());
+        if (accounts == null)
+            return;
+        Bank.getInstance().setAccounts(accounts);
+    }
+
+    public static void loadBankTokens() {
+        File file = getFileStatic(Path.RESOURCE.getPath() + "Tokens.json");
+        String savedTokens = readFile(file);
+        ArrayList<Token> tokens;
+        tokens = gson.fromJson(savedTokens, new TypeToken<ArrayList<Token>>() {
+        }.getType());
+        if (tokens == null)
+            return;
+        Bank.getInstance().setTokens(tokens);
+    }
+
+    public static void loadBankTransactions() {
+        File file = getFileStatic(Path.RESOURCE.getPath() + "Transactions.json");
+        String savedTransactions = readFile(file);
+        ArrayList<Transaction> transactions;
+        transactions = gson.fromJson(savedTransactions, new TypeToken<ArrayList<Transaction>>() {
+        }.getType());
+        if (transactions == null)
+            return;
+        Bank.getInstance().setTransactions(transactions);
+    }
+
+    public static void loadBankReceipts() {
+        File file = getFileStatic(Path.RESOURCE.getPath() + "Receipts.json");
+        String savedReceipts = readFile(file);
+        ArrayList<Receipt> receipts;
+        receipts = gson.fromJson(savedReceipts, new TypeToken<ArrayList<Receipt>>() {
+        }.getType());
+        if (receipts == null)
+            return;
+        Bank.getInstance().setReceipts(receipts);
+    }
+
     private void loadUsedUsernames() {
         File file = getFile(Path.RESOURCE.getPath() + "UsedUsernames.json");
         String usedUsernames = readFile(file);
@@ -419,6 +460,10 @@ public class Database {
     }
 
     private File getFile(String path) {
+        return new File(path);
+    }
+
+    private static File getFileStatic(String path) {
         return new File(path);
     }
 

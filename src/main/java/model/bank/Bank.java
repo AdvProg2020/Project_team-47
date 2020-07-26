@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Bank {
     private static Bank bank;
-    private final ArrayList<Account> accounts;
-    private final ArrayList<Token> tokens;
-    private final ArrayList<Receipt> receipts;
-    private final ArrayList<Transaction> transactions;
+    private  ArrayList<Account> accounts;
+    private  ArrayList<Token> tokens;
+    private  ArrayList<Receipt> receipts;
+    private  ArrayList<Transaction> transactions;
     public Bank() {
         accounts = new ArrayList<>();
         tokens = new ArrayList<>();
@@ -36,6 +36,22 @@ public class Bank {
 
     public ArrayList<Receipt> getReceipts() {
         return receipts;
+    }
+
+    public void setAccounts(ArrayList<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public void setTokens(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+    }
+
+    public void setReceipts(ArrayList<Receipt> receipts) {
+        this.receipts = receipts;
+    }
+
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     public Token findTokenWithId(int tokenId) {

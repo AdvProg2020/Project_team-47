@@ -51,4 +51,8 @@ public class Token {
     public int getId() {
         return id;
     }
+
+    public boolean isExpired() {
+        return this.getFinishTime().before(Controller.getCurrentTime());
+    }
 }

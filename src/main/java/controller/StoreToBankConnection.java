@@ -3,7 +3,6 @@ package controller;
 import com.google.gson.Gson;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
-
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -12,6 +11,11 @@ import java.net.Socket;
 public class StoreToBankConnection {
 
     public static void main(String[]args){
+        try {
+            getInstance().getToken("1aliUsername", "1aliPassword");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -48,12 +52,13 @@ public class StoreToBankConnection {
     }
 
     private void sendRequest(ClientMessage request) throws IOException {
-        dataOutputStream.writeUTF(new Gson().toJson(request, ServerMessage.class));
+        dataOutputStream.writeUTF(new Gson().toJson(request, ClientMessage.class));
         dataOutputStream.flush();
     }
 
     private ServerMessage getAnswer() throws IOException {
-        return new Gson().fromJson(dataInputStream.readUTF(), ServerMessage.class);
+        String input = dataInputStream.readUTF();
+        return new Gson().fromJson(input, ServerMessage.class);
     }
 
     public ServerMessage createAccount(String firstName, String lastName, String username, String password, String repeatPassword) throws IOException {
@@ -62,6 +67,7 @@ public class StoreToBankConnection {
     }
 
     public ServerMessage getToken(String username, String password) throws IOException {
+        System.out.println("salam_salam");
         return doAction("get_token " + username + " " + password);
     }
 
