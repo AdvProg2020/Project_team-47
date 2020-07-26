@@ -23,26 +23,33 @@
                 </Button>
             </AnchorPane>
             <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="55" prefWidth="100.0" style="-fx-background-color: beige;">
-                <Button layoutX="396.0" layoutY="113.0" mnemonicParsing="false" onAction="#manageOffs" prefHeight="55" prefWidth="207.0" text="Manage Offs" AnchorPane.leftAnchor="396.0" AnchorPane.rightAnchor="395.19999999999993" AnchorPane.topAnchor="113.0">
+                <Button layoutX="396.0" layoutY="113.0" mnemonicParsing="false" onAction="#manageOffs" prefHeight="55" prefWidth="212.0" text="Manage Offs" AnchorPane.leftAnchor="396.0" AnchorPane.rightAnchor="390.0" AnchorPane.topAnchor="113.0">
                     <font>
                         <Font name="Segoe UI Black" size="15.0" />
                     </font>
                 </Button>
-                <Button layoutX="396.0" layoutY="204.0" mnemonicParsing="false" onAction="#manageProducts" prefHeight="55" prefWidth="207.0" text="Manage Products" AnchorPane.leftAnchor="396.0" AnchorPane.topAnchor="204.0">
+                <Button layoutX="396.0" layoutY="204.0" mnemonicParsing="false" onAction="#manageProducts" prefHeight="55" prefWidth="212.0" text="Manage Products" AnchorPane.leftAnchor="396.0" AnchorPane.topAnchor="204.0">
                     <font>
                         <Font name="Segoe UI Black" size="15.0" />
                     </font>
                 </Button>
-                <Button layoutX="396.0" layoutY="297.0" mnemonicParsing="false" onAction="#productsPage" prefHeight="55" prefWidth="207.0" text="Products Page" AnchorPane.leftAnchor="396.0" AnchorPane.rightAnchor="395.19999999999993">
+                <Button layoutX="396.0" layoutY="297.0" mnemonicParsing="false" onAction="#productsPage" prefHeight="55" prefWidth="215.0" text="Products Page" AnchorPane.leftAnchor="396.0" AnchorPane.rightAnchor="387.0">
                     <font>
                         <Font name="Segoe UI Black" size="15.0" />
                     </font>
                 </Button>
-                <Button layoutX="396.0" layoutY="386.0" mnemonicParsing="false" onAction="#buyLogs" prefHeight="55" prefWidth="207.0" text="Buy Logs">
+                <Button layoutX="396.0" layoutY="386.0" mnemonicParsing="false" onAction="#buyLogs" prefHeight="55" prefWidth="219.0" text="Buy Logs">
                     <font>
                         <Font name="Segoe UI Black" size="15.0" />
                     </font>
                 </Button>
+                <Button layoutX="396.0" layoutY="472.0" mnemonicParsing="false" onAction="#lowerWalletMoney" prefHeight="50.0" prefWidth="221.0" text="lower wallet money">
+                    <font>
+                        <Font name="Segoe UI Black" size="15.0" />
+                    </font>
+                </Button>
+                <TextArea fx:id="raiseMoney" layoutX="647.0" layoutY="472.0" prefHeight="50.0" prefWidth="200.0" />
+
             </AnchorPane>
         </SplitPane>
     </AnchorPane>
