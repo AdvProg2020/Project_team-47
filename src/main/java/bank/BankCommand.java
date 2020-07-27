@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public abstract class BankCommand {
     protected String name;
+    protected static ServerMessage serverMessage;
 
     public static CreateAccountCommand getCreateAccountCommand() {
         return CreateAccountCommand.getInstance();
@@ -50,8 +51,7 @@ public abstract class BankCommand {
     }
 
     public static ServerMessage actionCompleted() {
-        ServerMessage serverMessage = new ServerMessage();
-        serverMessage.setType("successful");
+        serverMessage.setType("Successful");
         return serverMessage;
     }
 }
@@ -126,6 +126,9 @@ class CreateReceiptCommand extends BankCommand {
         String[] parameters = request.split("\\s");
         Receipt receipt = new Receipt(parameters[2], parameters[1], parameters[3],
                 parameters[4], parameters[5], getDescription(request));
+        serverMessage = new ServerMessage();
+        serverMessage.setReceipt(receipt);
+        actionCompleted();
     }
 
 
@@ -329,9 +332,9 @@ class GetTokenCommand extends BankCommand {
 
         checkPrimaryErrors(request.getType());
         getToken(request.getType());
-        ServerMessage answer = new ServerMessage();
-        answer.setToken(getToken(request.getType()));
-        return answer;
+        serverMessage = new ServerMessage();
+        serverMessage.setToken(getToken(request.getType()));
+        return actionCompleted();
     }
 
     private Token getToken(String request) {

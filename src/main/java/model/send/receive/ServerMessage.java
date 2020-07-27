@@ -1,6 +1,7 @@
 package model.send.receive;
 
 
+import model.bank.Receipt;
 import model.bank.Token;
 import model.bank.Transaction;
 import model.others.ClientFilter;
@@ -35,6 +36,7 @@ public class ServerMessage {
     private String id;
     private Token token;
     private ArrayList<Transaction> transactions;
+    private Receipt receipt;
 
     public ServerMessage() {
     }
@@ -42,6 +44,14 @@ public class ServerMessage {
     public ServerMessage(String error, String errorMessage) {
         this.type = error;
         this.errorMessage = errorMessage;
+    }
+
+    public Receipt getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(Receipt receipt) {
+        this.receipt = receipt;
     }
 
     public String getId() {

@@ -1,6 +1,7 @@
 package controller;
 
 import com.google.gson.Gson;
+import controller.bankRelated.BankRelatedController;
 import controller.login.LoginController;
 import controller.off.OffController;
 import controller.panels.UserPanelController;
@@ -24,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 abstract public class Controller {
+    public static final String SHOP_NAME = "apshop47";
     private static final ArrayList<Controller> controllers;
     private static final Gson gson = new Gson();
     private static final HashMap<String, User> USER_HASH_MAP = new HashMap<>();
@@ -45,6 +47,7 @@ abstract public class Controller {
         controllers.add(OffController.getInstance());
         controllers.add(ProductController.getInstance());
         controllers.add(PurchaseController.getInstance());
+        controllers.add(BankRelatedController.getInstance());
     }
 
     public static ServerMessage process(ClientMessage clientMessage) throws Exception {
