@@ -1,4 +1,4 @@
-package controller.Bank;
+package bank;
 
 import controller.Controller;
 import model.bank.*;

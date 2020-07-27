@@ -1,6 +1,7 @@
-package controller;
+package bank;
 
 import com.google.gson.Gson;
+import controller.Controller;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import java.io.*;
@@ -67,7 +68,6 @@ public class StoreToBankConnection {
     }
 
     public ServerMessage getToken(String username, String password) throws IOException {
-        System.out.println("salam_salam");
         return doAction("get_token " + username + " " + password);
     }
 

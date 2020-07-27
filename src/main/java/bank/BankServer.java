@@ -1,7 +1,6 @@
-package controller;
+package bank;
 
 import com.google.gson.Gson;
-import controller.Bank.BankCommand;
 import database.Database;
 import model.bank.Bank;
 import model.ecxeption.Bank.BankException;
