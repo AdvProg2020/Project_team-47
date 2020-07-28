@@ -9,7 +9,7 @@ public class ManagerExistenceException extends Exception {
 
     public static class ManagerExist extends ManagerExistenceException {
         public ManagerExist() {
-            super("There is manager and you can't register as a manager!!");
+            super("There is manager and you can't register as a manager salam!!");
         }
     }
 

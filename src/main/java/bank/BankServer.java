@@ -1,6 +1,7 @@
 package bank;
 
 import com.google.gson.Gson;
+import controller.PortsAndIps;
 import database.Database;
 import model.bank.Account;
 import model.bank.Bank;
@@ -17,7 +18,6 @@ import java.util.regex.Pattern;
 
 public class BankServer {
     private static BankServer bankServer;
-    private final int port = 12229;
     private final ServerSocket bankSocket;
     private Socket storeSocket;
     private ArrayList<BankCommand> bankCommands;
@@ -27,7 +27,7 @@ public class BankServer {
     private DataInputStream dataInputStream;
 
     public BankServer() throws IOException {
-        bankSocket = new ServerSocket(port);
+        bankSocket = new ServerSocket(PortsAndIps.BANK_PORT);
         bankServer = this;
         bankCommands = new ArrayList<>();
         addCommands();

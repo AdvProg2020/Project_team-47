@@ -30,7 +30,6 @@ abstract public class Controller {
     private static final Gson gson = new Gson();
     private static final HashMap<String, User> USER_HASH_MAP = new HashMap<>();
     protected static User loggedUser;
-    private static final int BankPort = 12228;
 
     static {
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
@@ -280,7 +279,4 @@ abstract public class Controller {
         return false;
     }
 
-    public static int getBankPort() {
-        return BankPort;
-    }
 }//end Controller Class

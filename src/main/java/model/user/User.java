@@ -104,6 +104,10 @@ abstract public class User {
         }
     }
 
+    public static void setManagersNumber(int managersNumber) {
+        User.managersNumber = managersNumber;
+    }
+
     public static boolean doesUsernameUsed(String username) {
         return usedUsernames.contains(username);
     }

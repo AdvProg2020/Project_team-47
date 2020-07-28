@@ -22,13 +22,12 @@ import java.util.Map;
 
 public class Server {
     private static Server server;
-    private final int port = 12228;
     private final ServerSocket socket;
     private final ArrayList<ClientThread> threads;
     private final HashMap<User, ServerMessage> sendingQueue;
 
     public Server() throws IOException {
-        socket = new ServerSocket(port);
+        socket = new ServerSocket(PortsAndIps.SERVER_PORT);
         threads = new ArrayList<>();
         sendingQueue = new HashMap<>();
         server = this;

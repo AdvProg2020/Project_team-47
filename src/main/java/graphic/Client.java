@@ -1,6 +1,7 @@
 package graphic;
 
 import com.google.gson.Gson;
+import controller.PortsAndIps;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
@@ -19,7 +20,6 @@ public class Client {
     }
 
     private final ArrayList<ServerMessage> answers;
-    private final int serverPort = 12222;
     private final Gson gson;
     private final ArrayList<ClientMessage> clientMessages;
     private Socket socket;
@@ -29,7 +29,7 @@ public class Client {
         answers = new ArrayList<>();
         clientMessages = new ArrayList<>();
         try {
-            socket = new Socket("127.0.0.1", serverPort);
+            socket = new Socket(PortsAndIps.SERVER_IP, PortsAndIps.SERVER_PORT);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,7 +131,7 @@ public class Client {
         request.setAuthToken(MainFX.getInstance().getToken());
         if (request.getType().equals("logout")) MainFX.getInstance().setToken("");
         String message = gson.toJson(request);
-        if (!socket.isConnected()) socket = new Socket("127.0.0.1", serverPort);
+        if (!socket.isConnected()) socket = new Socket(PortsAndIps.SERVER_IP, PortsAndIps.SERVER_PORT);
         sendRequest(this.socket, message);
         return answer(request.getId());
     }

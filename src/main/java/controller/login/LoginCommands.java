@@ -88,7 +88,7 @@ class RegisterCommand extends LoginCommands {
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
         containNullField(request.getHashMap(), request.getFile());
-        checkPrimaryErrors(request);
+        //checkPrimaryErrors(request);
         avatar = request.getFile();
         register(request.getHashMap());
         return actionCompleted();

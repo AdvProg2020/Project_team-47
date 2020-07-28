@@ -2,6 +2,7 @@ package bank;
 
 import com.google.gson.Gson;
 import controller.Controller;
+import controller.PortsAndIps;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import java.io.*;
@@ -36,7 +37,7 @@ public class StoreToBankConnection {
 
     public StoreToBankConnection() {
         try {
-            socket = new Socket(InetAddress.getLocalHost(), Controller.getBankPort());
+            socket = new Socket(PortsAndIps.BANK_IP, PortsAndIps.BANK_PORT);
             dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
         } catch (IOException e) {
