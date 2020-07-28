@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 
@@ -21,7 +22,7 @@ import java.util.ResourceBundle;
 public class CustomerPage extends PageController {
     private static PageController controller;
     @FXML
-    public TextArea raiseMoney;
+    public TextField raiseMoney;
 
     public static PageController getInstance() {
         if (controller == null) {

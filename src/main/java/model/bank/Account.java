@@ -16,7 +16,7 @@ public class Account {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.money = 0;
+        this.money = 1000;
         this.sourceTransactions = new ArrayList<>();
         this.destTransactions = new ArrayList<>();
     }

@@ -54,6 +54,7 @@ public abstract class BankCommand {
         serverMessage.setType("Successful");
         return serverMessage;
     }
+
 }
 
 class CreateAccountCommand extends BankCommand {

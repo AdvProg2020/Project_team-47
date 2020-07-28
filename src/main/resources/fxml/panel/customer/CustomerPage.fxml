@@ -42,6 +42,6 @@
                 <Font size="22.0" />
             </font>
         </Button>
-      <TextArea fx:id="raiseMoney" layoutX="647.0" layoutY="123.0" prefHeight="50.0" prefWidth="200.0" />
+      <TextField fx:id="raiseMoney" layoutX="647.0" layoutY="123.0" prefHeight="50.0" prefWidth="200.0" />
     </AnchorPane>
 </Scene>

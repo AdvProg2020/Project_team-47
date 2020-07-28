@@ -137,6 +137,7 @@ class RegisterCommand extends LoginCommands {
     private void registerUser(HashMap<String, String> userInformation, String userType) throws RegisterException {
         User newUser = switch (userType) {
             case "customer" -> new Customer(userInformation, avatar);
+
             case "seller" -> new Seller(userInformation, avatar);
             case "manager" -> new Manager(userInformation, avatar);
             default -> throw new RegisterException("Enter valid type!!");

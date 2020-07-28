@@ -2,6 +2,7 @@ package bank;
 
 import com.google.gson.Gson;
 import database.Database;
+import model.bank.Account;
 import model.bank.Bank;
 import model.ecxeption.Bank.BankException;
 import model.ecxeption.Exception;
@@ -16,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class BankServer {
     private static BankServer bankServer;
-    private final int port = 12228;
+    private final int port = 12229;
     private final ServerSocket bankSocket;
     private Socket storeSocket;
     private ArrayList<BankCommand> bankCommands;
@@ -31,6 +32,12 @@ public class BankServer {
         bankCommands = new ArrayList<>();
         addCommands();
         loadBankDataBase();
+        if (Bank.getInstance().isUsernameAvailable("apshop47")) {
+            Bank.getInstance().getAccounts().add(new Account
+                    ("apshop47", "apshop47"
+                            , "apshop47", "apshop47"));
+        }
+        updateBankDataBase();
     }
 
     private void addCommands() {

@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class Server {
     private static Server server;
-    private final int port = 12222;
+    private final int port = 12228;
     private final ServerSocket socket;
     private final ArrayList<ClientThread> threads;
     private final HashMap<User, ServerMessage> sendingQueue;
