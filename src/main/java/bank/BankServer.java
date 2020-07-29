@@ -64,8 +64,10 @@ public class BankServer {
 
     private void run() throws Exception {
         try {
+            System.out.println("waiting...");
             storeSocket = bankSocket.accept();
             handleRequests();
+            new BankServer().run();
         } catch (IOException e) {
             e.printStackTrace();
         }

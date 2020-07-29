@@ -29,7 +29,7 @@ public class Token {
     }
 
     public Account getAccount() {
-        return Bank.getInstance().findAccountWithUsername(this.username);
+        return Bank.getInstance().findAccountWithId(this.username);
     }
 
     public Date getStartTime() {

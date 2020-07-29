@@ -110,15 +110,6 @@ public class Bank {
         return null;
     }
 
-    public Account findAccountWithUsername(String id) {
-        for (Account account : accounts) {
-            if (account.getId().equals(id)) {
-                return account;
-            }
-        }
-        return null;
-    }
-
     public Receipt findReceiptWithId(int id) {
         for (Receipt receipt : receipts) {
             if (receipt.getReceiptId() == id) {

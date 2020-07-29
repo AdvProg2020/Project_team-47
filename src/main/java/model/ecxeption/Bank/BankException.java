@@ -115,5 +115,11 @@ public class BankException extends Exception {
         }
     }
 
+    public static class AlreadyHasTokenException extends BankException {
+        public AlreadyHasTokenException() {
+            super("already has token");
+        }
+    }
+
 
 }

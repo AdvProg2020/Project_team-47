@@ -53,4 +53,13 @@ public class Account {
     public void addMoney(double money) {
         this.money = this.money + money;
     }
+
+    public boolean hasToken() {
+        for (Token token : Bank.getInstance().getTokens()) {
+            if (token.getAccount().equals(this)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

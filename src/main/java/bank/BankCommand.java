@@ -144,8 +144,9 @@ class CreateReceiptCommand extends BankCommand {
 
     @Override
     public void checkPrimaryErrors(String request) throws BankException {
-        String[] parameters = name.split("\\s");
+        String[] parameters = request.split("\\s");
         if (!isReceiptTypeValid(parameters[2])) {
+            System.out.println(parameters[2]);
             throw new BankException.InvalidReceiptTypeException();
         }
         if (!isMoneyValid(parameters[3])) {
@@ -154,19 +155,21 @@ class CreateReceiptCommand extends BankCommand {
         if (!invalidParameters()) {
             throw new BankException.InvalidParametersException();
         }
-        if (!isTokenValid(parameters[0])) {
+        if (!isTokenValid(parameters[1])) {
             throw new BankException.InvalidTokenException();
         }
-        if (isTokenExpired(parameters[0])) {
+        if (isTokenExpired(parameters[1])) {
             throw new BankException.ExpiredTokenException();
         }
         if (!isSourceOrDestAccountIdValid(parameters[4])) {
+            System.out.println(parameters[4]);
             throw new BankException.InvalidSourceAccountIdException();
         }
         if (!isSourceOrDestAccountIdValid(parameters[5])) {
+            System.out.println(parameters[6]);
             throw new BankException.InvalidDestAccountIdException();
         }
-        if (!isSourceAndDestIdSame(parameters[4], parameters[5])) {
+        if (isSourceAndDestIdSame(parameters[4], parameters[5])) {
             throw new BankException.SourceAndDestIdSameException();
         }
         if (!isAccountsIdsValid(parameters[4], parameters[5])) {
@@ -202,6 +205,7 @@ class CreateReceiptCommand extends BankCommand {
     }
 
     private boolean isTokenValid(String tokenId) {
+        System.out.println(tokenId);
         return Bank.getInstance().isTokenValid(Integer.parseInt(tokenId));
     }
 
@@ -352,6 +356,9 @@ class GetTokenCommand extends BankCommand {
         if (!Bank.getInstance().isPasswordCorrect(parameters[1], parameters[2])) {
             throw new BankException.InvalidUsernameOrPasswordException();
         }
+        if(Bank.getInstance().findAccountWithId(parameters[1]).hasToken()){
+            throw new BankException.AlreadyHasTokenException();
+        }
     }
 
 }//end GetTokenCommand Class
@@ -441,7 +448,7 @@ class PayCommand extends BankCommand {
     }
 
     private void pay(String request) {
-        Receipt receipt = Bank.getInstance().findReceiptWithId(Integer.parseInt(request));
+        Receipt receipt = Bank.getInstance().findReceiptWithId(Integer.parseInt(request.split("\\s")[1]));
         switch (receipt.getType()) {
             case "deposit" -> deposit(receipt);
             case "withdraw" -> withdraw(receipt);
@@ -477,7 +484,8 @@ class PayCommand extends BankCommand {
         if (!isMoneyEnough(request)) {
             throw new BankException.InsufficientMoneyException();
         }
-        if (isAccountIdValid(request)) {
+        if (!isAccountIdValid(request)) {
+            System.out.println("salam");
             throw new BankException.InvalidAccountIdException();
         }
     }
