@@ -44,12 +44,21 @@ class RaiseMoneyCommand extends BankRelatedCommands {
                     .getToken(user.getUsername(), user.getPassword());
             if (answer.getType().equals("Successful")) {
                 user.setToken(answer.getToken());
+            } else {
+                System.out.println("error in getting token");
             }
+
             answer = StoreToBankConnection.getInstance()
                     .createReceipt("" + user.getToken().getId()
                     , "move", request.getType().split("\\s")[1]
                     , user.getUsername(), Controller.SHOP_NAME);
-            StoreToBankConnection.getInstance().pay("" + answer.getReceipt().getReceiptId());
+            if (answer.getType().equals("Error")) {
+                System.out.println("error in creating receipt");
+            }
+            answer = StoreToBankConnection.getInstance().pay("" + answer.getReceipt().getReceiptId());
+            if (answer.getType().equals("Error")) {
+                System.out.println("error in paying");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
