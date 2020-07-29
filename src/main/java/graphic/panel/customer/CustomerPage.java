@@ -1,13 +1,19 @@
 package graphic.panel.customer;
 
+import controller.Controller;
 import graphic.MainFX;
 import graphic.PageController;
 import graphic.TemplatePage;
 import graphic.panel.AccountPage;
 import graphic.panel.seller.log.LogsPage;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import model.send.receive.ClientMessage;
+import model.send.receive.ServerMessage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,6 +21,8 @@ import java.util.ResourceBundle;
 
 public class CustomerPage extends PageController {
     private static PageController controller;
+    @FXML
+    public TextField raiseMoney;
 
     public static PageController getInstance() {
         if (controller == null) {
@@ -77,4 +85,9 @@ public class CustomerPage extends PageController {
         TemplatePage.getInstance().changePane(FXMLLoader.load(getClass().getResource("/fxml/products/Products.fxml")));
     }
 
+    public void raiseBalance() {
+        ClientMessage clientMessage = new ClientMessage("raise_balance " + raiseMoney.getText());
+        ServerMessage serverMessage = send(clientMessage);
+        //todo amir
+    }
 }

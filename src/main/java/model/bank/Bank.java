@@ -1,19 +1,18 @@
 package model.bank;
 
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class Bank {
     private static Bank bank;
-    private final ArrayList<Account> accounts;
-    private final ArrayList<Token> tokens;
-    private final ArrayList<Receipt> receipts;
+    private  ArrayList<Account> accounts;
+    private  ArrayList<Token> tokens;
+    private  ArrayList<Receipt> receipts;
+    private  ArrayList<Transaction> transactions;
     public Bank() {
         accounts = new ArrayList<>();
         tokens = new ArrayList<>();
         receipts = new ArrayList<>();
+        transactions = new ArrayList<>();
     }
 
     public static Bank getInstance() {
@@ -21,6 +20,10 @@ public class Bank {
             bank = new Bank();
         }
         return bank;
+    }
+
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
     }
 
     public ArrayList<Account> getAccounts() {
@@ -35,36 +38,52 @@ public class Bank {
         return receipts;
     }
 
+    public void setAccounts(ArrayList<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public void setTokens(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+    }
+
+    public void setReceipts(ArrayList<Receipt> receipts) {
+        this.receipts = receipts;
+    }
+
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     public Token findTokenWithId(int tokenId) {
         for (Token token : tokens) {
-            if (token.getTokenId() == tokenId) {
+            if (token.getId() == tokenId) {
                 return token;
             }
         }
         return null;
     }
 
-    public boolean isUsernameAvailable(String username) {
+    public boolean isUsernameAvailable(String id) {
         for (Account account : accounts) {
-            if (account.getUsername().equals(username)) {
+            if (account.getId().equals(id)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean isIdValid(int id) {
+    public boolean isIdValid(String id) {
         for (Account account : accounts) {
-            if (account.getId() == id) {
+            if (account.getId().equals(id)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isPasswordCorrect(String username, String password) {
+    public boolean isPasswordCorrect(String id, String password) {
         for (Account account : accounts) {
-            if (account.getUsername().equals(username)) {
+            if (account.getId().equals(id)) {
                 if (account.getPassword().equals(password)) {
                     return true;
                 }
@@ -75,25 +94,25 @@ public class Bank {
 
     public boolean isTokenValid(int tokenId) {
         for (Token token : tokens) {
-            if (token.getTokenId() == tokenId) {
+            if (token.getId() == tokenId) {
                 return true;
             }
         }
         return false;
     }
 
-    public Account findAccountWithId(int id) {
+    public Account findAccountWithId(String id) {
         for (Account account : accounts) {
-            if (account.getId() == id) {
+            if (account.getId().equals(id)) {
                 return account;
             }
         }
         return null;
     }
 
-    public Account findAccountWithUsername(String username) {
+    public Account findAccountWithUsername(String id) {
         for (Account account : accounts) {
-            if (account.getUsername().equals(username)) {
+            if (account.getId().equals(id)) {
                 return account;
             }
         }

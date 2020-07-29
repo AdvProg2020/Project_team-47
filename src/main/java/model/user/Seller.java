@@ -1,5 +1,6 @@
 package model.user;
 
+import bank.StoreToBankConnection;
 import controller.Controller;
 import database.UserData;
 import model.discount.Off;
@@ -15,6 +16,7 @@ import model.send.receive.OffInfo;
 import model.send.receive.ProductInfo;
 import model.send.receive.UserInfo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -42,6 +44,14 @@ public class Seller extends User {
         sellLogs = new ArrayList<>();
         allProducts = new ArrayList<>();
         allOff = new ArrayList<>();
+        this.money = 0;
+        try {
+            StoreToBankConnection.getInstance().createAccount(this.getFirstName()
+                    , this.getLastName(), this.getUsername()
+                    , this.getPassword(), this.getPassword());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

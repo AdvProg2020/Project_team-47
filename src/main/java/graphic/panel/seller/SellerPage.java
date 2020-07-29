@@ -7,9 +7,12 @@ import graphic.panel.AccountPage;
 import graphic.panel.seller.log.LogsPage;
 import graphic.panel.seller.offs.ManageOffsPage;
 import graphic.panel.seller.products.ManageProductsPage;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
@@ -20,6 +23,8 @@ import java.util.ResourceBundle;
 
 public class SellerPage extends PageController {
     private static PageController controller;
+    @FXML
+    public TextField raiseMoney;
     @FXML
     private ImageView avatar;
 
@@ -88,4 +93,14 @@ public class SellerPage extends PageController {
     public void update() {
     }
 
+    public void lowerWalletMoney(ActionEvent actionEvent) {
+        ClientMessage clientMessage = new ClientMessage("lower_wallet_money " + raiseMoney.getText());
+        System.out.println("client message created");
+        ServerMessage serverMessage = send(clientMessage);
+        if (serverMessage.getType().equals("Successful")) {
+            raiseMoney.setText("");
+        } else {
+            raiseMoney.setText("error");
+        }
+    }
 }

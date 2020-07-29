@@ -3,27 +3,25 @@ package model.bank;
 import java.util.ArrayList;
 
 public class Account {
-    private final String username;
     private final String password;
     private final String firstName;
     private final String lastName;
     private double money;
-    private final int id;
+    private final String id;
     private final ArrayList<Transaction> sourceTransactions;
     private final ArrayList<Transaction> destTransactions;
 
     public Account(String username, String password, String firstName, String lastName) {
-        this.username = username;
+        this.id = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        money = 0;
-        id = Bank.getInstance().getAccounts().size();
-        sourceTransactions = new ArrayList<>();
-        destTransactions = new ArrayList<>();
+        this.money = 1000;
+        this.sourceTransactions = new ArrayList<>();
+        this.destTransactions = new ArrayList<>();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -35,9 +33,6 @@ public class Account {
         return destTransactions;
     }
 
-    public String getUsername() {
-        return username;
-    }
 
     public String getPassword() {
         return password;

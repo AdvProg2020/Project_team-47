@@ -3,6 +3,7 @@ package model.user;
 import controller.Controller;
 import database.Database;
 import database.UserData;
+import model.bank.Token;
 import model.discount.DiscountCode;
 import model.ecxeption.user.UserNotExistException;
 import model.ecxeption.user.WrongPasswordException;
@@ -47,6 +48,7 @@ abstract public class User {
     private Product productPage;
     private BuyLog purchaseLog;
     private DiscountCode purchaseCode;
+    private Token token;
 
     public User() {
         this.offFilters = new ArrayList<>();
@@ -100,6 +102,10 @@ abstract public class User {
         } catch (UserNotExistException e) {
             return false;
         }
+    }
+
+    public static void setManagersNumber(int managersNumber) {
+        User.managersNumber = managersNumber;
     }
 
     public static boolean doesUsernameUsed(String username) {
@@ -226,6 +232,14 @@ abstract public class User {
 
     public void setPurchaseLog(BuyLog purchaseLog) {
         this.purchaseLog = purchaseLog;
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public void setToken(Token token) {
+        this.token = token;
     }
 
     public DiscountCode getPurchaseCode() {
@@ -457,5 +471,10 @@ abstract public class User {
 
     public void removeNotVerifiedFromDatabase() {
         Database.removeNotVerifiedUser(this.username);
+    }
+
+    public double getAllowedMoney() {
+        //todo amir
+        return 0;
     }
 }

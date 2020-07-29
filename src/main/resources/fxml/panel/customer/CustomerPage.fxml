@@ -7,7 +7,12 @@
 
 <Scene stylesheets="@../../../Others/Stylesheet.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphic.panel.customer.CustomerPage">
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="789.0">
-        <Button layoutX="363.0" layoutY="110.0" mnemonicParsing="false" onAction="#personalInfo" prefHeight="55.0" prefWidth="274.0" text="Personal Info" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="2">
+        <Button layoutX="363.0" layoutY="33.0" mnemonicParsing="false" onAction="#personalInfo" prefHeight="55.0" prefWidth="274.0" text="Personal Info" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="2">
+            <font>
+                <Font size="22.0" />
+            </font>
+        </Button>
+        <Button layoutX="363.0" layoutY="120.0" mnemonicParsing="false" onAction="#raiseBalance" prefHeight="55.0" prefWidth="274.0" text="raise balance" GridPane.columnIndex="4" GridPane.columnSpan="4" GridPane.rowIndex="3">
             <font>
                 <Font size="22.0" />
             </font>
@@ -37,5 +42,6 @@
                 <Font size="22.0" />
             </font>
         </Button>
+      <TextField fx:id="raiseMoney" layoutX="647.0" layoutY="123.0" prefHeight="50.0" prefWidth="200.0" />
     </AnchorPane>
 </Scene>

@@ -1,8 +1,6 @@
-package controller.Bank;
+package bank;
 
 import controller.Controller;
-
-import java.util.ArrayList;
 
 public class BankController extends Controller {
     private static BankController bankController;

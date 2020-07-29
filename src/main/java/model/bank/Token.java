@@ -10,14 +10,14 @@ public class Token {
     private Date finishTime;
     private String username;
     private String password;
-    private int tokenId;
+    private int id;
 
     public Token(String username, String password) {
         this.username = username;
         this.password = password;
         setStartAndFinish();
         Bank.getInstance().getTokens().add(this);
-        tokenId = Bank.getInstance().getTokens().size();
+        id = Bank.getInstance().getTokens().size();
     }
 
     private void setStartAndFinish() {
@@ -48,7 +48,11 @@ public class Token {
         return password;
     }
 
-    public int getTokenId() {
-        return tokenId;
+    public int getId() {
+        return id;
+    }
+
+    public boolean isExpired() {
+        return this.getFinishTime().before(Controller.getCurrentTime());
     }
 }

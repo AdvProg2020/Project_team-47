@@ -1,5 +1,6 @@
 package model.user;
 
+import bank.StoreToBankConnection;
 import database.UserData;
 import model.discount.DiscountCode;
 import model.ecxeption.purchase.CodeException;
@@ -12,6 +13,7 @@ import model.send.receive.DiscountCodeInfo;
 import model.send.receive.LogInfo;
 import model.send.receive.UserInfo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,7 +37,14 @@ public class Customer extends User {
         shoppingCart = new ShoppingCart();
         buyLogs = new ArrayList<>();
         discountCodes = new ArrayList<>();
-        this.money = 10000000;
+        this.money = 0;
+        try {
+            StoreToBankConnection.getInstance().createAccount(this.getFirstName()
+                    , this.getLastName(), this.getUsername()
+                    , this.getPassword(), this.getPassword());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package controller.panels.customer;
 
 import controller.Command;
+import controller.Controller;
 import model.ecxeption.CommonException;
 import model.ecxeption.Exception;
 import model.ecxeption.common.NullFieldException;
@@ -38,6 +39,10 @@ public abstract class OtherCommands extends Command {
         return ViewCodesCommand.getInstance();
     }
 
+    public static RaiseMoneyCommand getRaiseMoneyCommand() {
+        return RaiseMoneyCommand.getInstance();
+    }
+
     protected void canUserDo() throws UserTypeException.NeedCustomerException {
         if (!(getLoggedUser() instanceof Customer)) {
             throw new UserTypeException.NeedCustomerException();
@@ -69,6 +74,38 @@ class ViewBalanceCommand extends OtherCommands {
     @Override
     public void checkPrimaryErrors(ClientMessage request) throws Exception {
 
+    }
+
+    private ServerMessage viewBalance() {
+        return sendAnswer(((Customer) getLoggedUser()).getMoney());
+    }
+
+}
+
+class RaiseMoneyCommand extends OtherCommands {
+    private static RaiseMoneyCommand command;
+
+    private RaiseMoneyCommand() {
+        this.name = "raise_money \\d+";
+    }
+
+    public static RaiseMoneyCommand getInstance() {
+        if (command != null)
+            return command;
+        command = new RaiseMoneyCommand();
+        return command;
+    }
+
+
+    @Override
+    public ServerMessage process(ClientMessage request) throws Exception {
+        checkPrimaryErrors(request);
+        return viewBalance();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        //Controller.getLoggedUser()
     }
 
     private ServerMessage viewBalance() {
