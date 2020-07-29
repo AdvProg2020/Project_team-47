@@ -107,7 +107,7 @@ class CreateReceiptCommand extends BankCommand {
     private static CreateReceiptCommand command;
 
     private CreateReceiptCommand() {
-        this.name = "create_receipt \\d+ \\S+ \\d+ \\d+ \\d+.*";
+        this.name = "create_receipt \\d+ \\S+ \\d+ \\S+ \\S+";
     }
 
     public static CreateReceiptCommand getInstance() {

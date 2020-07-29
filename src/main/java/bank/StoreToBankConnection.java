@@ -76,7 +76,7 @@ public class StoreToBankConnection {
 
     public ServerMessage createReceipt(String tokenId, String receiptType, String money, String sourceId, String destId) throws IOException {
         return doAction("create_receipt " + tokenId + " " + receiptType
-                + " " + money + " " + sourceId + " " + destId);
+                + " " + money + " " + sourceId + " " + destId + " ");
     }
 
     public ServerMessage getTransactions(String tokenId, String type) throws IOException {

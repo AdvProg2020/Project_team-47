@@ -94,6 +94,7 @@ public class BankServer {
                 }
             } catch (BankException e) {
                 System.out.println("error occurred");
+                System.out.println(e.getMessage());
                 sendError(e);
             }
         }
