@@ -60,7 +60,9 @@ public class StoreToBankConnection {
 
     private ServerMessage getAnswer() throws IOException {
         String input = dataInputStream.readUTF();
-        return new Gson().fromJson(input, ServerMessage.class);
+        ServerMessage serverMessage = new Gson().fromJson(input, ServerMessage.class);
+        System.out.println(serverMessage.getType());
+        return serverMessage;
     }
 
     public ServerMessage createAccount(String firstName, String lastName, String username, String password, String repeatPassword) throws IOException {

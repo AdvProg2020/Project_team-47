@@ -37,6 +37,7 @@ class RaiseMoneyCommand extends BankRelatedCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
+        checkPrimaryErrors(request);
         User user = Controller.getLoggedUser();
         try {
             ServerMessage answer = StoreToBankConnection.getInstance()
@@ -82,18 +83,29 @@ class LowerWalletMoneyCommand extends BankRelatedCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
+        checkPrimaryErrors(request);
         User user = Controller.getLoggedUser();
         try {
             ServerMessage answer = StoreToBankConnection.getInstance()
                     .getToken(user.getUsername(), user.getPassword());
             if (answer.getType().equals("Successful")) {
                 user.setToken(answer.getToken());
+            } else {
+                System.out.println("error in getting token");
             }
             answer = StoreToBankConnection.getInstance()
                     .createReceipt("" + user.getToken().getId()
                             , "move", request.getType().split("\\s")[1]
                             , Controller.SHOP_NAME, user.getUsername());
-            StoreToBankConnection.getInstance().pay("" + answer.getReceipt().getReceiptId());
+            if (answer.getType().equals("Successful")) {
+                answer = StoreToBankConnection.getInstance().pay("" + answer.getReceipt().getReceiptId());
+                if (answer.getType().equals("Error")) {
+                    System.out.println("error in paying");
+                }
+
+            } else {
+                System.out.println("error in creating receipt");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

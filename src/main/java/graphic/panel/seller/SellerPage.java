@@ -95,7 +95,12 @@ public class SellerPage extends PageController {
 
     public void lowerWalletMoney(ActionEvent actionEvent) {
         ClientMessage clientMessage = new ClientMessage("lower_wallet_money " + raiseMoney.getText());
+        System.out.println("client message created");
         ServerMessage serverMessage = send(clientMessage);
-        //todo amir
+        if (serverMessage.getType().equals("Successful")) {
+            raiseMoney.setText("");
+        } else {
+            raiseMoney.setText("error");
+        }
     }
 }

@@ -76,6 +76,7 @@ class CreateAccountCommand extends BankCommand {
     public ServerMessage process(ClientMessage request) throws BankException {
         checkPrimaryErrors(request.getType());
         createAccount(request.getType().split("\\s"));
+        serverMessage = new ServerMessage();
         return actionCompleted();
     }
 
@@ -129,7 +130,6 @@ class CreateReceiptCommand extends BankCommand {
                 parameters[4], parameters[5], getDescription(request));
         serverMessage = new ServerMessage();
         serverMessage.setReceipt(receipt);
-        actionCompleted();
     }
 
 
@@ -265,7 +265,7 @@ class GetBalanceCommand extends BankCommand {
     private static GetBalanceCommand command;
 
     private GetBalanceCommand() {
-        this.name = "get balance \\S+";
+        this.name = "get_balance \\S+";
     }
 
     public static GetBalanceCommand getInstance() {
@@ -278,9 +278,9 @@ class GetBalanceCommand extends BankCommand {
     @Override
     public ServerMessage process(ClientMessage request) throws BankException {
         checkPrimaryErrors(request.getType());
-        ServerMessage answer = new ServerMessage();
-        answer.setFirstString("" + getBalance(request.getType().split("\\s")[1]));
-        return answer;
+        serverMessage = new ServerMessage();
+        serverMessage.setFirstString("" + getBalance(request.getType().split("\\s")[1]));
+        return actionCompleted();
     }
 
     private double getBalance(String tokenId) {

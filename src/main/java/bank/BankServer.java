@@ -74,7 +74,6 @@ public class BankServer {
     private void handleRequests() throws IOException {
          dataOutputStream = new DataOutputStream(new BufferedOutputStream(storeSocket.getOutputStream()));
          dataInputStream = new DataInputStream(new BufferedInputStream(storeSocket.getInputStream()));
-         answer = new ServerMessage();
         while (true) {
             String input = dataInputStream.readUTF();
             request = new Gson().fromJson(input, ClientMessage.class);
@@ -89,7 +88,7 @@ public class BankServer {
                 if (answer.getFirstString() != null && answer.getFirstString().equals("exit")) {
                     waitForClient();
                 } else {
-                    System.out.println("successful");
+                    System.out.println("Successful");
                     updateBankDataBase();
                     sendAnswer(answer);
                 }
@@ -101,14 +100,16 @@ public class BankServer {
     }
 
     private void sendError(BankException e) throws IOException {
-        answer.setType("error");
+        answer.setType("Error");
         answer.setErrorMessage(e.getMessage());
         dataOutputStream.writeUTF(new Gson().toJson(answer, ServerMessage.class));
+        dataOutputStream.flush();
     }
 
     private void sendAnswer(ServerMessage answer) throws IOException {
-        answer.setType("successful");
+        answer.setType("Successful");
         dataOutputStream.writeUTF(new Gson().toJson(answer, ServerMessage.class));
+        dataOutputStream.flush();
     }
 
     private void waitForClient() {
