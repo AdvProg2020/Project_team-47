@@ -204,6 +204,8 @@ public class Database {
 
     public void startDatabaseLoading() {
         this.loadDatabase();
+        System.out.println("least wallet money : " + Controller.getLeastWalletMoney());
+        System.out.println("profit percent : " + Controller.getProfitPercent());
         this.connectRelations();
     }
 
@@ -501,7 +503,7 @@ public class Database {
         BUY_LOGS_FOLDER("src/main/resources/Logs/BuyLogs/"),
         BANK_FOLDER("src/main/resources/Bank/"),
         SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs/"),
-        OTHERS_FOLDER("src/main/resources/Others");
+        OTHERS_FOLDER("src/main/resources/Others/");
 
         private final String path;
 

@@ -100,10 +100,6 @@ public class RegisterPage extends PageController {
         reqInfo.put("username", usernameString);
         reqInfo.put("password", passwordString);
         reqInfo.put("verification code", verificationCode.getText());
-        if (managerButton.isSelected()) {
-            reqInfo.put("leastWalletMoney", leastWalletMoney.getText());
-            reqInfo.put("profitPercent", profitPercent.getText());
-        }
         request.setHashMap(reqInfo);
         processConfirmAnswer(send(request));
     }
@@ -167,6 +163,8 @@ public class RegisterPage extends PageController {
         if (managerButton.isSelected()) {
             userType = "manager";
             reqInfo.put("type", "manager");
+            reqInfo.put("leastWalletMoney", leastWalletMoney.getText());
+            reqInfo.put("profitPercent", profitPercent.getText());
         } else if (sellerButton.isSelected()) {
             userType = "seller";
             reqInfo.put("type", "seller");
