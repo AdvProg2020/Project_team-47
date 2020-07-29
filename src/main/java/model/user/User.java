@@ -474,7 +474,15 @@ abstract public class User {
     }
 
     public double getAllowedMoney() {
+        if (this instanceof Seller) {
+            Seller seller = (Seller) this;
+            return seller.getMoney() - Controller.getLeastWalletMoney();
+        }
+        if (this instanceof Customer) {
+            Customer customer = (Customer) this;
+            return customer.getMoney() - Controller.getLeastWalletMoney();
+        }
         //todo amir
-        return 0;
+        return 10000;
     }
 }

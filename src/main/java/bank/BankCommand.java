@@ -461,16 +461,19 @@ class PayCommand extends BankCommand {
         Account destAccount = Bank.getInstance().findAccountWithId(receipt.getDestId());
         sourceAccount.addMoney(-1 * receipt.getMoney());
         destAccount.addMoney(receipt.getMoney());
+        receipt.setPaid(true);
     }
 
     private void withdraw(Receipt receipt) {
         Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
         sourceAccount.addMoney(-1 * receipt.getMoney());
+        receipt.setPaid(true);
     }
 
     private void deposit(Receipt receipt) {
         Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
         sourceAccount.addMoney(receipt.getMoney());
+        receipt.setPaid(true);
     }
 
     @Override

@@ -98,6 +98,13 @@ public class Database {
         saveInFile(transactions, Path.BANK_FOLDER.getPath() + "Transactions.json");
     }
 
+    public static void updateLeastWalletMoneyAndProfitPercent(String leastWalletMoney, String profitPercent) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add(leastWalletMoney);
+        arrayList.add(profitPercent);
+        saveInFile(arrayList, Path.OTHERS_FOLDER.getPath() + "leastWalletMoneyAndProfitPercent.json");
+    }
+
 
     static void addProduct(ProductData productData, String productId) {
         saveInFile(productData, Path.PRODUCT_FOLDER.getPath() + productId + ".json");
@@ -223,6 +230,7 @@ public class Database {
         this.loadUsers();
         this.loadNotVerifiedUsers();
         this.loadRequests();
+        this.loadLeastWalletMoneyAndProfitPercent();
     }
 
     private void creatingFolders() {
@@ -234,7 +242,9 @@ public class Database {
     private void loadEmail() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter email password!!");
-        Email.setPassword(scanner.nextLine());
+        //todo amir
+        //Email.setPassword(scanner.nextLine());
+        Email.setPassword("apshop1818901");
         //Email.checkPassword();
         scanner.close();
         File htmlPage = new File(Path.RESOURCE.getPath() + "Others/HtmlPage.html");
@@ -259,6 +269,18 @@ public class Database {
         if (usedId == null)
             return;
         Log.setUsedId(usedIdTreeSet);
+    }
+
+    public void loadLeastWalletMoneyAndProfitPercent() {
+        File file = getFileStatic(Path.OTHERS_FOLDER.getPath() + "leastWalletMoneyAndProfitPercent.json");
+        String savedStrings = readFile(file);
+        ArrayList<String> strings;
+        strings = gson.fromJson(savedStrings, new TypeToken<ArrayList<String>>() {
+        }.getType());
+        if (strings == null)
+            return;
+        Controller.setLeastWalletMoney(Integer.parseInt(strings.get(0)));
+        Controller.setProfitPercent(Integer.parseInt(strings.get(1)));
     }
 
     public static void loadBankAccounts() {
@@ -478,7 +500,8 @@ public class Database {
         OFFS_FOLDER("src/main/resources/Offs/"),
         BUY_LOGS_FOLDER("src/main/resources/Logs/BuyLogs/"),
         BANK_FOLDER("src/main/resources/Bank/"),
-        SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs/");
+        SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs/"),
+        OTHERS_FOLDER("src/main/resources/Others");
 
         private final String path;
 

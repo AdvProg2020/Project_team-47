@@ -23,6 +23,10 @@ import java.util.ResourceBundle;
 public class RegisterPage extends PageController {
     private static boolean shouldBack;
     @FXML
+    public TextField leastWalletMoney;
+    @FXML
+    public TextField profitPercent;
+    @FXML
     private Button picButton;
     @FXML
     private Button regButton;
@@ -96,6 +100,10 @@ public class RegisterPage extends PageController {
         reqInfo.put("username", usernameString);
         reqInfo.put("password", passwordString);
         reqInfo.put("verification code", verificationCode.getText());
+        if (managerButton.isSelected()) {
+            reqInfo.put("leastWalletMoney", leastWalletMoney.getText());
+            reqInfo.put("profitPercent", profitPercent.getText());
+        }
         request.setHashMap(reqInfo);
         processConfirmAnswer(send(request));
     }

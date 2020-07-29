@@ -2,6 +2,7 @@ package controller.login;
 
 import controller.Command;
 import controller.Controller;
+import database.Database;
 import model.ecxeption.CommonException;
 import model.ecxeption.Exception;
 import model.ecxeption.user.*;
@@ -88,7 +89,7 @@ class RegisterCommand extends LoginCommands {
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
         containNullField(request.getHashMap(), request.getFile());
-        //checkPrimaryErrors(request);
+        checkPrimaryErrors(request);
         avatar = request.getFile();
         register(request.getHashMap());
         return actionCompleted();
@@ -111,6 +112,12 @@ class RegisterCommand extends LoginCommands {
 
     public void register(HashMap<String, String> registerInformationHashMap) throws RegisterException {
         //this function will register user
+        if (registerInformationHashMap.get("type").equals("manager")) {
+            Controller.setLeastWalletMoney(Integer.parseInt(registerInformationHashMap.get("leastWalletMoney")));
+            Controller.setLeastWalletMoney(Integer.parseInt(registerInformationHashMap.get("profitPercent")));
+            Database.updateLeastWalletMoneyAndProfitPercent(registerInformationHashMap.get("leastWalletMoney")
+            , registerInformationHashMap.get("profitPercent"));
+        }
         registerUser(registerInformationHashMap, registerInformationHashMap.get("type"));
     }
 

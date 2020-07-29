@@ -22,17 +22,27 @@
                 <Font size="18.0" />
             </font>
         </TextField>
-        <TextField fx:id="email" layoutX="97.0" layoutY="245.0" prefHeight="55.0" prefWidth="236.0" promptText="Email" styleClass="textfield" AnchorPane.leftAnchor="97.0">
+        <TextField fx:id="email" layoutX="97.0" layoutY="234.0" prefHeight="55.0" prefWidth="236.0" promptText="Email" styleClass="textfield" AnchorPane.leftAnchor="97.0">
             <font>
                 <Font size="18.0" />
             </font>
         </TextField>
-        <TextField fx:id="companyName" layoutX="97.0" layoutY="314.0" prefHeight="55.0" prefWidth="236.0" promptText="Company Name" styleClass="textfield" AnchorPane.leftAnchor="97.0">
+        <TextField fx:id="companyName" layoutX="97.0" layoutY="300.0" prefHeight="55.0" prefWidth="236.0" promptText="Company Name" styleClass="textfield" AnchorPane.leftAnchor="97.0">
             <font>
                 <Font size="18.0" />
             </font>
         </TextField>
-        <TextArea fx:id="companyInfo" layoutX="97.0" layoutY="442.0" prefHeight="240.0" prefWidth="289.0" promptText="Company Info" AnchorPane.leftAnchor="97.0">
+        <TextField fx:id="leastWalletMoney" layoutX="97.0" layoutY="360.0" prefHeight="55.0" prefWidth="236.0" promptText="Least Wallet Money" styleClass="textfield" AnchorPane.leftAnchor="97.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <TextField fx:id="profitPercent" layoutX="97.0" layoutY="423.0" prefHeight="55.0" prefWidth="236.0" promptText="Profit Percent" styleClass="textfield" AnchorPane.leftAnchor="97.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <TextArea fx:id="companyInfo" layoutX="97.0" layoutY="486.0" prefHeight="200.0" prefWidth="289.0" promptText="Company Info" AnchorPane.leftAnchor="97.0">
             <font>
                 <Font size="17.0" />
             </font>

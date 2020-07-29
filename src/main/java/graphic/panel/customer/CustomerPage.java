@@ -88,6 +88,10 @@ public class CustomerPage extends PageController {
     public void raiseBalance() {
         ClientMessage clientMessage = new ClientMessage("raise_balance " + raiseMoney.getText());
         ServerMessage serverMessage = send(clientMessage);
-        //todo amir
+        if (serverMessage.getType().equals("Error")) {
+            raiseMoney.setText("error");
+        } else if (serverMessage.getType().equals("Successful")) {
+            raiseMoney.setText("");
+        }
     }
 }

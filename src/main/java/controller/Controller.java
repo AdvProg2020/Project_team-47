@@ -30,6 +30,8 @@ abstract public class Controller {
     private static final Gson gson = new Gson();
     private static final HashMap<String, User> USER_HASH_MAP = new HashMap<>();
     protected static User loggedUser;
+    private static int leastWalletMoney;
+    private static int profitPercent;
 
     static {
         ShoppingCart.setLocalShoppingCart(new ShoppingCart());
@@ -68,6 +70,22 @@ abstract public class Controller {
 
     public static void setLoggedUser(String authToken) {
         loggedUser = USER_HASH_MAP.get(authToken);
+    }
+
+    public static int getLeastWalletMoney() {
+        return leastWalletMoney;
+    }
+
+    public static int getProfitPercent() {
+        return profitPercent;
+    }
+
+    public static void setLeastWalletMoney(int leastWalletMoney) {
+        Controller.leastWalletMoney = leastWalletMoney;
+    }
+
+    public static void setProfitPercent(int profitPercent) {
+        Controller.profitPercent = profitPercent;
     }
 
     public static User getLoggedUser(String authToken) {

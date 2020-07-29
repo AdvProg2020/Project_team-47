@@ -60,6 +60,8 @@ public class Customer extends User {
         this.shoppingCart = new ShoppingCart();
     }
 
+
+
     public DiscountCode getDiscountCode(String code) throws CodeException.DontHaveCode {
         for (DiscountCode discountCode : discountCodes) {
             if (discountCode.getDiscountCode().equals(code)) {

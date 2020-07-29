@@ -92,6 +92,7 @@ class LowerWalletMoneyCommand extends BankRelatedCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
+        System.out.println("lower money command found");
         checkPrimaryErrors(request);
         User user = Controller.getLoggedUser();
         try {
@@ -125,11 +126,13 @@ class LowerWalletMoneyCommand extends BankRelatedCommands {
     @Override
     public void checkPrimaryErrors(ClientMessage request) throws Exception {
         int money = Integer.parseInt(request.getType().split("\\s")[1]);
+        System.out.println("money amount is : " + money);
         if (money <= 0) {
             throw new Exception("money should be positive");
         }
 
         if (money > Controller.getLoggedUser().getAllowedMoney()) {
+            System.out.println("this amount of money is not allowed");
             throw new Exception("this amount of money is not allowed");
         }
     }
