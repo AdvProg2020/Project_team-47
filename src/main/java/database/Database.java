@@ -217,7 +217,7 @@ public class Database {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter email password!!");
         Email.setPassword(scanner.nextLine());
-        Email.checkPassword();
+        //Email.checkPassword();
         scanner.close();
         File htmlPage = new File(Path.RESOURCE.getPath() + "Others/HtmlPage.html");
         Email.setHtmlPage(readFile(htmlPage));

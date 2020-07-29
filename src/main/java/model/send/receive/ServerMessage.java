@@ -108,16 +108,26 @@ public class ServerMessage {
         this.categoryInfo = categoryInfo;
     }
 
-    public DiscountCodeInfo getDiscountCodeInfo() {
-        return discountCodeInfo;
-    }
-
     public void setDiscountCodeInfo(DiscountCodeInfo discountCodeInfo) {
         this.discountCodeInfo = discountCodeInfo;
     }
 
-    public LogInfo getLogInfo() {
-        return logInfo;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServerMessage)) return false;
+
+        ServerMessage that = (ServerMessage) o;
+
+        if (!type.equals(that.type)) return false;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + id.hashCode();
+        return result;
     }
 
     public void setLogInfo(LogInfo logInfo) {
@@ -140,10 +150,6 @@ public class ServerMessage {
         this.productInfo = productInfo;
     }
 
-    public RequestInfo getRequestInfo() {
-        return requestInfo;
-    }
-
     public void setRequestInfo(RequestInfo requestInfo) {
         this.requestInfo = requestInfo;
     }
@@ -154,10 +160,6 @@ public class ServerMessage {
 
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
-    }
-
-    public ArrayList<String> getStrings() {
-        return strings;
     }
 
     public void setStrings(ArrayList<String> strings) {

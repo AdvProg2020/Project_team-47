@@ -150,6 +150,7 @@ public class ShoppingCart {
     private void startDownload(User customer, User seller, String path) {
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setType("give me port");
+        serverMessage.setId("-1");
         serverMessage.setFirstString(customer.getUsername());
         serverMessage.setSecondString(path);
         Server.getServer().addMessage(seller, serverMessage);

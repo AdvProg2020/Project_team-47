@@ -19,7 +19,7 @@ public class Client {
     }
 
     private final ArrayList<ServerMessage> answers;
-    private final int serverPort = 12222;
+    private final int serverPort = 11121;
     private final Gson gson;
     private final ArrayList<ClientMessage> clientMessages;
     private Socket socket;
@@ -32,22 +32,41 @@ public class Client {
             socket = new Socket("127.0.0.1", serverPort);
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(11);
         }
         new Thread(this::gettingAnswer).start();
-        new Thread(() -> {
-            while (true) {
-                synchronized (clientMessages) {
-                    for (ClientMessage clientMessage : clientMessages) {
+        new Thread(this::sendingQueue).start();
+        new Thread(this::serverInterrupts).start();
+    }
+
+    private void serverInterrupts() {
+        while (true) {
+            synchronized (answers) {
+                for (ServerMessage answer : answers) {
+                    if ("-1".equals(answer.getId())) {
                         try {
-                            send(clientMessage);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            serverMessage(answer);
+                        } catch (IOException ignored) {
                         }
+                        break;
                     }
                 }
             }
-        }).start();
+        }
+    }
 
+    private void sendingQueue() {
+        while (true) {
+            synchronized (clientMessages) {
+                for (ClientMessage clientMessage : clientMessages) {
+                    try {
+                        send(clientMessage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     public static ServerMessage sendRequest(ClientMessage request) {
@@ -73,15 +92,21 @@ public class Client {
     }
 
     private void download(ServerMessage answer) throws IOException {
-        new File("src/resources/download/").mkdirs();
+        new File("src/main/resources/download/").mkdirs();
         int port = Integer.parseInt(answer.getFirstString());
         Socket socket = new Socket(answer.getSecondString(), port);
-        String path = "src/resources/download/" + getAnswer(socket);
+        String path = "src/main/resources/download/" + getAnswer(socket);
         File file = new File(path);
+        System.out.println(file.createNewFile());
         OutputStream outputStream = new FileOutputStream(file);
         byte[] fileBytes = gson.fromJson(getAnswer(socket), byte[].class);
+        System.out.println("done");
         outputStream.write(fileBytes);
-        outputStream.close();
+        try {
+            outputStream.close();
+        } catch (IOException ignored) {
+            System.out.println("debug");
+        }
         socket.close();
     }
 
@@ -97,6 +122,7 @@ public class Client {
         ClientMessage clientMessage = new ClientMessage("port opened");
         clientMessage.setFirstInt(serverSocket.getLocalPort());
         clientMessage.setHashMap(reqInfo);
+        clientMessage.setId(String.valueOf(id++));
         new Thread(() -> {
             try {
                 addMessage(clientMessage);
@@ -114,24 +140,11 @@ public class Client {
         }
     }
 
-    private void gettingAnswer() {
-        while (true) {
-            try {
-                String answer = getAnswer(this.socket);
-                synchronized (answers) {
-                    answers.add(gson.fromJson(answer, ServerMessage.class));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private ServerMessage send(ClientMessage request) throws IOException {
+    private synchronized ServerMessage send(ClientMessage request) throws IOException {
         request.setAuthToken(MainFX.getInstance().getToken());
         if (request.getType().equals("logout")) MainFX.getInstance().setToken("");
         String message = gson.toJson(request);
-        if (!socket.isConnected()) socket = new Socket("127.0.0.1", serverPort);
+        if (socket == null || !socket.isConnected()) socket = new Socket("127.0.0.1", serverPort);
         sendRequest(this.socket, message);
         return answer(request.getId());
     }
@@ -140,17 +153,7 @@ public class Client {
         while (true) {
             synchronized (answers) {
                 for (ServerMessage answer : answers) {
-                    if (answer.getId() == null || answer.getId().equals("-1")) {
-                        try {
-                            serverMessage(answer);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    }
-                }
-                for (ServerMessage answer : answers) {
-                    if (answer.getId().equals(id)) {
+                    if (id.equals(answer.getId())) {
                         answers.remove(answer);
                         return answer;
                     }
@@ -166,6 +169,19 @@ public class Client {
             message = message.substring(1000);
         }
         dataOutputStream.writeUTF(message);
+    }
+
+    private void gettingAnswer() {
+        while (true) {
+            try {
+                String answer = getAnswer(this.socket);
+                synchronized (answers) {
+                    answers.add(gson.fromJson(answer, ServerMessage.class));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private String getAnswer(Socket socket) throws IOException {

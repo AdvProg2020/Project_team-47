@@ -18,29 +18,47 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Server {
     private static Server server;
-    private final int port = 12222;
+    private final int port = 11121;
     private final ServerSocket socket;
     private final ArrayList<ClientThread> threads;
-    private final HashMap<User, ServerMessage> sendingQueue;
+    private final ArrayList<SendMap> sendingQueue;
 
     public Server() throws IOException {
         socket = new ServerSocket(port);
         threads = new ArrayList<>();
-        sendingQueue = new HashMap<>();
+        sendingQueue = new ArrayList<>();
         server = this;
+    }
+
+    public static void main(String[] args) throws IOException {
+        new Database().startDatabaseLoading();
+        System.out.println("Database updated");
+        new Server().run();
     }
 
     public static Server getServer() {
         return server;
     }
 
-    public static void main(String[] args) throws IOException {
-        new Database().startDatabaseLoading();
-        new Server().run();
+    private void sendingThread() {
+        while (true) {
+            try {
+                synchronized (sendingQueue) {
+                    if (sendingQueue.size() != 0) {
+                        for (ClientThread thread : threads) {
+                            if (thread.getUser() == sendingQueue.get(0).user) {
+                                thread.sendAnswer(sendingQueue.remove(0).serverMessage);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch (ConcurrentModificationException ignored) {
+            }
+        }
     }
 
     public void removeThread(ClientThread thread) {
@@ -62,30 +80,26 @@ public class Server {
         }
     }
 
-    private void sendingThread() {
-        while (true) {
-            try {
-                for (Map.Entry<User, ServerMessage> answer : sendingQueue.entrySet()) {
-                    boolean flag = false;
-                    for (ClientThread thread : threads) {
-                        if (thread.getUser() == answer.getKey()) {
-                            thread.sendAnswer(answer.getValue());
-                            flag = true;
-                        }
-                    }
-
-                    if (flag) {
-                        sendingQueue.remove(answer.getKey(), answer.getValue());
-                        break;
-                    }
-                }
-            } catch (ConcurrentModificationException ignored) {
-            }
-        }
+    public void addMessage(User user, ServerMessage serverMessage) {
+        sendingQueue.add(new SendMap(user, serverMessage));
     }
 
-    public void addMessage(User user, ServerMessage serverMessage) {
-        sendingQueue.put(user, serverMessage);
+    private static class SendMap {
+        private final User user;
+        private final ServerMessage serverMessage;
+
+        public SendMap(User user, ServerMessage serverMessage) {
+            this.user = user;
+            this.serverMessage = serverMessage;
+        }
+
+        public User getUser() {
+            return user;
+        }
+
+        public ServerMessage getServerMessage() {
+            return serverMessage;
+        }
     }
 }
 
@@ -99,7 +113,6 @@ class ClientThread extends Thread {
     private ShoppingCart shoppingCart = new ShoppingCart();
     private String sort = null;
     private String sortDirection = null;
-    private boolean kill = false;
 
     public ClientThread(Socket socket) {
         this.socket = socket;
@@ -110,21 +123,26 @@ class ClientThread extends Thread {
     @Override
     public void run() {
         ClientMessage request;
-
+        new Thread(this::sendQueue).start();
         while (socket.isConnected()) {
             synchronized (this) {
                 request = getRequest();
-                if (kill) break;
+                if (request == null) break;
                 sendToSocket(processAnswer(request));
-            }
-            for (String answer : sendingQueue) {
-                sendToSocket(answer);
             }
         }
         try {
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void sendQueue() {
+        while (true) {
+            synchronized (sendingQueue) {
+                if (sendingQueue.size() != 0) sendToSocket(sendingQueue.remove(0));
+            }
         }
     }
 
@@ -153,19 +171,13 @@ class ClientThread extends Thread {
 
     private ClientMessage getRequest() {
         String requestString = getMessage();
-        // TODO: 7/23/2020
         ClientMessage request;
         synchronized (Controller.getGson()) {
             try {
                 request = Controller.getGson().fromJson(requestString, ClientMessage.class);
-                if (request == null) {
-                    kill = true;
-                    return null;
-                }
-
+                if (request == null) return null;
             } catch (JsonSyntaxException e) {
                 Server.getServer().removeThread(this);
-                kill = true;
                 return null;
             }
         }
@@ -230,14 +242,19 @@ class ClientThread extends Thread {
                 message = message.substring(1000);
             }
             socketOutputStream.writeUTF(message);
+            socketOutputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void sendAnswer(ServerMessage message) {
+        String string;
         synchronized (Controller.getGson()) {
-            sendingQueue.add(Controller.getGson().toJson(message));
+            string = Controller.getGson().toJson(message);
+        }
+        synchronized (sendingQueue) {
+            sendingQueue.add(string);
         }
     }
 }

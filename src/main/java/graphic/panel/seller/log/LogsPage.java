@@ -75,7 +75,7 @@ public class LogsPage extends PageController {
     private void initializePagination() {
         pagination.setPageFactory((Integer page) -> {
             VBox vBox = new VBox();
-            for (int i = 0; i < 4 && i < anchorPanes.length; i++) {
+            for (int i = 0; i < 4 && page * 5 + i < anchorPanes.length; i++) {
                 vBox.getChildren().add(anchorPanes[page * 5 + i]);
             }
             return vBox;

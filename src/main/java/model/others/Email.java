@@ -47,17 +47,10 @@ public class Email {
     }
 
     private void sendWithoutThread() {
-        try {
-            Message message = createMessage();
-            if (message == null)
-                return;
-            Transport.send(message);
-        } catch (AuthenticationFailedException e) {
-            System.out.println("\nYou entered wrong password for email!!");
-            //System.exit(2);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        Message message = createMessage();
+        if (message == null)
+            return;
+        //Transport.send(message);
     }
 
     private Message createMessage() {
@@ -145,14 +138,7 @@ public class Email {
         }
 
         public void run() {
-            try {
-                Transport.send(message);
-            } catch (AuthenticationFailedException e) {
-                System.out.println("\nYou entered wrong password for email!!");
-                //System.exit(2);
-            } catch (MessagingException e) {
-                e.printStackTrace();
-            }
+            //Transport.send(message);
         }
     }
 
