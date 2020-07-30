@@ -160,6 +160,13 @@ abstract public class Controller {
         serverMessage.setOffInfo(offInfo);
         return serverMessage;
     }
+    
+    public static ServerMessage sendAnswer(ArrayList<AuctionInfo> auctionInfo) {
+        ServerMessage serverMessage = new ServerMessage();
+        serverMessage.setType("Successful");
+        serverMessage.setAuctionInfoArrayList(auctionInfo);
+        return serverMessage;
+    }
 
     public static ServerMessage sendAnswer(RequestInfo requestInfo) {
         ServerMessage serverMessage = new ServerMessage();
