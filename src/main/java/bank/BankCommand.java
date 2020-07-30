@@ -375,7 +375,8 @@ class GetTransactionsCommand extends BankCommand {
     private static GetTransactionsCommand command;
 
     private GetTransactionsCommand() {
-        this.name = "get transactions \\S+ \\S+";
+        this.name = "get_transactions \\S+ \\S+";
+        // second parameter can be + or - or *
     }
 
 
@@ -390,14 +391,34 @@ class GetTransactionsCommand extends BankCommand {
     @Override
     public ServerMessage process(ClientMessage request) throws BankException {
         checkPrimaryErrors(request.getType());
-        ServerMessage answer = new ServerMessage();
-        answer.setTransactions(getTransactions(request.getType()));
-        return answer;
+        serverMessage = new ServerMessage();
+        serverMessage.setTransactions(getTransactions(request.getType()));
+        return actionCompleted();
     }
 
     private ArrayList<Transaction> getTransactions(String request) {
+        String[] parameters = request.split("\\s");
         ArrayList<Transaction> transactions = new ArrayList<>();
-        //todo amir
+        Token token = Bank.getInstance().findTokenWithId(Integer.parseInt(parameters[1]));
+        switch (parameters[2]) {
+            case "+" -> transactions = destTransactions(token);
+            case "-" -> transactions = sourceTransactions(token);
+            case "*" -> transactions = allTransactions(token);
+        }
+        return transactions;
+    }
+
+    private ArrayList<Transaction> destTransactions(Token token) {
+        return token.getAccount().getDestTransactions();
+    }
+
+    private ArrayList<Transaction> sourceTransactions(Token token) {
+        return token.getAccount().getSourceTransactions();
+    }
+
+    private ArrayList<Transaction> allTransactions(Token token) {
+        ArrayList<Transaction> transactions = new ArrayList<>(token.getAccount().getDestTransactions());
+        transactions.addAll(token.getAccount().getSourceTransactions());
         return transactions;
     }
 
@@ -410,7 +431,7 @@ class GetTransactionsCommand extends BankCommand {
         if (isTokenExpired(parameters[1])) {
             throw new BankException.ExpiredTokenException();
         }
-        if (!isReceiptIdValid()) {
+        if (!isReceiptIdValid(parameters[2])) {
             throw new BankException.InvalidReceiptIdException();
         }
     }
@@ -424,9 +445,8 @@ class GetTransactionsCommand extends BankCommand {
         return token.getFinishTime().before(Controller.getCurrentTime());
     }
 
-    private boolean isReceiptIdValid() {
-        //todo amir
-        return true;
+    private boolean isReceiptIdValid(String receipt) {
+        return receipt.equals("+") || receipt.equals("-") || receipt.equals("*");
     }
 
 

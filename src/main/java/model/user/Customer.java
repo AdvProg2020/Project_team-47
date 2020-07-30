@@ -110,7 +110,8 @@ public class Customer extends User {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return Integer.parseInt(answer.getFirstString()) >= cartPrice;
+            System.out.println(answer.getFirstString());
+            return Double.parseDouble(answer.getFirstString()) >= cartPrice;
         } else {
             throw new Exception("invalid type of source");
         }
