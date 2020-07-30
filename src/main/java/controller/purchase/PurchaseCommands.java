@@ -192,7 +192,7 @@ class PayCommand extends PurchaseCommands {
     private static PayCommand command;
 
     private PayCommand() {
-        this.name = "pay with wallet|bank";
+        this.name = "pay with (bank|wallet)";
     }
 
     public static PayCommand getInstance() {
@@ -204,6 +204,7 @@ class PayCommand extends PurchaseCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException, NotEnoughMoneyException {
+        System.out.println("salam");
         pay(request.getType().split("\\s")[2]);
         return actionCompleted();
     }

@@ -294,7 +294,7 @@ class GetBalanceCommand extends BankCommand {
 
     @Override
     public void checkPrimaryErrors(String request) throws BankException {
-        String token = name.split("\\s")[1];
+        String token = request.split("\\s")[1];
         if (!isTokenValid(token)) {
             throw new BankException.InvalidTokenException();
         }

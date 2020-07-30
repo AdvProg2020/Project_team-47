@@ -76,7 +76,9 @@ public class PurchasePage extends PageController {
     private void purchaseWithBank() {
         MainFX.getInstance().click();
         ClientMessage clientMessage = new ClientMessage("pay with bank");
+        System.out.println("salam");
         if (sendAndProcess(clientMessage)) {
+            System.out.println("salam1");
             TemplatePage.getInstance().back();
         }
     }
