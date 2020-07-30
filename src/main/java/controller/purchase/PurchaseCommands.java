@@ -1,5 +1,6 @@
 package controller.purchase;
 
+import bank.StoreToBankConnection;
 import controller.Command;
 import controller.Controller;
 import model.discount.DiscountCode;
@@ -15,6 +16,7 @@ import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import model.user.Customer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -202,7 +204,7 @@ class PayCommand extends PurchaseCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException, NotEnoughMoneyException {
-        pay(request.getArrayList().get(0));
+        pay(request.getType().split("\\s")[2]);
         return actionCompleted();
     }
 
@@ -220,10 +222,15 @@ class PayCommand extends PurchaseCommands {
 
         double finalPrice = getFinalPrice(shoppingCart.getTotalPrice());
         //check if customer has enough money
-        if (!customer.canUserBuy(finalPrice, source)) {
-            throw new NotEnoughMoneyException();
-        } else if (finalPrice > 1000000) {
-            giveGift(customer, finalPrice);
+        try {
+            if (!customer.canUserBuy(finalPrice, source)) {
+                throw new NotEnoughMoneyException();
+            } else if (finalPrice > 1000000) {
+                giveGift(customer, finalPrice);
+            }
+        } catch (java.lang.Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
         useDiscountCode(shoppingCart);
@@ -243,8 +250,30 @@ class PayCommand extends PurchaseCommands {
     private void decreaseMoneyFromCustomer(String source, double finalPrice, Customer customer) {
         if (source.equals("wallet")) {
             customer.decreaseMoney(finalPrice);
-        } else {
-            //todo amir bank
+        } else if (source.equals("bank")){
+            payWithBankAccount(source, finalPrice, customer);
+        }
+    }
+
+    private void payWithBankAccount(String source, double finalPrice, Customer customer) {
+        ServerMessage answer;
+        try {
+            answer = StoreToBankConnection.getInstance().getToken(customer.getUsername(), customer.getPassword());
+            if (answer.getType().equals("Error")) {
+                System.out.println("error in getting token");
+            }
+            answer = StoreToBankConnection.getInstance().createReceipt("" + answer.getToken().getId()
+                    , "withdraw", "" + (int)finalPrice, customer.getUsername(), customer.getUsername());
+            if (answer.getType().equals("Error")) {
+                System.out.println("error in creating receipt");
+            }
+            answer = StoreToBankConnection.getInstance().pay("" + answer.getReceipt().getReceiptId());
+            if (answer.getType().equals("Error")) {
+                System.out.println("error in paying receipt");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 

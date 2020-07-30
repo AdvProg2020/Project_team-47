@@ -2,6 +2,7 @@ package model.user;
 
 import bank.StoreToBankConnection;
 import database.UserData;
+import graphic.Client;
 import model.discount.DiscountCode;
 import model.ecxeption.purchase.CodeException;
 import model.log.BuyLog;
@@ -9,9 +10,7 @@ import model.log.Log;
 import model.others.Product;
 import model.others.Score;
 import model.others.ShoppingCart;
-import model.send.receive.DiscountCodeInfo;
-import model.send.receive.LogInfo;
-import model.send.receive.UserInfo;
+import model.send.receive.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -93,12 +92,28 @@ public class Customer extends User {
     }
 
 
-    public boolean canUserBuy(double cartPrice, String source) {
+    public boolean canUserBuy(double cartPrice, String source) throws Exception {
         if (source.equals("wallet")) {
-            return !(this.money < cartPrice);
+            return this.getAllowedMoney() >= cartPrice;
         }
-        //todo amir
-        return true;
+        if (source.equals("bank")) {
+            ServerMessage answer = null;
+            try {
+                answer = StoreToBankConnection.getInstance().getToken(this.getUsername(), getPassword());
+                if (answer.getType().equals("Error")) {
+                    System.out.println("error in getting token");
+                }
+                answer = StoreToBankConnection.getInstance().getBalance("" + answer.getToken().getId());
+                if (answer.getType().equals("Error")) {
+                    System.out.println("error in getting balance");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return Integer.parseInt(answer.getFirstString()) >= cartPrice;
+        } else {
+            throw new Exception("invalid type of source");
+        }
     }
 
     public void addBuyLog(BuyLog buyLog) {

@@ -204,8 +204,6 @@ public class Database {
 
     public void startDatabaseLoading() {
         this.loadDatabase();
-        System.out.println("least wallet money : " + Controller.getLeastWalletMoney());
-        System.out.println("profit percent : " + Controller.getProfitPercent());
         this.connectRelations();
     }
 

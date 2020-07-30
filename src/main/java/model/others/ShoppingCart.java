@@ -1,5 +1,6 @@
 package model.others;
 
+import bank.StoreToBankConnection;
 import controller.Controller;
 import controller.Server;
 import model.log.BuyLog;
@@ -8,6 +9,7 @@ import model.send.receive.ServerMessage;
 import model.user.Seller;
 import model.user.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ShoppingCart {
@@ -140,10 +142,34 @@ public class ShoppingCart {
                 new Thread(() -> startDownload(Controller.getLoggedUser(), seller, product.getFilePath())).start();
             int productNumber = productInCart.getNumberInCart();
             double price = product.getFinalPrice(seller) * (double) productNumber;
-            seller.increaseMoney(price);
+            seller.increaseMoney(price * (100.0 - (double) Controller.getProfitPercent()) / 100.0);
+            increaseStoreMoney(price * ((double)Controller.getProfitPercent()) / 100.0);
             product.decreaseProduct(seller, productNumber);
             product.updateDatabase();
             seller.updateDatabase().update();
+        }
+    }
+
+    private void increaseStoreMoney(double money) {
+        //todo amir discount should be considered
+        ServerMessage answer;
+        try {
+            answer = StoreToBankConnection.getInstance().getToken("apshop47", "apshop47");
+            if (answer.getType().equals("Error")) {
+                System.out.println("error in getting token");
+            }
+            answer = StoreToBankConnection.getInstance().createReceipt("" + answer.getToken().getId()
+                    , "deposit", "" + (int)money, "apshop47", "apshop47");
+            if (answer.getType().equals("Error")) {
+                System.out.println("error in creating receipt");
+            }
+            answer = StoreToBankConnection.getInstance().pay("" + answer.getReceipt().getReceiptId());
+            if (answer.getType().equals("Error")) {
+                System.out.println("error in paying receipt");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 

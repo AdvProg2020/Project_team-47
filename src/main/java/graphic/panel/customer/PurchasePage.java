@@ -67,9 +67,6 @@ public class PurchasePage extends PageController {
     private void purchaseWithWallet() {
         MainFX.getInstance().click();
         ClientMessage clientMessage = new ClientMessage("pay with wallet");
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("wallet");
-        clientMessage.setArrayList(arrayList);
         if (sendAndProcess(clientMessage)) {
             TemplatePage.getInstance().back();
         }
@@ -79,9 +76,6 @@ public class PurchasePage extends PageController {
     private void purchaseWithBank() {
         MainFX.getInstance().click();
         ClientMessage clientMessage = new ClientMessage("pay with bank");
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("bank");
-        clientMessage.setArrayList(arrayList);
         if (sendAndProcess(clientMessage)) {
             TemplatePage.getInstance().back();
         }
