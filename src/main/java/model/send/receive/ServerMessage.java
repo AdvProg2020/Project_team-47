@@ -228,6 +228,10 @@ public class ServerMessage {
     public void setAuctionInfoArrayList(ArrayList<AuctionInfo> auctionInfoArrayList) {
         this.auctionInfoArrayList = auctionInfoArrayList;
     }
+    
+    public ArrayList<AuctionInfo> getAuctionInfoArrayList() {
+        return auctionInfoArrayList;
+    }
 
     public ArrayList<ProductInfo> getProductInfoArrayList() {
         return productInfoArrayList;
