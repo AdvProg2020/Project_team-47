@@ -2,9 +2,11 @@ package controller.panels.seller;
 
 import controller.Command;
 import controller.Server;
+import model.auction.Auction;
 import model.category.Category;
 import model.ecxeption.CommonException;
 import model.ecxeption.Exception;
+import model.ecxeption.common.DateException;
 import model.ecxeption.common.NotEnoughInformation;
 import model.ecxeption.common.NullFieldException;
 import model.ecxeption.common.NumberException;
@@ -15,12 +17,14 @@ import model.others.Product;
 import model.others.SpecialProperty;
 import model.others.request.AddProductRequest;
 import model.others.request.Request;
+import model.send.receive.AuctionInfo;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import model.user.Seller;
 import model.user.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import static controller.Controller.*;
@@ -52,6 +56,14 @@ public abstract class CommonCommands extends Command {
         return ShowCategoriesCommand.getInstance();
     }
 */
+
+    public static AddAuctionCommand getAddAuctionCommand() {
+        return AddAuctionCommand.getInstance();
+    }
+
+    public static GiveAuctionsCommand getGiveAuctionsCommand() {
+        return GiveAuctionsCommand.getInstance();
+    }
 
     public static ViewBalanceCommand getViewBalanceCommand() {
         return ViewBalanceCommand.getInstance();
@@ -164,6 +176,82 @@ class ViewSalesHistoryCommand extends CommonCommands {
         return sendAnswer(((Seller) getLoggedUser()).getAllSellLogsInfo(field, direction), "log");
     }
 }//end ViewSalesHistoryCommand class
+
+class AddAuctionCommand extends CommonCommands {
+    private static AddAuctionCommand command;
+    Date startDate;
+    Date finishDate;
+
+    private AddAuctionCommand() {
+        this.name = "add auction";
+    }
+
+    public static AddAuctionCommand getInstance() {
+        if (command != null)
+            return command;
+        command = new AddAuctionCommand();
+        return command;
+    }
+
+
+    @Override
+    public ServerMessage process(ClientMessage request) throws Exception {
+        checkPrimaryErrors(request);
+        addToAuction(request);
+        return actionCompleted();
+    }
+
+    private void addToAuction(ClientMessage request) throws CommonException {
+        if (!((Seller) getLoggedUser()).hasProduct(request.getHashMap().get("product id")))
+            throw new CommonException("You don't have product with this id: " + request.getHashMap().get("product id") + "!!");
+
+        Auction auction = new Auction(getLoggedUser().getUsername(), request.getHashMap().get("product id"), startDate, finishDate);
+        auction.updateDatabase();
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+        String[] offInfoKey = {"start-time", "finish-time", "product id"};
+        for (String key : offInfoKey) {
+            if (!request.getHashMap().containsKey(key)) throw new NotEnoughInformation();
+        }
+        startDate = getDateWithString(request.getHashMap().get("start-time"));
+        finishDate = getDateWithString(request.getHashMap().get("finish-time"));
+        if (startDate.before(getCurrentTime()) ||
+                finishDate.before(getCurrentTime()) ||
+                !startDate.before(finishDate)) throw new DateException();
+    }
+}// end AddToAuctionCommand class
+
+class GiveAuctionsCommand extends CommonCommands {
+    private static GiveAuctionsCommand command;
+
+    private GiveAuctionsCommand() {
+        this.name = "give auctions";
+    }
+
+    public static GiveAuctionsCommand getInstance() {
+        if (command != null)
+            return command;
+        command = new GiveAuctionsCommand();
+        return command;
+    }
+
+
+    @Override
+    public ServerMessage process(ClientMessage request) throws Exception {
+        return fresh();
+    }
+
+    private ServerMessage fresh() {
+        return sendAnswer(Auction.getAllAuctionsInfo());
+    }
+
+    @Override
+    public void checkPrimaryErrors(ClientMessage request) throws Exception {
+
+    }
+}// end GiveAuctionsCommand class
 
 class AddProductCommand extends CommonCommands {
     private static AddProductCommand command;
