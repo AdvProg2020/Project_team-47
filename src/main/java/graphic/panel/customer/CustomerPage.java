@@ -94,4 +94,10 @@ public class CustomerPage extends PageController {
             raiseMoney.setText("");
         }
     }
+
+    public void Auctions() {
+        MainFX.getInstance().click();
+        ((AuctionsPage) AuctionsPage.getInstance()).fresh();
+        MainFX.getInstance().changeScene(AuctionsPage.getScene());
+    }
 }
