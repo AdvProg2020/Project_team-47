@@ -6,7 +6,6 @@ import controller.PortsAndIps;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 
 
