@@ -33,6 +33,7 @@ public class Database {
     private final ArrayList<BuyLog> buyLogs;
     private final ArrayList<SellLog> sellLogs;
     private final ArrayList<OffData> offs;
+    private final ArrayList<AuctionData> auctions;
     private final ArrayList<ProductData> products;
     private final ArrayList<UserData> users;
     private final ArrayList<UserData> notVerifiedUsers;
@@ -45,6 +46,7 @@ public class Database {
         categories = new ArrayList<>();
         codes = new ArrayList<>();
         offs = new ArrayList<>();
+        auctions = new ArrayList<>();
         buyLogs = new ArrayList<>();
         sellLogs = new ArrayList<>();
         products = new ArrayList<>();
@@ -144,6 +146,10 @@ public class Database {
         saveInFile(log, Path.BUY_LOGS_FOLDER.getPath() + logId + ".json");
     }
 
+    public static void addAuction(AuctionData auctionData, String id) {
+        saveInFile(auctionData, Path.AUCTIONS_FOLDER.getPath() + id + ".json");
+    }
+
     public static void addSellLog(SellLog log, String logId) {
         saveInFile(log, Path.SELL_LOGS_FOLDER.getPath() + logId + ".json");
     }
@@ -211,6 +217,7 @@ public class Database {
         CategoryData.connectRelations(this.categories);
         DiscountCodeData.connectRelations(this.codes);
         OffData.connectRelations(this.offs);
+        AuctionData.connectRelations(this.auctions);
         ProductData.connectRelations(this.products);
         UserData.connectRelations(this.users, this.sellLogs, this.buyLogs);
     }
@@ -226,6 +233,7 @@ public class Database {
         this.loadCategories();
         this.loadCodes();
         this.loadOffs();
+        this.loadAuctions();
         this.loadProducts();
         this.loadUsers();
         this.loadNotVerifiedUsers();
@@ -465,6 +473,22 @@ public class Database {
         offs.add(gson.fromJson(off, OffData.class));
     }
 
+    private void loadAuctions() {
+        File[] files = new File(Path.AUCTIONS_FOLDER.getPath()).listFiles();
+        if (files == null)
+            return;
+        for (File file : files) {
+            if (file.isDirectory())
+                continue;
+            addAuction(readFile(file));
+        }
+        AuctionData.addAuctions(this.auctions);
+    }
+
+    private void addAuction(String auction) {
+        auctions.add(gson.fromJson(auction, AuctionData.class));
+    }
+
     private void loadCategories() {
         File[] files = new File(Path.CATEGORIES_FOLDER.getPath()).listFiles();
         if (files == null)
@@ -498,6 +522,7 @@ public class Database {
         PRODUCT_FOLDER("src/main/resources/Products/"),
         CODES_FOLDER("src/main/resources/Codes/"),
         OFFS_FOLDER("src/main/resources/Offs/"),
+        AUCTIONS_FOLDER("src/main/resources/Auctions"),
         BUY_LOGS_FOLDER("src/main/resources/Logs/BuyLogs/"),
         BANK_FOLDER("src/main/resources/Bank/"),
         SELL_LOGS_FOLDER("src/main/resources/Logs/SellLogs/"),
