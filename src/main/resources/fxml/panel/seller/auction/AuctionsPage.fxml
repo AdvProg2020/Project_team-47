@@ -24,16 +24,16 @@
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <children>
-                    <Label fx:id="0" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" />
-                    <Label fx:id="1" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="1" />
-                    <Label fx:id="2" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="2" />
-                    <Label fx:id="3" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="3" />
-                    <Label fx:id="4" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="5" />
-                    <Label fx:id="5" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="4" />
-                    <Label fx:id="6" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="6" />
-                    <Label fx:id="7" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="7" />
-                    <Label fx:id="8" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="8" />
-                    <Label fx:id="9" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="9" />
+                    <Label fx:id="l0" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" />
+                    <Label fx:id="l1" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="1" />
+                    <Label fx:id="l2" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="2" />
+                    <Label fx:id="l3" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="3" />
+                    <Label fx:id="l4" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="5" />
+                    <Label fx:id="l5" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="4" />
+                    <Label fx:id="l6" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="6" />
+                    <Label fx:id="l7" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="7" />
+                    <Label fx:id="l8" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="8" />
+                    <Label fx:id="l9" prefHeight="28.0" prefWidth="238.0" style="-fx-alignment: center;" text="Label" GridPane.rowIndex="9" />
 
                 </children>
             </GridPane>
