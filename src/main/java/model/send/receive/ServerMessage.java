@@ -28,6 +28,7 @@ public class ServerMessage {
     private ArrayList<DiscountCodeInfo> discountCodeInfoArrayList;
     private ArrayList<LogInfo> logInfoArrayList;
     private ArrayList<OffInfo> offInfoArrayList;
+    private ArrayList<AuctionInfo> auctionInfoArrayList;
     private ArrayList<ProductInfo> productInfoArrayList;
     private ArrayList<RequestInfo> requestArrayList;
     private ArrayList<UserInfo> userInfoArrayList;
@@ -222,6 +223,10 @@ public class ServerMessage {
 
     public void setOffInfoArrayList(ArrayList<OffInfo> offInfoArrayList) {
         this.offInfoArrayList = offInfoArrayList;
+    }
+
+    public void setAuctionInfoArrayList(ArrayList<AuctionInfo> auctionInfoArrayList) {
+        this.auctionInfoArrayList = auctionInfoArrayList;
     }
 
     public ArrayList<ProductInfo> getProductInfoArrayList() {
