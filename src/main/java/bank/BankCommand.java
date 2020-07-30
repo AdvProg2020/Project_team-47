@@ -169,7 +169,7 @@ class CreateReceiptCommand extends BankCommand {
             System.out.println(parameters[6]);
             throw new BankException.InvalidDestAccountIdException();
         }
-        if (isSourceAndDestIdSame(parameters[4], parameters[5])) {
+        if (isSourceAndDestIdSame(parameters[4], parameters[5]) && parameters[2].equals("move")) {
             throw new BankException.SourceAndDestIdSameException();
         }
         if (!isAccountsIdsValid(parameters[4], parameters[5])) {
