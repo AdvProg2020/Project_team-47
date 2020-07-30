@@ -251,11 +251,11 @@ class PayCommand extends PurchaseCommands {
         if (source.equals("wallet")) {
             customer.decreaseMoney(finalPrice);
         } else if (source.equals("bank")){
-            payWithBankAccount(source, finalPrice, customer);
+            payWithBankAccount(finalPrice, customer);
         }
     }
 
-    private void payWithBankAccount(String source, double finalPrice, Customer customer) {
+    private void payWithBankAccount(double finalPrice, Customer customer) {
         ServerMessage answer;
         try {
             answer = StoreToBankConnection.getInstance().getToken(customer.getUsername(), customer.getPassword());

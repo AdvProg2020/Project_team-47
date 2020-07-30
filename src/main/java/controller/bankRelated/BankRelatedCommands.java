@@ -3,9 +3,12 @@ package controller.bankRelated;
 import bank.StoreToBankConnection;
 import controller.Command;
 import controller.Controller;
+import database.Database;
 import model.ecxeption.Exception;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
+import model.user.Customer;
+import model.user.Seller;
 import model.user.User;
 
 import java.io.IOException;
@@ -38,20 +41,21 @@ class RaiseMoneyCommand extends BankRelatedCommands {
     @Override
     public ServerMessage process(ClientMessage request) throws Exception {
         checkPrimaryErrors(request);
-        User user = Controller.getLoggedUser();
+        Customer customer = (Customer)Controller.getLoggedUser();
+        customer.setMoney(customer.getMoney() + Integer.parseInt(request.getType().split("\\s")[1]));
         try {
             ServerMessage answer = StoreToBankConnection.getInstance()
-                    .getToken(user.getUsername(), user.getPassword());
+                    .getToken(customer.getUsername(), customer.getPassword());
             if (answer.getType().equals("Successful")) {
-                user.setToken(answer.getToken());
+                customer.setToken(answer.getToken());
             } else {
                 System.out.println("error in getting token");
             }
 
             answer = StoreToBankConnection.getInstance()
-                    .createReceipt("" + user.getToken().getId()
+                    .createReceipt("" + customer.getToken().getId()
                     , "move", request.getType().split("\\s")[1]
-                    , user.getUsername(), Controller.SHOP_NAME);
+                    , customer.getUsername(), Controller.SHOP_NAME);
             if (answer.getType().equals("Error")) {
                 System.out.println("error in creating receipt");
             }
@@ -94,19 +98,20 @@ class LowerWalletMoneyCommand extends BankRelatedCommands {
     public ServerMessage process(ClientMessage request) throws Exception {
         System.out.println("lower money command found");
         checkPrimaryErrors(request);
-        User user = Controller.getLoggedUser();
+        Seller seller = (Seller)Controller.getLoggedUser();
+        seller.increaseMoney(-1 * Integer.parseInt(request.getType().split("\\s")[1]));
         try {
             ServerMessage answer = StoreToBankConnection.getInstance()
-                    .getToken(user.getUsername(), user.getPassword());
+                    .getToken(seller.getUsername(), seller.getPassword());
             if (answer.getType().equals("Successful")) {
-                user.setToken(answer.getToken());
+                seller.setToken(answer.getToken());
             } else {
                 System.out.println("error in getting token");
             }
             answer = StoreToBankConnection.getInstance()
-                    .createReceipt("" + user.getToken().getId()
+                    .createReceipt("" + seller.getToken().getId()
                             , "move", request.getType().split("\\s")[1]
-                            , Controller.SHOP_NAME, user.getUsername());
+                            , Controller.SHOP_NAME, seller.getUsername());
             if (answer.getType().equals("Successful")) {
                 answer = StoreToBankConnection.getInstance().pay("" + answer.getReceipt().getReceiptId());
                 if (answer.getType().equals("Error")) {
