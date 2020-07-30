@@ -143,6 +143,7 @@ public class ShoppingCart {
             int productNumber = productInCart.getNumberInCart();
             double price = product.getFinalPrice(seller) * (double) productNumber;
             seller.increaseMoney(price * (100.0 - (double) Controller.getProfitPercent()) / 100.0);
+            seller.updateDatabase().update();
             increaseStoreMoney(price * ((double)Controller.getProfitPercent()) / 100.0);
             product.decreaseProduct(seller, productNumber);
             product.updateDatabase();

@@ -15,6 +15,7 @@ import model.others.ShoppingCart;
 import model.send.receive.ClientMessage;
 import model.send.receive.ServerMessage;
 import model.user.Customer;
+import model.user.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -204,7 +205,6 @@ class PayCommand extends PurchaseCommands {
 
     @Override
     public ServerMessage process(ClientMessage request) throws UserTypeException.NeedCustomerException, NotEnoughMoneyException {
-        System.out.println("salam");
         pay(request.getType().split("\\s")[2]);
         return actionCompleted();
     }
@@ -251,6 +251,7 @@ class PayCommand extends PurchaseCommands {
     private void decreaseMoneyFromCustomer(String source, double finalPrice, Customer customer) {
         if (source.equals("wallet")) {
             customer.decreaseMoney(finalPrice);
+            customer.updateDatabase().update();
         } else if (source.equals("bank")){
             payWithBankAccount(finalPrice, customer);
         }

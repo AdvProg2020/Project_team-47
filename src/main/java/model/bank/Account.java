@@ -56,10 +56,18 @@ public class Account {
 
     public boolean hasToken() {
         for (Token token : Bank.getInstance().getTokens()) {
-            if (token.getAccount().equals(this)) {
+            if (token.getAccount().equals(this) && !token.isExpired()) {
                 return true;
             }
         }
         return false;
+    }
+    public Token findToken() {
+        for (Token token : Bank.getInstance().getTokens()) {
+            if (token.getAccount().equals(this) && !token.isExpired()) {
+                return token;
+            }
+        }
+        return null;
     }
 }

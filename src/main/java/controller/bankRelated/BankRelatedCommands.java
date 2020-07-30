@@ -62,6 +62,8 @@ class RaiseMoneyCommand extends BankRelatedCommands {
             answer = StoreToBankConnection.getInstance().pay("" + answer.getReceipt().getReceiptId());
             if (answer.getType().equals("Error")) {
                 System.out.println("error in paying");
+            } else {
+                customer.updateDatabase().update();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,6 +118,8 @@ class LowerWalletMoneyCommand extends BankRelatedCommands {
                 answer = StoreToBankConnection.getInstance().pay("" + answer.getReceipt().getReceiptId());
                 if (answer.getType().equals("Error")) {
                     System.out.println("error in paying");
+                } else {
+                    seller.updateDatabase().update();
                 }
 
             } else {

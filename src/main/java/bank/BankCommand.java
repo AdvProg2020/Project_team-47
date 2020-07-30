@@ -318,6 +318,7 @@ class GetBalanceCommand extends BankCommand {
 
 class GetTokenCommand extends BankCommand {
     private static GetTokenCommand command;
+    private static Token token;
 
     private GetTokenCommand() {
         this.name = "get_token \\S+ \\S+";
@@ -344,6 +345,9 @@ class GetTokenCommand extends BankCommand {
 
     private Token getToken(String request) {
         String[] parameters = request.split("\\s");
+        if (token != null) {
+            return token;
+        }
         return new Token(parameters[1], parameters[2]);
     }
 
@@ -357,8 +361,11 @@ class GetTokenCommand extends BankCommand {
             throw new BankException.InvalidUsernameOrPasswordException();
         }
         if(Bank.getInstance().findAccountWithId(parameters[1]).hasToken()){
-            throw new BankException.AlreadyHasTokenException();
+            Token token1 = Bank.getInstance().findAccountWithId(parameters[1]).findToken();
+            token = token1;
+            return;
         }
+        token = null;
     }
 
 }//end GetTokenCommand Class
