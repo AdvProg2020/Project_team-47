@@ -128,6 +128,7 @@ class CreateReceiptCommand extends BankCommand {
         String[] parameters = request.split("\\s");
         Receipt receipt = new Receipt(parameters[2], parameters[1], parameters[3],
                 parameters[4], parameters[5], getDescription(request));
+        Bank.getInstance().getReceipts().add(receipt);
         serverMessage = new ServerMessage();
         serverMessage.setReceipt(receipt);
     }
@@ -348,7 +349,9 @@ class GetTokenCommand extends BankCommand {
         if (token != null) {
             return token;
         }
-        return new Token(parameters[1], parameters[2]);
+        Token token = new Token(parameters[1], parameters[2]);
+        Bank.getInstance().getTokens().add(token);
+        return token;
     }
 
     @Override
@@ -488,18 +491,22 @@ class PayCommand extends BankCommand {
         Account destAccount = Bank.getInstance().findAccountWithId(receipt.getDestId());
         sourceAccount.addMoney(-1 * receipt.getMoney());
         destAccount.addMoney(receipt.getMoney());
+        sourceAccount.getSourceTransactions().add(new Transaction("move", sourceAccount, destAccount));
+        sourceAccount.getDestTransactions().add(new Transaction("move", sourceAccount, destAccount));
         receipt.setPaid(true);
     }
 
     private void withdraw(Receipt receipt) {
         Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
         sourceAccount.addMoney(-1 * receipt.getMoney());
+        sourceAccount.getSourceTransactions().add(new Transaction("withdraw", sourceAccount, sourceAccount));
         receipt.setPaid(true);
     }
 
     private void deposit(Receipt receipt) {
         Account sourceAccount = Bank.getInstance().findAccountWithId(receipt.getSourceId());
         sourceAccount.addMoney(receipt.getMoney());
+        sourceAccount.getDestTransactions().add(new Transaction("deposit", sourceAccount, sourceAccount));
         receipt.setPaid(true);
     }
 
