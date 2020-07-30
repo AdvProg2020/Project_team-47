@@ -43,7 +43,7 @@
                         <Font name="Segoe UI Black" size="15.0" />
                     </font>
                 </Button>
-                <Button layoutX="396.0" layoutY="472.0" mnemonicParsing="false" onAction="#lowerWalletMoney" prefHeight="50.0" prefWidth="221.0" text="lower wallet money">
+                <Button layoutX="396.0" layoutY="472.0" mnemonicParsing="false" onAction="#lowerWalletMoney" prefHeight="50.0" prefWidth="221.0" text="Lower Wallet Money">
                     <font>
                         <Font name="Segoe UI Black" size="15.0" />
                     </font>
